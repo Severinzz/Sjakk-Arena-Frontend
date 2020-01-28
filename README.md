@@ -1,4 +1,5 @@
-#Sjakk-arena-frontend
+# Sjakk Arena
+
 
 ## Project setup
 ```
