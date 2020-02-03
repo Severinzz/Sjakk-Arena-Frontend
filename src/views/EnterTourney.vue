@@ -13,13 +13,15 @@
                 </v-toolbar>
                 <v-card-text>
                   <v-form>
-                    <v-text-field v-model="numberValue" hide-details :min="0" :max="10000" label="Game Pin" name="gamePin" type="number"/>
-                    <v-text-field label="Player Name" name="playerName" type="text"/>
+                    <v-text-field v-model="numberValue" hide-details :min="0" :max="10000" label="Game Pin" placeholder="1234" type="number"/>
+                    <v-text-field v-model="playerName" label="Player Name" placeholder="Ola Nordmann" type="text"/>
+                    <p>game pin is: {{numberValue}}</p>
+                    <p>player name is: {{playerName}}</p>
                   </v-form>
                   <v-card-actions>
                     <v-spacer />
                     <router-link to="/">
-                    <v-btn color="error">Cancel</v-btn>
+                    <v-btn color="red" dark>Cancel</v-btn>
                     </router-link>
                     <v-btn color="success">Enter Game</v-btn>
                   </v-card-actions>
@@ -36,15 +38,19 @@
 <script>
 import AppHeader from '@/components/AppHeader.vue'
 import AppFooter from '@/components/AppFooter.vue'
+import TileHeaderSpace from '@/components/TileHeaderSpace'
 
 export default {
   name: 'EnterTourney',
   components: {
     AppHeader,
+    TileHeaderSpace,
     AppFooter
   },
   props: {
     source: String
+  },
+  methods: {
   }
 }
 </script>

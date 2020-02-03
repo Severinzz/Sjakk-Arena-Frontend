@@ -5,10 +5,7 @@
         <v-container fluid>
           <v-row>
             <v-col cols="12">
-              <v-row
-                align="center"
-                justify="center"
-              >
+              <v-row align="center" justify="center">
                 <router-link to="/about">
                   <MenuTile choice="Spill turnering" color="red" icon="fa-chess-knight"></MenuTile>
                 </router-link>
