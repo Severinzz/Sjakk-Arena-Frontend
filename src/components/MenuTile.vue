@@ -6,7 +6,9 @@
       <v-card-title class="justify-center">
         <span>{{choice}}</span>
       </v-card-title>
-      <v-img :src="require('@/assets/' + imageName + '')"></v-img>
+      <div id="tile-icon">
+        <i :class="[commonClass, icon]"></i>
+      </div>
     </v-card>
 </template>
 
@@ -16,10 +18,19 @@ export default {
   props: {
     choice: String,
     color: String,
-    imageName: String
+    icon: String
+  },
+  data: function() {
+    return {
+      commonClass: 'fas fa-7x'
+    }
   }
 }
 </script>
 
 <style scoped>
+  #tile-icon{
+    text-align:center;
+    margin-top:10%;
+  }
 </style>
