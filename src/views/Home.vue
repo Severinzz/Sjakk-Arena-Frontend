@@ -1,18 +1,38 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <AppHeader></AppHeader>
+    <TileHeaderSpace></TileHeaderSpace>
+        <v-container fluid>
+          <v-row>
+            <v-col cols="12">
+              <v-row
+                align="center"
+                justify="center"
+              >
+                  <MenuTile choice="Spill turnering" color="red" icon="fa-chess-knight"></MenuTile>
+                  <MenuTile choice="Opprett turnering" color="blue" icon="fa-chess-board"></MenuTile>
+                  <MenuTile choice="Skriv inn turneringsID" color="deep-purple" icon="fa-id-card"></MenuTile>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-container>
+    <AppFooter></AppFooter>
   </div>
 </template>
-
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import AppHeader from '@/components/AppHeader.vue'
+import AppFooter from '@/components/AppFooter.vue'
+import MenuTile from '@/components/MenuTile.vue'
+import TileHeaderSpace from '@/components/TileHeaderSpace'
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    TileHeaderSpace,
+    AppHeader,
+    AppFooter,
+    MenuTile
   }
 }
 </script>
