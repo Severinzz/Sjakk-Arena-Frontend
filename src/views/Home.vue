@@ -10,13 +10,13 @@
                 justify="center"
               >
                 <router-link to="/about">
-                  <MenuTile path="'/about'" choice="Spill turnering" color="red" icon="fa-chess-knight"></MenuTile>
+                  <MenuTile choice="Spill turnering" color="red" icon="fa-chess-knight"></MenuTile>
                 </router-link>
                 <router-link to="/about">
-                  <MenuTile path="'/about'" choice="Opprett turnering" color="blue" icon="fa-chess-board"></MenuTile>
+                  <MenuTile choice="Opprett turnering" color="blue" icon="fa-chess-board"></MenuTile>
                 </router-link>
                 <router-link to="/enterTID">
-                  <MenuTile path="'/enterTID'" choice="Skriv inn turneringsID" color="deep-purple" icon="fa-id-card"></MenuTile>
+                  <MenuTile choice="Skriv inn turneringsID" color="deep-purple" icon="fa-id-card"></MenuTile>
                 </router-link>
               </v-row>
             </v-col>
