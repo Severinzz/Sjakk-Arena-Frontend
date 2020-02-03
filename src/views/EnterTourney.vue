@@ -13,12 +13,14 @@
                 </v-toolbar>
                 <v-card-text>
                   <v-form>
-                    <v-text-field v-model="numberValue" hide-details label="Game pin" name="gamePin" type="number"/>
+                    <v-text-field v-model="numberValue" hide-details :min="0" :max="10000" label="Game pin" name="gamePin" type="number"/>
                     <v-text-field label="Player name" name="playerName" type="text"/>
                   </v-form>
                   <v-card-actions>
                     <v-spacer />
+                    <router-link to="/">
                     <v-btn color="error">Cancel</v-btn>
+                    </router-link>
                     <v-btn color="success">Enter Game</v-btn>
                   </v-card-actions>
                 </v-card-text>
