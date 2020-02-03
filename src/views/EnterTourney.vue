@@ -9,12 +9,12 @@
             <v-col cols="12" sm="8" md="4">
               <v-card class="elevation-12">
                 <v-toolbar color="primary" dark flat>
-                  <v-toolbar-title>Fill in game pin and you name.</v-toolbar-title>
+                  <v-toolbar-title>Fill in game pin and you name</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
                   <v-form>
-                    <v-text-field v-model="numberValue" hide-details :min="0" :max="10000" label="Game pin" name="gamePin" type="number"/>
-                    <v-text-field label="Player name" name="playerName" type="text"/>
+                    <v-text-field v-model="numberValue" hide-details :min="0" :max="10000" label="Game Pin" name="gamePin" type="number"/>
+                    <v-text-field label="Player Name" name="playerName" type="text"/>
                   </v-form>
                   <v-card-actions>
                     <v-spacer />
