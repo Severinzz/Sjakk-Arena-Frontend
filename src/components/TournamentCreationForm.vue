@@ -104,6 +104,7 @@
         v-model="tables"
         label="Antall bord"
         type="number"
+        :min="0"
       ></v-text-field>
       <!-- Length of pause between games-->
       <v-text-field
