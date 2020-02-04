@@ -6,7 +6,6 @@ import EnterTourney from '../views/EnterTourney'
 import EnterTID from '../views/EnterTID'
 import TournamentCreation from '../views/TournamentCreation.vue'
 
-
 Vue.use(VueRouter)
 
 const routes = [
@@ -24,11 +23,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    
+
     path: '/lobby',
     name: 'Lobby',
     component: Lobby
-
+  },
+  {
     // Add enter player-details for tournament from views for the router to use.
     path: '/enter-tourney',
     name: 'Enter Tournament',
