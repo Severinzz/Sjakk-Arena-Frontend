@@ -1,7 +1,7 @@
 <template>
   <v-footer absolute>
     <v-spacer></v-spacer>
-    <div>&copy; {{new Date().getFullYear()}}</div>
+    <div>&copy; {{ new Date().getFullYear() }}</div>
   </v-footer>
 </template>
 
@@ -11,5 +11,5 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 </style>

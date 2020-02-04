@@ -1,16 +1,29 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <TileHeaderSpace></TileHeaderSpace>
+        <v-container fluid>
+          <v-row>
+            <v-col cols="12">
+              <v-row align="center" justify="center">
+                  <MenuTile tileText="Spill turnering" color="red" icon="fa-chess-knight" to="/enter-tourney"></MenuTile>
+                  <MenuTile tileText="Opprett turnering" color="blue" icon="fa-chess-board" to="/tournament-creation"></MenuTile>
+                  <MenuTile tileText="Skriv inn turneringsID" color="deep-purple" icon="fa-id-card" to="/enter-TID"></MenuTile>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-container>
   </div>
 </template>
-
 <script>
 // @ is an alias to /src
+import MenuTile from '@/components/MenuTile.vue'
+import TileHeaderSpace from '@/components/TileHeaderSpace'
 
 export default {
   name: 'home',
   components: {
+    TileHeaderSpace,
+    MenuTile
   }
 }
 </script>

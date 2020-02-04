@@ -1,0 +1,57 @@
+<template>
+  <div class="EnterTID">
+    <AppHeader></AppHeader>
+    <TileHeaderSpace></TileHeaderSpace>
+    <v-content>
+      <!-- // Kilde: https://github.com/vuetifyjs/vuetify/blob/master/packages/docs/src/layouts/layouts/demos/centered.vue -->
+      <v-container class="fill-height" fluid>
+        <v-row align="center" justify="center">
+          <v-col cols="12" sm="8" md="4">
+            <v-card class="elevation-12">
+              <v-toolbar color="primary" dark flat>
+                <v-toolbar-title>Fyll inn game pin</v-toolbar-title>
+              </v-toolbar>
+              <v-card-text>
+                <v-form>
+                  <!-- No limits for the input field, might be needed to changed -->
+                  <v-text-field v-model="game_pin" label="Game pin" placeholder="1337" type="text"/>
+                </v-form>
+                <v-card-actions>
+                  <v-spacer />
+                  <router-link to="/">
+                    <v-btn color="red" dark>Avbryt</v-btn>
+                  </router-link>
+                  <v-btn color="success">Send inn</v-btn>
+                </v-card-actions>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-content>
+    <AppFooter></AppFooter>
+  </div>
+</template>
+
+<script>
+import AppHeader from '@/components/AppHeader.vue'
+import AppFooter from '@/components/AppFooter.vue'
+import TileHeaderSpace from '@/components/TileHeaderSpace'
+export default {
+  name: 'enterTID',
+  components: {
+    AppHeader,
+    TileHeaderSpace,
+    AppFooter
+  },
+  data () {
+    return {
+      game_pin: ''
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
