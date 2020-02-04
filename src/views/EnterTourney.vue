@@ -15,8 +15,6 @@
                   <v-form>
                     <v-text-field v-model="game_pin" hide-details :min="0" :max="10000" label="Game Pin" placeholder="1234" type="number"/>
                     <v-text-field v-model="playerName" label="Player Name" placeholder="Ola Nordmann" type="text"/>
-                    <p>game pin is: {{game_pin}}</p>      <!-- Remove these! -->
-                    <p>player name is: {{playerName}}</p>
                   </v-form>
                   <v-card-actions>
                     <v-spacer />
