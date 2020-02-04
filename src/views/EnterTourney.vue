@@ -1,5 +1,5 @@
 <template>
-    <div class="EnterTourneyPin">
+    <div class="EnterTourney">
       <AppHeader></AppHeader>
       <TileHeaderSpace></TileHeaderSpace>
       <v-content>
