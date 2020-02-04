@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import EnterTourney from '../views/EnterTourney'
 import EnterTID from '../views/EnterTID'
+import TournamentCreation from '../views/TournamentCreation.vue'
+
 
 Vue.use(VueRouter)
 
@@ -31,6 +33,11 @@ const routes = [
     path: '/enterTID',
     name: 'Enter TID',
     component: EnterTID
+  },
+  {
+    path: '/tournament-creation',
+    name: 'tournamentCreation',
+    component: TournamentCreation
   }
 ]
 
