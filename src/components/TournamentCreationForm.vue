@@ -119,7 +119,7 @@
         type="number"
       ></v-text-field>
       <v-switch label="Start når to spillere er påmeldt" v-model="earlyStart"></v-switch>
-      <v-btn class="mr-4" @click="validate">Send</v-btn>
+      <v-btn class="mr-4" color="primary" @click="validate">Send</v-btn>
       <v-btn @click="clear">Tøm</v-btn>
     </v-form>
   </div>

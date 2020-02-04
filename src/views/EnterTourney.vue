@@ -18,10 +18,8 @@
                   </v-form>
                   <v-card-actions>
                     <v-spacer />
-                    <router-link to="/">
-                    <v-btn color="red" dark>Avbryt</v-btn>
-                    </router-link>
-                    <v-btn color="success">Delta</v-btn>
+                    <v-btn color="primary" to="/">Delta</v-btn>
+                    <v-btn to="/">Avbryt</v-btn>
                   </v-card-actions>
                 </v-card-text>
               </v-card>
