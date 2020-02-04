@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Lobby from '../views/Lobby'
 import EnterTourney from '../views/EnterTourney'
 import EnterTID from '../views/EnterTID'
 import TournamentCreation from '../views/TournamentCreation.vue'
+
 
 Vue.use(VueRouter)
 
@@ -22,6 +24,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
+    
+    path: '/lobby',
+    name: 'Lobby',
+    component: Lobby
+
     // Add enter player-details for tournament from views for the router to use.
     path: '/enter-tourney',
     name: 'Enter Tournament',
@@ -37,6 +44,7 @@ const routes = [
     path: '/tournament-creation',
     name: 'tournamentCreation',
     component: TournamentCreation
+
   }
 ]
 

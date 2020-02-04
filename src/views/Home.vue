@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <AppHeader></AppHeader>
     <TileHeaderSpace></TileHeaderSpace>
         <v-container fluid>
           <v-row>
@@ -13,13 +12,10 @@
             </v-col>
           </v-row>
         </v-container>
-    <AppFooter></AppFooter>
   </div>
 </template>
 <script>
 // @ is an alias to /src
-import AppHeader from '@/components/AppHeader.vue'
-import AppFooter from '@/components/AppFooter.vue'
 import MenuTile from '@/components/MenuTile.vue'
 import TileHeaderSpace from '@/components/TileHeaderSpace'
 
@@ -27,8 +23,6 @@ export default {
   name: 'home',
   components: {
     TileHeaderSpace,
-    AppHeader,
-    AppFooter,
     MenuTile
   }
 }
