@@ -21,7 +21,7 @@
                   <router-link to="/">
                     <v-btn color="red" dark>Avbryt</v-btn>
                   </router-link>
-                  <v-btn color="success">Send inn</v-btn>
+                  <v-btn color="primary">Send inn</v-btn>
                 </v-card-actions>
               </v-card-text>
             </v-card>
