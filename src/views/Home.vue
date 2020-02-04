@@ -12,7 +12,7 @@
                 <router-link to="/about">
                   <MenuTile choice="Opprett turnering" color="blue" icon="fa-chess-board"></MenuTile>
                 </router-link>
-                <router-link to="/about">
+                <router-link to="/enterTID">
                   <MenuTile choice="Skriv inn turneringsID" color="deep-purple" icon="fa-id-card"></MenuTile>
                 </router-link>
               </v-row>

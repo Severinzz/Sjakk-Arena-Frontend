@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import EnterTourney from '../views/EnterTourney'
+import EnterTID from '../views/EnterTID'
 
 Vue.use(VueRouter)
 
@@ -20,10 +21,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    // Add enter tournament id from views to the router to use.
+    // Add enter player-details for tournament from views for the router to use.
     path: '/enterTourney',
-    name: 'Tournament ID',
+    name: 'Enter Tournament',
     component: EnterTourney
+  },
+  {
+    // Add host enter tournament ID from views for the router to use
+    path: '/enterTID',
+    name: 'Enter TID',
+    component: EnterTID
   }
 ]
 
