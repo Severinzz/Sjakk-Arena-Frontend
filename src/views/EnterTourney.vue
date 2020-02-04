@@ -51,6 +51,12 @@ export default {
     source: String
   },
   methods: {
+  },
+  data () {
+    return {
+      numberValue: '',
+      playerName: ''
+    }
   }
 }
 </script>
