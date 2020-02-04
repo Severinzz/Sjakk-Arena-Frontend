@@ -13,9 +13,9 @@
                 </v-toolbar>
                 <v-card-text>
                   <v-form>
-                    <v-text-field v-model="numberValue" hide-details :min="0" :max="10000" label="Game Pin" placeholder="1234" type="number"/>
+                    <v-text-field v-model="game_pin" hide-details :min="0" :max="10000" label="Game Pin" placeholder="1234" type="number"/>
                     <v-text-field v-model="playerName" label="Player Name" placeholder="Ola Nordmann" type="text"/>
-                    <p>game pin is: {{numberValue}}</p>
+                    <p>game pin is: {{game_pin}}</p>
                     <p>player name is: {{playerName}}</p>
                   </v-form>
                   <v-card-actions>
@@ -54,7 +54,7 @@ export default {
   },
   data () {
     return {
-      numberValue: '',
+      game_pin: '',
       playerName: ''
     }
   }

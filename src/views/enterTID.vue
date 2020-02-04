@@ -14,8 +14,8 @@
               <v-card-text>
                 <v-form>
                   <!-- No limits for the input field, might be needed to changed -->
-                  <v-text-field v-model="game_pin" label="Enter game pin" placeholder="l2e4" type="text"/>
-                  <p>player name is: {{game_pin}}</p>
+                  <v-text-field v-model="game_pin" label="Enter game pin" placeholder="1337" type="text"/>
+                  <p>Entered game pin: {{game_pin}}</p>
                 </v-form>
                 <v-card-actions>
                   <v-spacer />
