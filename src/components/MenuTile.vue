@@ -16,7 +16,6 @@
 export default {
   name: 'MenuTile',
   props: {
-    choice: String,
     tileText: String,
     color: String,
     icon: String,

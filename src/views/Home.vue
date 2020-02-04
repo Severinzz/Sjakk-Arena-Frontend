@@ -6,17 +6,9 @@
           <v-row>
             <v-col cols="12">
               <v-row align="center" justify="center">
-                  <MenuTile choice="Spill turnering" color="red" icon="fa-chess-knight" to="/enterTourney"></MenuTile>
+                  <MenuTile tileText="Spill turnering" color="red" icon="fa-chess-knight" to="/enterTourney"></MenuTile>
                   <MenuTile tileText="Opprett turnering" color="blue" icon="fa-chess-board" to="/tournament-creation"></MenuTile>
-                  <MenuTile choice="Skriv inn turneringsID" color="deep-purple" icon="fa-id-card" to="/enterTID"></MenuTile>
-              <v-row
-                align="center"
-                justify="center"
-              >
-                  <MenuTile tileText="Spill turnering" color="red" icon="fa-chess-knight" to="/about"></MenuTile>
-                  <MenuTile tileText="Opprett turnering" color="blue"
-                            icon="fa-chess-board" to="/tournament-creation"></MenuTile>
-
+                  <MenuTile tileText="Skriv inn turneringsID" color="deep-purple" icon="fa-id-card" to="/enterTID"></MenuTile>
               </v-row>
             </v-col>
           </v-row>

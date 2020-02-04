@@ -5,7 +5,6 @@ import EnterTourney from '../views/EnterTourney'
 import EnterTID from '../views/EnterTID'
 import TournamentCreation from '../views/TournamentCreation.vue'
 
-
 Vue.use(VueRouter)
 
 const routes = [
@@ -30,7 +29,7 @@ const routes = [
   },
   {
     // Add host enter tournament ID from views for the router to use
-    path: '/enterTID',
+    path: '/EnterTID',
     name: 'Enter TID',
     component: EnterTID
   },
