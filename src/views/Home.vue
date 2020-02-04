@@ -9,9 +9,11 @@
                 align="center"
                 justify="center"
               >
-                  <MenuTile choice="Spill turnering" color="red" icon="fa-chess-knight"></MenuTile>
-                  <MenuTile choice="Opprett turnering" color="blue" icon="fa-chess-board"></MenuTile>
-                  <MenuTile choice="Skriv inn turneringsID" color="deep-purple" icon="fa-id-card"></MenuTile>
+                  <MenuTile tileText="Spill turnering" color="red" icon="fa-chess-knight" to="/about"></MenuTile>
+                  <MenuTile tileText="Opprett turnering" color="blue"
+                            icon="fa-chess-board" to="/tournament-creation"></MenuTile>
+                  <MenuTile tileText="Skriv inn turneringsID" color="deep-purple" icon="fa-id-card"
+                            to="/about"></MenuTile>
               </v-row>
             </v-col>
           </v-row>
