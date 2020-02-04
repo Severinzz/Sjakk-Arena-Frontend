@@ -38,7 +38,6 @@
     </v-app-bar>
 
     <v-content>
-      <router-link to="/lobby">Lobby</router-link> |
       <router-view/>
     </v-content>
   </v-app>

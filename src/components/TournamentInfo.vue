@@ -18,5 +18,8 @@ export default {
 </script>
 
 <style scoped>
-
+div{
+  display: inline-block;
+  margin: auto;
+}
 </style>

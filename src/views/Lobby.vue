@@ -1,39 +1,37 @@
 <template>
-  <div>
-    <tournament-info
-  :tournament="tournament"
-  :started="false"/>
-  <v-divider
-    class="mx-11"
-    inset
-    vertical>
-  </v-divider>
-    <v-container fluid>
-      <v-row>
-        <v-col cols="12">
+    <v-container class="content-wrapper" fluid>
+      <v-row style="height: 100%;">
+        <v-col cols="2" style="height: 100%;">
+          <div class="info-wrapper">
+            <tournament-info
+              :tournament="tournament"
+              :started="false"/>
+
+            <div class="button-wrapper">
+              <v-btn class="mr-4" >start</v-btn>
+              <v-btn class="mr-4" >Cancel</v-btn>
+            </div>
+          </div>
+        </v-col>
+          <v-col class="1">
           <v-row
             align="start"
             justify="start"
-            class="grey lighten-5"
-            style="height: 300px;"
+            class="text-center"
+            style="height: 100%;"
           >
-            <v-card
+            <div
               v-for="player in players"
               :key="player.index"
-              class="ma-3 pa-6 justify-center"
-              outlined
-              tile
-              icon="fas fa-chess-rook"
+              class="player-wrapper"
             >
-              {{ player.name }}
-              <br>
+              <p class="player-name">{{ player.name }}</p>
               <i :class="randomIcon()"></i>
-            </v-card>
+            </div>
           </v-row>
-        </v-col>
+          </v-col>
       </v-row>
     </v-container>
-  </div>
 </template>
 
 <script>
@@ -75,5 +73,34 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+  .content-wrapper{
+    height: 100% !important;
+  }
+  .info-wrapper{
+    justify-items: center;
+    align-content: center;
+    text-align: center;
+    border-right: 10px solid rebeccapurple;
+    display: inline-block;
+    height: 100%;
+  }
+  .button-wrapper{
+    margin: 2% 1% 0 1%;
+    display: inline-block;
+  }
+  .player-name{
+    font-size: 1.3em;
+    font-weight: bold;
+  }
+  .player-wrapper{
+    margin: auto;
+    padding: 10px;
+    width: 10%;
+  }
+  .player-wrapper:hover{
+  }
+  .info-col{
+    height: 100%;
+  }
 </style>
