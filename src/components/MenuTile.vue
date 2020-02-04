@@ -1,6 +1,6 @@
 <template>
     <v-card :color="color"
-            :to="`/about`"
+            :to="to"
             tile=true width="20vw" height="20vw" max-height="300px" max-width="300px"
             min-height="230px" min-width="230px" class="ma-2" >
       <v-card-title class="justify-center">
@@ -18,7 +18,8 @@ export default {
   props: {
     choice: String,
     color: String,
-    icon: String
+    icon: String,
+    to: String
   },
   data: function() {
     return {

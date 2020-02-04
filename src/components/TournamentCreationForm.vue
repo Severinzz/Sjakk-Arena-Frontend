@@ -5,22 +5,34 @@
       v-model="valid"
       lazy-validation
     >
-      <v-toolbar dark color="blue">
+      <v-toolbar dark :color="formColor">
         <v-toolbar-title >Turneringsinformasjon</v-toolbar-title>
       </v-toolbar>
+      <!-- Name of tournament host -->
       <v-text-field
         v-model="name"
         label="Navn"
+        :rules="nameRules"
         required
       ></v-text-field>
+      <!-- email address of tournament host -->
+      <v-text-field
+        v-model="email"
+        label="E-post"
+        :rules="emailRules"
+        required
+      ></v-text-field>
+      <!-- Name of tournament -->
       <v-text-field
         v-model="tournamentName"
         label="Navn på turnering"
+        :rules="tournamentNameRules"
         required
       ></v-text-field>
       <!-- code from https://vuetifyjs.com/en/components/time-pickers-->
       <v-row>
         <v-col cols="11" sm="5">
+          <!-- Start time -->
           <v-menu
             ref="firstmenu"
             v-model="startTimeMenu"
@@ -37,6 +49,7 @@
                 v-model="startTime"
                 label="Starttid"
                 readonly
+                required
                 v-on="on"
               ></v-text-field>
             </template>
@@ -45,11 +58,15 @@
               v-model="startTime"
               full-width
               @click:minute="$refs.firstmenu.save(startTime)"
+              :color="formColor"
+              :max="endTime"
+              format="24hr"
             ></v-time-picker>
           </v-menu>
         </v-col>
         <v-spacer></v-spacer>
         <v-col cols="11" sm="5">
+          <!-- End time -->
           <v-menu
             ref="secondmenu"
             v-model="endTimeMenu"
@@ -74,28 +91,34 @@
               v-model="endTime"
               full-width
               @click:minute="$refs.secondmenu.save(endTime)"
+              :color="formColor"
+              :min="startTime"
+              format="24hr"
             ></v-time-picker>
           </v-menu>
         </v-col>
       </v-row>
-      <!-- end of copied code -->
+      <!-- end of code from vuetifyjs.com -->
+      <!-- Number of tables -->
       <v-text-field
         v-model="tables"
         label="Antall bord"
-        required
+        type="number"
       ></v-text-field>
+      <!-- Length of pause between games-->
       <v-text-field
         v-model="pause"
         label="Tid mellom parti (i minutter)"
-        required
+        type="number"
       ></v-text-field>
+      <!-- Maximum number of rounds -->
       <v-text-field
         v-model="rounds"
         label="Max antall runder"
-        required
+        type="number"
       ></v-text-field>
       <v-switch label="Start når to spillere er påmeldt" v-model="earlyStart"></v-switch>
-      <v-btn class="mr-4" @click="submit">Send</v-btn>
+      <v-btn class="mr-4" @click="validate">Send</v-btn>
       <v-btn @click="clear">Tøm</v-btn>
     </v-form>
   </div>
@@ -106,16 +129,31 @@ export default {
   name: 'TournamentCreationForm',
   data () {
     return {
-      startTime: null,
-      endTime: null,
+      startTime: null, // start time of tournament
+      endTime: null, // end time of tournament
       startTimeMenu: false,
       endTimeMenu: false,
-      name: '',
-      tournamentName: '',
-      tables: '',
-      pause: '',
-      rounds: '',
-      earlyStart: false
+      name: '', // name of tournament host
+      email: '', // email address of tournament host
+      tournamentName: '', // name of tournament
+      tables: '', // number of tables used in the tournament
+      pause: '', // length of pause between games
+      rounds: '', // maximum number of rounds in the tournament
+      earlyStart: false, // true if the tournament will start when two players are registered
+      formColor: 'blue', // color to be used in form elements
+
+      // rules
+      nameRules: [
+        v => !!v || 'Navn er påkrevd',
+        v => (v && v.length <= 20) || 'Navn må innholde færre enn 20 karakterer'
+      ],
+      emailRules: [
+        v => /.+@.+\..+/.test(v) || 'Du må skrive inn en gyldig e-postadresse'
+      ],
+      tournamentNameRules: [
+        v => !!v || 'Turneringsnavn er påkrevd',
+        v => (v && v.length <= 20) || 'Turneringsnavn må innholde færre enn 20 karakterer'
+      ]
     }
   },
   methods: {
@@ -128,12 +166,18 @@ export default {
       this.pause = ''
       this.rounds = ''
       this.earlyStart = false
+      this.email = ''
     },
     submit() {
-      alert('Navn: ' + this.name + '\nTurneringsnavn: ' + this.tournamentName +
+      alert('Navn: ' + this.name + '\nEmail: ' + this.email + '\nTurneringsnavn: ' + this.tournamentName +
       '\nStarttid: ' + this.startTime + '\nSluttid: ' + this.endTime +
         '\nAntall bord: ' + this.tables + '\nMax antall runder: ' + this.rounds +
       '\nStart når to spillere er påmeldt: ' + this.earlyStart)
+    },
+    validate() {
+      if (this.$refs.form.validate()) {
+        this.submit()
+      }
     }
   }
 }
@@ -142,6 +186,6 @@ export default {
 
 <style scoped>
   .form{
-    margin: 5vw 20vw 0 20vw;
+    margin: 5vw 20vw 20vh 20vw;
   }
 </style>
