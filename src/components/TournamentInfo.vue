@@ -1,9 +1,9 @@
 <template>
 <div>
-  <h1>PIN:</h1>
-  <h1>{{ tournament[0].pin }}</h1>
-  <h2 v-if="!started">Starter: {{ tournament[0].start }}</h2>
-  <h2 v-if="started">Slutter: {{ tournament[0].end }}</h2>
+  <p class="pin">PIN:</p>
+  <p class="pin">{{tournament[0].pin}}</p>
+  <p class="time" v-if="!started">Starter: {{tournament[0].start}}</p>
+  <p class="time" v-if="started">Slutter: {{tournament[0].end}}</p>
 </div>
 </template>
 
@@ -18,8 +18,16 @@ export default {
 </script>
 
 <style scoped>
-div{
-  display: inline-block;
-  margin: auto;
-}
+  div{
+    display: inline-block;
+    margin: auto;
+  }
+  .pin{
+    font-size: 5.5em;
+    font-weight: bold;
+  }
+  .time{
+    margin: 20% 0 10% 0;
+    font-size: 3em;
+  }
 </style>

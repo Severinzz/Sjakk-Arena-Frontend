@@ -1,28 +1,33 @@
 <template>
     <v-container class="content-wrapper" fluid>
       <v-row style="height: 100%;">
-        <v-col cols="2" style="height: 100%;">
+        <v-col cols="2">
           <div class="info-wrapper">
             <tournament-info
               :tournament="tournament"
               :started="false"/>
-
+            <p class="numberOfPlayers">Antall spillere:  {{this.getPlayerCount}}</p>
             <div class="button-wrapper">
-              <v-btn class="mr-4" >start</v-btn>
-              <v-btn class="mr-4" >Cancel</v-btn>
+              <v-btn id="start" color="primary" class="mr-4" >start</v-btn>
+              <v-btn id="cancel" class="mr-4" >Cancel</v-btn>
             </div>
           </div>
         </v-col>
-          <v-col class="1">
+          <v-col
+                 offset="5"
+                 offset-sm="3"
+          offset-md="2"
+          offset-lg="1"
+          offset-xl="0">
           <v-row
             align="start"
             justify="start"
-            class="text-center"
-            style="height: 100%;"
-          >
+            class="text-center">
+
             <div
-              v-for="player in players"
-              :key="player.index"
+              v-for="(player, index) in players"
+              :key="index"
+              @click="handleRemovePlayer(index)"
               class="player-wrapper"
             >
               <p class="player-name">{{ player.name }}</p>
@@ -36,7 +41,7 @@
 
 <script>
 import TournamentInfo from '../components/TournamentInfo'
-import { mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'Lobby',
@@ -65,8 +70,15 @@ export default {
     ])
   },
   methods: {
+    ...mapActions([
+      'removePlayer',
+      'addPlayer'
+    ]),
     randomIcon() {
       return this.iconsAvailable[Math.floor(Math.random() * this.iconsAvailable.length)]
+    },
+    handleRemovePlayer(index) {
+      this.removePlayer(index)
     }
   }
 
@@ -76,17 +88,20 @@ export default {
 <style>
   .content-wrapper{
     height: 100% !important;
+    padding: 0 0 2% 0;
+  }
+  .numberOfPlayers{
+    font-size: 1em;
   }
   .info-wrapper{
-    justify-items: center;
-    align-content: center;
     text-align: center;
-    border-right: 10px solid rebeccapurple;
     display: inline-block;
     height: 100%;
+    padding-top: 20%;
+    margin: auto auto auto 10%;
   }
   .button-wrapper{
-    margin: 2% 1% 0 1%;
+    margin: 5% 1% 0 1%;
     display: inline-block;
   }
   .player-name{
@@ -94,13 +109,16 @@ export default {
     font-weight: bold;
   }
   .player-wrapper{
-    margin: auto;
+    margin: 3% auto auto auto;
     padding: 10px;
     width: 10%;
+    min-width: 150px;
   }
   .player-wrapper:hover{
+    text-decoration: line-through;
   }
-  .info-col{
+  div.col {
     height: 100%;
+    padding: 0;
   }
 </style>
