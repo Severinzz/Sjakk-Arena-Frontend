@@ -9,20 +9,19 @@
           <v-col cols="12" sm="8" md="4">
             <v-card class="elevation-12">
               <v-toolbar color="primary" dark flat>
-                <v-toolbar-title>Fill in game pin of you Tournament</v-toolbar-title>
+                <v-toolbar-title>Fyll inn game pin</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form>
                   <!-- No limits for the input field, might be needed to changed -->
-                  <v-text-field v-model="game_pin" label="Enter game pin" placeholder="1337" type="text"/>
-                  <p>Entered game pin: {{game_pin}}</p>
+                  <v-text-field v-model="game_pin" label="Game pin" placeholder="1337" type="text"/>
                 </v-form>
                 <v-card-actions>
                   <v-spacer />
                   <router-link to="/">
-                    <v-btn color="red" dark>Cancel</v-btn>
+                    <v-btn color="red" dark>Avbryt</v-btn>
                   </router-link>
-                  <v-btn color="success">Enter Game</v-btn>
+                  <v-btn color="success">Send inn</v-btn>
                 </v-card-actions>
               </v-card-text>
             </v-card>

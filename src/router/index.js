@@ -23,13 +23,13 @@ const routes = [
   },
   {
     // Add enter player-details for tournament from views for the router to use.
-    path: '/enterTourney',
+    path: '/enter-tourney',
     name: 'Enter Tournament',
     component: EnterTourney
   },
   {
     // Add host enter tournament ID from views for the router to use
-    path: '/EnterTID',
+    path: '/enter-TID',
     name: 'Enter TID',
     component: EnterTID
   },
