@@ -6,13 +6,13 @@
           <v-row>
             <v-col cols="12">
               <v-row align="center" justify="center">
-                <router-link to="/about">
+                <router-link to="/enterTourney">
                   <MenuTile choice="Spill turnering" color="red" icon="fa-chess-knight"></MenuTile>
                 </router-link>
                 <router-link to="/about">
                   <MenuTile choice="Opprett turnering" color="blue" icon="fa-chess-board"></MenuTile>
                 </router-link>
-                <router-link to="/enterTID">
+                <router-link to="/about">
                   <MenuTile choice="Skriv inn turneringsID" color="deep-purple" icon="fa-id-card"></MenuTile>
                 </router-link>
               </v-row>

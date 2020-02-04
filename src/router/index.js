@@ -21,7 +21,7 @@ const routes = [
   },
   {
     // Add enter tournament id from views to the router to use.
-    path: '/enterTID',
+    path: '/enterTourney',
     name: 'Tournament ID',
     component: EnterTourney
   }
