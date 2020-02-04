@@ -30,8 +30,10 @@
               @click="handleRemovePlayer(index)"
               class="player-wrapper"
             >
-              <p class="player-name">{{ player.name }}</p>
-              <i :class="randomIcon()"></i>
+              <player
+              :player-name="player.name"
+              :player-piece="randomIcon()"
+              />
             </div>
           </v-row>
           </v-col>
@@ -41,12 +43,14 @@
 
 <script>
 import TournamentInfo from '../components/TournamentInfo'
+import Player from '../components/Player'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'Lobby',
   components: {
-    TournamentInfo
+    TournamentInfo,
+    Player
   },
   data () {
     return {
@@ -103,10 +107,6 @@ export default {
   .button-wrapper{
     margin: 5% 1% 0 1%;
     display: inline-block;
-  }
-  .player-name{
-    font-size: 1.3em;
-    font-weight: bold;
   }
   .player-wrapper{
     margin: 3% auto auto auto;
