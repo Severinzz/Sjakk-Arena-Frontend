@@ -1,5 +1,6 @@
 <template>
     <div class="EnterTourney">
+      <TileHeaderSpace></TileHeaderSpace>
       <v-content>
       <!-- Kilde: https://github.com/vuetifyjs/vuetify/blob/master/packages/docs/src/layouts/layouts/demos/centered.vue -->
         <v-container class="fill-height" fluid>
@@ -29,9 +30,12 @@
 </template>
 
 <script>
+import TileHeaderSpace from '@/components/TileHeaderSpace'
+
 export default {
   name: 'EnterTourney',
   components: {
+    TileHeaderSpace
   },
   props: {
     source: String
