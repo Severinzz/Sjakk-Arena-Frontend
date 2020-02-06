@@ -1,7 +1,7 @@
 <template>
-  <v-app-bar extended app color="blue darken-4">
-    <img id="logo" :src="require('../assets/Logo-v2.png')">
-  </v-app-bar>
+  <v-toolbar extended app color="blue darken-4">
+    <img id="logo" :src="require('@/assets/Logo-v2.png')">
+  </v-toolbar>
 </template>
 
 <script>

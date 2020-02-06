@@ -9,11 +9,14 @@
 </template>
 
 <script>
-import AppFooter from './components/AppFooter'
-import AppHeader from './components/AppHeader'
+import AppFooter from '@/components/AppFooter'
+import AppHeader from '@/components/AppHeader'
+
 export default {
   name: 'App',
-  components: { AppHeader, AppFooter }
+  components: {
+    AppHeader,
+    AppFooter }
 }
 </script>
 

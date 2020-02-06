@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <TileHeaderSpace></TileHeaderSpace>
-        <v-container fluid>
+    <v-container fluid>
           <v-row>
             <v-col cols="12">
               <v-row align="center" justify="center">
@@ -22,8 +22,8 @@ import TileHeaderSpace from '@/components/TileHeaderSpace'
 export default {
   name: 'home',
   components: {
-    TileHeaderSpace,
-    MenuTile
+    MenuTile,
+    TileHeaderSpace
   }
 }
 </script>

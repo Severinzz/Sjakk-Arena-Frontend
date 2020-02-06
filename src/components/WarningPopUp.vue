@@ -1,24 +1,22 @@
 <template>
   <div id="warning">
     <v-card class="elevation-5 ma-auto"
-            max-width="400"
-    >
+            max-width="400">
       <v-card-text class="text-center">
-        <span id="warning-text">{{message}}</span>
+        <span id="warning-text">{{ message }}</span>
       </v-card-text>
       <v-row>
         <v-col cols="12">
           <v-row justify="center">
               <v-btn class="mr-5 px-10 mt-3" color="primary"
-                     :to="primaryBtnOnClickPath"
-              >{{primaryBtnName}}
+                     :to="primaryBtnOnClickPath">
+                {{ primaryBtnName }}
               </v-btn>
             <v-btn class="mr-5 px-10 mt-3"
                    :hidden="secondaryBtnNameHide"
-                   :to="secondaryBtnOnClickPath"
-            >{{secondaryBtnName}}
+                   :to="secondaryBtnOnClickPath">
+              {{ secondaryBtnName }}
             </v-btn>
-
           </v-row>
         </v-col>
       </v-row>

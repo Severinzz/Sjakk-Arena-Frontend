@@ -1,49 +1,58 @@
 <template>
-    <v-container class="content-wrapper" fluid>
-      <v-row style="height: 100%;">
-        <v-col cols="2">
-          <div class="info-wrapper">
-            <tournament-info
-              :tournament="tournament"
-              :started="false"/>
-            <p class="numberOfPlayers">Antall spillere:  {{this.getPlayerCount}}</p>
-            <div class="button-wrapper">
-              <v-btn id="start" color="primary" class="mr-4" >start</v-btn>
-              <v-btn id="cancel" class="mr-4" >Cancel</v-btn>
-            </div>
+  <v-container class="content-wrapper" fluid>
+    <v-row>
+      <v-col cols="2">
+        <div class="info-wrapper">
+          <tournament-info
+            :tournament="tournament"
+            :started="false"
+          />
+          <p class="numberOfPlayers">
+            Antall spillere: {{ this.getPlayerCount }}
+          </p>
+          <div class="button-wrapper">
+            <v-btn id="start" color="primary" class="mr-4">
+              Start
+            </v-btn>
+            <v-btn id="cancel" class="mr-4">
+              Avbryt
+            </v-btn>
           </div>
-        </v-col>
-          <v-col
-                 offset="5"
-                 offset-sm="3"
-          offset-md="2"
-          offset-lg="1"
-          offset-xl="0">
-          <v-row
-            align="start"
-            justify="start"
-            class="text-center">
-
-            <div
-              v-for="(player, index) in players"
-              :key="index"
-              @click="handleRemovePlayer(index)"
-              class="player-wrapper"
-            >
-              <player
+        </div>
+      </v-col>
+      <!-- The player list. Offset to better fit smaller screens -->
+      <v-col
+        offset="5"
+        offset-sm="3"
+        offset-md="2"
+        offset-lg="1"
+        offset-xl="0"
+      >
+        <v-row
+          align="start"
+          justify="start"
+          class="text-center"
+        >
+          <!-- The individual players -->
+          <div
+            v-for="(player, index) in players"
+            :key="index"
+            @click="handleRemovePlayer(index)"
+            class="player-wrapper">
+            <player
               :player-name="player.name"
               :player-piece="randomIcon()"
-              />
-            </div>
-          </v-row>
-          </v-col>
-      </v-row>
-    </v-container>
+            />
+          </div>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import TournamentInfo from '../components/TournamentInfo'
-import Player from '../components/Player'
+import TournamentInfo from '@/components/TournamentInfo'
+import Player from '@/components/Player'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
@@ -78,10 +87,10 @@ export default {
       'removePlayer',
       'addPlayer'
     ]),
-    randomIcon() {
+    randomIcon () {
       return this.iconsAvailable[Math.floor(Math.random() * this.iconsAvailable.length)]
     },
-    handleRemovePlayer(index) {
+    handleRemovePlayer (index) {
       this.removePlayer(index)
     }
   }
@@ -90,33 +99,38 @@ export default {
 </script>
 
 <style>
-  .content-wrapper{
-    height: 100% !important;
+  .content-wrapper {
     padding: 0 0 2% 0;
   }
-  .numberOfPlayers{
-    font-size: 1em;
+
+  .numberOfPlayers {
+    font-size: 1.5em;
   }
-  .info-wrapper{
+
+  .info-wrapper {
     text-align: center;
     display: inline-block;
     height: 100%;
     padding-top: 20%;
     margin: auto auto auto 10%;
   }
-  .button-wrapper{
+
+  .button-wrapper {
     margin: 5% 1% 0 1%;
     display: inline-block;
   }
-  .player-wrapper{
+
+  .player-wrapper {
     margin: 3% auto auto auto;
     padding: 10px;
     width: 10%;
     min-width: 150px;
   }
-  .player-wrapper:hover{
+
+  .player-wrapper:hover {
     text-decoration: line-through;
   }
+
   div.col {
     height: 100%;
     padding: 0;

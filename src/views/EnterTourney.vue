@@ -1,6 +1,5 @@
 <template>
     <div class="EnterTourney">
-      <AppHeader></AppHeader>
       <TileHeaderSpace></TileHeaderSpace>
       <v-content>
       <!-- Kilde: https://github.com/vuetifyjs/vuetify/blob/master/packages/docs/src/layouts/layouts/demos/centered.vue -->
@@ -27,21 +26,16 @@
           </v-row>
         </v-container>
       </v-content>
-      <AppFooter></AppFooter>
     </div>
 </template>
 
 <script>
-import AppHeader from '@/components/AppHeader.vue'
-import AppFooter from '@/components/AppFooter.vue'
 import TileHeaderSpace from '@/components/TileHeaderSpace'
 
 export default {
   name: 'EnterTourney',
   components: {
-    AppHeader,
-    TileHeaderSpace,
-    AppFooter
+    TileHeaderSpace
   },
   props: {
     source: String
