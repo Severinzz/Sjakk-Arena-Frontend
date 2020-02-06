@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="player-name"> {{playerName}} </p>
+    <p class="player-name"> {{ playerName }} </p>
     <i :class="playerPiece"></i>
   </div>
 </template>
