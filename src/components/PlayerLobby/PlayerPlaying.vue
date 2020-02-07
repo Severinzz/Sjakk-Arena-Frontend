@@ -1,4 +1,5 @@
 <template>
+  <!-- This page is only loaded when tournament has started -->
   <v-container class="justify-center" fluid>
     <v-row class="justify-center" align="center">
       <v-card class="elevation-12, card">
@@ -12,22 +13,18 @@
           <h1>{{ Tname }}</h1>
           <h2 class="gameDetail">{{Usernamne}}</h2>
           <h2 class="gameDetail">Poeng: {{Tpoints}}</h2>
+          <!-- Do player have an opponent? -->
           <div v-if="paired">
             <PlayerPaired></PlayerPaired>
           </div>
           <div v-else-if="!paired">
-            <p class="gameDetail">Please wait while we try to pair you up!</p>
-            <v-progress-circular
-              :size="70"
-              :width="7"
-              color="indigo"
-              indeterminate
-            ></v-progress-circular>
+            <PlayerNotPaired></PlayerNotPaired>
           </div>
+          <!-- If something goes wrong this shows up -->
           <div v-else>
             <p>System is unable to pair you up, please try again.</p>
           </div>
-          <p class="gameDetail body-2">Spille tid: {{Tstart}} -> {{Tend}} </p>
+          <p class="gameDetail body-2">Spilletid: {{Tstart}} -> {{Tend}} </p>
           <v-spacer />
         </v-card-text>
       </v-card>
@@ -37,21 +34,22 @@
 
 <script>
 import PlayerPaired from './PlayerPaired'
+import PlayerNotPaired from './PlayerNotPaired'
 
 export default {
   name: 'PlayerPlaying',
   components: {
-    PlayerPaired
+    PlayerPaired,
+    PlayerNotPaired
   },
   data() {
     return {
       Tname: 'NTNU Open',
       Tstart: '13:00',
       Tend: '15:30',
-      Tpin: '13376',
       Usernamne: 'Ola Nordmann',
       Tpoints: '13',
-      paired: false
+      paired: true
     }
   }
 }

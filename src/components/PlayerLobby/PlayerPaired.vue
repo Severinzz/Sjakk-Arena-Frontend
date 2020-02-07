@@ -1,4 +1,5 @@
 <template>
+  <!-- This is loaded when system has found an opponent for player -->
     <span>
       <p class="gameDetail">Neste parti: {{TnextOpponent}}</p>
       <p class="gameDetail">Farge: {{Tcolour}}</p>

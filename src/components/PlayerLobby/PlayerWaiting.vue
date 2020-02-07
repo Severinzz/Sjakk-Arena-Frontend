@@ -10,8 +10,9 @@
         <v-card-text align="center">
           <v-spacer />
           <h1>{{ Tname }}</h1>
-          <h5 class="gameDetail body-2">Spille tid: {{Tstart}} -> {{Tend}} </h5>
-          <h2 class="gameDetail">{{Usernamne}}</h2>
+          <p class="body-2">{{Tpin}}</p>
+          <h5 class="gameDetail body-2">Spilletid: {{Tstart}} -> {{Tend}} </h5>
+          <h2 class="gameDetail">{{Username}}</h2>
           <p class="gameDetail body-1">{{TournDet}}</p>
           <v-spacer />
         </v-card-text>
@@ -29,7 +30,7 @@ export default {
       Tstart: '13:00',
       Tend: '15:30',
       Tpin: '13376',
-      Usernamne: 'Ola Nordmann',
+      Username: 'Ola Nordmann',
       TournDet: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ' +
         'et dolore magna aliqua. fgdfgkposdfkgpdfgodskpfgoksdf gosfdk gposd fgkos dfgk psodfgk psdofgkdopfkg sdofpg kdsf okg' +
         'sdfpåg sdfg sdpåfgk dsfåg ksdf gp sdkfågpsdfk gås dfg kpdfg sdfpågkpdskfgæølksd fgå sdpfg kp sdf.'
