@@ -1,7 +1,7 @@
 <template>
   <!-- This is loaded while user waits for a match -->
     <span>
-      <p class="gameDetail">Please wait while we try to pair you up!</p>
+      <p class="gameDetail">Vent mens vi setter opp et parti for deg!</p>
       <!-- https://vuetifyjs.com/en/components/progress-circular -->
       <v-progress-circular
         :size="70"

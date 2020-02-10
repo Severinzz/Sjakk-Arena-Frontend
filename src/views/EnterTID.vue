@@ -1,6 +1,5 @@
 <template>
   <div class="EnterTID">
-    <v-content>
       <!-- // Kilde: https://github.com/vuetifyjs/vuetify/blob/master/packages/docs/src/layouts/layouts/demos/centered.vue -->
       <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
@@ -24,7 +23,6 @@
           </v-col>
         </v-row>
       </v-container>
-    </v-content>
   </div>
 </template>
 

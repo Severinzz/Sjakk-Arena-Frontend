@@ -22,7 +22,7 @@
           </div>
           <!-- If something goes wrong this shows up -->
           <div v-else>
-            <p>System is unable to pair you up, please try again.</p>
+            <p>Systemet kan ikke sette deg opp mot noen, Vennligst prøv igjen.</p>
           </div>
           <p class="gameDetail body-2">Spilletid: {{Tstart}} -> {{Tend}} </p>
           <v-spacer />
@@ -49,7 +49,7 @@ export default {
       Tend: '15:30',
       Usernamne: 'Ola Nordmann',
       Tpoints: '13',
-      paired: true
+      paired: false
     }
   }
 }

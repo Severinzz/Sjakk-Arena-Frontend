@@ -1,5 +1,5 @@
 <template>
-<v-content>
+<v-container>
   <!-- Let the system decide what to load when we are waiting -->
   <!-- https://vuejs.org/v2/guide/conditional.html -->
   <div v-if="waiting">
@@ -13,7 +13,7 @@
   <div v-else>
     <h1>Shit...</h1>
   </div>
-</v-content>
+</v-container>
 </template>
 
 <script>
