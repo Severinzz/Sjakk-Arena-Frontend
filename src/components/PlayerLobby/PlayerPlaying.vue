@@ -60,7 +60,7 @@ export default {
       Tend: '15:30',
       Usernamne: 'Ola Nordmann',
       Tpoints: '13',
-      paired: true
+      paired: false
     }
   }
 }

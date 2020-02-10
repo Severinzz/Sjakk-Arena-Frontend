@@ -2,9 +2,9 @@
   <!-- This is loaded when system has found an opponent for player -->
     <span>
       <h1 class="gameDetail">Ditt neste parti:</h1>
-      <h2 class="gameDetail">Bord: {{Tbord}}</h2>
-      <h2 class="gameDetail">Neste parti: {{TnextOpponent}}</h2>
-      <h2 class="gameDetail">Farge: {{Tcolour}}</h2>
+      <h2 class="gameDetail">Bord: <strong>{{Tbord}}</strong></h2>
+      <h2 class="gameDetail">Neste parti: <strong>{{TnextOpponent}}</strong></h2>
+      <h2 class="gameDetail">Farge: <strong>{{Tcolour}}</strong></h2>
     </span>
 </template>
 
