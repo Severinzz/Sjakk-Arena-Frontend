@@ -1,19 +1,22 @@
 <template>
-<v-container>
-  <!-- Let the system decide what to load when we are waiting -->
-  <!-- https://vuejs.org/v2/guide/conditional.html -->
-  <div v-if="waiting">
-  <PlayerWaiting></PlayerWaiting>
+  <div>
+    <v-container>
+      <!-- Let the system decide what to load when we are waiting -->
+      <!-- https://vuejs.org/v2/guide/conditional.html -->
+      <div v-if="waiting">
+        <PlayerWaiting></PlayerWaiting>
+      </div>
+      <!-- Let the system decide what to load when we are not waiting -->
+      <div v-else-if="!waiting">
+        <PlayerPlaying></PlayerPlaying>
+      </div>
+      <!-- Let the system decide what to load when something goes wrong -->
+      <div v-else>
+        <h1>Shit...</h1>
+      </div>
+    </v-container>
+    <v-spacer/>
   </div>
-  <!-- Let the system decide what to load when we are not waiting -->
-  <div v-else-if="!waiting">
-    <PlayerPlaying></PlayerPlaying>
-  </div>
-  <!-- Let the system decide what to load when something goes wrong -->
-  <div v-else>
-    <h1>Shit...</h1>
-  </div>
-</v-container>
 </template>
 
 <script>

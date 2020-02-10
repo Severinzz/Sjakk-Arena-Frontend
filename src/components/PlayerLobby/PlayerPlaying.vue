@@ -11,8 +11,8 @@
         <v-card-text align="center">
           <v-spacer />
           <h1>{{ Tname }}</h1>
-          <h2 class="gameDetail">{{Usernamne}}</h2>
-          <h2 class="gameDetail">Poeng: {{Tpoints}}</h2>
+          <h2 class="gameDetail">{{ Usernamne }}</h2>
+          <h2 class="gameDetail">Poeng: {{ Tpoints }}</h2>
           <!-- Do player have an opponent? -->
           <div v-if="paired">
             <PlayerPaired></PlayerPaired>
@@ -24,6 +24,22 @@
           <div v-else>
             <p>Systemet kan ikke sette deg opp mot noen, Vennligst prøv igjen.</p>
           </div>
+          <v-container>
+            <v-row no-gutters>
+            <v-col>
+            <div v-if="!paired">
+            <v-btn tile depressed disabled class="pa-2">Legg inn resultat</v-btn>
+            </div>
+            <div v-if="paired">
+              <v-btn tile depressed class="pa-2">Legg inn resultat</v-btn>
+            </div>
+            <v-btn tile depressed class="pa-2">Tidligere parti</v-btn>
+            <br>
+            <v-btn tile depressed class="pa-2">Forlat turnering</v-btn>
+            <v-btn tile depressed class="pa-2">Ta pause</v-btn>
+            </v-col>
+            </v-row>
+          </v-container>
           <p class="gameDetail body-2">Spilletid: {{Tstart}} -> {{Tend}} </p>
           <v-spacer />
         </v-card-text>
@@ -49,13 +65,16 @@ export default {
       Tend: '15:30',
       Usernamne: 'Ola Nordmann',
       Tpoints: '13',
-      paired: false
+      paired: true
     }
   }
 }
 </script>
 
 <style scoped>
+  .buttons_col{
+  }
+
   .card{
     display: inline;
     width: auto;
