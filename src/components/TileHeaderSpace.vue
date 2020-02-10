@@ -11,6 +11,6 @@ export default {
 
 <style scoped>
   #tile-header-space{
-    margin-top: 4%;
+    margin-top: 2em;
   }
 </style>

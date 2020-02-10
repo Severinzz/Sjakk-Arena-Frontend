@@ -11,8 +11,8 @@
         <v-card-text align="center">
           <v-spacer />
           <h1>{{ Tname }}</h1>
-          <h2 class="gameDetail">{{ Usernamne }}</h2>
-          <h2 class="gameDetail">Poeng: {{ Tpoints }}</h2>
+          <h3 class="gameDetail">{{ Usernamne }}</h3>
+          <h3 class="gameDetail">Poeng: {{ Tpoints }}</h3>
           <!-- Do player have an opponent? -->
           <div v-if="paired">
             <PlayerPaired></PlayerPaired>
@@ -25,22 +25,17 @@
             <p>Systemet kan ikke sette deg opp mot noen, Vennligst prøv igjen.</p>
           </div>
           <v-container>
-            <v-row no-gutters>
-            <v-col>
             <div v-if="!paired">
-            <v-btn tile depressed disabled class="pa-2">Legg inn resultat</v-btn>
+            <v-btn class="btns" block rounded depressed disabled>Registrer resultat</v-btn>
             </div>
             <div v-if="paired">
-              <v-btn tile depressed class="pa-2">Legg inn resultat</v-btn>
+              <v-btn class="btns" block rounded depressed>Registrer resultat</v-btn>
             </div>
-            <v-btn tile depressed class="pa-2">Tidligere parti</v-btn>
-            <br>
-            <v-btn tile depressed class="pa-2">Forlat turnering</v-btn>
-            <v-btn tile depressed class="pa-2">Ta pause</v-btn>
-            </v-col>
-            </v-row>
+            <v-btn class="btns" block rounded depressed>Tidligere parti</v-btn>
+            <v-btn class="btns" block rounded depressed>Forlat turnering</v-btn>
+            <v-btn class="btns" block rounded depressed>Ta pause</v-btn>
           </v-container>
-          <p class="gameDetail body-2">Spilletid: {{Tstart}} -> {{Tend}} </p>
+          <p class="gameDetail body-2">Spilletid: {{ Tstart }} -> {{ Tend }} </p>
           <v-spacer />
         </v-card-text>
       </v-card>
@@ -72,18 +67,19 @@ export default {
 </script>
 
 <style scoped>
-  .buttons_col{
+  .btns{
+    margin-top: 0.5em;
   }
 
   .card{
     display: inline;
     width: auto;
     min-width: 8em;
-    max-width: 65em;
+    max-width: 70em;
     height: auto;
   }
 
   .gameDetail{
-    margin-top: 1.2em;
+    margin-top: 0.8em;
   }
 </style>
