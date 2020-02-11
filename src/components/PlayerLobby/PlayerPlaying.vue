@@ -24,17 +24,51 @@
           <div v-else>
             <p>Systemet kan ikke sette deg opp mot noen, Vennligst prøv igjen.</p>
           </div>
+          <!-- Buttons to be spawned -->
           <v-container>
             <div v-if="!paired">
             <v-btn class="btns" block rounded depressed disabled>Registrer resultat</v-btn>
             </div>
             <div v-if="paired">
-              <v-btn class="btns" block rounded depressed>Registrer resultat</v-btn>
+                <v-btn class="btns" color="primary" block rounded depressed @click="dialog = true">Registrer resultat</v-btn>
             </div>
             <v-btn class="btns" block rounded depressed>Tidligere parti</v-btn>
             <v-btn class="btns" block rounded depressed>Forlat turnering</v-btn>
             <v-btn class="btns" block rounded depressed>Ta pause</v-btn>
           </v-container>
+          <!-- Dialog for user to input result -->
+          <v-row class="justify-center" align="center">
+          <v-dialog v-model="dialog" persistent max-width="650px">
+            <v-card>
+              <v-card-title class="justify-center">Registrer Resultat</v-card-title>
+              <v-card-text>
+                <v-row class="justify-center">
+                  <v-radio-group
+                    v-model="radios"
+                    :row="true"
+                    :mandatory="true"
+                  >
+                    <v-col cols="4">
+                      <v-radio label="1-0"></v-radio>
+                    </v-col>
+                    <v-col cols="4">
+                      <v-radio label=",5-,5"></v-radio>
+                    </v-col>
+                    <v-col cols="4">
+                      <v-radio label="0-1"></v-radio>
+                    </v-col>
+                  </v-radio-group>
+                </v-row>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn text @click="dialog = false">Avbryt</v-btn>
+                <v-btn text color="primary" @click="dialog = false">Send inn</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          </v-row>
+          <!-- playtime -->
           <p class="gameDetail body-2">Spilletid: {{ Tstart }} -> {{ Tend }} </p>
           <v-spacer />
         </v-card-text>
@@ -60,7 +94,8 @@ export default {
       Tend: '15:30',
       Usernamne: 'Ola Nordmann',
       Tpoints: '13',
-      paired: false
+      paired: true,
+      dialog: false
     }
   }
 }
