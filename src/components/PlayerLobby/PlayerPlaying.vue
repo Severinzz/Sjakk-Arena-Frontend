@@ -36,26 +36,33 @@
             <v-btn class="btns" block rounded depressed>Forlat turnering</v-btn>
             <v-btn class="btns" block rounded depressed>Ta pause</v-btn>
           </v-container>
-          <!-- Dialog for user to input result -->
+          <!-- Dialog for user to input result; https://vuetifyjs.com/en/components/dialogs -->
           <v-row class="justify-center" align="center">
           <v-dialog v-model="dialog" persistent max-width="650px">
             <v-card>
-              <v-card-title class="justify-center">Registrer Resultat</v-card-title>
+              <v-card-title class="justify-center">Resultatet ble:</v-card-title>
               <v-card-text>
                 <v-row class="justify-center">
+                  <!-- Radio buttons used to register result; https://vuetifyjs.com/en/components/dialogs -->
                   <v-radio-group
                     v-model="radios"
-                    :row="true"
                     :mandatory="true"
+                    inline-block
                   >
                     <v-col cols="4">
-                      <v-radio label="1-0"></v-radio>
+                      <v-radio class="radioa" label="Hvit seier">
+                        <v-spacer />
+                      </v-radio>
                     </v-col>
                     <v-col cols="4">
-                      <v-radio label=",5-,5"></v-radio>
+                      <v-radio class="radioa" label="Remis">
+                        <v-spacer />
+                      </v-radio>
                     </v-col>
                     <v-col cols="4">
-                      <v-radio label="0-1"></v-radio>
+                      <v-radio class="radioa" label="Sort seier">
+                        <v-spacer />
+                      </v-radio>
                     </v-col>
                   </v-radio-group>
                 </v-row>
@@ -102,6 +109,10 @@ export default {
 </script>
 
 <style scoped>
+  .radioa{
+    margin-bottom: 1em;
+  }
+
   .btns{
     margin-top: 0.5em;
   }
