@@ -4,7 +4,7 @@
       ref="form"
       lazy-validation
     >
-      <v-toolbar dark :color="formColor">
+      <v-toolbar dark color="primary">
         <v-toolbar-title>Turneringsinformasjon</v-toolbar-title>
       </v-toolbar>
       <!-- Name of tournament host -->
@@ -126,8 +126,8 @@
         :rules="numberFieldRules"
       ></v-text-field>
       <v-switch label="Start når to spillere er påmeldt" v-model="earlyStart"></v-switch>
-      <v-btn class="mr-4" color="primary" @click="validate">Send</v-btn>
-      <v-btn @click="clear">Tøm</v-btn>
+      <v-btn id="submit-btn" class="mr-4" color="primary" @click="validate">Send</v-btn>
+      <v-btn id="clear-btn" @click="clear">Tøm</v-btn>
     </v-form>
   </div>
 </template>
@@ -169,15 +169,7 @@ export default {
   },
   methods: {
     clear() {
-      this.startTime = null
-      this.endTime = null
-      this.name = ''
-      this.tournamentName = ''
-      this.tables = ''
-      this.pause = ''
-      this.rounds = ''
-      this.earlyStart = false
-      this.email = ''
+      this.$refs.form.reset()
     },
     submit() {
       alert('Navn: ' + this.name + '\nEmail: ' + this.email + '\nTurneringsnavn: ' + this.tournamentName +

@@ -34,16 +34,14 @@
           class="text-center"
         >
           <!-- The individual players -->
-          <div
-            v-for="(player, index) in players"
-            :key="index"
-            @click="handleRemovePlayer(index)"
-            class="player-wrapper">
             <player
+              @click.native="handleRemovePlayer(index)"
+              v-for="(player, index) in players"
               :player-name="player.name"
               :player-piece="randomIcon()"
+              :key="index"
+              :id="'player' + index"
             />
-          </div>
         </v-row>
       </v-col>
     </v-row>
@@ -91,6 +89,7 @@ export default {
       return this.iconsAvailable[Math.floor(Math.random() * this.iconsAvailable.length)]
     },
     handleRemovePlayer (index) {
+      console.log(index)
       this.removePlayer(index)
     }
   }
@@ -118,17 +117,6 @@ export default {
   .button-wrapper {
     margin: 5% 1% 0 1%;
     display: inline-block;
-  }
-
-  .player-wrapper {
-    margin: 3% auto auto auto;
-    padding: 10px;
-    width: 10%;
-    min-width: 150px;
-  }
-
-  .player-wrapper:hover {
-    text-decoration: line-through;
   }
 
   div.col {
