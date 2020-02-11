@@ -14,15 +14,20 @@
           <h3 class="gameDetail">{{ Usernamne }}</h3>
           <h3 class="gameDetail">Poeng: {{ Tpoints }}</h3>
           <!-- Do player have an opponent? -->
-          <div v-if="paired">
+          <div v-if="paired && !pause">
             <PlayerPaired></PlayerPaired>
           </div>
-          <div v-else-if="!paired">
+          <div v-else-if="!paired && !pause">
             <PlayerNotPaired></PlayerNotPaired>
           </div>
-          <!-- If something goes wrong this shows up -->
+          <!-- If user is on a break and not in a game this shows -->
+          <div v-else-if="!paired && pause">
+            <p>Du har nå pause. For å spille mer avslutt pausen.</p>
+          </div>
+          <!-- If all goe to shit this shows up -->
           <div v-else>
-            <p>Systemet kan ikke sette deg opp mot noen, Vennligst prøv igjen.</p>
+            <p>System is not able to pair you. Please try again..</p>
+            <p>Feil: pause: {{pause}} og paired: {{paired}}</p>
           </div>
           <!-- Buttons to be spawned -->
           <v-container>
@@ -30,15 +35,22 @@
             <v-btn class="btns" block rounded depressed disabled>Registrer resultat</v-btn>
             </div>
             <div v-if="paired">
-                <v-btn class="btns" color="primary" block rounded depressed @click="dialog = true">Registrer resultat</v-btn>
+              <v-btn class="btns" color="primary" block rounded depressed @click="result_dialog = true">Registrer resultat</v-btn>
             </div>
             <v-btn class="btns" block rounded depressed>Tidligere parti</v-btn>
-            <v-btn class="btns" block rounded depressed>Forlat turnering</v-btn>
-            <v-btn class="btns" block rounded depressed>Ta pause</v-btn>
+            <v-btn class="btns" block rounded depressed @click="leave_dialog = true">Forlat turnering</v-btn>
+            <!-- If user is NOT paired or in a break -->
+            <div v-if="!pause && !paired">
+              <v-btn class="btns" block rounded depressed @click="pause = !pause">Ta pause</v-btn>
+            </div>
+            <!-- If user if NOT paired and in a break -->
+            <div v-if="pause && !paired">
+              <v-btn class="btns" color="primary" block rounded depressed @click="pause = !pause">Avslutt pause</v-btn>
+            </div>
           </v-container>
           <!-- Dialog for user to input result; https://vuetifyjs.com/en/components/dialogs -->
           <v-row class="justify-center" align="center">
-          <v-dialog v-model="dialog" persistent max-width="650px">
+          <v-dialog v-model="result_dialog" persistent max-width="650px">
             <v-card>
               <v-card-title class="justify-center">Resultatet ble:</v-card-title>
               <v-card-text>
@@ -69,11 +81,31 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn text @click="dialog = false">Avbryt</v-btn>
-                <v-btn text color="primary" @click="dialog = false">Send inn</v-btn>
+                <v-btn text @click="result_dialog = false">Avbryt</v-btn>
+                <v-btn text color="primary" @click="result_registrated">Send inn</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
+          </v-row>
+          <!-- Dialog for user if 'FORLAT TURNERING' is pressed -->
+          <v-row class="justify-center" align="center">
+            <v-dialog v-model="leave_dialog" persistent max-width="650px">
+              <v-card>
+                <v-card-title class="justify-center">Forlat turnering</v-card-title>
+                <v-card-text>
+                  <v-row class="justify-center">
+                    <h2>Er du sikker på at du vil forlate tuneringen?</h2>
+                    <p>Denne handlingen kan <strong>ikke</strong> reverseres.</p>
+                  </v-row>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer />
+                  <!-- User has the option to either leave or go back -->
+                  <v-btn text to="/">Forlat turneringen</v-btn>
+                  <v-btn text color="primary" outlined @click="leave_dialog = false">Avbryt</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-row>
           <!-- playtime -->
           <p class="gameDetail body-2">Spilletid: {{ Tstart }} -> {{ Tend }} </p>
@@ -100,9 +132,17 @@ export default {
       Tstart: '13:00',
       Tend: '15:30',
       Usernamne: 'Ola Nordmann',
-      Tpoints: '13',
-      paired: true,
-      dialog: false
+      Tpoints: 13.0,
+      result_dialog: false, // Endres av bruker
+      leave_dialog: false, // Endres av bruker
+      pause: false, // Endres av bruker
+      paired: true // Endres av systemet
+    }
+  },
+  methods: {
+    result_registrated () {
+      this.paired = false
+      this.result_dialog = false
     }
   }
 }
