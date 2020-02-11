@@ -1,4 +1,5 @@
 <template>
+  <!-- This is loaded when player is waiting for game start -->
   <v-container class="justify-center" fluid>
     <v-row class="justify-center" align="center">
       <v-card class="elevation-12, card">

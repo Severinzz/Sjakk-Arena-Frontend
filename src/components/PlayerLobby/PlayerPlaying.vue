@@ -37,7 +37,7 @@
             <p>Feil: pause: {{pause}} og paired: {{paired}}</p>
           </div>
 
-          <!-- Buttons to be spawned -->
+          <!-- Buttons always visible -->
           <v-container>
             <div v-if="!paired">
             <v-btn class="btns" block rounded depressed disabled>Registrer resultat</v-btn>

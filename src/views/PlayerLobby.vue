@@ -6,13 +6,15 @@
       <div v-if="waiting">
         <PlayerWaiting></PlayerWaiting>
       </div>
+
       <!-- Let the system decide what to load when we are not waiting -->
       <div v-else-if="!waiting">
         <PlayerPlaying></PlayerPlaying>
       </div>
-      <!-- Let the system decide what to load when something goes wrong -->
+
+      <!-- Something goes wrong -->
       <div v-else>
-        <h1>Shit...</h1>
+        <h1>Something wrong in PlayerLobby.vue. waiting = {{waiting}}</h1>
       </div>
     </v-container>
     <v-spacer/>

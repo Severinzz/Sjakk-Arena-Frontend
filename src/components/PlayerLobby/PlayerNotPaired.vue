@@ -8,7 +8,7 @@
         :width="7"
         color="indigo"
         indeterminate
-        class="dumdum"
+        class="progress_style"
       ></v-progress-circular>
     </span>
 </template>
@@ -23,7 +23,7 @@ export default {
   .gameDetail{
     margin-top: 1.2em;
   }
-  .dumdum{
+  .progress_style{
     margin-top: 10px;
   }
 </style>
