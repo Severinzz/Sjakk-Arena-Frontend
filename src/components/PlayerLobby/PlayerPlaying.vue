@@ -45,7 +45,12 @@
             <div v-if="paired">
               <v-btn class="btns" color="primary" block rounded depressed @click="result_dialog = true">Registrer resultat</v-btn>
             </div>
-            <v-btn class="btns" block rounded depressed>Tidligere parti</v-btn>
+            <div v-if="!past_results">
+            <v-btn class="btns" block rounded depressed @click="past_results = true">Tidligere parti</v-btn>
+            </div>
+            <div v-if="past_results">
+              <v-btn class="btns" color="primary" block rounded depressed @click="past_results = false">Fjern resultatliste</v-btn>
+            </div>
             <v-btn class="btns" block rounded depressed @click="leave_dialog = true">Forlat turnering</v-btn>
             <!-- If user is NOT paired or in a break -->
             <div v-if="!pause && !paired">
@@ -56,6 +61,11 @@
               <v-btn class="btns" color="primary" block rounded depressed @click="pause = !pause">Avslutt pause</v-btn>
             </div>
           </v-container>
+
+          <div v-if="past_results">
+            <EarlierResults></EarlierResults>
+            <v-btn class="btns" color="primary" block rounded depressed @click="past_results = false">Fjern resultatliste</v-btn>
+          </div>
 
           <!-- Dialog for user to input result; https://vuetifyjs.com/en/components/dialogs -->
           <v-row class="justify-center" align="center">
@@ -91,7 +101,7 @@
               <v-card-actions>
                 <v-spacer />
                 <v-btn text @click="result_dialog = false">Avbryt</v-btn>
-                <v-btn text color="primary" outlined @click="result_registrated">Send inn</v-btn>
+                <v-btn text color="primary" outlined @click="result_registered">Send inn</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -129,12 +139,14 @@
 <script>
 import PlayerPaired from './PlayerPaired'
 import PlayerNotPaired from './PlayerNotPaired'
+import EarlierResults from './EarlierResults'
 
 export default {
   name: 'PlayerPlaying',
   components: {
     PlayerPaired,
-    PlayerNotPaired
+    PlayerNotPaired,
+    EarlierResults
   },
   data() {
     return {
@@ -145,12 +157,13 @@ export default {
       Tpoints: 13.5,
       result_dialog: false, // Endres av bruker
       leave_dialog: false, // Endres av bruker
+      past_results: true, // Endres av bruker
       pause: false, // Endres av bruker
       paired: false // Endres av systemet
     }
   },
   methods: {
-    result_registrated () {
+    result_registered () {
       this.paired = false
       this.result_dialog = false
     }
