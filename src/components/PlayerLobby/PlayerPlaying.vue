@@ -157,7 +157,7 @@ export default {
       Tpoints: 13.5,
       result_dialog: false, // Endres av bruker
       leave_dialog: false, // Endres av bruker
-      past_results: true, // Endres av bruker
+      past_results: false, // Endres av bruker
       pause: false, // Endres av bruker
       paired: false // Endres av systemet
     }
