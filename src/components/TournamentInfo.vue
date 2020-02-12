@@ -1,9 +1,9 @@
 <template>
 <div>
   <p class="pin">PIN:</p>
-  <p class="pin">{{tournament[0].pin}}</p>
-  <p class="time" v-if="!started">Starter: {{tournament[0].start}}</p>
-  <p class="time" v-if="started">Slutter: {{tournament[0].end}}</p>
+  <p class="pin">{{ tournament[0].pin }}</p>
+  <p class="time" v-if="!started">Starter: {{ tournament[0].start }}</p>
+  <p class="time" v-if="started">Slutter: {{ tournament[0].end }}</p>
 </div>
 </template>
 

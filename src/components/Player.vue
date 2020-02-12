@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <p class="player-name"> {{playerName}} </p>
+  <div class="player-wrapper">
+    <p class="player-name"> {{ playerName }} </p>
     <i :class="playerPiece"></i>
   </div>
 </template>
@@ -19,5 +19,16 @@ export default {
   .player-name{
     font-size: 1.3em;
     font-weight: bold;
+  }
+
+  .player-wrapper {
+    margin: 3% auto auto auto;
+    padding: 10px;
+    width: 10%;
+    min-width: 150px;
+  }
+
+  .player-wrapper:hover {
+    text-decoration: line-through;
   }
 </style>

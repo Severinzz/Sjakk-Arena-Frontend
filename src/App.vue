@@ -17,6 +17,7 @@ import TileHeaderSpace from './components/TileHeaderSpace'
 export default {
   name: 'App',
   components: { AppHeader, AppFooter, TileHeaderSpace }
+
 }
 </script>
 

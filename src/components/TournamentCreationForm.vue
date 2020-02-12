@@ -2,11 +2,10 @@
   <div class="form">
     <v-form
       ref="form"
-      v-model="valid"
       lazy-validation
     >
-      <v-toolbar dark :color="formColor">
-        <v-toolbar-title >Turneringsinformasjon</v-toolbar-title>
+      <v-toolbar dark color="primary">
+        <v-toolbar-title>Turneringsinformasjon</v-toolbar-title>
       </v-toolbar>
       <!-- Name of tournament host -->
       <v-text-field
@@ -14,14 +13,15 @@
         label="Navn"
         :rules="nameRules"
         required
-      ></v-text-field>
+      >
+      </v-text-field>
       <!-- email address of tournament host -->
       <v-text-field
         v-model="email"
         label="E-post"
         :rules="emailRules"
-        required
-      ></v-text-field>
+        required>
+      </v-text-field>
       <!-- Name of tournament -->
       <v-text-field
         v-model="tournamentName"
@@ -51,7 +51,8 @@
                 readonly
                 required
                 v-on="on"
-              ></v-text-field>
+              >
+              </v-text-field>
             </template>
             <v-time-picker
               v-if="startTimeMenu"
@@ -61,7 +62,8 @@
               :color="formColor"
               :max="endTime"
               format="24hr"
-            ></v-time-picker>
+            >
+            </v-time-picker>
           </v-menu>
         </v-col>
         <v-spacer></v-spacer>
@@ -105,22 +107,27 @@
         label="Antall bord"
         type="number"
         :min="0"
-      ></v-text-field>
+        :rules="numberFieldRules"
+      >
+      </v-text-field>
       <!-- Length of pause between games-->
       <v-text-field
         v-model="pause"
         label="Tid mellom parti (i minutter)"
         type="number"
-      ></v-text-field>
+        :rules="numberFieldRules"
+      >
+      </v-text-field>
       <!-- Maximum number of rounds -->
       <v-text-field
         v-model="rounds"
         label="Max antall runder"
         type="number"
+        :rules="numberFieldRules"
       ></v-text-field>
       <v-switch label="Start når to spillere er påmeldt" v-model="earlyStart"></v-switch>
-      <v-btn class="mr-4" color="primary" @click="validate">Send</v-btn>
-      <v-btn @click="clear">Tøm</v-btn>
+      <v-btn id="submit-btn" class="mr-4" color="primary" @click="validate">Send</v-btn>
+      <v-btn id="clear-btn" @click="clear">Tøm</v-btn>
     </v-form>
   </div>
 </template>
@@ -154,20 +161,15 @@ export default {
       tournamentNameRules: [
         v => !!v || 'Turneringsnavn er påkrevd',
         v => (v && v.length <= 20) || 'Turneringsnavn må innholde færre enn 20 karakterer'
+      ],
+      numberFieldRules: [
+        v => /^\d+$/.test(v) || 'Bare tall i dette feltet!' // If not included the number field can contain + and -
       ]
     }
   },
   methods: {
     clear() {
-      this.startTime = null
-      this.endTime = null
-      this.name = ''
-      this.tournamentName = ''
-      this.tables = ''
-      this.pause = ''
-      this.rounds = ''
-      this.earlyStart = false
-      this.email = ''
+      this.$refs.form.reset()
     },
     submit() {
       alert('Navn: ' + this.name + '\nEmail: ' + this.email + '\nTurneringsnavn: ' + this.tournamentName +
