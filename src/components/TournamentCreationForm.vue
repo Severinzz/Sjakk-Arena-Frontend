@@ -4,6 +4,14 @@
       ref="form"
       lazy-validation
     >
+      <v-alert
+        :value="error"
+      color="red"
+      dark
+      icon="as fa-plug"
+      transition="scale-transition">
+        {{ errorMessage }}
+      </v-alert>
       <v-toolbar dark color="primary">
         <v-toolbar-title>Turneringsinformasjon</v-toolbar-title>
       </v-toolbar>
@@ -66,39 +74,15 @@
             </v-time-picker>
           </v-menu>
         </v-col>
-        <v-spacer></v-spacer>
-        <v-col cols="11" sm="5">
-          <!-- End time -->
-          <v-menu
-            ref="secondmenu"
-            v-model="endTimeMenu"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            :return-value.sync="endTime"
-            transition="scale-transition"
-            offset-y
-            max-width="290px"
-            min-width="290px"
-          >
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="endTime"
-                label="Sluttid"
-                readonly
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-time-picker
-              v-if="endTimeMenu"
-              v-model="endTime"
-              full-width
-              @click:minute="$refs.secondmenu.save(endTime)"
-              :color="formColor"
-              :min="startTime"
-              format="24hr"
-            ></v-time-picker>
-          </v-menu>
-        </v-col>
+        <v-spacer>
+          <v-progress-circular
+            :size="70"
+            :width="7"
+            color="purple"
+            indeterminate
+            v-if="isLoading === true"
+          ></v-progress-circular>
+        </v-spacer>
       </v-row>
       <!-- end of code from vuetifyjs.com -->
       <!-- Number of tables -->
@@ -126,6 +110,45 @@
         :rules="numberFieldRules"
       ></v-text-field>
       <v-switch label="Start når to spillere er påmeldt" v-model="earlyStart"></v-switch>
+      <v-switch label="Bruk sluttid" v-model="useEndTime"></v-switch>
+      <!-- code from https://vuetifyjs.com/en/components/time-pickers-->
+      <v-row>
+      <v-col cols="12" sm="5">
+      <!-- End time -->
+      <v-menu
+        ref="secondmenu"
+        v-model="endTimeMenu"
+        :close-on-content-click="false"
+        :nudge-right="40"
+        :return-value.sync="endTime"
+        v-if="useEndTime"
+        transition="scale-transition"
+        offset-y
+        max-width="290px"
+        min-width="290px"
+      >
+        <template v-slot:activator="{ on }">
+          <v-text-field
+            v-model="endTime"
+            label="Sluttid"
+            readonly
+            v-on="on"
+            :rules="endTimeRules"
+          ></v-text-field>
+        </template>
+        <v-time-picker
+          v-if="endTimeMenu"
+          v-model="endTime"
+          full-width
+          @click:minute="$refs.secondmenu.save(endTime)"
+          :color="formColor"
+          :min="startTime"
+          format="24hr"
+        ></v-time-picker>
+      </v-menu>
+      </v-col>
+      </v-row>
+      <!-- end of code from vuetifyjs.com -->
       <v-btn id="submit-btn" class="mr-4" color="primary" @click="validate">Send</v-btn>
       <v-btn id="clear-btn" @click="clear">Tøm</v-btn>
     </v-form>
@@ -133,54 +156,84 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'TournamentCreationForm',
   data () {
     return {
-      startTime: null, // start time of tournament
-      endTime: null, // end time of tournament
+      startTime: '', // start time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
+      endTime: '', // end time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
       startTimeMenu: false,
       endTimeMenu: false,
       name: '', // name of tournament host
       email: '', // email address of tournament host
       tournamentName: '', // name of tournament
-      tables: '', // number of tables used in the tournament
-      pause: '', // length of pause between games
-      rounds: '', // maximum number of rounds in the tournament
+      tables: '', // number of tables used in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
+      pause: '', // length of pause between games // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
+      rounds: '', // maximum number of rounds in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
       earlyStart: false, // true if the tournament will start when two players are registered
       formColor: 'blue', // color to be used in form elements
-
+      isLoading: false,
+      errorMessage: '',
+      error: false,
+      useEndTime: false,
       // rules
       nameRules: [
         v => !!v || 'Navn er påkrevd',
         v => (v && v.length <= 20) || 'Navn må innholde færre enn 20 karakterer'
       ],
       emailRules: [
-        v => /.+@.+\..+/.test(v) || 'Du må skrive inn en gyldig e-postadresse'
+        v => /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/.test(v) || 'Du må skrive inn en gyldig e-postadresse'
       ],
       tournamentNameRules: [
         v => !!v || 'Turneringsnavn er påkrevd',
         v => (v && v.length <= 20) || 'Turneringsnavn må innholde færre enn 20 karakterer'
       ],
       numberFieldRules: [
-        v => /^\d+$/.test(v) || 'Bare tall i dette feltet!' // If not included the number field can contain + and -
+        v => /^\d+$/.test(v) || 'Bare tall i dette feltet!', // If not included the number field can contain + and -
+        v => v < 256 || 'Må vær mindre en 256!' // TODO MIGHT NOT WANT IT TO BE THE SAME FOR EACH NUMBER FIELD
+      ],
+      endTimeRules: [
+        v => !v || this.lastNumberInTime(v) > this.lastNumberInTime(this.startTime) ||
+          'Sluttid kan ikke vær lik eller mindre start tiden!'
       ]
     }
   },
   methods: {
+    ...mapActions([
+      'createTournament'
+    ]),
     clear() {
       this.$refs.form.reset()
     },
-    submit() {
-      alert('Navn: ' + this.name + '\nEmail: ' + this.email + '\nTurneringsnavn: ' + this.tournamentName +
-      '\nStarttid: ' + this.startTime + '\nSluttid: ' + this.endTime +
-        '\nAntall bord: ' + this.tables + '\nMax antall runder: ' + this.rounds +
-      '\nStart når to spillere er påmeldt: ' + this.earlyStart)
+    async submit () {
+      this.error = false
+      this.isLoading = true
+      let payload = {
+        'tournament_name': this.name,
+        'admin_email': this.email,
+        'start': this.startTime,
+        'end': this.endTime,
+        'tables': parseInt(this.tables),
+        'max_rounds': parseInt(this.rounds),
+        'active': false // TODO: CHANGE TO EARLY START
+      }
+      await this.createTournament(payload).then(res => {
+        this.$router.push('/lobby')
+        this.isLoading = false
+      }).catch(err => {
+        this.isLoading = false
+        this.error = true
+        this.errorMessage = err + '. Please try again later'
+      })
     },
     validate() {
       if (this.$refs.form.validate()) {
         this.submit()
       }
+    },
+    lastNumberInTime(timeString) {
+      return parseInt(timeString.toString().split(':')[1])
     }
   }
 }

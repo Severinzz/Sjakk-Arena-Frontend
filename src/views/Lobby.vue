@@ -89,7 +89,6 @@ export default {
       return this.iconsAvailable[Math.floor(Math.random() * this.iconsAvailable.length)]
     },
     handleRemovePlayer (index) {
-      console.log(index)
       this.removePlayer(index)
     }
   }
