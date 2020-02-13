@@ -1,5 +1,6 @@
 import players from '../data/players'
-import tournament from '../data/tournament'
+// TODO: REFRACTOR STORE :(
+let tournament = {}
 
 export default {
   players,

@@ -4,6 +4,14 @@
       ref="form"
       lazy-validation
     >
+      <v-alert
+        :value="error"
+      color="red"
+      dark
+      icon="as fa-plug"
+      transition="scale-transition">
+        {{ errorMessage }}
+      </v-alert>
       <v-toolbar dark color="primary">
         <v-toolbar-title>Turneringsinformasjon</v-toolbar-title>
       </v-toolbar>
@@ -66,7 +74,15 @@
             </v-time-picker>
           </v-menu>
         </v-col>
-        <v-spacer></v-spacer>
+        <v-spacer>
+          <v-progress-circular
+            :size="70"
+            :width="7"
+            color="purple"
+            indeterminate
+            v-if="isLoading === true"
+          ></v-progress-circular>
+        </v-spacer>
         <v-col cols="11" sm="5">
           <!-- End time -->
           <v-menu
@@ -133,12 +149,13 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'TournamentCreationForm',
   data () {
     return {
-      startTime: null, // start time of tournament
-      endTime: null, // end time of tournament
+      startTime: '', // start time of tournament
+      endTime: '', // end time of tournament
       startTimeMenu: false,
       endTimeMenu: false,
       name: '', // name of tournament host
@@ -149,14 +166,16 @@ export default {
       rounds: '', // maximum number of rounds in the tournament
       earlyStart: false, // true if the tournament will start when two players are registered
       formColor: 'blue', // color to be used in form elements
-
+      isLoading: false,
+      errorMessage: '',
+      error: false,
       // rules
       nameRules: [
         v => !!v || 'Navn er påkrevd',
         v => (v && v.length <= 20) || 'Navn må innholde færre enn 20 karakterer'
       ],
       emailRules: [
-        v => /.+@.+\..+/.test(v) || 'Du må skrive inn en gyldig e-postadresse'
+        v => /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/.test(v) || 'Du må skrive inn en gyldig e-postadresse'
       ],
       tournamentNameRules: [
         v => !!v || 'Turneringsnavn er påkrevd',
@@ -168,14 +187,32 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'createTournament'
+    ]),
     clear() {
       this.$refs.form.reset()
     },
-    submit() {
-      alert('Navn: ' + this.name + '\nEmail: ' + this.email + '\nTurneringsnavn: ' + this.tournamentName +
-      '\nStarttid: ' + this.startTime + '\nSluttid: ' + this.endTime +
-        '\nAntall bord: ' + this.tables + '\nMax antall runder: ' + this.rounds +
-      '\nStart når to spillere er påmeldt: ' + this.earlyStart)
+    async submit () {
+      this.error = false
+      this.isLoading = true
+      let payload = {
+        'tournament_name': this.name,
+        'admin_email': this.email,
+        'start': this.startTime, // TODO: SHOULD NOT BE ABLE TO BE NULL OR UNDEFINED
+        'end': this.endTime, // TODO: SHOULD NOT BE ABLE TO BE NULL OR UNDEFINED
+        'tables': parseInt(this.tables), // TODO: CHECK DATABASE FOR MAX
+        'max_rounds': parseInt(this.rounds), // TODO: CHECK DATABASE FOR MAX
+        'active': false // TODO: CHANGE TO EARLY START
+      }
+      await this.createTournament(payload).then(res => {
+        this.$router.push('/lobby')
+        this.isLoading = false
+      }).catch(err => {
+        this.isLoading = false
+        this.error = true
+        this.errorMessage = err + '. Please try again later'
+      })
     },
     validate() {
       if (this.$refs.form.validate()) {

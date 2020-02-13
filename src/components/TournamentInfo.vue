@@ -1,22 +1,22 @@
 <template>
 <div>
   <p class="pin">PIN:</p>
-  <p class="pin">{{ tournament[0].pin }}</p>
-  <p class="time" v-if="!started">Starter: {{ tournament[0].start }}</p>
-  <p class="time" v-if="started">Slutter: {{ tournament[0].end }}</p>
+  <p class="pin">{{ tournament.tournamentId }}</p>
+  <p class="time" v-if="!started">Starter: {{ tournament.start }}</p>
+  <p class="time" v-if="started">Slutter: {{ tournament.end }}</p>
 </div>
 </template>
 
 <script>
+
 export default {
   name: 'TournamentInfo',
   props: {
-    tournament: { type: Array, required: true },
+    tournament: { type: Object, required: true },
     started: { type: Boolean, required: true }
   }
 }
 </script>
-
 <style scoped>
   div{
     display: inline-block;
