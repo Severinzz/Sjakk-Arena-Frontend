@@ -1,5 +1,5 @@
 import players from '../data/players'
-// TODO: REFRACTOR STORE :(
+// TODO: REFACTOR STORE TO USE MODULES?
 let tournament = {}
 
 export default {
