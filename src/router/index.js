@@ -5,6 +5,7 @@ import Lobby from '../views/Lobby'
 import EnterTourney from '../views/EnterTourney'
 import EnterTID from '../views/EnterTID'
 import TournamentCreation from '../views/TournamentCreation.vue'
+import PlayerLobby from '../views/PlayerLobby'
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,12 @@ const routes = [
     name: 'tournamentCreation',
     component: TournamentCreation
 
+  },
+  {
+    // Add a lobby for players
+    path: '/player-lobby',
+    name: 'playerLobby',
+    component: PlayerLobby
   }
 ]
 
