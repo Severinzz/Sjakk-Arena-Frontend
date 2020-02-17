@@ -2,7 +2,7 @@
 
 describe('My First Test', () => {
   it('Visits the app root url', () => {
-    cy.visit('http://localhost:8080/#/lobby')
+    cy.visit('http://localhost:8081/#/lobby')
     cy.wait(3000)
     cy.get('#player0').trigger('mouseover')
     cy.wait(3000)

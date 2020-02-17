@@ -1,7 +1,7 @@
 <template>
 <div>
   <p class="pin">PIN:</p>
-  <p class="pin">{{ tournament.tournamentId }}</p>
+  <p class="pin">{{ tournament.id }}</p>
   <p class="time" v-if="!started">Starter: {{ tournament.start }}</p>
   <p class="time" v-if="started">Slutter: {{ tournament.end }}</p>
 </div>
