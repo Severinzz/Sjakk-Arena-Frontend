@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import Lobby from '../views/Lobby'
 import EnterTourney from '../views/EnterTourney'
 import EnterTID from '../views/EnterTID'
 import TournamentCreation from '../views/TournamentCreation.vue'
@@ -24,10 +23,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-
-    path: '/lobby',
+    path: '/lobby/:id',
     name: 'Lobby',
-    component: Lobby
+    component: () => import('../views/Lobby')
   },
   {
     // Add enter player-details for tournament from views for the router to use.
@@ -48,6 +46,7 @@ const routes = [
 
   },
   {
+    // TODO: ADD DYNAMIC ROUTE LINK
     // Add a lobby for players
     path: '/player-lobby',
     name: 'playerLobby',

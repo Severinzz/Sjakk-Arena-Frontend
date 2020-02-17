@@ -12,6 +12,11 @@ const tournamentService = {
     return axios.put(`${path}`, params).then(res => res).catch(err => {
       throw err
     })
+  },
+  get(path) {
+    return axios.get('/tournament-information/' + `${path}`).then(res => res).catch(err => {
+      throw err
+    })
   }
 }
 

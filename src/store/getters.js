@@ -4,5 +4,8 @@ export default {
   },
   getPlayerCount: (state) => {
     return state.players.length
+  },
+  getTournament: (state) => {
+    return state.tournament
   }
 }
