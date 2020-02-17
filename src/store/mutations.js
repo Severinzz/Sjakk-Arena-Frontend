@@ -5,7 +5,7 @@ export default {
   removePlayer: (state, index) => {
     state.players.splice(index, 1)
   },
-  createTournament: (state, tournament) => {
+  addTournament: (state, tournament) => {
     state.tournament = tournament
   }
 }

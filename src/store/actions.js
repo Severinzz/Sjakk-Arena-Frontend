@@ -9,15 +9,19 @@ export default {
     commit('removePlayer', index)
   },
   createTournament: ({ commit }, payload) => {
-    return new Promise((resolve, reject) => {
-      tournamentService.put('/new-tournament', payload).then(res => {
-        payload['tournamentId'] = res.data.tournament_id
-        addToken(res.data.jwt)
-        commit('createTournament', payload)
-        resolve(res)
-      }).catch(err => {
-        reject(err)
-      })
+    return tournamentService.put('/new-tournament', payload).then(res => {
+      payload['id'] = res.data.tournament_id
+      addToken(res.data.jwt)
+      commit('addTournament', payload)
+    }).catch(err => {
+      throw err
+    })
+  },
+  fetchTournament: ({ commit }, path) => {
+    return tournamentService.get(path).then(res => {
+      addToken(res.data.jwt)
+      let job = JSON.parse(res.data.tournament)
+      commit('addTournament', job)
     }).catch(err => {
       throw err
     })
