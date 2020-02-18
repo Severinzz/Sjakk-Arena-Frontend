@@ -9,13 +9,27 @@
                   <v-toolbar-title>Fyll in game pin og spillenavn</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
-                  <v-form>
-                    <v-text-field v-model="game_pin" hide-details :min="0" :max="10000" label="Game Pin" placeholder="1234" type="number"/>
-                    <v-text-field v-model="playerName" label="Spillernavn" placeholder="Ola Nordmann" type="text"/>
+                  <v-form ref="form" lazy-validation>
+                    <v-text-field v-model="gamePin"
+                                  :min="0"
+                                  :max="10000"
+                                  :rules="[ v => !!v || 'Game Pin er påkrevd']"
+                                  label="Game Pin"
+                                  placeholder="1234"
+                                  type="number"
+                    />
+                    <v-spacer></v-spacer>
+                    <v-text-field v-model="playerName"
+                                  label="Spillernavn"
+                                  placeholder="Ola Nordmann"
+                                  :rules="[ v => !!v || 'Navn er påkrevd']"
+                                  type="text"
+                    />
+                    <div id="error">{{ errorMessage }}</div>
                   </v-form>
                   <v-card-actions>
                     <v-spacer />
-                    <v-btn color="primary" to="/">Delta</v-btn>
+                    <v-btn color="primary" @click="validate">Delta</v-btn>
                     <v-btn to="/">Avbryt</v-btn>
                   </v-card-actions>
                 </v-card-text>
@@ -27,7 +41,7 @@
 </template>
 
 <script>
-
+import { mapActions } from 'vuex'
 export default {
   name: 'EnterTourney',
   components: {
@@ -36,16 +50,40 @@ export default {
     source: String
   },
   methods: {
+    ...mapActions([
+      'createPlayer'
+    ]),
+    async submit() {
+      let payload = {
+        'name': this.playerName,
+        'tournament': parseInt(this.gamePin)
+      }
+      await this.createPlayer(payload).then(res => {
+        this.$router.push('/player-lobby')
+      }).catch(err => {
+        console.log(err)
+        this.errorMessage = 'Er game pin riktig? Prøv et annet spillernavn!'
+      })
+    },
+    validate() {
+      if (this.$refs.form.validate()) {
+        this.submit()
+      }
+    }
   },
   data () {
     return {
-      game_pin: '',
-      playerName: ''
+      gamePin: '',
+      playerName: '',
+      errorMessage: ''
+      // TODO avgrense input felt
     }
   }
 }
 </script>
 
 <style scoped>
-
+  #error{
+    color: #FF5252;
+  }
 </style>

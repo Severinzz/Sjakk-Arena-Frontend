@@ -6,12 +6,12 @@
           <v-col cols="12" sm="8" md="4">
             <v-card class="elevation-12">
               <v-toolbar color="primary" dark flat>
-                <v-toolbar-title>Fyll inn game pin</v-toolbar-title>
+                <v-toolbar-title>Fyll inn turneringsID</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form>
                   <!-- No limits for the input field, might be needed to changed -->
-                  <v-text-field v-model="game_pin" label="Game pin" placeholder="1337" type="text"/>
+                  <v-text-field v-model="tournamentId" label="TurneringsID" placeholder="1337" type="text"/>
                 </v-form>
                 <v-card-actions>
                   <v-spacer />
@@ -34,7 +34,7 @@ export default {
   },
   data () {
     return {
-      game_pin: ''
+      tournamentId: ''
     }
   }
 }
