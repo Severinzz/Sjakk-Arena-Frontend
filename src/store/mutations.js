@@ -7,5 +7,8 @@ export default {
   },
   addTournament: (state, tournament) => {
     state.tournament = tournament
+  },
+  createPlayer: (state, player) => {
+    state.player = player
   }
 }

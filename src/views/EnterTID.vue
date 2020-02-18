@@ -11,7 +11,7 @@
             />
             <v-card class="elevation-12">
               <v-toolbar color="primary" dark flat>
-                <v-toolbar-title>Fyll inn turnerings id</v-toolbar-title>
+                <v-toolbar-title>Fyll inn turneringsID</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form>
@@ -24,7 +24,7 @@
                     v-if="isLoading === true"
                   ></v-progress-circular>
                   <!-- No limits for the input field, might be needed to changed -->
-                  <v-text-field v-model="tournamentId" label="Game pin" placeholder="1337" type="text"/>
+                  <v-text-field v-model="tournamentId" label="TurneringsID" placeholder="1337" type="text"/>
                 </v-form>
                 <v-card-actions>
                   <v-spacer />
