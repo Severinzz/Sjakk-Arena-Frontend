@@ -5,8 +5,9 @@ export default {
   addPlayer: ({ commit }, payload) => {
     commit('addPlayer', payload)
   },
-  removePlayer: ({ commit }, index) => {
-    commit('removePlayer', index)
+  removePlayer: ({ commit }, payload) => {
+    tournamentService.deleteURI(payload.path, payload.id)
+    commit('removePlayer', payload.index)
   },
   createTournament: ({ commit }, payload) => {
     return tournamentService.put('/new-tournament', payload).then(res => {
@@ -27,11 +28,20 @@ export default {
   },
   fetchTournament: ({ commit }, path) => {
     return tournamentService.get(path).then(res => {
-      addToken(res.data.jwt)
-      let job = JSON.parse(res.data.tournament)
-      commit('addTournament', job)
+      if (res.data.jwt !== undefined) {
+        addToken(res.data.jwt)
+        const job = JSON.parse(res.data.tournament)
+        commit('addTournament', job)
+      } else {
+        commit('addTournament', res.data)
+      }
     }).catch(err => {
       throw err
+    })
+  },
+  fetchPlayers: ({ commit }, path) => {
+    return tournamentService.getPlayers(path).then(res => {
+      commit('addPlayers', res.data)
     })
   }
 }

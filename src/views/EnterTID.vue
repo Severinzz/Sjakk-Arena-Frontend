@@ -64,6 +64,7 @@ export default {
       'getTournament'
     ]),
     async submit() {
+      this.error = false
       this.isLoading = true
       await this.fetchTournament(this.tournamentId).then(res => {
         let tournament = this.getTournament()
@@ -72,6 +73,7 @@ export default {
           this.$router.push('/lobby/' + `${tournament.id}`)
         }
       }).catch(err => {
+        // TODO Forandre feilemding til nøke meir fornuftig
         this.isLoading = false
         this.error = true
         this.errorMessage = err + '. Prøv igjen senere!'

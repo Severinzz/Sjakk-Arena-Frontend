@@ -165,7 +165,7 @@ export default {
       endTime: '', // end time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
       startTimeMenu: false,
       endTimeMenu: false,
-      name: '', // name of tournament host
+      name: '', // name of tournament host // TODO TRENG VI VIRKELI DINNA?
       email: '', // email address of tournament host
       tournamentName: '', // name of tournament
       tables: '', // number of tables used in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
