@@ -28,9 +28,13 @@ export default {
   },
   fetchTournament: ({ commit }, path) => {
     return tournamentService.get(path).then(res => {
-      addToken(res.data.jwt)
-      let job = JSON.parse(res.data.tournament)
-      commit('addTournament', job)
+      if (res.data.jwt !== undefined) {
+        addToken(res.data.jwt)
+        const job = JSON.parse(res.data.tournament)
+        commit('addTournament', job)
+      } else {
+        commit('addTournament', res.data)
+      }
     }).catch(err => {
       throw err
     })

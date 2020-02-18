@@ -24,6 +24,7 @@
                                   placeholder="Ola Nordmann"
                                   :rules="[ v => !!v || 'Navn er påkrevd']"
                                   type="text"
+                                  @keydown="limit"
                     />
                     <div id="error">{{ errorMessage }}</div>
                   </v-form>
@@ -69,7 +70,16 @@ export default {
       if (this.$refs.form.validate()) {
         this.submit()
       }
+    },
+    // https://stackoverflow.com/a/46290037
+    limit(e) {
+      if (this.playerName.length >= 20) {
+        if (e.keyCode >= 48 || e.keyCode === 32) {
+          e.preventDefault()
+        }
+      }
     }
+    // End of stack overflow
   },
   data () {
     return {
@@ -77,6 +87,14 @@ export default {
       playerName: '',
       errorMessage: ''
       // TODO avgrense input felt
+    }
+  },
+  watch: {
+    playerName: function() {
+      if (this.playerName.length > 20) {
+        // https://stackoverflow.com/a/8499776
+        this.playerName = this.playerName.substring(0, Math.min(this.playerName.length, 20))
+      }
     }
   }
 }

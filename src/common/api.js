@@ -8,12 +8,6 @@ Vue.use(VueAxios, axios)
 Vue.axios.defaults.baseURL = API_URL
 Vue.axios.defaults.timeout = TIME_OUT
 
-let config = {
-  headers: {
-    'Authorization': 'Bearer ' + jwtService.getToken()
-  }
-}
-
 const tournamentService = {
   put(path, params) {
     return axios.put(`${path}`, params).then(res => res).catch(err => {
@@ -21,20 +15,35 @@ const tournamentService = {
     })
   },
   get(path) {
-    return axios.get('/tournament-information/' + `${path}`).then(res => res).catch(err => {
-      throw err
-    })
+    if (path === undefined || path == null) {
+      let config = this.setupHeader()
+      return axios.get('/tournament/information', config).then(res => res).catch(err => {
+        throw err
+      })
+    } else {
+      return axios.get('/tournament-information/' + `${path}`).then(res => res).catch(err => {
+        throw err
+      })
+    }
   },
   getPlayers(path) {
-    console.log(jwtService.getToken())
+    let config = this.setupHeader()
     return axios.get(path, config).then(res => res).catch(err => {
       throw err
     })
   },
   deleteURI(path, param) {
+    let config = this.setupHeader()
     return axios.delete(path + `${param}`, config).catch(err => {
       throw err
     })
+  },
+  setupHeader() {
+    return {
+      headers: {
+        'Authorization': 'Bearer ' + jwtService.getToken()
+      }
+    }
   }
 }
 

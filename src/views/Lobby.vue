@@ -38,7 +38,7 @@
               v-for="(player, index) in players"
               @click.native="handleRemovePlayer(index, player.id)"
               :player-name="player.name"
-              :player-piece="randomIcon()"
+              :player-piece="player.icon"
               :key="index"
               :id="'player' + index"
             />
@@ -61,14 +61,6 @@ export default {
   },
   data () {
     return {
-      iconsAvailable: [
-        'fas fa-chess-rook fa-3x',
-        'fas fa-chess-queen fa-3x',
-        'fas fa-chess-pawn fa-3x',
-        'fas fa-chess-knight fa-3x',
-        'fas fa-chess-king fa-3x',
-        'fas fa-chess-bishop fa-3x'
-      ],
       intervalId: ''
     }
   },
@@ -85,11 +77,9 @@ export default {
     ...mapActions([
       'fetchPlayers',
       'removePlayer',
-      'addPlayer'
+      'addPlayer',
+      'fetchTournament'
     ]),
-    randomIcon () {
-      return this.iconsAvailable[Math.floor(Math.random() * this.iconsAvailable.length)]
-    },
     handleRemovePlayer (index, id) {
       let payload = {
         index: index,
@@ -100,7 +90,7 @@ export default {
     },
     loadPlayers(reference) {
       this.intervalId = setInterval(async function() {
-        await reference.fetchPlayers('/tournament/player-names').then(res => {
+        await reference.fetchPlayers('/tournament/player-lobby-information').then(res => {
         }).catch(err => {
           throw err
         })
@@ -109,8 +99,10 @@ export default {
   },
   mounted() {
     this.loadPlayers(this)
-    if (this.tournament === undefined) {
-
+  },
+  created () {
+    if (this.tournament.tournament_name === undefined) {
+      this.fetchTournament()
     }
   },
   destroyed () {
