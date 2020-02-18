@@ -45,12 +45,6 @@
             <div v-if="paired">
               <v-btn class="btns" color="primary" block rounded depressed @click="result_dialog = true">Registrer resultat</v-btn>
             </div>
-            <div v-if="!past_results">
-            <v-btn class="btns" block rounded depressed @click="past_results = true">Tidligere parti</v-btn>
-            </div>
-            <div v-if="past_results">
-              <v-btn class="btns" color="primary" block rounded depressed @click="past_results = false">Fjern resultatliste</v-btn>
-            </div>
             <v-btn class="btns" block rounded depressed @click="leave_dialog = true">Forlat turnering</v-btn>
             <!-- If user is NOT paired or in a break -->
             <div v-if="!pause && !paired">
@@ -59,6 +53,12 @@
             <!-- If user if NOT paired and in a break -->
             <div v-if="pause && !paired">
               <v-btn class="btns" color="primary" block rounded depressed @click="pause = !pause">Avslutt pause</v-btn>
+            </div>
+            <div v-if="!past_results">
+              <v-btn class="btns" block rounded depressed @click="past_results = true">Tidligere parti</v-btn>
+            </div>
+            <div v-if="past_results">
+              <v-btn class="btns" color="primary" block rounded depressed @click="past_results = false">Fjern resultatliste</v-btn>
             </div>
           </v-container>
 
