@@ -1,4 +1,5 @@
 import players from '../data/players'
+import playingPlayers from '../data/playingPlayers'
 // TODO: REFACTOR STORE TO USE MODULES?
 let tournament = {}
 let player = {}
@@ -6,5 +7,6 @@ let player = {}
 export default {
   players,
   tournament,
-  player
+  player,
+  playingPlayers
 }

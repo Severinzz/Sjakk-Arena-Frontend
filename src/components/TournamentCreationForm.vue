@@ -4,14 +4,11 @@
       ref="form"
       lazy-validation
     >
-      <v-alert
-        :value="error"
-      color="red"
-      dark
-      icon="as fa-plug"
-      transition="scale-transition">
-        {{ errorMessage }}
-      </v-alert>
+     <alert-box
+     v-if="error"
+     :errorMessage="errorMessage"
+     :errorIcon="'fas fa-plug'"
+     />
       <v-toolbar dark color="primary">
         <v-toolbar-title>Turneringsinformasjon</v-toolbar-title>
       </v-toolbar>
@@ -151,14 +148,17 @@
       <!-- end of code from vuetifyjs.com -->
       <v-btn id="submit-btn" class="mr-4" color="primary" @click="validate">Send</v-btn>
       <v-btn id="clear-btn" @click="clear">Tøm</v-btn>
+      <v-btn id="cancel-btn" @click="cancel">Avbryt</v-btn>
     </v-form>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import AlertBox from './AlertBox'
 export default {
   name: 'TournamentCreationForm',
+  components: { AlertBox },
   data () {
     return {
       startTime: '', // start time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
@@ -194,7 +194,7 @@ export default {
         v => v < 256 || 'Må vær mindre enn 256!' // TODO MIGHT NOT WANT IT TO BE THE SAME FOR EACH NUMBER FIELD
       ],
       endTimeRules: [
-        v => !v || this.lastNumberInTime(v) > this.lastNumberInTime(this.startTime) ||
+        v => !v || this.checkTime() ||
           'Sluttid kan ikke vær lik eller mindre start tiden!'
       ]
     }
@@ -202,6 +202,9 @@ export default {
   methods: {
     ...mapActions([
       'createTournament'
+    ]),
+    ...mapGetters([
+      'getTournament'
     ]),
     clear() {
       this.$refs.form.reset()
@@ -216,15 +219,16 @@ export default {
         'end': this.endTime,
         'tables': parseInt(this.tables),
         'max_rounds': parseInt(this.rounds),
-        'active': false // TODO: CHANGE TO EARLY START
+        'early_start': this.early_start
       }
       await this.createTournament(payload).then(res => {
-        this.$router.push('/lobby')
+        let tournament = this.getTournament()
+        this.$router.push('/lobby/' + tournament.id)
         this.isLoading = false
       }).catch(err => {
         this.isLoading = false
         this.error = true
-        this.errorMessage = err + '. Please try again later'
+        this.errorMessage = err + '. Prøv igjen senere!'
       })
     },
     validate() {
@@ -232,8 +236,23 @@ export default {
         this.submit()
       }
     },
+    checkTime() {
+      let startTimeH = this.startTime.toString().split(':')[0]
+      let endTimeH = this.endTime.toString().split(':')[0]
+      if (parseInt(startTimeH) < parseInt(endTimeH)) {
+        return true
+      } else {
+        let startTimeM = this.lastNumberInTime(this.startTime)
+        let endTimeM = this.lastNumberInTime(this.endTime)
+        return parseInt(startTimeM) < parseInt(endTimeM)
+      }
+    },
     lastNumberInTime(timeString) {
       return parseInt(timeString.toString().split(':')[1])
+    },
+    cancel() {
+      this.clear()
+      this.$router.go(-1)
     }
   }
 }
@@ -243,5 +262,8 @@ export default {
 <style scoped>
   .form{
     margin: 5vw 20vw 20vh 20vw;
+  }
+  #cancel-btn{
+    margin-left: 1%;
   }
 </style>

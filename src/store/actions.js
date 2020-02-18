@@ -10,18 +10,26 @@ export default {
   },
   createTournament: ({ commit }, payload) => {
     return tournamentService.put('/new-tournament', payload).then(res => {
-      payload['tournamentId'] = res.data.tournament_id
+      payload['id'] = res.data.tournament_id
       addToken(res.data.jwt)
-      commit('createTournament', payload)
+      commit('addTournament', payload)
     }).catch(err => {
       throw err
     })
   },
-
   createPlayer: ({ commit }, payload) => {
     return tournamentService.put('/new-player', payload).then(res => {
       addToken(res.data.jwt)
       commit('createPlayer', payload)
+      }).catch(err => {
+      throw err
+    })
+  },
+  fetchTournament: ({ commit }, path) => {
+    return tournamentService.get(path).then(res => {
+      addToken(res.data.jwt)
+      let job = JSON.parse(res.data.tournament)
+      commit('addTournament', job)
     }).catch(err => {
       throw err
     })
