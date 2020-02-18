@@ -35,8 +35,8 @@
         >
           <!-- The individual players -->
             <player
-              @click.native="handleRemovePlayer(index)"
               v-for="(player, index) in players"
+              @click.native="handleRemovePlayer(index, player.id)"
               :player-name="player.name"
               :player-piece="randomIcon()"
               :key="index"
@@ -68,7 +68,8 @@ export default {
         'fas fa-chess-knight fa-3x',
         'fas fa-chess-king fa-3x',
         'fas fa-chess-bishop fa-3x'
-      ]
+      ],
+      intervalId: ''
     }
   },
   computed: {
@@ -82,15 +83,38 @@ export default {
   },
   methods: {
     ...mapActions([
+      'fetchPlayers',
       'removePlayer',
       'addPlayer'
     ]),
     randomIcon () {
       return this.iconsAvailable[Math.floor(Math.random() * this.iconsAvailable.length)]
     },
-    handleRemovePlayer (index) {
-      this.removePlayer(index)
+    handleRemovePlayer (index, id) {
+      let payload = {
+        index: index,
+        path: '/tournament/delete-player/',
+        id: id
+      }
+      this.removePlayer(payload)
+    },
+    loadPlayers(reference) {
+      this.intervalId = setInterval(async function() {
+        await reference.fetchPlayers('/tournament/player-names').then(res => {
+        }).catch(err => {
+          throw err
+        })
+      }, 3000)
     }
+  },
+  mounted() {
+    this.loadPlayers(this)
+    if (this.tournament === undefined) {
+
+    }
+  },
+  destroyed () {
+    clearInterval(this.intervalId)
   }
 
 }

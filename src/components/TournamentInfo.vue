@@ -2,8 +2,8 @@
 <div>
   <p class="pin">PIN:</p>
   <p class="pin">{{ tournament.id }}</p>
-  <p class="time" v-if="!started">Starter: {{ tournament.start }}</p>
-  <p class="time" v-if="started">Slutter: {{ tournament.end }}</p>
+  <p class="time" v-if="!started">Starter: {{ tournament.start.substring(0, tournament.start.length-3) }}</p>
+  <p class="time" v-if="started">Slutter: {{ tournament.end.substring(0, tournament.start.length-3) }}</p>
 </div>
 </template>
 

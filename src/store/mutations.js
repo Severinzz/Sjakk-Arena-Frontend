@@ -10,5 +10,8 @@ export default {
   },
   createPlayer: (state, player) => {
     state.player = player
+  },
+  addPlayers: (state, payload) => {
+    state.players = payload
   }
 }

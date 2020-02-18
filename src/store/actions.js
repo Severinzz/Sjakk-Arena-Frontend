@@ -5,8 +5,9 @@ export default {
   addPlayer: ({ commit }, payload) => {
     commit('addPlayer', payload)
   },
-  removePlayer: ({ commit }, index) => {
-    commit('removePlayer', index)
+  removePlayer: ({ commit }, payload) => {
+    tournamentService.deleteURI(payload.path, payload.id)
+    commit('removePlayer', payload.index)
   },
   createTournament: ({ commit }, payload) => {
     return tournamentService.put('/new-tournament', payload).then(res => {
@@ -21,7 +22,7 @@ export default {
     return tournamentService.put('/new-player', payload).then(res => {
       addToken(res.data.jwt)
       commit('createPlayer', payload)
-      }).catch(err => {
+    }).catch(err => {
       throw err
     })
   },
@@ -32,6 +33,11 @@ export default {
       commit('addTournament', job)
     }).catch(err => {
       throw err
+    })
+  },
+  fetchPlayers: ({ commit }, path) => {
+    return tournamentService.getPlayers(path).then(res => {
+      commit('addPlayers', res.data)
     })
   }
 }
