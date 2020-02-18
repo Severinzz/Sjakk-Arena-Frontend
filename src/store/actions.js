@@ -21,7 +21,7 @@ export default {
     return tournamentService.put('/new-player', payload).then(res => {
       addToken(res.data.jwt)
       commit('createPlayer', payload)
-      }).catch(err => {
+    }).catch(err => {
       throw err
     })
   },
