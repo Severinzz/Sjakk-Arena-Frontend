@@ -165,7 +165,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'setPlayerInactive'
+      'inactivatePlayer'
     ]),
     result_registered () {
       this.paired = false
@@ -173,9 +173,10 @@ export default {
     },
     async set_player_inactive (id) {
       let payload = {
-        player_id: id
+        player_id: id,
+        path: '/tournament/set-inactive/'
       }
-      await this.setPlayerInactive(payload).then(res => {
+      await this.inactivatePlayer(payload).then(res => {
         this.$router.push('/')
       }).catch(err => {
         console.log(err)

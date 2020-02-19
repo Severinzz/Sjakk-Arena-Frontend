@@ -45,7 +45,7 @@ const tournamentService = {
       }
     }
   },
-  inactivatePlayer(path, id) {
+  setPlayerInactive(path, id) {
     return axios.put(path, id).catch(err => {
       throw err
     })

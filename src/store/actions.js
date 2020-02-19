@@ -44,8 +44,8 @@ export default {
       commit('addPlayers', res.data)
     })
   },
-  setPlayerInactive: ({ commit }, payload) => {
-    tournamentService.inactivatePlayer('/tournament/set-inactive', payload.player_id).then(res => {
+  inactivatePlayer: ({ commit }, payload) => {
+    tournamentService.setPlayerInactive(payload.path, payload.player_id).then(res => {
       commit('setPlayerInactive', payload.player_id)
     }).catch(err => {
       throw err
