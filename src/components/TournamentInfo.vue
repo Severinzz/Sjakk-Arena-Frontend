@@ -2,8 +2,8 @@
 <div>
   <p class="pin">PIN:</p>
   <p class="pin">{{ tournament.id }}</p>
-  <p class="time" v-if="!started">Starter: {{ tournament.start.substring(0, tournament.start.length-3) }}</p>
-  <p class="time" v-if="started">Slutter: {{ tournament.end.substring(0, tournament.start.length-3) }}</p>
+  <p class="time" v-if="!started">Starter: {{ this.timeFormat(tournament.start) }}</p>
+  <p class="time" v-if="started">Slutter: {{ this.timeFormat(tournament.end) }}</p>
 </div>
 </template>
 
@@ -13,6 +13,15 @@ export default {
   props: {
     tournament: { type: Object, required: true },
     started: { type: Boolean, required: true }
+  },
+  methods: {
+    timeFormat(time) {
+      if (time.length === 8) {
+        return time.substring(0, time.length - 3)
+      } else {
+        return time
+      }
+    }
   }
 }
 </script>

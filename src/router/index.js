@@ -25,6 +25,7 @@ const routes = [
   {
     path: '/lobby/:id',
     name: 'Lobby',
+    // Lazy-load for better performance.
     component: () => import('../views/Lobby')
   },
   {
