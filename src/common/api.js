@@ -44,6 +44,11 @@ const tournamentService = {
         'Authorization': 'Bearer ' + jwtService.getToken()
       }
     }
+  },
+  inactivatePlayer(path, id) {
+    return axios.put(path, id).catch(err => {
+      throw err
+    })
   }
 }
 
