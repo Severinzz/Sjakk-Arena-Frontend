@@ -46,7 +46,7 @@ const tournamentService = {
     }
   },
   setPlayerInactive(path, id) {
-    return axios.patch(path, id).catch(err => {
+    return axios.patch(path, id).then(res => res).catch(err => {
       throw err
     })
   }

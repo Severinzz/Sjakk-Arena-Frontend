@@ -174,7 +174,7 @@ export default {
     async set_player_inactive (id) {
       let payload = {
         player_id: id,
-        path: '/tournament/set-inactive/'
+        path: '/player/set-inactive/'
       }
       await this.inactivatePlayer(payload).then(res => {
         this.$router.push('/')
