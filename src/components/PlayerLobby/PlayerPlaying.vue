@@ -121,7 +121,7 @@
                 <v-card-actions>
                   <v-spacer />
                   <!-- User has the option to either leave or go back -->
-                  <v-btn text @click="set_player_inactive(1)">Forlat turneringen</v-btn>
+                  <v-btn text @click="set_player_inactive()">Forlat turneringen</v-btn>
                   <v-btn text color="primary" outlined @click="leave_dialog = false">Avbryt</v-btn>
                 </v-card-actions>
               </v-card>
@@ -171,9 +171,9 @@ export default {
       this.paired = false
       this.result_dialog = false
     },
-    async set_player_inactive (id) {
+    async set_player_inactive () {
       let payload = {
-        player_id: id,
+        player_id: 1,
         path: '/player/set-inactive/'
       }
       await this.inactivatePlayer(payload).then(res => {

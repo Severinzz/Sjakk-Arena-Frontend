@@ -46,7 +46,7 @@ export default {
   },
   inactivatePlayer: ({ commit }, payload) => {
     tournamentService.setPlayerInactive(payload.path, payload.player_id).then(res => {
-      commit('setPlayerInactive', payload)
+      commit('setPlayerInactive')
     }).catch(err => {
       throw err
     })

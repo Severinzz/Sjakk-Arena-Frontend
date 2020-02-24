@@ -46,7 +46,8 @@ const tournamentService = {
     }
   },
   setPlayerInactive(path, id) {
-    return axios.patch(path, id).then(res => res).catch(err => {
+    let config = this.setupHeader()
+    return axios.patch(path + `${id}`, config).then(res => res).catch(err => {
       throw err
     })
   }
