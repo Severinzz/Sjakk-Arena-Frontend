@@ -38,18 +38,19 @@ const tournamentService = {
       throw err
     })
   },
+  setPlayerInactive(path, id) {
+    let config = this.setupHeader()
+    let fullPath = (path + id)
+    return axios.patch(fullPath, config).then(res => res).catch(err => {
+      throw err
+    })
+  },
   setupHeader() {
     return {
       headers: {
         'Authorization': 'Bearer ' + jwtService.getToken()
       }
     }
-  },
-  setPlayerInactive(path, id) {
-    let config = this.setupHeader()
-    return axios.patch(path + `${id}`, config).then(res => res).catch(err => {
-      throw err
-    })
   }
 }
 
