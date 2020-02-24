@@ -56,6 +56,11 @@ const routes = [
     path: '/player-lobby',
     name: 'playerLobby',
     component: PlayerLobby
+  },
+  {
+    path: '/tournament',
+    name: 'tournament',
+    component: () => import('../views/Tournament')
   }
 ]
 

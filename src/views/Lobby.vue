@@ -65,6 +65,7 @@ export default {
     }
   },
   computed: {
+    // TODO: Use mapGetters instead?
     ...mapState([
       'tournament',
       'players'
