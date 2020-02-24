@@ -250,9 +250,10 @@ export default {
     lastNumberInTime(timeString) {
       return parseInt(timeString.toString().split(':')[1])
     },
+    // Clears the form and all its errors and sends user back to homepage.
     cancel() {
       this.clear()
-      this.$router.go(-1)
+      this.$router.push('/')
     }
   }
 }
