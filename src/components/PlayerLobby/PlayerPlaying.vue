@@ -156,7 +156,7 @@ export default {
       Tend: '15:30',
       Usernamne: 'Ola Nordmann',
       Tpoints: 13.5,
-      userId: 5,
+      userId: 1,
       result_dialog: false, // Endres av bruker
       leave_dialog: false, // Endres av bruker
       past_results: false, // Endres av bruker
