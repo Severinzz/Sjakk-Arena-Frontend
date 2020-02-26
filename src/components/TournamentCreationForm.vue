@@ -65,7 +65,7 @@
               full-width
               @click:minute="$refs.firstmenu.save(startTime)"
               :color="formColor"
-              :max="endTime"
+              :max="calcStartTime"
               format="24hr"
             >
             </v-time-picker>
@@ -111,38 +111,14 @@
       <!-- code from https://vuetifyjs.com/en/components/time-pickers-->
       <v-row>
       <v-col cols="12" sm="5">
-      <!-- End time -->
-      <v-menu
-        ref="secondmenu"
-        v-model="endTimeMenu"
-        :close-on-content-click="false"
-        :nudge-right="40"
-        :return-value.sync="endTime"
-        v-if="useEndTime"
-        transition="scale-transition"
-        offset-y
-        max-width="290px"
-        min-width="290px"
-      >
-        <template v-slot:activator="{ on }">
-          <v-text-field
-            v-model="endTime"
-            label="Sluttid"
-            readonly
-            v-on="on"
-            :rules="endTimeRules"
-          ></v-text-field>
-        </template>
-        <v-time-picker
-          v-if="endTimeMenu"
-          v-model="endTime"
-          full-width
-          @click:minute="$refs.secondmenu.save(endTime)"
-          :color="formColor"
-          :min="startTime"
-          format="24hr"
-        ></v-time-picker>
-      </v-menu>
+      <!-- End time and date-->
+        <date-time
+          v-if="useEndTime"
+          :min-date="new Date().toISOString().slice(0, 10)"
+          :min-time="startTime"
+          :rules="endTimeRules"
+          :event-name="'endDateTime'"
+          @endDateTime="handleEndDateTime"></date-time>
       </v-col>
       </v-row>
       <!-- end of code from vuetifyjs.com -->
@@ -156,13 +132,16 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import AlertBox from './AlertBox'
+import DateTime from './DateTime'
 export default {
   name: 'TournamentCreationForm',
-  components: { AlertBox },
+  components: { AlertBox, DateTime },
   data () {
     return {
       startTime: '', // start time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
       endTime: '', // end time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
+      currentDate: new Date().toISOString().slice(0, 10),
+      endDate: '',
       startTimeMenu: false,
       endTimeMenu: false,
       name: '', // name of tournament host // TODO TRENG VI VIRKELI DINNA?
@@ -237,6 +216,7 @@ export default {
       }
     },
     checkTime() {
+      if (this.endTime === undefined || this.endDate !== this.currentDate) { return true }
       let startTimeH = this.startTime.toString().split(':')[0]
       let endTimeH = this.endTime.toString().split(':')[0]
       if (parseInt(startTimeH) < parseInt(endTimeH)) {
@@ -254,6 +234,21 @@ export default {
     cancel() {
       this.clear()
       this.$router.push('/')
+    },
+    handleEndDateTime(value) {
+      let dateTimeArray = value.split('t')
+      if (dateTimeArray.length === 2) {
+        this.endDate = dateTimeArray[0]
+        this.endTime = dateTimeArray[1]
+      }
+    }
+  },
+  computed: {
+    calcStartTime() {
+      if (this.currentDate === this.endDate) {
+        return this.endTime
+      }
+      return null
     }
   }
 }
