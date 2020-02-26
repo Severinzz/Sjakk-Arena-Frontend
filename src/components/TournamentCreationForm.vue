@@ -12,11 +12,11 @@
       <v-toolbar dark color="primary">
         <v-toolbar-title>Turneringsinformasjon</v-toolbar-title>
       </v-toolbar>
-      <!-- Name of tournament host -->
+      <!-- Name of tournament -->
       <v-text-field
-        v-model="name"
-        label="Navn"
-        :rules="nameRules"
+        v-model="tournamentName"
+        label="Navn på turnering"
+        :rules="tournamentNameRules"
         required
       >
       </v-text-field>
@@ -27,13 +27,6 @@
         :rules="emailRules"
         required>
       </v-text-field>
-      <!-- Name of tournament -->
-      <v-text-field
-        v-model="tournamentName"
-        label="Navn på turnering"
-        :rules="tournamentNameRules"
-        required
-      ></v-text-field>
       <!-- code from https://vuetifyjs.com/en/components/time-pickers-->
       <v-row>
         <v-col cols="11" sm="5">
@@ -91,14 +84,6 @@
         :rules="numberFieldRules"
       >
       </v-text-field>
-      <!-- Length of pause between games-->
-      <v-text-field
-        v-model="pause"
-        label="Tid mellom parti (i minutter)"
-        type="number"
-        :rules="numberFieldRules"
-      >
-      </v-text-field>
       <!-- Maximum number of rounds -->
       <v-text-field
         v-model="rounds"
@@ -144,11 +129,9 @@ export default {
       endDate: '',
       startTimeMenu: false,
       endTimeMenu: false,
-      name: '', // name of tournament host // TODO TRENG VI VIRKELI DINNA?
       email: '', // email address of tournament host
       tournamentName: '', // name of tournament
       tables: '', // number of tables used in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
-      pause: '', // length of pause between games // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
       rounds: '', // maximum number of rounds in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
       earlyStart: false, // true if the tournament will start when two players are registered
       formColor: 'blue', // color to be used in form elements
@@ -194,8 +177,8 @@ export default {
       let payload = {
         'tournament_name': this.name,
         'admin_email': this.email,
-        'start': this.startTime,
-        'end': this.endTime,
+        'start': this.currentDate + 'T' + this.startTime,
+        'end': this.endDate + 'T' + this.endTime,
         'tables': parseInt(this.tables),
         'max_rounds': parseInt(this.rounds),
         'early_start': this.early_start
