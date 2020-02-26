@@ -156,7 +156,7 @@ export default {
       Tend: '15:30',
       Usernamne: 'Ola Nordmann',
       Tpoints: 13.5,
-      userId: 1,
+      userId: 1, // TODO: må få tak i spiller sin ID!
       result_dialog: false, // Endres av bruker
       leave_dialog: false, // Endres av bruker
       past_results: false, // Endres av bruker
@@ -173,7 +173,6 @@ export default {
       this.result_dialog = false
     },
     async set_player_inactive (id) {
-      // TODO: get the player's ID instead of the hardcoded one.
       let payload = {
         player_id: id,
         path: '/user/set_inactive/'
