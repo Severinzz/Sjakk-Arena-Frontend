@@ -11,8 +11,10 @@ export default {
   },
   createTournament: ({ commit }, payload) => {
     return tournamentService.post('/new-tournament', payload).then(res => {
+      // Adds the tournament ID recieved from the server to the payload.
       payload['id'] = res.data.tournament_id
       addToken(res.data.jwt)
+      // Adds the payload (tournament) to the state in store.
       commit('addTournament', payload)
     }).catch(err => {
       throw err
@@ -30,6 +32,7 @@ export default {
     return tournamentService.get(path).then(res => {
       if (res.data.jwt !== undefined) {
         addToken(res.data.jwt)
+        // Formats the tournament to the correct format for the store.
         const job = JSON.parse(res.data.tournament)
         commit('addTournament', job)
       } else {

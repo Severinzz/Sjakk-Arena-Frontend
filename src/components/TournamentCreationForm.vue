@@ -124,7 +124,7 @@ export default {
   data () {
     return {
       startTime: '', // start time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
-      endTime: '', // end time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
+      endTime: '', // end time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT) // TODO: burde kunne endre senere
       currentDate: new Date().toISOString().slice(0, 10),
       endDate: '',
       startTimeMenu: false,
@@ -149,7 +149,7 @@ export default {
       ],
       tournamentNameRules: [
         v => !!v || 'Turneringsnavn er påkrevd',
-        v => (v && v.length <= 20) || 'Turneringsnavn må innholde færre enn 20 karakterer'
+        v => (v && v.length <= 20) || 'Turneringsnavn må innholde færre enn 20 karakterer' // TODO Litt kort me 20
       ],
       numberFieldRules: [
         v => /^\d+$/.test(v) || 'Bare tall i dette feltet!', // If not included the number field can contain + and -
@@ -168,12 +168,14 @@ export default {
     ...mapGetters([
       'getTournament'
     ]),
+    // Clears all input fields and errors from the form.
     clear() {
       this.$refs.form.reset()
     },
     async submit () {
       this.error = false
       this.isLoading = true
+      // Setup the JSON object to be sent to the server
       let payload = {
         'tournament_name': this.name,
         'admin_email': this.email,
@@ -183,11 +185,17 @@ export default {
         'max_rounds': parseInt(this.rounds),
         'early_start': this.early_start
       }
+      if (this.endTime.length > 0) {
+        payload.end = this.endTime
+      }
+      // Sends the given information in the form to the server.
       await this.createTournament(payload).then(res => {
+        // Grabs the tournament from store so the correct tournament_id is used in the dynamic link.
         let tournament = this.getTournament()
         this.$router.push('/lobby/' + tournament.id)
         this.isLoading = false
       }).catch(err => {
+        // Hides the loading circle and display error message
         this.isLoading = false
         this.error = true
         this.errorMessage = err + '. Prøv igjen senere!'
@@ -198,18 +206,22 @@ export default {
         this.submit()
       }
     },
+    // Checks if start time is before the end time and not after or equal.
     checkTime() {
       if (this.endTime === undefined || this.endDate !== this.currentDate) { return true }
       let startTimeH = this.startTime.toString().split(':')[0]
       let endTimeH = this.endTime.toString().split(':')[0]
       if (parseInt(startTimeH) < parseInt(endTimeH)) {
+        // Error displayed since the start time is smaller than the end time
         return true
       } else {
+        // Displays error only if start time is exaclty equal to end time.
         let startTimeM = this.lastNumberInTime(this.startTime)
         let endTimeM = this.lastNumberInTime(this.endTime)
         return parseInt(startTimeM) < parseInt(endTimeM)
       }
     },
+    // Grabs the minutes from the time string.
     lastNumberInTime(timeString) {
       return parseInt(timeString.toString().split(':')[1])
     },

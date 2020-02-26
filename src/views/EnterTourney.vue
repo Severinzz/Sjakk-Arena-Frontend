@@ -86,7 +86,6 @@ export default {
       gamePin: '',
       playerName: '',
       errorMessage: ''
-      // TODO avgrense input felt
     }
   },
   watch: {
