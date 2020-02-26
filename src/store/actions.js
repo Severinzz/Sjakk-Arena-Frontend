@@ -10,7 +10,7 @@ export default {
     commit('removePlayer', payload.index)
   },
   createTournament: ({ commit }, payload) => {
-    return tournamentService.put('/new-tournament', payload).then(res => {
+    return tournamentService.post('/new-tournament', payload).then(res => {
       // Adds the tournament ID recieved from the server to the payload.
       payload['id'] = res.data.tournament_id
       addToken(res.data.jwt)
@@ -21,7 +21,7 @@ export default {
     })
   },
   createPlayer: ({ commit }, payload) => {
-    return tournamentService.put('/new-player', payload).then(res => {
+    return tournamentService.post('/new-player', payload).then(res => {
       addToken(res.data.jwt)
       commit('createPlayer', payload)
     }).catch(err => {
