@@ -173,6 +173,7 @@ export default {
       this.result_dialog = false
     },
     async set_player_inactive (id) {
+      // TODO: get the player's ID instead of the hardcoded one.
       let payload = {
         player_id: id,
         path: '/user/set_inactive/'
