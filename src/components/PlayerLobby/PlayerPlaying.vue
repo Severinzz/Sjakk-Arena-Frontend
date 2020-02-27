@@ -121,7 +121,7 @@
                 <v-card-actions>
                   <v-spacer />
                   <!-- User has the option to either leave or go back USERID IS HARDCODED! -->
-                  <v-btn text @click="set_player_inactive(userId)">Forlat turneringen</v-btn>
+                  <v-btn text @click="set_player_inactive()">Forlat turneringen</v-btn>
                   <v-btn text color="primary" outlined @click="leave_dialog = false">Avbryt</v-btn>
                 </v-card-actions>
               </v-card>
@@ -156,7 +156,6 @@ export default {
       Tend: '15:30',
       Usernamne: 'Ola Nordmann',
       Tpoints: 13.5,
-      userId: 1, // TODO: må få tak i spiller sin ID!
       result_dialog: false, // Endres av bruker
       leave_dialog: false, // Endres av bruker
       past_results: false, // Endres av bruker
@@ -172,10 +171,9 @@ export default {
       this.paired = false
       this.result_dialog = false
     },
-    async set_player_inactive (id) {
+    async set_player_inactive () {
       let payload = {
-        player_id: id,
-        path: '/user/set_inactive/'
+        path: '/player/set-inactive/'
       }
       await this.inactivatePlayer(payload).then(res => {
         this.$router.push('/')
