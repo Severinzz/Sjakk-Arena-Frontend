@@ -213,14 +213,18 @@ export default {
       this.error = false
       this.isLoading = true
       let payload = {
-        'tournament_name': this.name,
+        'tournament_name': this.tournamentName,
         'admin_email': this.email,
-        'start': this.startTime,
-        'end': this.endTime,
+        'start': this.currentDate + 'T' + this.startTime,
+        'end': null,
         'tables': parseInt(this.tables),
         'max_rounds': parseInt(this.rounds),
         'early_start': this.early_start
       }
+      if (this.endTime.length > 0) {
+        payload.end = this.endDate + 'T' + this.endTime
+      }
+      // Sends the given information in the form to the server.
       await this.createTournament(payload).then(res => {
         let tournament = this.getTournament()
         this.$router.push('/lobby/' + tournament.id)

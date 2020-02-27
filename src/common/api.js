@@ -10,7 +10,7 @@ Vue.axios.defaults.timeout = TIME_OUT
 
 const tournamentService = {
   put(path, params) {
-    return axios.put(`${path}`, params).then(res => res).catch(err => {
+    return axios.post(`${path}`, params).then(res => res).catch(err => {
       throw err
     })
   },

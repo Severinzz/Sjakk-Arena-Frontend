@@ -58,6 +58,7 @@ const routes = [
     component: PlayerLobby
   },
   {
+    // TODO: Dynamic routing
     path: '/tournament',
     name: 'tournament',
     component: () => import('../views/Tournament')
