@@ -38,10 +38,9 @@ const tournamentService = {
       throw err
     })
   },
-  setPlayerInactive(path, id) {
+  setPlayerInactive(path) {
     let config = this.setupHeader()
-    let fullPath = (path + id)
-    return axios.patch(fullPath, null, config).then(res => res).catch(err => {
+    return axios.patch(path, null, config).then(res => res).catch(err => {
       throw err
     })
   },
