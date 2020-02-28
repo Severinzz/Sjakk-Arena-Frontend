@@ -51,5 +51,10 @@ export default {
     tournamentService.setPlayerInactive(payload.path).catch(err => {
       throw err
     })
+  },
+  fetchResults: ({ commit }, path) => {
+    return tournamentService.getResults(path).catch(err => {
+      throw err
+    })
   }
 }

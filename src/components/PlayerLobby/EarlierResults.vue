@@ -9,11 +9,12 @@
             <v-layout>
               <!-- https://stackoverflow.com/a/54836170/12885810 -->
               <ul>
-                <li v-for="(spill, index) in computedObj" :key="index">
+                <!--<li v-for="(spill, index) in computedObj" :key="index">
                   <h6 class="body-1">Parti: {{index + 1}} Mot: {{spill.name}}</h6>
                   <p class="body-2 dumdum">Farge: {{spill.color}}</p>
                   <p class="body-2 dumdum">Resultat: {{spill.result}}</p>
-                </li>
+                </li>-->
+                <li>loadResults()</li>
               </ul>
             </v-layout>
           </v-container>
@@ -22,6 +23,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'EarlierResults',
   data () {
@@ -72,11 +75,24 @@ export default {
         },
         {
           id: 8,
-          name: 'Ekkel jævel med langt navn som ingen liker hvorfor finnes disse ærligtalt',
+          name: 'Ekkel fyr med langt navn som ingen liker hvorfor finnes disse ærligtalt',
           color: 'Hvit',
           result: 1
         }
       ]
+    }
+  },
+  methods: {
+    ...mapActions([
+      'fetchResults'
+    ]),
+    async loadResults () {
+      this.intervalID = setInterval(async function () {
+        await this.fetchResults('/player/player-results').then(res => {
+        }).catch(err => {
+          throw err
+        })
+      }, 3000)
     }
   },
   computed: {

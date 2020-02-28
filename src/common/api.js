@@ -44,6 +44,12 @@ const tournamentService = {
       throw err
     })
   },
+  getResults(path) {
+    let config = this.setupHeader()
+    return axios.get(path, config).then(res => res).catch(err => {
+      throw err
+    })
+  },
   setupHeader() {
     return {
       headers: {
