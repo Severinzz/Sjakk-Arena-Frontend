@@ -60,7 +60,7 @@ const routes = [
   },
   {
     // TODO: Dynamic routing
-    path: '/tournament',
+    path: '/tournament/:id',
     name: 'tournament',
     component: () => import('../views/Tournament')
   }

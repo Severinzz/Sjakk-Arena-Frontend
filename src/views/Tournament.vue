@@ -4,11 +4,11 @@
       <v-col cols="2">
         <div class="info-wrapper">
           <tournament-info
-            :tournament="this.devTournament"
+            :tournament="this.activeTournament"
             :started="true"
           />
           <p class="numberOfPlayers">
-            Antall spillere: {{ this.getPlayerCount }}
+            Antall spillere: {{ this.playerCount }}
           </p>
           <div class="button-wrapper">
             <v-btn id="Games" class="mr-4">
@@ -29,24 +29,37 @@
              md="6"
              sm="5"
       >
+        <!-- Adapted from https://vuetifyjs.com/en/components/simple-tables -->
       <v-simple-table>
         <template v-slot:default>
           <tbody>
-          <tr v-for="player in playerList" :key="player.name">
-            <td>{{ player.name }}</td>
-            <td> {{ player.points }}</td>
+          <tr
+            v-for="player in playerList"
+              :key="player.name"
+          >
+            <td>
+              {{ player.name }}
+            </td>
+            <td>
+              {{ player.points }}
+            </td>
           </tr>
           </tbody>
           <!-- TODO: Lage knappa til en egen komponent? Mange begynn kanskje å bli veldi like -->
           <!-- TODO: FUCKA STYLINGA ANDRE PLASSA ME Å STYLE BUTTON -->
+          <div
+          v-if="playerCount > 0"
+          >
           <v-btn class="tableBtn mr-4"
             @click="increaseLimit()"
-            :disabled="limit >= playingPlayers.length">Vis flere</v-btn>
+            :disabled="limit >= playerCount">Vis flere</v-btn>
           <v-btn class="tableBtn mr-4"
             @click="decreaseLimit()"
             :disabled="limit <= 5">Vis mindre</v-btn>
+          </div>
         </template>
       </v-simple-table>
+        <!-- end -->
       </v-col>
     </v-row>
   </v-container>
@@ -64,7 +77,11 @@ export default {
   data () {
     return {
       intervalId: '',
-      limit: 5
+      limit: 5,
+      activeTournament: '',
+      playerCount: 0,
+      leaderboard: [],
+      instance: this
     }
   },
   computed: {
@@ -74,11 +91,13 @@ export default {
       'playingPlayers'
     ]),
     ...mapGetters([
-      'getPlayerCount'
+      'getPlayerCount',
+      'getTournament',
+      'getAllPlayers'
     ]),
     // https://stackoverflow.com/questions/46622209/how-to-limit-iteration-of-elements-in-v-for/54836170#54836170
     playerList () {
-      return this.limit ? this.playingPlayers.slice(0, this.limit) : this.playingPlayers
+      return this.limit ? this.leaderboard.slice(0, this.limit) : this.leaderboard
     }
   },
   methods: {
@@ -86,16 +105,21 @@ export default {
       'fetchPlayers',
       'fetchTournament'
     ]),
-    loadPlayers(reference) {
-      this.intervalId = setInterval(async function() {
-        await reference.fetchPlayers('/tournament/player-lobby-information').then(res => {
-        }).catch(err => {
-          throw err
-        })
-      }, 3000)
+    /**
+     * Updates the leaderboard
+     * @param vm Vm must be a instance reference
+     * @returns {Promise<void>}
+     */
+    async updateLeaderboard(vm) {
+      await this.fetchPlayers('/tournament/leaderboard').then(() => {
+        vm.playerCount = vm.getPlayerCount
+        vm.leaderboard = vm.getAllPlayers
+      }).catch(err => {
+        throw err
+      })
     },
     increaseLimit () {
-      if (this.limit < this.playingPlayers.length) {
+      if (this.limit < this.playerCount) {
         this.limit = this.limit + 5
       }
     },
@@ -105,21 +129,30 @@ export default {
       }
     }
   },
-  mounted() {
-    // this.loadPlayers(this)
+  async mounted() {
+    // Starts asking the server for the updated leaderboard every 3 seconds.
+    const self = this
+    this.intervalId = setInterval(async function() {
+      await self.updateLeaderboard(self).then().catch(err => { throw err })
+    }, 3000)
   },
-  created () {
-    // if (this.tournament.tournament_name === undefined) {
-    // this.fetchTournament()
-    // }
+  async created () {
+    // If the tournament id is a string then it wil get the tournament from the server since the id should always be int.
+    this.activeTournament = this.getTournament
+    if (typeof this.activeTournament.id === 'string') {
+      await this.fetchTournament().then(() => {
+        this.activeTournament = this.getTournament
+      })
+    }
+    this.updateLeaderboard(this)
   },
   destroyed () {
-    // clearInterval(this.intervalId)
+    clearInterval(this.intervalId)
   }
 }
 </script>
 
-<style>
+<style scoped>
   .content-wrapper {
     padding: 0 0 2% 0;
   }

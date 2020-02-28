@@ -4,14 +4,18 @@
       <v-col cols="2">
         <div class="info-wrapper">
           <tournament-info
-            :tournament="tournament"
+            :tournament="this.getTournament"
             :started="false"
           />
           <p class="numberOfPlayers">
             Antall spillere: {{ this.getPlayerCount }}
           </p>
           <div class="button-wrapper">
-            <v-btn id="start" color="primary" class="mr-4">
+            <v-btn
+              id="start"
+              color="primary"
+              class="mr-4"
+              @click="startTournament">
               Start
             </v-btn>
             <v-btn id="cancel"
@@ -37,7 +41,7 @@
         >
           <!-- The individual players -->
             <player
-              v-for="(player, index) in players"
+              v-for="(player, index) in this.getAllPlayers"
               @click.native="handleRemovePlayer(index, player.id)"
               :player-name="player.name"
               :player-piece="player.icon"
@@ -53,7 +57,7 @@
 <script>
 import TournamentInfo from '@/components/TournamentInfo'
 import Player from '@/components/Player'
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Lobby',
@@ -63,17 +67,15 @@ export default {
   },
   data () {
     return {
-      intervalId: ''
+      intervalId: '',
+      playerCount: 0
     }
   },
   computed: {
-    // TODO: Use mapGetters instead?
-    ...mapState([
-      'tournament',
-      'players'
-    ]),
     ...mapGetters([
-      'getPlayerCount'
+      'getPlayerCount',
+      'getTournament',
+      'getAllPlayers'
     ])
   },
   methods: {
@@ -94,6 +96,7 @@ export default {
     loadPlayers(reference) {
       this.intervalId = setInterval(async function() {
         await reference.fetchPlayers('/tournament/player-lobby-information').then(res => {
+          reference.playerCount = reference.getPlayerCount
         }).catch(err => {
           throw err
         })
@@ -101,13 +104,25 @@ export default {
     },
     cancel() {
       this.$router.go(-1)
+    },
+    startTournament() {
+      this.$router.replace('/tournament/' + this.getTournament.id)
+    }
+  },
+  watch: {
+    playerCount: function(playerCount) {
+      if (this.getTournament.early_start !== true) { } else {
+        if (playerCount >= 2) {
+          this.startTournament()
+        }
+      }
     }
   },
   mounted() {
     this.loadPlayers(this)
   },
   created () {
-    if (this.tournament.tournament_name === undefined) {
+    if (this.getTournament.tournament_name === undefined) {
       this.fetchTournament()
     }
   },

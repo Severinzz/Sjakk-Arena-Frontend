@@ -1,9 +1,9 @@
 export default {
   getAllPlayers: (state) => {
-    return state.players
+    return state.player
   },
   getPlayerCount: (state) => {
-    return state.players.length
+    return state.player.length
   },
   getTournament: (state) => {
     return state.tournament

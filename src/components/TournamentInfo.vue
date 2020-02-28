@@ -1,9 +1,18 @@
 <template>
 <div>
   <p class="pin">PIN:</p>
-  <p class="pin">{{ tournament.id }}</p>
-  <p class="time" v-if="!started">Starter: {{ startTime }}</p>
-  <p class="time" v-if="started">Slutter: {{ tournament.end.substring(0, tournament.start.length-3) }}</p>
+  <p class="pin">
+    {{ tournament.id }}
+  </p>
+  <p class="time" v-if="!started">
+    Starter: {{ formatTime(this.tournament.start) }}
+  </p>
+  <p class="time" v-if="tournament.end">
+    Slutter: {{ formatTime(this.tournament.end) }}
+  </p>
+  <p class="date" v-if="endDate">
+    Dato: {{ formatEndDate() }}
+  </p>
 </div>
 </template>
 
@@ -15,18 +24,36 @@ export default {
     started: { type: Boolean, required: true }
   },
   computed: {
-    // Returns the start time in the correct format.
-    startTime() {
-      let startArr
-      if (this.tournament.start.includes('T')) {
-        startArr = this.tournament.start.split('T')
-      } else {
-        startArr = this.tournament.start.split(' ')
+    endDate() {
+      if (this.tournament.end !== undefined && this.tournament.end !== null) {
+        let endDate = this.formatEndDate()
+        let currentDate = new Date().toISOString().slice(0, 10)
+        return endDate !== currentDate
       }
-      if (startArr.length > 1) {
-        return startArr[1].substring(0, 5)
+      return false
+    }
+  },
+  methods: {
+    // Returns the start time in the correct format.
+    formatTime(dateTime) {
+      if (dateTime.includes('loading')) { return dateTime }
+      let timeArr
+      if (dateTime.includes('T')) {
+        timeArr = dateTime.split('T')
       } else {
-        return startArr[0]
+        timeArr = dateTime.split(' ')
+      }
+      if (timeArr.length > 1) {
+        return timeArr[1].substring(0, 5)
+      } else {
+        return timeArr[0]
+      }
+    },
+    formatEndDate() {
+      if (this.tournament.end.includes('T')) {
+        return this.tournament.end.split('T')[0]
+      } else {
+        return this.tournament.end.split(' ')[0]
       }
     }
   }
@@ -44,5 +71,8 @@ export default {
   .time{
     margin: 20% 0 10% 0;
     font-size: 3em;
+  }
+  .date{
+    font-size: 2em;
   }
 </style>

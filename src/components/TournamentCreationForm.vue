@@ -197,7 +197,7 @@ export default {
         'end': null,
         'tables': parseInt(this.tables),
         'max_rounds': parseInt(this.rounds),
-        'early_start': this.early_start
+        'early_start': this.earlyStart
       }
       if (this.endTime.length > 0) {
         payload.end = this.endDate + 'T' + this.endTime
