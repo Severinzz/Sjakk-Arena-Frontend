@@ -49,6 +49,7 @@
                 readonly
                 required
                 v-on="on"
+                :error="missingStartTime"
               >
               </v-text-field>
             </template>
@@ -157,6 +158,7 @@ export default {
       errorMessage: '',
       error: false,
       useEndTime: false,
+      missingStartTime: false,
       // rules
       emailRules: [
         v => /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/.test(v) || 'Du må skrive inn en gyldig e-postadresse'
@@ -172,6 +174,10 @@ export default {
       endTimeRules: [
         v => !v || this.checkTime() ||
           'Sluttid kan ikke vær lik eller mindre start tiden!'
+      ],
+      startTimeRules: [
+        v => !!v || 'Starttid er påkrevd',
+        v => (v.length = 0) || 'fisk'
       ]
     }
   },
@@ -187,6 +193,10 @@ export default {
       this.$refs.form.reset()
     },
     async submit () {
+      if (this.validateTime()) {
+        this.missingStartTime = true
+        return
+      }
       this.error = false
       this.isLoading = true
       // Setup the JSON object to be sent to the server
@@ -220,7 +230,10 @@ export default {
         this.submit()
       }
     },
-    // Checks if start time is before the end time and not after or equal.
+    validateTime() {
+      return this.startTime === ''
+    },
+    // Checks if end time is after start time and not before or equal
     checkTime() {
       if (this.endTime === undefined || this.endDate !== this.currentDate) { return true }
       let startTimeH = this.startTime.toString().split(':')[0]
