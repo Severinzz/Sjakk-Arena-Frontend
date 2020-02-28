@@ -9,7 +9,7 @@ Vue.axios.defaults.baseURL = API_URL
 Vue.axios.defaults.timeout = TIME_OUT
 
 const tournamentService = {
-  put(path, params) {
+  post(path, params) {
     return axios.post(`${path}`, params).then(res => res).catch(err => {
       throw err
     })
@@ -35,6 +35,13 @@ const tournamentService = {
   deleteURI(path, param) {
     let config = this.setupHeader()
     return axios.delete(path + `${param}`, config).catch(err => {
+      throw err
+    })
+  },
+  setPlayerInactive(path, id) {
+    let config = this.setupHeader()
+    let fullPath = (path + id)
+    return axios.patch(fullPath, null, config).then(res => res).catch(err => {
       throw err
     })
   },

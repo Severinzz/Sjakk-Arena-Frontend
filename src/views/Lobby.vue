@@ -14,7 +14,9 @@
             <v-btn id="start" color="primary" class="mr-4">
               Start
             </v-btn>
-            <v-btn id="cancel" class="mr-4">
+            <v-btn id="cancel"
+                   class="mr-4"
+                   @click="cancel">
               Avbryt
             </v-btn>
           </div>
@@ -96,6 +98,9 @@ export default {
           throw err
         })
       }, 3000)
+    },
+    cancel() {
+      this.$router.go(-1)
     }
   },
   mounted() {

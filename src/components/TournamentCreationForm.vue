@@ -12,28 +12,21 @@
       <v-toolbar dark color="primary">
         <v-toolbar-title>Turneringsinformasjon</v-toolbar-title>
       </v-toolbar>
-      <!-- Name of tournament host -->
+      <!-- Name of tournament -->
       <v-text-field
-        v-model="name"
-        label="Navn"
-        :rules="nameRules"
+        v-model="tournamentName"
+        :rules="tournamentNameRules"
+        label="Navn på turnering"
         required
       >
       </v-text-field>
       <!-- email address of tournament host -->
       <v-text-field
         v-model="email"
-        label="E-post"
         :rules="emailRules"
+        label="E-post"
         required>
       </v-text-field>
-      <!-- Name of tournament -->
-      <v-text-field
-        v-model="tournamentName"
-        label="Navn på turnering"
-        :rules="tournamentNameRules"
-        required
-      ></v-text-field>
       <!-- code from https://vuetifyjs.com/en/components/time-pickers-->
       <v-row>
         <v-col cols="11" sm="5">
@@ -63,10 +56,10 @@
               v-if="startTimeMenu"
               v-model="startTime"
               full-width
+              format="24hr"
               @click:minute="$refs.firstmenu.save(startTime)"
               :color="formColor"
-              :max="endTime"
-              format="24hr"
+              :max="calcStartTime"
             >
             </v-time-picker>
           </v-menu>
@@ -91,14 +84,6 @@
         :rules="numberFieldRules"
       >
       </v-text-field>
-      <!-- Length of pause between games-->
-      <v-text-field
-        v-model="pause"
-        label="Tid mellom parti (i minutter)"
-        type="number"
-        :rules="numberFieldRules"
-      >
-      </v-text-field>
       <!-- Maximum number of rounds -->
       <v-text-field
         v-model="rounds"
@@ -106,49 +91,43 @@
         type="number"
         :rules="numberFieldRules"
       ></v-text-field>
-      <v-switch label="Start når to spillere er påmeldt" v-model="earlyStart"></v-switch>
-      <v-switch label="Bruk sluttid" v-model="useEndTime"></v-switch>
+      <v-switch
+        label="Start når to spillere er påmeldt"
+        v-model="earlyStart">
+      </v-switch><v-switch
+        label="Bruk sluttid"
+        v-model="useEndTime"></v-switch>
       <!-- code from https://vuetifyjs.com/en/components/time-pickers-->
       <v-row>
       <v-col cols="12" sm="5">
-      <!-- End time -->
-      <v-menu
-        ref="secondmenu"
-        v-model="endTimeMenu"
-        :close-on-content-click="false"
-        :nudge-right="40"
-        :return-value.sync="endTime"
-        v-if="useEndTime"
-        transition="scale-transition"
-        offset-y
-        max-width="290px"
-        min-width="290px"
-      >
-        <template v-slot:activator="{ on }">
-          <v-text-field
-            v-model="endTime"
-            label="Sluttid"
-            readonly
-            v-on="on"
-            :rules="endTimeRules"
-          ></v-text-field>
-        </template>
-        <v-time-picker
-          v-if="endTimeMenu"
-          v-model="endTime"
-          full-width
-          @click:minute="$refs.secondmenu.save(endTime)"
-          :color="formColor"
-          :min="startTime"
-          format="24hr"
-        ></v-time-picker>
-      </v-menu>
+      <!-- End time and date-->
+        <date-time
+          v-if="useEndTime"
+          :min-date="new Date().toISOString().slice(0, 10)"
+          :min-time="startTime"
+          :rules="endTimeRules"
+          :event-name="'endDateTime'"
+          @endDateTime="onEndDateTime"></date-time>
       </v-col>
       </v-row>
       <!-- end of code from vuetifyjs.com -->
-      <v-btn id="submit-btn" class="mr-4" color="primary" @click="validate">Send</v-btn>
-      <v-btn id="clear-btn" @click="clear">Tøm</v-btn>
-      <v-btn id="cancel-btn" @click="cancel">Avbryt</v-btn>
+      <v-btn
+        id="submit-btn"
+        class="mr-4"
+        color="primary"
+        @click="validate">
+        Send
+      </v-btn>
+      <v-btn
+        id="clear-btn"
+        @click="clear">
+        Tøm
+      </v-btn>
+      <v-btn
+        id="cancel-btn"
+        @click="cancel">
+        Avbryt
+      </v-btn>
     </v-form>
   </div>
 </template>
@@ -156,21 +135,22 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import AlertBox from './AlertBox'
+import DateTime from './DateTime'
 export default {
   name: 'TournamentCreationForm',
-  components: { AlertBox },
+  components: { AlertBox, DateTime },
   data () {
     return {
       startTime: '', // start time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
-      endTime: '', // end time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
+      endTime: '', // end time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT) // TODO: burde kunne endre senere
+      currentDate: new Date().toISOString().slice(0, 10),
+      endDate: '',
       startTimeMenu: false,
       endTimeMenu: false,
-      name: '', // name of tournament host // TODO TRENG VI VIRKELI DINNA?
-      email: '', // email address of tournament host
-      tournamentName: '', // name of tournament
-      tables: '', // number of tables used in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
-      pause: '', // length of pause between games // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
-      rounds: '', // maximum number of rounds in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
+      email: 'test@test.test.com', // email address of tournament host
+      tournamentName: 'testTournament', // name of tournament
+      tables: '14', // number of tables used in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
+      rounds: '14', // maximum number of rounds in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
       earlyStart: false, // true if the tournament will start when two players are registered
       formColor: 'blue', // color to be used in form elements
       isLoading: false,
@@ -178,16 +158,12 @@ export default {
       error: false,
       useEndTime: false,
       // rules
-      nameRules: [
-        v => !!v || 'Navn er påkrevd',
-        v => (v && v.length <= 20) || 'Navn må innholde færre enn 20 karakterer'
-      ],
       emailRules: [
         v => /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/.test(v) || 'Du må skrive inn en gyldig e-postadresse'
       ],
       tournamentNameRules: [
         v => !!v || 'Turneringsnavn er påkrevd',
-        v => (v && v.length <= 20) || 'Turneringsnavn må innholde færre enn 20 karakterer'
+        v => (v && v.length <= 40) || 'Turneringsnavn må innholde færre enn 20 karakterer' // TODO Litt kort me 20
       ],
       numberFieldRules: [
         v => /^\d+$/.test(v) || 'Bare tall i dette feltet!', // If not included the number field can contain + and -
@@ -206,12 +182,14 @@ export default {
     ...mapGetters([
       'getTournament'
     ]),
+    // Clears all input fields and errors from the form.
     clear() {
       this.$refs.form.reset()
     },
     async submit () {
       this.error = false
       this.isLoading = true
+      // Setup the JSON object to be sent to the server
       let payload = {
         'tournament_name': this.tournamentName,
         'admin_email': this.email,
@@ -226,10 +204,12 @@ export default {
       }
       // Sends the given information in the form to the server.
       await this.createTournament(payload).then(res => {
+        // Grabs the tournament from store so the correct tournament_id is used in the dynamic link.
         let tournament = this.getTournament()
         this.$router.push('/lobby/' + tournament.id)
         this.isLoading = false
       }).catch(err => {
+        // Hides the loading circle and display error message
         this.isLoading = false
         this.error = true
         this.errorMessage = err + '. Prøv igjen senere!'
@@ -240,17 +220,22 @@ export default {
         this.submit()
       }
     },
+    // Checks if start time is before the end time and not after or equal.
     checkTime() {
+      if (this.endTime === undefined || this.endDate !== this.currentDate) { return true }
       let startTimeH = this.startTime.toString().split(':')[0]
       let endTimeH = this.endTime.toString().split(':')[0]
       if (parseInt(startTimeH) < parseInt(endTimeH)) {
+        // Error displayed since the start time is smaller than the end time
         return true
       } else {
+        // Displays error only if start time is exaclty equal to end time.
         let startTimeM = this.lastNumberInTime(this.startTime)
         let endTimeM = this.lastNumberInTime(this.endTime)
         return parseInt(startTimeM) < parseInt(endTimeM)
       }
     },
+    // Grabs the minutes from the time string.
     lastNumberInTime(timeString) {
       return parseInt(timeString.toString().split(':')[1])
     },
@@ -258,6 +243,21 @@ export default {
     cancel() {
       this.clear()
       this.$router.push('/')
+    },
+    onEndDateTime(value) {
+      let dateTimeArray = value.split('t')
+      if (dateTimeArray.length === 2) {
+        this.endDate = dateTimeArray[0]
+        this.endTime = dateTimeArray[1]
+      }
+    }
+  },
+  computed: {
+    calcStartTime() {
+      if (this.currentDate === this.endDate) {
+        return this.endTime
+      }
+      return null
     }
   }
 }
