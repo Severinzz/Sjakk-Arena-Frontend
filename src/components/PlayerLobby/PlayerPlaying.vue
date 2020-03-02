@@ -101,7 +101,7 @@
               <v-card-actions>
                 <v-spacer />
                 <v-btn text @click="resultDialog = false">Avbryt</v-btn>
-                <v-btn text color="primary" outlined @click="result_registered">Send inn</v-btn>
+                <v-btn text color="primary" outlined @click="resultRegistered">Send inn</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -121,8 +121,8 @@
                 <v-card-actions>
                   <v-spacer />
                   <!-- User has the option to either leave or go back USERID IS HARDCODED! -->
-                  <v-btn text @click="set_player_inactive()">Forlat turneringen</v-btn>
-                  <v-btn text color="primary" outlined @click="leave_dialog = false">Avbryt</v-btn>
+                  <v-btn text @click="leaveTournament()">Forlat turneringen</v-btn>
+                  <v-btn text color="primary" outlined @click="leaveDialog = false">Avbryt</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -158,29 +158,26 @@ export default {
   },
   data() {
     return {
-      resultDialog: false, // Endres av bruker
-      leaveDialog: false, // Endres av bruker
-      pastResults: false, // Endres av bruker
-      pause: false, // Endres av bruker
-      paired: false // Endres av systemet
+      resultDialog: false,
+      leaveDialog: false,
+      pastResults: false,
+      pause: false,
+      paired: false
     }
   },
   methods: {
     ...mapActions([
-      'inactivatePlayer'
+      'sendLeaveRequest'
     ]),
-    result_registered () {
+    resultRegistered () {
       this.paired = false
-      this.result_dialog = false
+      this.resultDialog = false
     },
-    async set_player_inactive () {
-      let payload = {
-        path: '/player/set-inactive/'
-      }
-      await this.inactivatePlayer(payload).then(res => {
+    async leaveTournament () {
+      await this.sendLeaveRequest.then(res => {
         this.$router.push('/')
       }).catch(err => {
-        console.log(err)
+        console.error(err)
       })
     }
   }

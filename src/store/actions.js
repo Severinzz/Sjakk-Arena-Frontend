@@ -1,5 +1,5 @@
 import { API_SERVICE, TOURNAMENT_SERVICE, PLAYER_SERVICE } from '../common/api'
-import { addToken } from '../common/jwt.storage'
+import { addToken, deleteToken } from '../common/jwt.storage'
 
 export default {
   addPlayer: ({ commit }, payload) => {
@@ -65,6 +65,11 @@ export default {
   fetchPlayer: ({ commit }) => {
     return PLAYER_SERVICE.get('information').then(res => {
       commit('createPlayer', res.data)
+    })
+  },
+  sendLeaveRequest: () => {
+    return PLAYER_SERVICE.patch('set-inactive').then(res => {
+      deleteToken()
     })
   }
 }

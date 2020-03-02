@@ -37,6 +37,11 @@ export const API_SERVICE = {
     return axios.put(`${path}`, params).then(res => res).catch(err => {
       throw err
     })
+  },
+  patch(path, slug = '') {
+    return axios.patch(`${path}/${slug}`).then(res => res).catch(err => {
+      throw err
+    })
   }
 }
 
@@ -60,5 +65,8 @@ export const TOURNAMENT_SERVICE = {
 export const PLAYER_SERVICE = {
   get(slug) {
     return API_SERVICE.get('player', slug)
+  },
+  patch(slug) {
+    return API_SERVICE.patch('player', slug)
   }
 }
