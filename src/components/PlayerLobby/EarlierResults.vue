@@ -9,12 +9,11 @@
             <v-layout>
               <!-- https://stackoverflow.com/a/54836170/12885810 -->
               <ul>
-                <!--<li v-for="(spill, index) in computedObj" :key="index">
-                  <h6 class="body-1">Parti: {{index + 1}} Mot: {{spill.name}}</h6>
-                  <p class="body-2 dumdum">Farge: {{spill.color}}</p>
-                  <p class="body-2 dumdum">Resultat: {{spill.result}}</p>
-                </li>-->
-                <li>loadResults()</li>
+                <li v-for="game in gameList" :key="game.id">
+                  <h6 class="body-1">Parti: {{game.id}} Mot: {{game.black_player_name}}</h6>
+                  <p class="body-2 dumdum">Farge: {{null}}</p>
+                  <p class="body-2 dumdum">Resultat: {{game.result}}</p>
+                </li>
               </ul>
             </v-layout>
           </v-container>
@@ -30,6 +29,7 @@ export default {
   data () {
     return {
       limit: 10,
+      spillArray: [],
       resultater: [
         {
           id: 1,
@@ -87,8 +87,11 @@ export default {
       'fetchResults'
     ]),
     async loadResults () {
+      const VM = this
       this.intervalID = setInterval(async function () {
-        await this.fetchResults('/player/player-results').then(res => {
+        await VM.fetchResults('/player/games').then(res => {
+          VM.spillArray = res
+          console.log(VM.spillArray)
         }).catch(err => {
           throw err
         })
@@ -96,9 +99,15 @@ export default {
     }
   },
   computed: {
-    computedObj () {
-      return this.limit ? this.resultater.slice(0, this.limit) : this.result
+    gameList () {
+      return this.limit ? this.spillArray.slice(0, this.limit) : this.result
     }
+  },
+  created () {
+    this.loadResults()
+  },
+  destroyed () {
+    clearInterval(this.intervalID)
   }
 }
 </script>
