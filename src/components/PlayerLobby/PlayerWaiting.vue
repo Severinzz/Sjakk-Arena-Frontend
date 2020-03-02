@@ -10,11 +10,9 @@
         </v-toolbar>
         <v-card-text align="center">
           <v-spacer />
-          <h1>{{ Tname }}</h1>
-          <p class="body-2">{{Tpin}}</p>
-          <h5 class="gameDetail body-2">Spilletid: {{Tstart}} -> {{Tend}} </h5>
-          <h2 class="gameDetail">{{Username}}</h2>
-          <p class="gameDetail body-1">{{TournDet}}</p>
+          <h1>{{ tournamentName }}</h1>
+          <h5 class="gameDetail body-2">Spilletid: {{tournamentStart}} -> {{tournamentEnd}} </h5>
+          <h2 class="gameDetail">{{ playerName }}</h2>
           <v-spacer />
         </v-card-text>
       </v-card>
@@ -25,17 +23,12 @@
 <script>
 export default {
   name: 'PlayerWaiting',
-  data() {
-    return {
-      Tname: 'NTNU Open',
-      Tstart: '13:00',
-      Tend: '15:30',
-      Tpin: '13376',
-      Username: 'Ola Nordmann',
-      TournDet: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ' +
-        'et dolore magna aliqua. fgdfgkposdfkgpdfgodskpfgoksdf gosfdk gposd fgkos dfgk psodfgk psdofgkdopfkg sdofpg kdsf okg' +
-        'sdfpåg sdfg sdpåfgk dsfåg ksdf gp sdkfågpsdfk gås dfg kpdfg sdfpågkpdskfgæølksd fgå sdpfg kp sdf.'
-    }
+  props: {
+    tournamentName: String,
+    tournamentStart: String,
+    tournamentEnd: String,
+    playerName: String,
+    points: Number
   }
 }
 </script>

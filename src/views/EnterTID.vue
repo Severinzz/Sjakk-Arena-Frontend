@@ -66,12 +66,10 @@ export default {
     async submit() {
       this.error = false
       this.isLoading = true
-      await this.fetchTournament(this.tournamentId).then(res => {
+      this.fetchTournament(this.tournamentId).then(res => {
         let tournament = this.getTournament()
         this.isLoading = false
-        if (tournament.early_start === false) {
-          this.$router.push('/lobby/' + `${tournament.id}`)
-        }
+        this.$router.push('/lobby/' + `${tournament.id}`)
       }).catch(err => {
         // TODO Forandre feilemding til nøke meir fornuftig
         this.isLoading = false
