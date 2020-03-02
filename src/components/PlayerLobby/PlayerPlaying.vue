@@ -120,9 +120,9 @@
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer />
-                  <!-- User has the option to either leave or go back -->
-                  <v-btn text to="/">Forlat turneringen</v-btn>
-                  <v-btn text color="primary" outlined @click="leaveDialog = false">Avbryt</v-btn>
+                  <!-- User has the option to either leave or go back USERID IS HARDCODED! -->
+                  <v-btn text @click="set_player_inactive()">Forlat turneringen</v-btn>
+                  <v-btn text color="primary" outlined @click="leave_dialog = false">Avbryt</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -140,6 +140,7 @@
 import PlayerPaired from './PlayerPaired'
 import PlayerNotPaired from './PlayerNotPaired'
 import EarlierResults from './EarlierResults'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'PlayerPlaying',
@@ -165,9 +166,22 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'inactivatePlayer'
+    ]),
     result_registered () {
       this.paired = false
-      this.resultDialog = false
+      this.result_dialog = false
+    },
+    async set_player_inactive () {
+      let payload = {
+        path: '/player/set-inactive/'
+      }
+      await this.inactivatePlayer(payload).then(res => {
+        this.$router.push('/')
+      }).catch(err => {
+        console.log(err)
+      })
     }
   }
 }
