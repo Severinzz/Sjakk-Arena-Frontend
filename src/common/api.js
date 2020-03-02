@@ -8,49 +8,65 @@ Vue.use(VueAxios, axios)
 Vue.axios.defaults.baseURL = API_URL
 Vue.axios.defaults.timeout = TIME_OUT
 
-const tournamentService = {
+/*
+ Adapted from gothinkers/vue-realworld-example-app repository
+ Source: https://github.com/gothinkster/vue-realworld-example-app/blob/master/src/common/api.service.js
+ Structure and some general methods are approximately the same as in the "real world" example.
+ */
+export const API_SERVICE = {
+
+  setHeader() {
+    Vue.axios.defaults.headers.common['Authorization'] = `Bearer ${jwtService.getToken()}`
+  },
+  delete(path, slug = '') {
+    return axios.delete(`${path}/${slug}`).catch(err => {
+      throw err
+    })
+  },
+  get(path, slug = '') {
+    return axios.get(`${path}/${slug}`).then(res => res).catch(err => {
+      throw err
+    })
+  },
   post(path, params) {
     return axios.post(`${path}`, params).then(res => res).catch(err => {
       throw err
     })
   },
-  get(path) {
-    if (path === undefined || path == null) {
-      let config = this.setupHeader()
-      return axios.get('/tournament/information', config).then(res => res).catch(err => {
-        throw err
-      })
-    } else {
-      return axios.get('/tournament-information/' + `${path}`).then(res => res).catch(err => {
-        throw err
-      })
-    }
-  },
-  getPlayers(path) {
-    let config = this.setupHeader()
-    return axios.get(path, config).then(res => res).catch(err => {
+  put(path, params) {
+    return axios.put(`${path}`, params).then(res => res).catch(err => {
       throw err
     })
   },
-  deleteURI(path, param) {
-    let config = this.setupHeader()
-    return axios.delete(path + `${param}`, config).catch(err => {
+  patch(path, slug = '') {
+    return axios.patch(`${path}/${slug}`).then(res => res).catch(err => {
       throw err
     })
-  },
-  setPlayerInactive(path) {
-    let config = this.setupHeader()
-    return axios.patch(path, null, config).then(res => res).catch(err => {
-      throw err
-    })
-  },
-  setupHeader() {
-    return {
-      headers: {
-        'Authorization': 'Bearer ' + jwtService.getToken()
-      }
-    }
   }
 }
 
-export default tournamentService
+export const TOURNAMENT_SERVICE = {
+
+  delete(slug) {
+    return API_SERVICE.delete('tournament', slug)
+  },
+  get(slug) {
+    return API_SERVICE.get('tournament', slug)
+  },
+  post(params) {
+    return API_SERVICE.post('tournament', params)
+  },
+  put(params) {
+    return API_SERVICE.put('tournament', params)
+  }
+
+}
+
+export const PLAYER_SERVICE = {
+  get(slug) {
+    return API_SERVICE.get('player', slug)
+  },
+  patch(slug) {
+    return API_SERVICE.patch('player', slug)
+  }
+}
