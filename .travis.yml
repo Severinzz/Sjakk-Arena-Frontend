@@ -1,0 +1,7 @@
+language: node.js
+cache:
+  directories:
+    - node_modules
+script:
+  - npm run test:unit
+  - npm run build
