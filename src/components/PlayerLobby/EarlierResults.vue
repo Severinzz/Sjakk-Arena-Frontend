@@ -9,10 +9,19 @@
             <v-layout>
               <!-- https://stackoverflow.com/a/54836170/12885810 -->
               <ul>
-                <li v-for="(spill, index) in computedObj" :key="index">
-                  <h6 class="body-1">Parti: {{index + 1}} Mot: {{spill.name}}</h6>
-                  <p class="body-2 dumdum">Farge: {{spill.color}}</p>
-                  <p class="body-2 dumdum">Resultat: {{spill.result}}</p>
+                <li
+                  v-for="(spill, index) in computedObj"
+                  :key="index"
+                >
+                  <h6 class="body-1">
+                    Parti: {{index + 1}} Mot: {{spill.name}}
+                  </h6>
+                  <p class="body-2 dumdum">
+                    Farge: {{spill.color}}
+                  </p>
+                  <p class="body-2 dumdum">
+                    Resultat: {{spill.result}}
+                  </p>
                 </li>
               </ul>
             </v-layout>
