@@ -11,14 +11,15 @@
               <ul>
                 <h6 v-if="gameList.length == 0" class="body-1">Du har jo ikke spilt enda!</h6>
                 <li v-for="(games, index) in gameList" v-bind:key="index">
-                  <h6 v-if="games.white_player_name === navn" class="body-1">
+                  <h6 v-if="games.white_player_name === playerName" class="body-1">
                     Parti: {{gameList.length - index}} Mot: {{games.black_player_name}}
                   </h6>
-                  <h6 v-if="games.black_player_name === navn" class="body-1">
+                  <h6 v-if="games.black_player_name === playerName" class="body-1">
                     Parti: {{gameList.length - index}} Mot: {{games.white_player_name}}
                   </h6>
-                  <p v-if="games.white_player_name === navn" class="body-2 dumdum">Farge: Hvit</p>
-                  <p v-if="games.black_player_name === navn" class="body-2 dumdum">Farge: Sort</p>
+                  <p v-if="games.white_player_name === playerName" class="body-2 dumdum">Farge: Hvit</p>
+                  <p v-if="games.black_player_name === playerName" class="body-2 dumdum">Farge: Sort</p>
+                  <!-- 1 = hvit seier, 0 = sort seier -->
                     <p v-if="games.result == 1" class="body-2 dumdum">Resultat: Hvit Seier</p>
                     <p v-if="games.result == 0.5" class="body-2 dumdum">Resultat: Remis</p>
                     <p v-if="games.result == 0" class="body-2 dumdum">Resultat: Sort Seier</p>
@@ -40,7 +41,7 @@ export default {
   data () {
     return {
       limit: 10,
-      navn: 'Eddik', // må endres til din bruker!!!
+      playerName: 'Eddik', // må endres til din bruker!!!
       spillArray: []
     }
   },
