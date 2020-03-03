@@ -15,46 +15,47 @@ Vue.axios.defaults.timeout = TIME_OUT
  */
 export const API_SERVICE = {
 
-  setHeader() {
+  setHeader () {
     Vue.axios.defaults.headers.common['Authorization'] = `Bearer ${jwtService.getToken()}`
   },
-  delete(path, slug = '') {
+  delete (path, slug = '') {
     return axios.delete(`${path}/${slug}`).catch(err => {
       throw err
     })
   },
-  get(path, slug = '') {
+  get (path, slug = '') {
     return axios.get(`${path}/${slug}`).then(res => res).catch(err => {
       throw err
     })
   },
-  post(path, params) {
+  post (path, params) {
     return axios.post(`${path}`, params).then(res => res).catch(err => {
       throw err
     })
   },
-  put(path, params) {
+  put (path, params) {
     return axios.put(`${path}`, params).then(res => res).catch(err => {
       throw err
     })
   },
-  patch(path, slug = '') {
+  patch (path, slug = '') {
     return axios.patch(`${path}/${slug}`).then(res => res).catch(err => {
       throw err
     })
   },
-  getResults(path) {
+  getResults (path) {
     let config = this.setupHeader()
     return axios.get(path, config).then(res => res).catch(err => {
       throw err
     })
   },
-  setupHeader() {
+  setupHeader () {
     return {
       headers: {
         'Authorization': 'Bearer ' + jwtService.getToken()
       }
     }
+  }
 }
 
 export const TOURNAMENT_SERVICE = {

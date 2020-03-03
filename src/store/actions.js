@@ -73,7 +73,7 @@ export default {
     })
   },
   fetchResults: ({ commit }, path) => {
-    return tournamentService.getResults(path).catch(err => {
+    return TOURNAMENT_SERVICE.getResults(path).catch(err => {
       throw err
     })
   }

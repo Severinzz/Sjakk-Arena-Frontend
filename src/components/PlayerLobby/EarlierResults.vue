@@ -34,21 +34,22 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'EarlierResults',
   data () {
     return {
       limit: 10,
-      playerName: 'svela', // må endres til din bruker!!!
-      timeOut: 100, // “maximum interval between events for perception that one event causes another event: 140 milliseconds” designing with the mind in mind.
+      playerName: 'jwfoijewo',
+      timeOut: 3000, // “maximum interval between events for perception that one event causes another event: 140 milliseconds” designing with the mind in mind.
       spillArray: []
     }
   },
   methods: {
     ...mapActions([
-      'fetchResults'
+      'fetchResults',
+      'fetchPlayer'
     ]),
     loadResults () {
       const VM = this
@@ -62,16 +63,20 @@ export default {
       }, this.timeOut) // ka interval som gir mening?
     }
   },
-  computed: {
+  computed: mapState({
+    playerName: state => state.player.name,
     gameList () {
       return this.limit ? this.spillArray.slice(0, this.limit) : this.result
     }
-  },
-  created () {
+  }),
+  Created () {
     this.loadResults()
   },
   destroyed () {
     clearInterval(this.intervalID)
+  },
+  mounted () {
+    this.fetchPlayer()
   }
 }
 </script>
