@@ -11,7 +11,7 @@
               <ul>
                 <h6 v-if="gameList.length == 0" class="body-1">Du har ikke noen resultater ennå!</h6>
                 <li v-for="(games, index) in gameList" v-bind:key="index">
-                  <v-divider inset></v-divider>
+                  <v-divider inset></v-divider> <!-- Seperator line between elements -->
                   <h6 v-if="games.white_player_name === navn" class="body-1">Parti: {{gameList.length - index}} Mot: {{games.black_player_name}}</h6>
                   <h6 v-if="games.black_player_name === navn" class="body-1">Parti: {{gameList.length - index}} Mot: {{games.white_player_name}}</h6>
                   <p v-if="games.white_player_name === navn" class="body-2 dumdum">Farge: Hvit</p>
@@ -44,7 +44,7 @@ export default {
     ...mapActions([
       'fetchResults'
     ]),
-    async loadResults () {
+    loadResults () {
       const VM = this
       this.intervalID = setInterval(async function () {
         await VM.fetchResults('/player/games').then(res => {
