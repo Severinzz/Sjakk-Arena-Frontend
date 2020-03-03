@@ -9,13 +9,17 @@
             <v-layout>
               <!-- https://stackoverflow.com/a/54836170/12885810 -->
               <ul>
+                <h6 v-if="gameList.length == 0" class="body-1">Du har ikke noen resultater ennå!</h6>
                 <li v-for="(games, index) in gameList" v-bind:key="index">
                   <v-divider inset></v-divider>
-                  <h6 class="body-1">Parti: {{gameList.length - index}} Mot: {{games.black_player_name}}</h6>
-                  <p class="body-2 dumdum">Farge: ?? {{null}}</p>
+                  <h6 v-if="games.white_player_name === navn" class="body-1">Parti: {{gameList.length - index}} Mot: {{games.black_player_name}}</h6>
+                  <h6 v-if="games.black_player_name === navn" class="body-1">Parti: {{gameList.length - index}} Mot: {{games.white_player_name}}</h6>
+                  <p v-if="games.white_player_name === navn" class="body-2 dumdum">Farge: Hvit</p>
+                  <p v-if="games.black_player_name === navn" class="body-2 dumdum">Farge: Sort</p>
                     <p v-if="games.result == 1" class="body-2 dumdum">Resultat: Hvit Seier</p>
                     <p v-if="games.result == 0.5" class="body-2 dumdum">Resultat: Remis</p>
                     <p v-if="games.result == 0" class="body-2 dumdum">Resultat: Sort Seier</p>
+                  <p v-if="games.result == null" class="body-2 dumdum">Her har den sjedd en feil!</p>
                 </li>
               </ul>
             </v-layout>
@@ -32,6 +36,7 @@ export default {
   data () {
     return {
       limit: 10,
+      navn: 'Eddik', // må endres til din bruker!!!
       spillArray: []
     }
   },
