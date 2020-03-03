@@ -1,4 +1,5 @@
 import playingPlayers from '../data/playingPlayers'
+import devTournament from '../data/tournament'
 // TODO: REFACTOR STORE TO USE MODULES?
 const LOADING_MESSAGE = 'loading....'
 let tournament = {
@@ -17,6 +18,7 @@ let players = {}
 export default {
   players,
   tournament,
+  devTournament,
   player,
   playingPlayers
 }
