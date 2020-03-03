@@ -41,7 +41,8 @@ export default {
   data () {
     return {
       limit: 10,
-      playerName: 'Eddik', // må endres til din bruker!!!
+      playerName: 'svela', // må endres til din bruker!!!
+      timeOut: 100, // “maximum interval between events for perception that one event causes another event: 140 milliseconds” designing with the mind in mind.
       spillArray: []
     }
   },
@@ -58,7 +59,7 @@ export default {
         }).catch(err => {
           throw err
         })
-      }, 500) // ka interval som gir mening?
+      }, this.timeOut) // ka interval som gir mening?
     }
   },
   computed: {
