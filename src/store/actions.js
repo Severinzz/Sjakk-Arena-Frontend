@@ -71,5 +71,8 @@ export default {
     return PLAYER_SERVICE.patch('set-inactive').then(res => {
       deleteToken()
     })
+  },
+  sendResult: ({ commit }, result) => {
+    return PLAYER_SERVICE.put('add-result', result)
   }
 }
