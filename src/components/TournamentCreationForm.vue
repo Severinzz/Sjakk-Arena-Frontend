@@ -15,16 +15,16 @@
       <!-- Name of tournament -->
       <v-text-field
         v-model="tournamentName"
-        label="Navn på turnering"
         :rules="tournamentNameRules"
+        label="Navn på turnering"
         required
       >
       </v-text-field>
       <!-- email address of tournament host -->
       <v-text-field
         v-model="email"
-        label="E-post"
         :rules="emailRules"
+        label="E-post"
         required>
       </v-text-field>
       <!-- code from https://vuetifyjs.com/en/components/time-pickers-->
@@ -49,6 +49,7 @@
                 readonly
                 required
                 v-on="on"
+                :error="missingStartTime"
               >
               </v-text-field>
             </template>
@@ -56,10 +57,10 @@
               v-if="startTimeMenu"
               v-model="startTime"
               full-width
+              format="24hr"
               @click:minute="$refs.firstmenu.save(startTime)"
               :color="formColor"
               :max="calcStartTime"
-              format="24hr"
             >
             </v-time-picker>
           </v-menu>
@@ -91,8 +92,12 @@
         type="number"
         :rules="numberFieldRules"
       ></v-text-field>
-      <v-switch label="Start når to spillere er påmeldt" v-model="earlyStart"></v-switch>
-      <v-switch label="Bruk sluttid" v-model="useEndTime"></v-switch>
+      <v-switch
+        label="Start når to spillere er påmeldt"
+        v-model="earlyStart">
+      </v-switch><v-switch
+        label="Bruk sluttid"
+        v-model="useEndTime"></v-switch>
       <!-- code from https://vuetifyjs.com/en/components/time-pickers-->
       <v-row>
       <v-col cols="12" sm="5">
@@ -103,13 +108,27 @@
           :min-time="startTime"
           :rules="endTimeRules"
           :event-name="'endDateTime'"
-          @endDateTime="handleEndDateTime"></date-time>
+          @endDateTime="onEndDateTime"></date-time>
       </v-col>
       </v-row>
       <!-- end of code from vuetifyjs.com -->
-      <v-btn id="submit-btn" class="mr-4" color="primary" @click="validate">Send</v-btn>
-      <v-btn id="clear-btn" @click="clear">Tøm</v-btn>
-      <v-btn id="cancel-btn" @click="cancel">Avbryt</v-btn>
+      <v-btn
+        id="submit-btn"
+        class="mr-4"
+        color="primary"
+        @click="validate">
+        Send
+      </v-btn>
+      <v-btn
+        id="clear-btn"
+        @click="clear">
+        Tøm
+      </v-btn>
+      <v-btn
+        id="cancel-btn"
+        @click="cancel">
+        Avbryt
+      </v-btn>
     </v-form>
   </div>
 </template>
@@ -139,17 +158,14 @@ export default {
       errorMessage: '',
       error: false,
       useEndTime: false,
+      missingStartTime: false,
       // rules
-      nameRules: [
-        v => !!v || 'Navn er påkrevd',
-        v => (v && v.length <= 20) || 'Navn må innholde færre enn 20 karakterer'
-      ],
       emailRules: [
         v => /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/.test(v) || 'Du må skrive inn en gyldig e-postadresse'
       ],
       tournamentNameRules: [
         v => !!v || 'Turneringsnavn er påkrevd',
-        v => (v && v.length <= 20) || 'Turneringsnavn må innholde færre enn 20 karakterer' // TODO Litt kort me 20
+        v => (v && v.length <= 40) || 'Turneringsnavn må innholde færre enn 20 karakterer' // TODO Litt kort me 20
       ],
       numberFieldRules: [
         v => /^\d+$/.test(v) || 'Bare tall i dette feltet!', // If not included the number field can contain + and -
@@ -158,6 +174,10 @@ export default {
       endTimeRules: [
         v => !v || this.checkTime() ||
           'Sluttid kan ikke vær lik eller mindre start tiden!'
+      ],
+      startTimeRules: [
+        v => !!v || 'Starttid er påkrevd',
+        v => (v.length = 0) || 'fisk'
       ]
     }
   },
@@ -173,20 +193,24 @@ export default {
       this.$refs.form.reset()
     },
     async submit () {
+      if (this.validateTime()) {
+        this.missingStartTime = true
+        return
+      }
       this.error = false
       this.isLoading = true
       // Setup the JSON object to be sent to the server
       let payload = {
-        'tournament_name': this.name,
+        'tournament_name': this.tournamentName,
         'admin_email': this.email,
         'start': this.currentDate + 'T' + this.startTime,
-        'end': this.endDate + 'T' + this.endTime,
+        'end': null,
         'tables': parseInt(this.tables),
         'max_rounds': parseInt(this.rounds),
-        'early_start': this.early_start
+        'early_start': this.earlyStart
       }
       if (this.endTime.length > 0) {
-        payload.end = this.endTime
+        payload.end = this.endDate + 'T' + this.endTime
       }
       // Sends the given information in the form to the server.
       await this.createTournament(payload).then(res => {
@@ -206,7 +230,10 @@ export default {
         this.submit()
       }
     },
-    // Checks if start time is before the end time and not after or equal.
+    validateTime() {
+      return this.startTime === ''
+    },
+    // Checks if end time is after start time and not before or equal
     checkTime() {
       if (this.endTime === undefined || this.endDate !== this.currentDate) { return true }
       let startTimeH = this.startTime.toString().split(':')[0]
@@ -230,7 +257,7 @@ export default {
       this.clear()
       this.$router.push('/')
     },
-    handleEndDateTime(value) {
+    onEndDateTime(value) {
       let dateTimeArray = value.split('t')
       if (dateTimeArray.length === 2) {
         this.endDate = dateTimeArray[0]

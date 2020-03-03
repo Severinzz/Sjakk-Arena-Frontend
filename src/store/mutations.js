@@ -12,6 +12,6 @@ export default {
     state.player = player
   },
   addPlayers: (state, payload) => {
-    state.players = payload
+    state.player = payload
   }
 }

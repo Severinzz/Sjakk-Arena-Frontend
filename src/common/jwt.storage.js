@@ -1,5 +1,5 @@
+// From https://github.com/gothinkster/vue-realworld-example-app/blob/master/src/common/jwt.service.js
 const JWT_TOKEN = 'jwt_token'
-
 // TODO CHANGE FROM SESSIONSTORAGE TO LOCALSTORAGE
 
 export const getToken = () => {

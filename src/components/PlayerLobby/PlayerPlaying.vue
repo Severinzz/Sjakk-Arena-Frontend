@@ -12,9 +12,9 @@
           <v-spacer />
 
           <!-- Basic user details -->
-          <h1>{{ Tname }}</h1>
-          <h3 class="gameDetail">{{ Usernamne }}</h3>
-          <h3 class="gameDetail">Poeng: {{ Tpoints }}</h3>
+          <h1>{{ tournamentName }}</h1>
+          <h3 class="gameDetail">{{ playerName }}</h3>
+          <h3 class="gameDetail">Poeng: {{ points }}</h3>
 
           <!-- Do player have an opponent? -->
           <div v-if="paired && !pause">
@@ -43,9 +43,9 @@
             <v-btn class="btns" block rounded depressed disabled>Registrer resultat</v-btn>
             </div>
             <div v-if="paired">
-              <v-btn class="btns" color="primary" block rounded depressed @click="result_dialog = true">Registrer resultat</v-btn>
+              <v-btn class="btns" color="primary" block rounded depressed @click="resultDialog = true">Registrer resultat</v-btn>
             </div>
-            <v-btn class="btns" block rounded depressed @click="leave_dialog = true">Forlat turnering</v-btn>
+            <v-btn class="btns" block rounded depressed @click="leaveDialog = true">Forlat turnering</v-btn>
             <!-- If user is NOT paired or in a break -->
             <div v-if="!pause && !paired">
               <v-btn class="btns" block rounded depressed @click="pause = !pause">Ta pause</v-btn>
@@ -54,22 +54,22 @@
             <div v-if="pause && !paired">
               <v-btn class="btns" color="primary" block rounded depressed @click="pause = !pause">Avslutt pause</v-btn>
             </div>
-            <div v-if="!past_results">
-              <v-btn class="btns" block rounded depressed @click="past_results = true">Tidligere parti</v-btn>
+            <div v-if="!pastResults">
+              <v-btn class="btns" block rounded depressed @click="pastResults = true">Tidligere parti</v-btn>
             </div>
-            <div v-if="past_results">
-              <v-btn class="btns" color="primary" block rounded depressed @click="past_results = false">Fjern resultatliste</v-btn>
+            <div v-if="pastResults">
+              <v-btn class="btns" color="primary" block rounded depressed @click="pastResults = false">Fjern resultatliste</v-btn>
             </div>
           </v-container>
 
-          <div v-if="past_results">
+          <div v-if="pastResults">
             <EarlierResults></EarlierResults>
-            <v-btn class="btns" color="primary" block rounded depressed @click="past_results = false">Fjern resultatliste</v-btn>
+            <v-btn class="btns" color="primary" block rounded depressed @click="pastResults = false">Fjern resultatliste</v-btn>
           </div>
 
           <!-- Dialog for user to input result; https://vuetifyjs.com/en/components/dialogs -->
           <v-row class="justify-center" align="center">
-          <v-dialog v-model="result_dialog" persistent max-width="650px">
+          <v-dialog v-model="resultDialog" persistent max-width="650px">
             <v-card>
               <v-card-title class="justify-center">Resultatet ble:</v-card-title>
               <v-card-text>
@@ -100,8 +100,8 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn text @click="result_dialog = false">Avbryt</v-btn>
-                <v-btn text color="primary" outlined @click="result_registered">Send inn</v-btn>
+                <v-btn text @click="resultDialog = false">Avbryt</v-btn>
+                <v-btn text color="primary" outlined @click="resultRegistered">Send inn</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -109,7 +109,7 @@
 
           <!-- Dialog for user if 'FORLAT TURNERING' is pressed -->
           <v-row class="justify-center" align="center">
-            <v-dialog v-model="leave_dialog" persistent max-width="650px">
+            <v-dialog v-model="leaveDialog" persistent max-width="650px">
               <v-card>
                 <v-card-title class="justify-center">Forlat turnering</v-card-title>
                 <v-card-text>
@@ -121,15 +121,15 @@
                 <v-card-actions>
                   <v-spacer />
                   <!-- User has the option to either leave or go back USERID IS HARDCODED! -->
-                  <v-btn text @click="set_player_inactive()">Forlat turneringen</v-btn>
-                  <v-btn text color="primary" outlined @click="leave_dialog = false">Avbryt</v-btn>
+                  <v-btn text @click="leaveTournament()">Forlat turneringen</v-btn>
+                  <v-btn text color="primary" outlined @click="leaveDialog = false">Avbryt</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
           </v-row>
 
           <!-- playtime -->
-          <p class="gameDetail body-2">Spilletid: {{ Tstart }} -> {{ Tend }} </p>
+          <p class="gameDetail body-2">Spilletid: {{ tournamentStart }} -> {{ tournamentEnd }} </p>
         </v-card-text>
       </v-card>
     </v-row>
@@ -144,6 +144,13 @@ import { mapActions } from 'vuex'
 
 export default {
   name: 'PlayerPlaying',
+  props: {
+    tournamentName: String,
+    tournamentStart: String,
+    tournamentEnd: String,
+    playerName: String,
+    points: Number
+  },
   components: {
     PlayerPaired,
     PlayerNotPaired,
@@ -151,34 +158,26 @@ export default {
   },
   data() {
     return {
-      Tname: 'NTNU Open',
-      Tstart: '13:00',
-      Tend: '15:30',
-      Usernamne: 'Ola Nordmann',
-      Tpoints: 13.5,
-      result_dialog: false, // Endres av bruker
-      leave_dialog: false, // Endres av bruker
-      past_results: false, // Endres av bruker
-      pause: false, // Endres av bruker
-      paired: false // Endres av systemet
+      resultDialog: false,
+      leaveDialog: false,
+      pastResults: false,
+      pause: false,
+      paired: false
     }
   },
   methods: {
     ...mapActions([
-      'inactivatePlayer'
+      'sendLeaveRequest'
     ]),
-    result_registered () {
+    resultRegistered () {
       this.paired = false
-      this.result_dialog = false
+      this.resultDialog = false
     },
-    async set_player_inactive () {
-      let payload = {
-        path: '/player/set-inactive/'
-      }
-      await this.inactivatePlayer(payload).then(res => {
+    async leaveTournament () {
+      await this.sendLeaveRequest.then(res => {
         this.$router.push('/')
       }).catch(err => {
-        console.log(err)
+        console.error(err)
       })
     }
   }
