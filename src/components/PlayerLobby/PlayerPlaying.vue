@@ -216,7 +216,7 @@ export default {
       leaveDialog: false,
       pastResults: false,
       pause: false,
-      paired: false,
+      paired: true,
       pauseButtonText: 'Ta pause',
       pastResultsText: 'Tidligere parti',
       result: ''
@@ -225,13 +225,13 @@ export default {
   methods: {
     ...mapActions([
       'sendLeaveRequest',
-      'sendResult'
+      'sendGameResult'
     ]),
     /*
       Register the result of the currently active game
     */
     registerResult () {
-      this.sendResult(this.result).then(res => {
+      this.sendGameResult(this.result).then(res => {
         this.paired = false
         this.resultDialog = false
       })
@@ -242,8 +242,6 @@ export default {
     leaveTournament () {
       this.sendLeaveRequest.then(res => {
         this.$router.push('/')
-      }).catch(err => {
-        console.error(err)
       })
     },
     /*

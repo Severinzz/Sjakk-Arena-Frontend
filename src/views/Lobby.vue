@@ -85,7 +85,6 @@ export default {
     handleRemovePlayer (index, id) {
       let payload = {
         index: index,
-        path: '/tournament/delete-player/',
         id: id
       }
       this.removePlayer(payload)
@@ -93,8 +92,6 @@ export default {
     loadPlayers(reference) {
       this.intervalId = setInterval(async function() {
         await reference.fetchPlayers('/tournament/player-lobby-information').then(res => {
-        }).catch(err => {
-          throw err
         })
       }, 3000)
     },
