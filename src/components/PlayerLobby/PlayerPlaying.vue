@@ -1,11 +1,18 @@
 <template>
   <!-- This page is only loaded when tournament has started -->
   <v-container class="justify-center" fluid>
-    <v-row class="justify-center" align="center">
+    <v-row
+      class="justify-center"
+      align="center"
+    >
       <v-card class="elevation-12, card">
-        <v-toolbar color="primary" dark flat>
+        <v-toolbar
+          color="primary"
+          dark
+          flat
+        >
           <v-spacer />
-          <v-toolbar-title>Spillet har startet!</v-toolbar-title>
+          <v-toolbar-title>Turneringen har startet!</v-toolbar-title>
           <v-spacer />
         </v-toolbar>
         <v-card-text align="center">
@@ -17,54 +24,81 @@
           <h3 class="gameDetail">Poeng: {{ points }}</h3>
 
           <!-- Do player have an opponent? -->
-          <div v-if="paired && !pause">
+          <div v-if="paired">
             <PlayerPaired></PlayerPaired>
           </div>
 
-          <!-- Player do not have opponent and is not on a break -->
-          <div v-else-if="!paired && !pause">
+          <!-- Player do not have opponent -->
+          <div v-else-if="!pause">
             <PlayerNotPaired></PlayerNotPaired>
           </div>
 
-          <!-- If user is on a break and not in a game this shows -->
-          <div v-else-if="!paired && pause">
-            <p>Du har nå pause. For å spille mer avslutt pausen.</p>
+          <!-- If user is on a break  -->
+          <div v-if="pause && !paired">
+            <p>Du har nå pause. For å spille mer, avslutt pausen.</p>
           </div>
 
-          <!-- If all goe to shit this shows up -->
-          <div v-else>
-            <p>System is not able to pair you. Please try again..</p>
-            <p>Feil: pause: {{pause}} og paired: {{paired}}</p>
-          </div>
-
-          <!-- Buttons always visible -->
+          <!-- Buttons -->
+          <!-- Register result -->
           <v-container>
-            <div v-if="!paired">
-            <v-btn class="btns" block rounded depressed disabled>Registrer resultat</v-btn>
-            </div>
-            <div v-if="paired">
-              <v-btn class="btns" color="primary" block rounded depressed @click="resultDialog = true">Registrer resultat</v-btn>
-            </div>
-            <v-btn class="btns" block rounded depressed @click="leaveDialog = true">Forlat turnering</v-btn>
-            <!-- If user is NOT paired or in a break -->
-            <div v-if="!pause && !paired">
-              <v-btn class="btns" block rounded depressed @click="pause = !pause">Ta pause</v-btn>
-            </div>
-            <!-- If user if NOT paired and in a break -->
-            <div v-if="pause && !paired">
-              <v-btn class="btns" color="primary" block rounded depressed @click="pause = !pause">Avslutt pause</v-btn>
-            </div>
-            <div v-if="!pastResults">
-              <v-btn class="btns" block rounded depressed @click="pastResults = true">Tidligere parti</v-btn>
-            </div>
-            <div v-if="pastResults">
-              <v-btn class="btns" color="primary" block rounded depressed @click="pastResults = false">Fjern resultatliste</v-btn>
-            </div>
+            <v-btn
+              class="btn"
+              color="primary"
+              v-if="paired"
+              block
+              rounded
+              depressed
+              @click="resultDialog = true"
+            >
+              Registrer resultat
+            </v-btn>
+            <!-- Leave tournament -->
+            <v-btn
+              class="btn"
+              block
+              rounded
+              depressed
+              @click="leaveDialog = true"
+            >
+              Forlat turnering
+            </v-btn>
+            <!-- break -->
+            <v-btn
+              class="btn"
+              :color="pause ? 'primary' : ''"
+              block
+              v-if="!paired"
+              rounded
+              depressed
+              @click="alterBreakState"
+            >
+              {{ pauseButtonText }}
+            </v-btn>
+            <!-- Past results -->
+            <v-btn
+              class="btn"
+              :color="pastResults ? 'primary' : ''"
+              block
+              rounded
+              depressed
+              @click="alterPastResultsState"
+            >
+              {{ pastResultsText }}
+            </v-btn>
           </v-container>
 
           <div v-if="pastResults">
             <EarlierResults></EarlierResults>
-            <v-btn class="btns" color="primary" block rounded depressed @click="pastResults = false">Fjern resultatliste</v-btn>
+            <v-btn
+              class="btn"
+              :color="pastResults ? 'primary' : ''"
+              block
+              rounded
+              depressed
+              @click="alterPastResultsState"
+            >
+              {{ pastResultsText }}
+            </v-btn>
           </div>
 
           <!-- Dialog for user to input result; https://vuetifyjs.com/en/components/dialogs -->
@@ -76,22 +110,34 @@
                 <v-row class="justify-center">
                   <!-- Radio buttons used to register result; https://vuetifyjs.com/en/components/dialogs -->
                   <v-radio-group
-                    v-model="radios"
+                    v-model="result"
                     :mandatory="true"
                     inline-block
                   >
                     <v-col cols="4">
-                      <v-radio class="radioa" label="Hvit seier">
+                      <v-radio
+                        class="radio"
+                        label="Hvit seier"
+                        value="1-0"
+                      >
                         <v-spacer />
                       </v-radio>
                     </v-col>
                     <v-col cols="4">
-                      <v-radio class="radioa" label="Remis">
+                      <v-radio
+                        class="radio"
+                        label="Remis"
+                        value="0.5-0.5"
+                      >
                         <v-spacer />
                       </v-radio>
                     </v-col>
                     <v-col cols="4">
-                      <v-radio class="radioa" label="Sort seier">
+                      <v-radio
+                        class="radio"
+                        label="Sort seier"
+                        value="0-1"
+                      >
                         <v-spacer />
                       </v-radio>
                     </v-col>
@@ -100,8 +146,16 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn text @click="resultDialog = false">Avbryt</v-btn>
-                <v-btn text color="primary" outlined @click="resultRegistered">Send inn</v-btn>
+                <v-btn
+                  text
+                  @click="resultDialog=false"
+                >Avbryt
+                </v-btn>
+                <v-btn
+                  text
+                  color="primary"
+                  outlined
+                  @click="registerResult">Send inn</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -120,7 +174,7 @@
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer />
-                  <!-- User has the option to either leave or go back USERID IS HARDCODED! -->
+                  <!-- User has the option to either leave or go back -->
                   <v-btn text @click="leaveTournament()">Forlat turneringen</v-btn>
                   <v-btn text color="primary" outlined @click="leaveDialog = false">Avbryt</v-btn>
                 </v-card-actions>
@@ -162,34 +216,66 @@ export default {
       leaveDialog: false,
       pastResults: false,
       pause: false,
-      paired: false
+      paired: true,
+      pauseButtonText: 'Ta pause',
+      pastResultsText: 'Tidligere parti',
+      result: ''
     }
   },
   methods: {
     ...mapActions([
-      'sendLeaveRequest'
+      'sendLeaveRequest',
+      'sendGameResult'
     ]),
-    resultRegistered () {
-      this.paired = false
-      this.resultDialog = false
-    },
-    async leaveTournament () {
-      await this.sendLeaveRequest.then(res => {
-        this.$router.push('/')
-      }).catch(err => {
-        console.error(err)
+    /*
+      Register the result of the currently active game
+    */
+    registerResult () {
+      this.sendGameResult(this.result).then(res => {
+        this.paired = false
+        this.resultDialog = false
       })
+    },
+    /*
+      The player leaves the tournament
+    */
+    leaveTournament () {
+      this.sendLeaveRequest.then(res => {
+        this.$router.push('/')
+      })
+    },
+    /*
+      Alter the break state. The player is either taking a break or not.
+    */
+    alterBreakState() {
+      this.pause = !this.pause
+      if (this.pause) {
+        this.pauseButtonText = 'Avslutt pause'
+      } else {
+        this.pauseButtonText = 'Ta pause'
+      }
+    },
+    /*
+      Alter the past result state. The past results is either shown or not.
+     */
+    alterPastResultsState() {
+      this.pastResults = !this.pastResults
+      if (this.pastResults) {
+        this.pastResultsText = 'Fjern resultatliste'
+      } else {
+        this.pastResultsText = 'Tidligere parti'
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-  .radioa{
+  .radio{
     margin-bottom: 1em;
   }
 
-  .btns{
+  .btn{
     margin-top: 0.5em;
   }
 

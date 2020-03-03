@@ -52,14 +52,14 @@ export default {
   },
   methods: {
     ...mapActions([
-      'createPlayer'
+      'sendPlayer'
     ]),
     async submit() {
       let payload = {
         'name': this.playerName,
         'tournament': parseInt(this.gamePin)
       }
-      await this.createPlayer(payload).then(res => {
+      await this.sendPlayer(payload).then(res => {
         this.$router.push('/player-lobby')
       }).catch(err => {
         console.log(err)

@@ -2,9 +2,9 @@
   <!-- This is loaded when system has found an opponent for player -->
     <span>
       <h1 class="gameDetail">Ditt neste parti:</h1>
-      <h2 class="gameDetail">Bord: <strong>{{Tbord}}</strong></h2>
-      <h2 class="gameDetail">Neste parti: <strong>{{TnextOpponent}}</strong></h2>
-      <h2 class="gameDetail">Farge: <strong>{{Tcolour}}</strong></h2>
+      <h2 class="gameDetail">Bord: <strong>{{table}}</strong></h2>
+      <h2 class="gameDetail">Motstander: <strong>{{nextOpponent}}</strong></h2>
+      <h2 class="gameDetail">Farge: <strong>{{colour}}</strong></h2>
     </span>
 </template>
 
@@ -13,9 +13,9 @@ export default {
   name: 'PlayerPaired',
   data () {
     return {
-      TnextOpponent: 'Magnus Carlsen',
-      Tcolour: 'Sort',
-      Tbord: '1'
+      nextOpponent: 'Magnus Carlsen',
+      colour: 'Sort',
+      table: '1'
     }
   }
 }

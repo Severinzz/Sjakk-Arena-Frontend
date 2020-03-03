@@ -183,7 +183,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'createTournament'
+      'sendTournament'
     ]),
     ...mapGetters([
       'getTournament'
@@ -213,7 +213,7 @@ export default {
         payload.end = this.endDate + 'T' + this.endTime
       }
       // Sends the given information in the form to the server.
-      await this.createTournament(payload).then(res => {
+      await this.sendTournament(payload).then(res => {
         // Grabs the tournament from store so the correct tournament_id is used in the dynamic link.
         let tournament = this.getTournament()
         this.$router.push('/lobby/' + tournament.id)
