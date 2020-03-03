@@ -10,6 +10,7 @@
               <!-- https://stackoverflow.com/a/54836170/12885810 -->
               <ul>
                 <li v-for="(games, index) in gameList" v-bind:key="index">
+                  <v-divider inset></v-divider>
                   <h6 class="body-1">Parti: {{gameList.length - index}} Mot: {{games.black_player_name}}</h6>
                   <p class="body-2 dumdum">Farge: ?? {{null}}</p>
                     <p v-if="games.result == 1" class="body-2 dumdum">Resultat: Hvit Seier</p>
