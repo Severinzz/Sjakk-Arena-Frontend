@@ -9,7 +9,7 @@
             <v-layout>
               <!-- https://stackoverflow.com/a/54836170/12885810 -->
               <ul>
-                <h6 v-if="gameList.length == 0" class="body-1">Du har ikke noen resultater ennå!</h6>
+                <h6 v-if="gameList.length == 0" class="body-1">Du har jo ikke spilt enda!</h6>
                 <li v-for="(games, index) in gameList" v-bind:key="index">
                   <v-divider inset></v-divider> <!-- Seperator line between elements -->
                   <h6 v-if="games.white_player_name === navn" class="body-1">Parti: {{gameList.length - index}} Mot: {{games.black_player_name}}</h6>
