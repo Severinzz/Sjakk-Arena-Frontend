@@ -148,10 +148,10 @@ export default {
       endDate: '',
       startTimeMenu: false,
       endTimeMenu: false,
-      email: 'test@test.test.com', // email address of tournament host
-      tournamentName: 'testTournament', // name of tournament
-      tables: '14', // number of tables used in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
-      rounds: '14', // maximum number of rounds in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
+      email: '', // email address of tournament host
+      tournamentName: '', // name of tournament
+      tables: '', // number of tables used in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
+      rounds: '', // maximum number of rounds in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
       earlyStart: false, // true if the tournament will start when two players are registered
       formColor: 'blue', // color to be used in form elements
       isLoading: false,
