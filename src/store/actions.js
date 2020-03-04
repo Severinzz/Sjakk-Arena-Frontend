@@ -2,42 +2,53 @@ import { API_SERVICE, TOURNAMENT_SERVICE, PLAYER_SERVICE } from '../common/api'
 import { addToken, deleteToken } from '../common/jwt.storage'
 
 export default {
+  /*
+    Add a player to the players list
+   */
   addPlayer: ({ commit }, payload) => {
     commit('addPlayer', payload)
   },
+  /*
+    Remove player from tournament
+
+    Payload has to contain the id and the list index of the player to be removed
+   */
   removePlayer: ({ commit }, payload) => {
     TOURNAMENT_SERVICE.delete(`delete-player/${payload.id}`)
     commit('removePlayer', payload.index)
   },
-  createTournament: ({ commit }, payload) => {
-    return API_SERVICE.post('new-tournament', payload).then(res => {
+  /*
+    Send a tournament to the server.
+   */
+  sendTournament: ({ commit }, tournament) => {
+    return API_SERVICE.post('new-tournament', tournament).then(res => {
       // Adds the tournament ID received from the server to the payload.
-      payload['id'] = res.data.tournament_id
+      tournament['id'] = res.data.tournament_id
       addToken(res.data.jwt)
       // Adds the payload (tournament) to the state in store.
-      commit('addTournament', payload)
-    }).catch(err => {
-      console.error(err)
+      commit('addTournament', tournament)
     }).then(res => {
       API_SERVICE.setHeader()
     })
   },
-  createPlayer: ({ commit }, payload) => {
-    return API_SERVICE.post('new-player', payload).then(res => {
+  /*
+    Send a player to the server
+   */
+  sendPlayer: ({ commit }, player) => {
+    return API_SERVICE.post('new-player', player).then(res => {
       addToken(res.data.jwt)
-      commit('createPlayer', payload)
+      commit('createPlayer', player)
     }).then(res => {
       API_SERVICE.setHeader()
-    }).catch(err => {
-      throw err
     })
   },
+  /*
+    Fetch a tournament from the server. Use uuid if token linked to a tournament user is absent
+   */
   fetchTournament: ({ commit }, uuid) => {
     if (uuid === undefined) {
       return TOURNAMENT_SERVICE.get('information').then(res => {
         commit('addTournament', res.data)
-      }).catch(err => {
-        throw err
       })
     } else {
       return API_SERVICE.get(`tournament-information/${uuid}`).then(res => {
@@ -47,26 +58,36 @@ export default {
         commit('addTournament', job)
       }).then(res => {
         API_SERVICE.setHeader()
-      }).catch(err => {
-        throw err
       })
     }
   },
+  /*
+    Fetch the tournament a player is enrolled in
+   */
   fetchPlayersTournament: ({ commit }) => {
     return PLAYER_SERVICE.get('tournament').then(res => {
       commit('addTournament', res.data)
     })
   },
+  /*
+    Fetch players enrolled in a tournament
+   */
   fetchPlayers: ({ commit }) => {
     return TOURNAMENT_SERVICE.get('players').then(res => {
       commit('addPlayers', res.data)
     })
   },
+  /*
+    Fetch the player using the application.
+   */
   fetchPlayer: ({ commit }) => {
     return PLAYER_SERVICE.get('information').then(res => {
       commit('createPlayer', res.data)
     })
   },
+  /*
+    Sends a request to leave to the server
+   */
   sendLeaveRequest: () => {
     return PLAYER_SERVICE.patch('set-inactive').then(res => {
       deleteToken()
@@ -76,5 +97,10 @@ export default {
     return PLAYER_SERVICE.get('games').catch(err => {
       throw err
     })
+  /*
+    Send a game result to the server.
+   */
+  sendGameResult: ({ commit }, result) => {
+    return PLAYER_SERVICE.put('add-result', result)
   }
 }
