@@ -203,14 +203,11 @@ export default {
       let payload = {
         'tournament_name': this.tournamentName,
         'admin_email': this.email,
-        'start': this.currentDate + 'T' + this.startTime,
-        'end': null,
+        'start': this.startTime !== '' ? this.currentDate + 'T' + this.startTime : null,
+        'end': this.useEndTime && this.endDate !== '' ? this.endDate + 'T' + this.endTime : null,
         'tables': parseInt(this.tables),
         'max_rounds': parseInt(this.rounds),
         'early_start': this.earlyStart
-      }
-      if (this.endTime.length > 0) {
-        payload.end = this.endDate + 'T' + this.endTime
       }
       // Sends the given information in the form to the server.
       await this.sendTournament(payload).then(res => {
@@ -262,6 +259,9 @@ export default {
       if (dateTimeArray.length === 2) {
         this.endDate = dateTimeArray[0]
         this.endTime = dateTimeArray[1]
+      } else {
+        this.endDate = ''
+        this.endTime = ''
       }
     }
   },

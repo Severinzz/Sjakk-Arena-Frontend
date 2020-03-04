@@ -98,6 +98,7 @@ export default {
       this.date = ''
       this.time = ''
       this.dateTime = ''
+      this.$emit(this.eventName, this.dateTime)
     },
     onChange() {
       this.dateTime = this.date + 't' + this.time
