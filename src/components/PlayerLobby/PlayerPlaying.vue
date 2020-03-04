@@ -225,7 +225,9 @@ export default {
   methods: {
     ...mapActions([
       'sendLeaveRequest',
-      'sendGameResult'
+      'sendGameResult',
+      'sendPauseRequest',
+      'sendUnpauseRequest'
     ]),
     /*
       Register the result of the currently active game
