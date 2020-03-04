@@ -41,7 +41,7 @@ export default {
   data () {
     return {
       limit: 10,
-      timeInterval: 3000,
+      timeInterval: 5000,
       spillArray: []
     }
   },
