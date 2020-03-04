@@ -19,29 +19,19 @@ export const API_SERVICE = {
     Vue.axios.defaults.headers.common['Authorization'] = `Bearer ${jwtService.getToken()}`
   },
   delete (path, slug = '') {
-    return axios.delete(`${path}/${slug}`).catch(err => {
-      throw err
-    })
+    return axios.delete(`${path}/${slug}`)
   },
   get (path, slug = '') {
-    return axios.get(`${path}/${slug}`).then(res => res).catch(err => {
-      throw err
-    })
+    return axios.get(`${path}/${slug}`)
   },
-  post (path, params) {
-    return axios.post(`${path}`, params).then(res => res).catch(err => {
-      throw err
-    })
+  post(path, params) {
+    return axios.post(`${path}`, params)
   },
-  put (path, params) {
-    return axios.put(`${path}`, params).then(res => res).catch(err => {
-      throw err
-    })
+  put(path, params) {
+    return axios.put(`${path}`, params)
   },
   patch (path, slug = '') {
-    return axios.patch(`${path}/${slug}`).then(res => res).catch(err => {
-      throw err
-    })
+    return axios.patch(`${path}/${slug}`)
   }
 }
 

@@ -74,15 +74,12 @@ export default {
     },
     ...mapState({ playerName: state => state.player.name })
   },
-  Created () {
+  created () {
+    this.initialResults()
     this.loadResults()
   },
   destroyed () {
     clearInterval(this.intervalID)
-  },
-  mounted () {
-    this.initialResults()
-    this.loadResults()
   }
 }
 </script>
