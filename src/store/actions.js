@@ -72,8 +72,8 @@ export default {
       deleteToken()
     })
   },
-  fetchResults: ({ commit }, path) => {
-    return TOURNAMENT_SERVICE.getResults(path).catch(err => {
+  fetchResults: () => {
+    return PLAYER_SERVICE.get('games').catch(err => {
       throw err
     })
   }

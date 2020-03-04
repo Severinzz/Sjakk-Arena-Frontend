@@ -42,19 +42,6 @@ export const API_SERVICE = {
     return axios.patch(`${path}/${slug}`).then(res => res).catch(err => {
       throw err
     })
-  },
-  getResults (path) {
-    let config = this.setupHeader()
-    return axios.get(path, config).then(res => res).catch(err => {
-      throw err
-    })
-  },
-  setupHeader () {
-    return {
-      headers: {
-        'Authorization': 'Bearer ' + jwtService.getToken()
-      }
-    }
   }
 }
 
@@ -72,7 +59,6 @@ export const TOURNAMENT_SERVICE = {
   put(params) {
     return API_SERVICE.put('tournament', params)
   }
-
 }
 
 export const PLAYER_SERVICE = {

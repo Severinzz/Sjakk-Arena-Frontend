@@ -41,8 +41,7 @@ export default {
   data () {
     return {
       limit: 10,
-      playerName: 'jwfoijewo',
-      timeOut: 3000, // “maximum interval between events for perception that one event causes another event: 140 milliseconds” designing with the mind in mind.
+      timeInterval: 3000,
       spillArray: []
     }
   },
@@ -54,21 +53,27 @@ export default {
     loadResults () {
       const VM = this
       this.intervalID = setInterval(async function () {
-        await VM.fetchResults('/player/games').then(res => {
+        await VM.fetchResults().then(res => {
           VM.spillArray = res.data
           console.log(VM.spillArray)
         }).catch(err => {
           throw err
         })
-      }, this.timeOut) // ka interval som gir mening?
+      }, this.timeInterval)
+    },
+    initialResults () {
+      const VM = this
+      this.fetchResults().then(res => {
+        VM.spillArray = res.data
+      })
     }
   },
-  computed: mapState({
-    playerName: state => state.player.name,
+  computed: {
     gameList () {
       return this.limit ? this.spillArray.slice(0, this.limit) : this.result
-    }
-  }),
+    },
+    ...mapState({ playerName: state => state.player.name })
+  },
   Created () {
     this.loadResults()
   },
@@ -76,7 +81,8 @@ export default {
     clearInterval(this.intervalID)
   },
   mounted () {
-    this.fetchPlayer()
+    this.initialResults()
+    this.loadResults()
   }
 }
 </script>
