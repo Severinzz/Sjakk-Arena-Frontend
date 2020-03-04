@@ -15,7 +15,7 @@ Vue.axios.defaults.timeout = TIME_OUT
  */
 export const API_SERVICE = {
 
-  setHeader () {
+  setHeader() {
     Vue.axios.defaults.headers.common['Authorization'] = `Bearer ${jwtService.getToken()}`
   },
   delete(path, slug = '') {
