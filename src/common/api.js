@@ -18,54 +18,48 @@ export const API_SERVICE = {
   setHeader () {
     Vue.axios.defaults.headers.common['Authorization'] = `Bearer ${jwtService.getToken()}`
   },
-  delete (path, slug = '') {
-    return axios.delete(`${path}/${slug}`).catch(err => {
-      throw err
-    })
+  delete(path, slug = '') {
+    return axios.delete(`${path}/${slug}`)
   },
-  get (path, slug = '') {
-    return axios.get(`${path}/${slug}`).then(res => res).catch(err => {
-      throw err
-    })
+  get(path, slug = '') {
+    return axios.get(`${path}/${slug}`)
   },
-  post (path, params) {
-    return axios.post(`${path}`, params).then(res => res).catch(err => {
-      throw err
-    })
+  post(path, params) {
+    return axios.post(`${path}`, params)
   },
-  put (path, params) {
-    return axios.put(`${path}`, params).then(res => res).catch(err => {
-      throw err
-    })
+  put(path, slug = '', params) {
+    return axios.put(`${path}/${slug}`, params)
   },
-  patch (path, slug = '') {
-    return axios.patch(`${path}/${slug}`).then(res => res).catch(err => {
-      throw err
-    })
+  patch(path, slug = '') {
+    return axios.patch(`${path}/${slug}`)
   }
 }
 
 export const TOURNAMENT_SERVICE = {
-
+  path: 'tournament',
   delete(slug) {
-    return API_SERVICE.delete('tournament', slug)
+    return API_SERVICE.delete(this.path, slug)
   },
   get(slug) {
-    return API_SERVICE.get('tournament', slug)
+    return API_SERVICE.get(this.path, slug)
   },
   post(params) {
-    return API_SERVICE.post('tournament', params)
+    return API_SERVICE.post(this.path, params)
   },
   put(params) {
-    return API_SERVICE.put('tournament', params)
+    return API_SERVICE.put(this.path, params)
   }
 }
 
 export const PLAYER_SERVICE = {
+  path: 'player',
   get(slug) {
-    return API_SERVICE.get('player', slug)
+    return API_SERVICE.get(this.path, slug)
   },
   patch(slug) {
-    return API_SERVICE.patch('player', slug)
+    return API_SERVICE.patch(this.path, slug)
+  },
+  put(slug, payload) {
+    return API_SERVICE.put(this.path, slug, payload)
   }
 }
