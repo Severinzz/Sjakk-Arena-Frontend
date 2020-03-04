@@ -8,7 +8,7 @@
             :started="false"
           />
           <p class="numberOfPlayers">
-            Antall spillere: {{ this.getPlayerCount }}
+            Antall spillere: {{ playerCount }}
           </p>
           <div class="button-wrapper">
             <v-btn
@@ -38,6 +38,7 @@
           align="start"
           justify="start"
           class="text-center"
+          v-if="this.getAllPlayers.length !== undefined"
         >
           <!-- The individual players -->
             <player
