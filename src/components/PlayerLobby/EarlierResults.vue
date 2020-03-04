@@ -9,19 +9,22 @@
             <v-layout>
               <!-- https://stackoverflow.com/a/54836170/12885810 -->
               <ul>
-                <li
-                  v-for="(spill, index) in computedObj"
-                  :key="index"
-                >
-                  <h6 class="body-1">
-                    Parti: {{index + 1}} Mot: {{spill.name}}
+                <h6 v-if="gameList.length == 0" class="body-1">Du har jo ikke spilt enda!</h6>
+                <li v-for="(games, index) in gameList" v-bind:key="index">
+                  <h6 v-if="games.white_player_name === playerName" class="body-1">
+                    Parti: {{gameList.length - index}} Mot: {{games.black_player_name}}
                   </h6>
-                  <p class="body-2 dumdum">
-                    Farge: {{spill.color}}
-                  </p>
-                  <p class="body-2 dumdum">
-                    Resultat: {{spill.result}}
-                  </p>
+                  <h6 v-if="games.black_player_name === playerName" class="body-1">
+                    Parti: {{gameList.length - index}} Mot: {{games.white_player_name}}
+                  </h6>
+                  <p v-if="games.white_player_name === playerName" class="body-2 dumdum">Farge: Hvit</p>
+                  <p v-if="games.black_player_name === playerName" class="body-2 dumdum">Farge: Sort</p>
+                  <!-- 1 = hvit seier, 0 = sort seier -->
+                    <p v-if="games.result == 1" class="body-2 dumdum">Resultat: Hvit Seier</p>
+                    <p v-if="games.result == 0.5" class="body-2 dumdum">Resultat: Remis</p>
+                    <p v-if="games.result == 0" class="body-2 dumdum">Resultat: Sort Seier</p>
+                  <p v-if="games.result === null" class="body-2 dumdum">Her har den sjedd en feil!</p>
+                  <v-divider inset></v-divider> <!-- Seperator line between elements -->
                 </li>
               </ul>
             </v-layout>
@@ -31,67 +34,52 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'EarlierResults',
   data () {
     return {
       limit: 10,
-      resultater: [
-        {
-          id: 1,
-          name: 'Ronald Weasly',
-          color: 'Sort',
-          result: 0 // enkel 1 for seier, 0.5 for remis og 0 for tap
-        },
-        {
-          id: 2,
-          name: 'Dungeon Troll',
-          color: 'Hvit',
-          result: 1
-        },
-        {
-          id: 3,
-          name: 'Legolas',
-          color: 'Hvit',
-          result: 0.5
-        },
-        {
-          id: 4,
-          name: 'Hikaru Nakamura',
-          color: 'Sort',
-          result: 1
-        },
-        {
-          id: 5,
-          name: 'Donald Duck',
-          color: 'Hvit',
-          result: 1
-        },
-        {
-          id: 6,
-          name: 'Jean Luc Picard',
-          color: 'Sort',
-          result: 1
-        },
-        {
-          id: 7,
-          name: 'Qui-Gon Jinn',
-          color: 'Hvit',
-          result: 0.5
-        },
-        {
-          id: 8,
-          name: 'Ekkel jævel med langt navn som ingen liker hvorfor finnes disse ærligtalt',
-          color: 'Hvit',
-          result: 1
-        }
-      ]
+      timeInterval: 5000,
+      spillArray: []
+    }
+  },
+  methods: {
+    ...mapActions([
+      'fetchResults',
+      'fetchPlayer'
+    ]),
+    loadResults () {
+      const VM = this
+      this.intervalID = setInterval(async function () {
+        await VM.fetchResults().then(res => {
+          VM.spillArray = res.data
+          console.log(VM.spillArray)
+        }).catch(err => {
+          throw err
+        })
+      }, this.timeInterval)
+    },
+    initialResults () {
+      const VM = this
+      this.fetchResults().then(res => {
+        VM.spillArray = res.data
+      })
     }
   },
   computed: {
-    computedObj () {
-      return this.limit ? this.resultater.slice(0, this.limit) : this.result
-    }
+    gameList () {
+      return this.limit ? this.spillArray.slice(0, this.limit) : this.result
+    },
+    ...mapState({ playerName: state => state.player.name })
+  },
+  created () {
+    this.initialResults()
+    this.loadResults()
+  },
+  destroyed () {
+    clearInterval(this.intervalID)
   }
 }
 </script>

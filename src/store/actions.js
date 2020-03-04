@@ -93,7 +93,11 @@ export default {
       deleteToken()
     })
   },
-
+  fetchResults: () => {
+    return PLAYER_SERVICE.get('games').catch(err => {
+      throw err
+    })
+  },
   /*
     Send a game result to the server.
    */
