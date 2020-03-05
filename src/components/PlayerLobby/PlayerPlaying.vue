@@ -216,7 +216,7 @@ export default {
       leaveDialog: false,
       pastResults: false,
       pause: false,
-      paired: true,
+      paired: false,
       pauseButtonText: 'Ta pause',
       pastResultsText: 'Tidligere parti',
       result: ''
@@ -252,8 +252,10 @@ export default {
     alterBreakState() {
       this.pause = !this.pause
       if (this.pause) {
+        this.sendPauseRequest()
         this.pauseButtonText = 'Avslutt pause'
       } else {
+        this.sendUnpauseRequest()
         this.pauseButtonText = 'Ta pause'
       }
     },
