@@ -103,5 +103,21 @@ export default {
    */
   sendGameResult: ({ commit }, result) => {
     return PLAYER_SERVICE.put('add-result', result)
+  },
+  /*
+    Send pause request
+   */
+  sendPauseRequest: () => {
+    return PLAYER_SERVICE.patch('pause').catch(err => {
+      throw err
+    })
+  },
+  /*
+    Send unpause request
+   */
+  sendUnpauseRequest: () => {
+    return PLAYER_SERVICE.patch('unpause').catch(err => {
+      throw err
+    })
   }
 }
