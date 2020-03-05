@@ -12,10 +12,10 @@
                 <h6 v-if="gameList.length == 0" class="body-1">Du har jo ikke spilt enda!</h6>
                 <li v-for="(games, index) in gameList" v-bind:key="index">
                   <h6 v-if="games.white_player_name === playerName" class="body-1">
-                    Parti: {{gameList.length - index}} Mot: {{games.black_player_name}}
+                    Parti {{gameList.length - index}}, Mot: {{games.black_player_name}}
                   </h6>
                   <h6 v-if="games.black_player_name === playerName" class="body-1">
-                    Parti: {{gameList.length - index}} Mot: {{games.white_player_name}}
+                    Parti {{gameList.length - index}}, Mot: {{games.white_player_name}}
                   </h6>
                   <p v-if="games.white_player_name === playerName" class="body-2 dumdum">Farge: Hvit</p>
                   <p v-if="games.black_player_name === playerName" class="body-2 dumdum">Farge: Sort</p>
