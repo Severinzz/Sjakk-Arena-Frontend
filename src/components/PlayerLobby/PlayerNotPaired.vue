@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: 'Player!Paired'
+  name: 'PlayerNotPaired'
 }
 </script>
 

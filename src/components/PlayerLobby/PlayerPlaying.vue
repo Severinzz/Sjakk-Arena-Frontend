@@ -194,7 +194,7 @@
 import PlayerPaired from './PlayerPaired'
 import PlayerNotPaired from './PlayerNotPaired'
 import EarlierResults from './EarlierResults'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'PlayerPlaying',
@@ -225,9 +225,14 @@ export default {
   methods: {
     ...mapActions([
       'sendLeaveRequest',
+      'sendDeleteRequest',
       'sendGameResult',
       'sendPauseRequest',
-      'sendUnpauseRequest'
+      'sendUnpauseRequest',
+      'fetchPlayersTournament'
+    ]),
+    ...mapGetters([
+      'getTournament'
     ]),
     /*
       Register the result of the currently active game
@@ -241,8 +246,10 @@ export default {
     /*
       The player leaves the tournament
     */
-    leaveTournament () {
-      this.sendLeaveRequest.then(res => {
+    async leaveTournament () {
+      await this.fetchPlayersTournament() // TODO: Bytt når websocket e inne
+      let started = this.getTournament().started // TODO: Bytt når websocket e inne
+      this.sendLeaveRequest(started).then(res => {
         this.$router.push('/')
       })
     },

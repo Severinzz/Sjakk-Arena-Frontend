@@ -69,7 +69,11 @@ export default {
       this.fetchTournament(this.tournamentId).then(res => {
         let tournament = this.getTournament()
         this.isLoading = false
-        this.$router.push('/lobby/' + `${tournament.id}`)
+        if (tournament.active) {
+          this.$router.push('/tournament/' + `${tournament.id}`)
+        } else {
+          this.$router.push('/lobby/' + `${tournament.id}`)
+        }
       }).catch(err => {
         // TODO Forandre feilemding til nøke meir fornuftig
         this.isLoading = false

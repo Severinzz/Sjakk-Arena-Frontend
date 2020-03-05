@@ -60,6 +60,7 @@ export default {
         'tournament': parseInt(this.gamePin)
       }
       await this.sendPlayer(payload).then(res => {
+        // TODO: Dynamic routing
         this.$router.push('/player-lobby')
       }).catch(err => {
         console.log(err)
