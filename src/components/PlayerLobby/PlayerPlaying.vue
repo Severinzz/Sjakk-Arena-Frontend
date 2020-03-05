@@ -250,12 +250,12 @@ export default {
       Alter the break state. The player is either taking a break or not.
     */
     alterBreakState() {
-      this.pause = !this.pause;
+      this.pause = !this.pause
       if (this.pause) {
-        this.sendPauseRequest();
+        this.sendPauseRequest()
         this.pauseButtonText = 'Avslutt pause'
       } else {
-        this.sendUnpauseRequest();
+        this.sendUnpauseRequest()
         this.pauseButtonText = 'Ta pause'
       }
     },
