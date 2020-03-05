@@ -72,8 +72,10 @@ export default {
   /*
     Fetch players enrolled in a tournament
    */
-  fetchPlayers: ({ commit }) => {
-    return TOURNAMENT_SERVICE.get('players').then(res => {
+  fetchPlayers: ({ commit }, started) => {
+    let slug
+    started ? slug = 'leaderboard' : slug = 'players'
+    return TOURNAMENT_SERVICE.get(slug).then(res => {
       commit('addPlayers', res.data)
     })
   },
@@ -88,8 +90,10 @@ export default {
   /*
     Sends a request to leave to the server
    */
-  sendLeaveRequest: () => {
-    return PLAYER_SERVICE.patch('set-inactive').then(res => {
+  sendLeaveRequest: ({ commit }, started) => {
+    let slug
+    started ? slug = 'set-inactive' : slug = 'delete-player'
+    return PLAYER_SERVICE.patch(slug).then(res => {
       deleteToken()
     })
   },

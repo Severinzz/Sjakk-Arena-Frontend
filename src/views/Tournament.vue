@@ -111,7 +111,7 @@ export default {
      * @returns {Promise<void>}
      */
     async updateLeaderboard(vm) {
-      await this.fetchPlayers('/tournament/leaderboard').then(() => {
+      await this.fetchPlayers(true).then(() => {
         vm.playerCount = vm.getPlayerCount
         vm.leaderboard = vm.getAllPlayers
       }).catch(err => {
