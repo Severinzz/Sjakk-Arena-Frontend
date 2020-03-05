@@ -18,8 +18,10 @@
         <v-card-text align="center">
           <v-spacer />
 
-          <!-- Basic user details -->
+          <!-- Tournament name -->
           <h1>{{ tournamentName }}</h1>
+
+          <!-- Basic user details -->
           <h3 class="gameDetail">{{ playerName }}</h3>
           <h3 class="gameDetail">Poeng: {{ points }}</h3>
 
