@@ -21,10 +21,10 @@ export default {
 
 <style scoped>
   .gameDetail{
-    margin-top: 0.1em;
+    margin-top: 0.5em;
   }
   .progress_style{
-    margin-top: 0.1em;
-    margin-bottom: 0.25em;
+    margin-top: 0.3em;
+    margin-bottom: 0.5em;
   }
 </style>

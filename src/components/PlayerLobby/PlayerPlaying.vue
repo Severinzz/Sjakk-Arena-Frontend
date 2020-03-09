@@ -19,11 +19,11 @@
           <v-spacer />
 
           <!-- Tournament name -->
-          <h1>{{ tournamentName }}</h1>
+          <h1 class="bigInfo">{{ tournamentName }}</h1>
 
           <!-- Basic user details -->
-          <h3 class="gameDetail">{{ playerName }}</h3>
-          <h3 class="gameDetail">Poeng: {{ points }}</h3>
+          <h3 class="minorInfo">{{ playerName }}</h3>
+          <h3 class="mediumInfo">Poeng: {{ points }}</h3>
 
           <v-divider></v-divider>
 
@@ -222,7 +222,7 @@ export default {
       leaveDialog: false,
       pastResults: false,
       pause: false,
-      paired: false,
+      paired: true,
       pauseButtonText: 'Ta pause',
       pastResultsText: 'Tidligere parti',
       result: ''
@@ -297,7 +297,18 @@ export default {
     height: auto;
   }
 
-  .gameDetail{
+  .bigInfo{
+    text-align-all: center;
+  }
+
+  .mediumInfo{
+    margin-top: 0.4em;
+    margin-bottom: 0.25em;
+    font-weight: bold;
+    font-size: 21px;
+  }
+
+  .minorInfo{
     margin-top: 0.8em;
   }
 </style>
