@@ -25,6 +25,8 @@
           <h3 class="gameDetail">{{ playerName }}</h3>
           <h3 class="gameDetail">Poeng: {{ points }}</h3>
 
+          <v-divider></v-divider>
+
           <!-- Do player have an opponent? -->
           <div v-if="paired">
             <PlayerPaired></PlayerPaired>
@@ -39,6 +41,8 @@
           <div v-if="pause && !paired">
             <p>Du har nå pause. For å spille mer, avslutt pausen.</p>
           </div>
+
+          <v-divider></v-divider>
 
           <!-- Buttons -->
           <!-- Register result -->

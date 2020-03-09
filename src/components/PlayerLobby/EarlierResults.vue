@@ -2,7 +2,7 @@
   <!-- https://codepen.io/anon/pen/mBwMrm?editors=1000 -->
       <v-card height="auto" class="pa-0">
         <v-layout column fill-height>
-          <v-toolbar dense class="primary">
+          <v-toolbar dense flat class="primary">
             <v-toolbar-title>Dine resultater</v-toolbar-title>
           </v-toolbar>
           <v-container fluid fill-height>
