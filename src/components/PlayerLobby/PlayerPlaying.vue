@@ -40,7 +40,6 @@
           <!-- If user is on a break  -->
           <div v-if="pause && !paired">
             <h2 class="pauseDetails">Du har nå pause.</h2>
-            <h2 class="pauseDetails">For å spille mer, avslutt pausen.</h2>
           </div>
 
           <v-divider></v-divider>
@@ -260,7 +259,7 @@ export default {
       this.pause = !this.pause
       if (this.pause) {
         this.sendPauseRequest()
-        this.pauseButtonText = 'Avslutt pause'
+        this.pauseButtonText = 'Fortsett spill'
       } else {
         this.sendUnpauseRequest()
         this.pauseButtonText = 'Ta pause'
@@ -283,9 +282,9 @@ export default {
 
 <style scoped>
   .pauseDetails{
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    font-size: 18px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 22px;
   }
 
   .radio{
