@@ -39,7 +39,7 @@
 
           <!-- If user is on a break  -->
           <div v-if="pause && !paired">
-            <h2 class="pauseDetails">Du har nå pause.</h2>
+            <p class="pauseDetails">Du har nå pause.</p>
           </div>
 
           <v-divider></v-divider>
