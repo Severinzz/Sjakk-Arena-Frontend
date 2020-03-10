@@ -292,7 +292,7 @@ export default {
   .card{
     display: inline;
     width: auto;
-    min-width: 8em;
+    min-width: 20em;
     max-width: 70em;
     height: auto;
   }

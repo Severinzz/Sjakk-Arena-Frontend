@@ -1,10 +1,10 @@
 <template>
   <!-- This is loaded when system has found an opponent for player -->
     <span>
-      <h1 class="bigInfo">Ditt neste parti:</h1>
-      <h2 class="bigInfo">Bord: <strong>{{table}}</strong></h2>
-      <h2 class="mediumInfo">Motstander: <strong>{{nextOpponent}}</strong></h2>
-      <h2 class="buttomInfo">Farge: <strong>{{colour}}</strong></h2>
+      <h1 class="title">Ditt neste parti:</h1>
+      <h2 class="Info">Bord: <strong>{{table}}</strong></h2>
+      <h2 class="Info">Farge: <strong>{{colour}}</strong></h2>
+      <h2 class="buttomInfo">Motstander: <strong>{{nextOpponent}}</strong></h2>
     </span>
 </template>
 
@@ -22,16 +22,19 @@ export default {
 </script>
 
 <style scoped>
-  .bigInfo{
+  .title{
     margin-top: 0.5em;
+    font-size: 18px;
   }
 
-   .mediumInfo{
-     margin-top: 0.3em;
-   }
+  .Info{
+    margin-top: 0.5em;
+    font-size: 22px;
+  }
 
   .buttomInfo{
     margin-top: 0.5em;
     margin-bottom: 0.5em;
+    font-size: 18px;
   }
 </style>
