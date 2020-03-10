@@ -39,7 +39,8 @@
 
           <!-- If user is on a break  -->
           <div v-if="pause && !paired">
-            <p>Du har nå pause. For å spille mer, avslutt pausen.</p>
+            <h2 class="pauseDetails">Du har nå pause.</h2>
+            <h2 class="pauseDetails">For å spille mer, avslutt pausen.</h2>
           </div>
 
           <v-divider></v-divider>
@@ -222,7 +223,7 @@ export default {
       leaveDialog: false,
       pastResults: false,
       pause: false,
-      paired: true,
+      paired: false,
       pauseButtonText: 'Ta pause',
       pastResultsText: 'Tidligere parti',
       result: ''
@@ -281,6 +282,12 @@ export default {
 </script>
 
 <style scoped>
+  .pauseDetails{
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-size: 18px;
+  }
+
   .radio{
     margin-bottom: 1em;
   }
