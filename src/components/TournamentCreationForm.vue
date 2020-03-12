@@ -1,5 +1,8 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-  <div class="form">
+  <v-container class="justify-center">
+    <!-- Adapted from: https://stackoverflow.com/questions/48969510/the-form-is-not-center-aligned-vertically-centered-middle -->
+    <v-row row wrap align-center>
+      <v-col>
     <v-card>
     <v-form
       ref="form"
@@ -134,7 +137,9 @@
       </div>
     </v-form>
     </v-card>
-  </div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -285,9 +290,6 @@ export default {
   .formstyle{
     margin-left: 0.5em;
     margin-right: 0.5em;
-  }
-  .form{
-    margin: 5vw 20vw 20vh 20vw;
   }
   #cancel-btn{
     margin-left: 1%;
