@@ -1,5 +1,6 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="form">
+    <v-card>
     <v-form
       ref="form"
       lazy-validation
@@ -13,6 +14,7 @@
         <v-toolbar-title>Turneringsinformasjon</v-toolbar-title>
       </v-toolbar>
       <!-- Name of tournament -->
+      <div class="formstyle">
       <v-text-field
         v-model="tournamentName"
         :rules="tournamentNameRules"
@@ -129,7 +131,9 @@
         @click="cancel">
         Avbryt
       </v-btn>
+      </div>
     </v-form>
+    </v-card>
   </div>
 </template>
 
@@ -278,10 +282,17 @@ export default {
 </script>
 
 <style scoped>
+  .formstyle{
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+  }
   .form{
     margin: 5vw 20vw 20vh 20vw;
   }
   #cancel-btn{
     margin-left: 1%;
+  }
+  #cancel-btn, #submit-btn, #clear-btn{
+    margin-bottom: 10px;
   }
 </style>
