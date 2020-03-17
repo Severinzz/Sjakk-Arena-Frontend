@@ -1,7 +1,7 @@
 <template>
   <!-- This is loaded while user waits for a match -->
-    <span>
-      <h3 class="gameDetail">Vent mens vi setter opp et parti for deg!</h3>
+  <span>
+      <h3 class="compTitle">Vent mens vi setter opp et parti for deg!</h3>
       <!-- https://vuetifyjs.com/en/components/progress-circular -->
       <v-progress-circular
         :size="70"
@@ -20,10 +20,11 @@ export default {
 </script>
 
 <style scoped>
-  .gameDetail{
-    margin-top: 1.2em;
+  .compTitle{
+    margin-top: 0.5em;
   }
   .progress_style{
-    margin-top: 10px;
+    margin-top: 0.3em;
+    margin-bottom: 0.5em;
   }
 </style>

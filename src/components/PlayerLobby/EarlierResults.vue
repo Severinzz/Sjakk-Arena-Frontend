@@ -2,7 +2,7 @@
   <!-- https://codepen.io/anon/pen/mBwMrm?editors=1000 -->
       <v-card height="auto" class="pa-0">
         <v-layout column fill-height>
-          <v-toolbar dense class="primary">
+          <v-toolbar dense flat class="primary">
             <v-toolbar-title>Dine resultater</v-toolbar-title>
           </v-toolbar>
           <v-container fluid fill-height>
@@ -12,18 +12,18 @@
                 <h6 v-if="gameList.length == 0" class="body-1">Du har jo ikke spilt enda!</h6>
                 <li v-for="(games, index) in gameList" v-bind:key="index">
                   <h6 v-if="games.white_player_name === playerName" class="body-1">
-                    Parti: {{gameList.length - index}} Mot: {{games.black_player_name}}
+                    Parti {{ gameList.length - index }}, Mot: {{ games.black_player_name }}
                   </h6>
                   <h6 v-if="games.black_player_name === playerName" class="body-1">
-                    Parti: {{gameList.length - index}} Mot: {{games.white_player_name}}
+                    Parti {{ gameList.length - index }}, Mot: {{ games.white_player_name }}
                   </h6>
-                  <p v-if="games.white_player_name === playerName" class="body-2 dumdum">Farge: Hvit</p>
-                  <p v-if="games.black_player_name === playerName" class="body-2 dumdum">Farge: Sort</p>
+                  <p v-if="games.white_player_name === playerName" class="body-2 resultDetails">Farge: Hvit</p>
+                  <p v-if="games.black_player_name === playerName" class="body-2 resultDetails">Farge: Sort</p>
                   <!-- 1 = hvit seier, 0 = sort seier -->
-                    <p v-if="games.result == 1" class="body-2 dumdum">Resultat: Hvit Seier</p>
-                    <p v-if="games.result == 0.5" class="body-2 dumdum">Resultat: Remis</p>
-                    <p v-if="games.result == 0" class="body-2 dumdum">Resultat: Sort Seier</p>
-                  <p v-if="games.result === null" class="body-2 dumdum">Her har den sjedd en feil!</p>
+                    <p v-if="games.result == 1" class="body-2 resultDetails">Resultat: Hvit Seier</p>
+                    <p v-if="games.result == 0.5" class="body-2 resultDetails">Resultat: Remis</p>
+                    <p v-if="games.result == 0" class="body-2 resultDetails">Resultat: Sort Seier</p>
+                  <p v-if="games.result === null" class="body-2 resultDetails">Her har den sjedd en feil!</p>
                   <v-divider inset></v-divider> <!-- Seperator line between elements -->
                 </li>
               </ul>
@@ -89,7 +89,7 @@ export default {
     text-align: left;
   }
 
-  .dumdum {
+  .resultDetails {
     display: inline-flex;
     margin-right: 1.5em;
   }

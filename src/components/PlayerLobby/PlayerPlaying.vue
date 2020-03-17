@@ -18,10 +18,14 @@
         <v-card-text align="center">
           <v-spacer />
 
+          <!-- Tournament name -->
+          <h1 class="bigInfo">{{ tournamentName }}</h1>
+
           <!-- Basic user details -->
-          <h1>{{ tournamentName }}</h1>
-          <h3 class="gameDetail">{{ playerName }}</h3>
-          <h3 class="gameDetail">Poeng: {{ points }}</h3>
+          <h3 class="minorInfo">{{ playerName }}</h3>
+          <h3 class="mediumInfo">Poeng: {{ points }}</h3>
+
+          <v-divider></v-divider>
 
           <!-- Do player have an opponent? -->
           <div v-if="paired">
@@ -35,8 +39,10 @@
 
           <!-- If user is on a break  -->
           <div v-if="pause && !paired">
-            <p>Du har nå pause. For å spille mer, avslutt pausen.</p>
+            <p class="pauseDetails">Du har nå pause.</p>
           </div>
+
+          <v-divider></v-divider>
 
           <!-- Buttons -->
           <!-- Register result -->
@@ -260,7 +266,7 @@ export default {
       this.pause = !this.pause
       if (this.pause) {
         this.sendPauseRequest()
-        this.pauseButtonText = 'Avslutt pause'
+        this.pauseButtonText = 'Fortsett spill'
       } else {
         this.sendUnpauseRequest()
         this.pauseButtonText = 'Ta pause'
@@ -282,6 +288,12 @@ export default {
 </script>
 
 <style scoped>
+  .pauseDetails{
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 22px;
+  }
+
   .radio{
     margin-bottom: 1em;
   }
@@ -293,12 +305,23 @@ export default {
   .card{
     display: inline;
     width: auto;
-    min-width: 8em;
+    min-width: 20em;
     max-width: 70em;
     height: auto;
   }
 
-  .gameDetail{
+  .bigInfo{
+    text-align-all: center;
+  }
+
+  .mediumInfo{
+    margin-top: 0.4em;
+    margin-bottom: 0.25em;
+    font-weight: bold;
+    font-size: 21px;
+  }
+
+  .minorInfo{
     margin-top: 0.8em;
   }
 </style>
