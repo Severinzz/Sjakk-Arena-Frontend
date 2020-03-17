@@ -65,7 +65,7 @@ export default {
       }).catch(err => {
         console.log(err)
         var str = err.toString()
-        if (str.includes('418')) {
+        if (str.includes('409')) {
           this.errorMessage = 'Navnet er tatt, prøv et nytt ett!'
         } else {
           this.errorMessage = 'Game pin finnes ikke!'
