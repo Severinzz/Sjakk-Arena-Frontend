@@ -1,5 +1,6 @@
 import { API_SERVICE, TOURNAMENT_SERVICE, PLAYER_SERVICE } from '../common/api'
 import { addToken, deleteToken } from '../common/jwt.storage'
+import websocketService from '../common/websocketApi'
 
 export default {
   /*
@@ -10,12 +11,11 @@ export default {
   },
   /*
     Remove player from tournament
-
     Payload has to contain the id and the list index of the player to be removed
    */
   removePlayer: ({ commit }, payload) => {
     TOURNAMENT_SERVICE.delete(`delete-player/${payload.id}`)
-    commit('removePlayer', payload.index)
+    commit('removePlayer', payload.player)
   },
   /*
     Send a tournament to the server.
@@ -51,7 +51,7 @@ export default {
         commit('addTournament', res.data)
       })
     } else {
-      return API_SERVICE.get(`tournament-information/${uuid}`).then(res => {
+      return API_SERVICE.get(`sign-in/${uuid}`).then(res => {
         addToken(res.data.jwt)
         // Formats the tournament to the correct format for the store.
         const job = JSON.parse(res.data.tournament)
@@ -73,11 +73,15 @@ export default {
     Fetch players enrolled in a tournament
    */
   fetchPlayers: ({ commit }, started) => {
+    const callback = function(res) {
+      let players = JSON.parse(res.body)
+      if (players.length >= 0) {
+        commit('addPlayers', players)
+      }
+    }
     let slug
     started ? slug = 'leaderboard' : slug = 'players'
-    return TOURNAMENT_SERVICE.get(slug).then(res => {
-      commit('addPlayers', res.data)
-    })
+    websocketService.connect('tournament/' + slug, callback)
   },
   /*
     Fetch the player using the application.
@@ -123,5 +127,8 @@ export default {
     return PLAYER_SERVICE.patch('unpause').catch(err => {
       throw err
     })
+  },
+  unsubscribe: () => {
+    websocketService.unsubscribe()
   }
 }

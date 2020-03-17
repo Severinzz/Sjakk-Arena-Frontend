@@ -43,7 +43,7 @@
           <!-- The individual players -->
             <player
               v-for="(player, index) in this.getAllPlayers"
-              @click.native="handleRemovePlayer(index, player.id)"
+              @click.native="handleRemovePlayer(player, player.id)"
               :player-name="player.name"
               :player-piece="player.icon"
               :key="index"
@@ -69,7 +69,8 @@ export default {
   data () {
     return {
       intervalId: '',
-      playerCount: 0
+      playerCount: 0,
+      subscribed: false
     }
   },
   computed: {
@@ -84,21 +85,15 @@ export default {
       'fetchPlayers',
       'removePlayer',
       'addPlayer',
-      'fetchTournament'
+      'fetchTournament',
+      'unsubscribe'
     ]),
-    handleRemovePlayer (index, id) {
+    handleRemovePlayer (player, id) {
       let payload = {
-        index: index,
+        player: player,
         id: id
       }
       this.removePlayer(payload)
-    },
-    loadPlayers(reference) {
-      this.intervalId = setInterval(async function() {
-        await reference.fetchPlayers('/tournament/player-lobby-information').then(res => {
-          reference.playerCount = reference.getPlayerCount
-        })
-      }, 3000)
     },
     cancel() {
       this.$router.go(-1)
@@ -116,16 +111,19 @@ export default {
       }
     }
   },
-  mounted() {
-    this.loadPlayers(this)
-  },
-  created () {
+
+  async created () {
+    let started = false
     if (this.getTournament.tournament_name === undefined) {
-      this.fetchTournament()
+      await this.fetchTournament()
     }
+    this.fetchPlayers(started)
+    this.subscribed = true
   },
   destroyed () {
-    clearInterval(this.intervalId)
+    if (this.subscribed === true) {
+      this.unsubscribe()
+    }
   }
 
 }
