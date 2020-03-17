@@ -1,6 +1,6 @@
 import { API_SERVICE, TOURNAMENT_SERVICE, PLAYER_SERVICE } from '../common/api'
 import { addToken, deleteToken } from '../common/jwt.storage'
-import websocketService from '../common/websocketApi'
+import WEBSOCKET_SERVICE from '../common/websocketApi'
 
 export default {
   /*
@@ -81,7 +81,7 @@ export default {
     }
     let slug
     started ? slug = 'leaderboard' : slug = 'players'
-    websocketService.connect('tournament/' + slug, callback)
+    WEBSOCKET_SERVICE.connect('tournament/' + slug, slug, callback)
   },
   /*
     Fetch the player using the application.
@@ -128,7 +128,17 @@ export default {
       throw err
     })
   },
-  unsubscribe: () => {
-    websocketService.unsubscribe()
+  /*
+  Unsubscribe from the enpoint
+  @Param subscription. Subscription object that contains id and unsubscribe function.
+   */
+  unsubscribe: ({ NULL }, subscription) => {
+    WEBSOCKET_SERVICE.unsubscribe(subscription)
+  },
+  /*
+  Close the websocket.
+   */
+  close: () => {
+    WEBSOCKET_SERVICE.close()
   }
 }

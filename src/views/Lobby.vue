@@ -69,8 +69,8 @@ export default {
   data () {
     return {
       intervalId: '',
-      playerCount: 0,
-      subscribed: false
+      subscribed: false,
+      subscription: 'players'
     }
   },
   computed: {
@@ -78,7 +78,10 @@ export default {
       'getPlayerCount',
       'getTournament',
       'getAllPlayers'
-    ])
+    ]),
+    playerCount() {
+      return this.getPlayerCount
+    }
   },
   methods: {
     ...mapActions([
@@ -118,14 +121,10 @@ export default {
       await this.fetchTournament()
     }
     this.fetchPlayers(started)
-    this.subscribed = true
   },
   destroyed () {
-    if (this.subscribed === true) {
-      this.unsubscribe()
-    }
+    this.unsubscribe(this.subscription)
   }
-
 }
 </script>
 

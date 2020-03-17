@@ -183,7 +183,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'sendTournament'
+      'sendTournament',
+      'close'
     ]),
     ...mapGetters([
       'getTournament'
@@ -272,6 +273,9 @@ export default {
       }
       return null
     }
+  },
+  created() {
+    this.close()
   }
 }
 

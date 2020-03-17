@@ -67,7 +67,7 @@
 
 <script>
 import TournamentInfo from '@/components/TournamentInfo'
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Tournament',
@@ -79,17 +79,12 @@ export default {
       intervalId: '',
       limit: 5,
       activeTournament: '',
-      playerCount: 0,
       leaderboard: [],
       instance: this
     }
   },
   computed: {
     // TODO: Use mapGetters instead?
-    ...mapState([
-      'devTournament',
-      'playingPlayers'
-    ]),
     ...mapGetters([
       'getPlayerCount',
       'getTournament',
@@ -97,27 +92,19 @@ export default {
     ]),
     // https://stackoverflow.com/questions/46622209/how-to-limit-iteration-of-elements-in-v-for/54836170#54836170
     playerList () {
-      return this.limit ? this.leaderboard.slice(0, this.limit) : this.leaderboard
+      return this.limit ? this.getAllPlayers.slice(0, this.limit) : this.getAllPlayers
+    },
+    playerCount() {
+      return this.getAllPlayers.length
     }
   },
   methods: {
     ...mapActions([
       'fetchPlayers',
-      'fetchTournament'
+      'fetchTournament',
+      'unsubscribe',
+      'close'
     ]),
-    /**
-     * Updates the leaderboard
-     * @param vm Vm must be a instance reference
-     * @returns {Promise<void>}
-     */
-    async updateLeaderboard(vm) {
-      await this.fetchPlayers(true).then(() => {
-        vm.playerCount = vm.getPlayerCount
-        vm.leaderboard = vm.getAllPlayers
-      }).catch(err => {
-        throw err
-      })
-    },
     increaseLimit () {
       if (this.limit < this.playerCount) {
         this.limit = this.limit + 5
@@ -129,14 +116,8 @@ export default {
       }
     }
   },
-  async mounted() {
-    // Starts asking the server for the updated leaderboard every 3 seconds.
-    const self = this
-    this.intervalId = setInterval(async function() {
-      await self.updateLeaderboard(self).then().catch(err => { throw err })
-    }, 3000)
-  },
   async created () {
+    let started = true
     // If the tournament id is a string then it wil get the tournament from the server since the id should always be int.
     this.activeTournament = this.getTournament
     if (typeof this.activeTournament.id === 'string') {
@@ -144,10 +125,11 @@ export default {
         this.activeTournament = this.getTournament
       })
     }
-    this.updateLeaderboard(this)
+    this.fetchPlayers(started)
   },
   destroyed () {
-    clearInterval(this.intervalId)
+    this.unsubscribe('leaderboard')
+    this.close()
   }
 }
 </script>
