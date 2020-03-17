@@ -1,5 +1,5 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-  <v-container class="justify-center">
+  <v-container class="justify-center form">
     <!-- Adapted from: https://stackoverflow.com/questions/48969510/the-form-is-not-center-aligned-vertically-centered-middle -->
     <v-row row wrap align-center>
       <v-col>
@@ -287,6 +287,9 @@ export default {
 </script>
 
 <style scoped>
+  .form{
+    margin-bottom: 15px;
+  }
   .formstyle{
     margin-left: 0.5em;
     margin-right: 0.5em;
