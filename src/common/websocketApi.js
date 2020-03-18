@@ -41,7 +41,6 @@ const WEBSOCKET = {
    */
   close() {
     if (socket !== null && socket !== undefined) {
-      console.log('asdfasdfasdfasdfasd')
       socket.close()
       connected = false
     }
