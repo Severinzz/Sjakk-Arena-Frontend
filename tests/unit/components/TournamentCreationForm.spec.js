@@ -1,16 +1,19 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import Vue from 'vue'
+import Vuex from 'vuex'
 import Vuetify from 'vuetify'
 import TournamentCreationForm from '@/components/TournamentCreationForm'
 
 Vue.use(Vuetify)
+Vue.use(Vuex)
 
 const localVue = createLocalVue()
 
-const factory = (formData, vuetify) => {
+const factory = (formData, vuetify, store) => {
   return mount(TournamentCreationForm, {
     vuetify,
     localVue,
+    store,
     data() {
       return {
         ...formData
@@ -33,13 +36,20 @@ let formData = {
 
 describe('TournamentCreationForm', () => {
   let vuetify
-
+  let store
+  let actions
   beforeEach(() => {
     vuetify = new Vuetify()
+    actions = {
+      close: jest.fn()
+    }
+    store = new Vuex.Store({
+      actions
+    })
   })
 
   it('inputs should reset when button clicked', () => {
-    let wrapper = factory(formData, vuetify)
+    let wrapper = factory(formData, vuetify, store)
     wrapper.find('#clear-btn').trigger('click')
     let data = wrapper.vm.$data
 
