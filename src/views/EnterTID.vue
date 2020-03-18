@@ -75,10 +75,15 @@ export default {
           this.$router.push('/lobby/' + `${tournament.id}`)
         }
       }).catch(err => {
-        // TODO Forandre feilemding til nøke meir fornuftig
         this.isLoading = false
         this.error = true
-        this.errorMessage = err + '. Prøv igjen senere!'
+        var str = err.toString()
+        if (str.includes('404')) {
+          this.errorMessage = 'Denne IDen: "' + this.tournamentId + '", finnes ikke!'
+        }
+        if (!str.includes('404')) {
+          this.errorMessage = str + '. Teknisk problem!'
+        }
       })
     }
   }
