@@ -46,7 +46,6 @@
           </tr>
           </tbody>
           <!-- TODO: Lage knappa til en egen komponent? Mange begynn kanskje å bli veldi like -->
-          <!-- TODO: FUCKA STYLINGA ANDRE PLASSA ME Å STYLE BUTTON -->
           <div
           v-if="playerCount > 0"
           >
