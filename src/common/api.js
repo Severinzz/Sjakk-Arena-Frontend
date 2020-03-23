@@ -48,6 +48,9 @@ export const TOURNAMENT_SERVICE = {
   },
   put(params) {
     return API_SERVICE.put(this.path, params)
+  },
+  patch(slug) {
+    return API_SERVICE.patch(this.path, slug)
   }
 }
 

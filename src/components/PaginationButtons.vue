@@ -18,7 +18,7 @@
     v-if="activeButton !== lastButton">
       &raquo;
     </v-btn>
-      <p>Side {{ activeButton }} av {{ lastButton }}</p>
+      <p>Side {{ activeButton }} av {{ visibleButtons.length }}</p>
   </div>
 </template>
 

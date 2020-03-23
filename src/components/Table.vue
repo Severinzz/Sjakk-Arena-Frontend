@@ -1,4 +1,6 @@
 <template>
+  <!-- Adapted from https://vuetifyjs.com/en/components/simple-tables/ -->
+  <div>
   <v-simple-table>
     <template v-slot:default>
       <thead>
@@ -12,9 +14,9 @@
       </thead>
       <tbody>
       <tr
-        v-for="object in objectList"
-        :key="object.name"
-        @click="onClick(object)"
+        v-for="object in slicedList"
+        :key="object.id"
+        @click="onEntryClicked(object)"
       >
         <td
           v-for="attribute in attributeList"
@@ -25,20 +27,57 @@
       </tbody>
     </template>
   </v-simple-table>
+    <pagination-buttons
+      :number-of-items="objectList.length"
+      :pr-page="5"
+      @pageChanged="handlePageChange"
+    ></pagination-buttons>
+  </div>
 </template>
 
 <script>
+import PaginationButtons from './PaginationButtons'
+import _ from 'lodash'
+
 export default {
   name: 'Table',
+  components: { PaginationButtons },
   props: {
     objectList: { type: Array, required: true },
     attributeList: { type: Array, required: true },
     headingList: { type: Array, required: false },
-    onClick: { type: Function, required: false }
+    prPage: { type: Number, required: false, default: 5 }
+  },
+  data() {
+    return {
+      entryStart: 0
+    }
+  },
+  methods: {
+    onEntryClicked(entry) {
+      this.$emit('entryClicked', entry)
+    },
+    // From code with mosh, React course pagination (https://codewithmosh.com/courses/357787/lectures/5706707)
+    handlePageChange(page) {
+      this.entryStart = (page - 1) * this.prPage
+    }
+  },
+  computed: {
+    slicedList() {
+      // From code with mosh, React course pagination (https://codewithmosh.com/courses/357787/lectures/5706707)
+      return _(this.objectList).slice(this.entryStart).take(this.prPage).value()
+    }
   }
 }
 </script>
 
 <style scoped>
-
+td{
+  text-align: left;
+}
+  th{
+    color: black !important;
+    font-size: 17px;
+    background-color: rgb(200, 200, 200);
+  }
 </style>
