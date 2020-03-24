@@ -14,8 +14,13 @@ export default {
     Payload has to contain the id and the list index of the player to be removed
    */
   removePlayer: ({ commit }, payload) => {
-    TOURNAMENT_SERVICE.delete(`delete-player/${payload.id}`)
-    commit('removePlayer', payload.player)
+    if (payload.started === true) {
+      commit('removePlayer', payload.player)
+      return TOURNAMENT_SERVICE.patch(`set-player-inactive/${payload.id}`)
+    } else {
+      TOURNAMENT_SERVICE.delete(`delete-player/${payload.id}`)
+      commit('removePlayer', payload.player)
+    }
   },
   /*
     Send a tournament to the server.
@@ -90,6 +95,10 @@ export default {
     return PLAYER_SERVICE.get('information').then(res => {
       commit('createPlayer', res.data)
     })
+  },
+  hostFetchPlayer: ({ NULL }, payload) => {
+    API_SERVICE.setHeader()
+    return TOURNAMENT_SERVICE.get(`player/${payload.id}`)
   },
   /*
     Sends a request to leave to the server

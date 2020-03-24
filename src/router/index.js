@@ -63,6 +63,11 @@ const routes = [
     path: '/tournament/:id',
     name: 'tournament',
     component: () => import('../views/Tournament')
+  },
+  {
+    path: '/tournament/player/:index',
+    name: 'playerdetails',
+    component: () => import('../views/PlayerDetails')
   }
 ]
 

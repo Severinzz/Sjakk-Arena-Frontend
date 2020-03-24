@@ -30,12 +30,14 @@
              sm="5"
       >
         <!-- Adapted from https://vuetifyjs.com/en/components/simple-tables -->
+        <!-- TODO: Bytt til table komponenten -->
       <v-simple-table>
         <template v-slot:default>
           <tbody>
           <tr
             v-for="player in playerList"
               :key="player.name"
+            @click="handlePlayerClicked(player)"
           >
             <td>
               {{ player.name }}
@@ -46,7 +48,6 @@
           </tr>
           </tbody>
           <!-- TODO: Lage knappa til en egen komponent? Mange begynn kanskje å bli veldi like -->
-          <!-- TODO: FUCKA STYLINGA ANDRE PLASSA ME Å STYLE BUTTON -->
           <div
           v-if="playerCount > 0"
           >
@@ -114,6 +115,12 @@ export default {
       if (this.limit > 5) {
         this.limit = this.limit - 5
       }
+    },
+    handlePlayerClicked(player) {
+      // TODO: PRØVE Å SENDE PLAYER?
+      // https://stackoverflow.com/a/47874850
+      let route = this.$router.resolve('/tournament/player/' + player.id)
+      window.open(route.href, '_blank')
     }
   },
   async created () {
