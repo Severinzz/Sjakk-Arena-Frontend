@@ -124,7 +124,7 @@
                       <v-radio
                         class="radio"
                         label="Hvit seier"
-                        value="1-0"
+                        value="1"
                       >
                         <v-spacer />
                       </v-radio>
@@ -133,7 +133,7 @@
                       <v-radio
                         class="radio"
                         label="Remis"
-                        value="0.5-0.5"
+                        value="0.5"
                       >
                         <v-spacer />
                       </v-radio>
@@ -142,7 +142,7 @@
                       <v-radio
                         class="radio"
                         label="Sort seier"
-                        value="0-1"
+                        value="0"
                       >
                         <v-spacer />
                       </v-radio>
