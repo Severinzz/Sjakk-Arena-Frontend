@@ -119,7 +119,7 @@ export default {
     handlePlayerClicked(player) {
       // TODO: PRØVE Å SENDE PLAYER?
       // https://stackoverflow.com/a/47874850
-      let route = this.$router.resolve('/tournament/player/' + player.id)
+      let route = this.$router.resolve('/tournament/player/' + player.user_id)
       window.open(route.href, '_blank')
     }
   },

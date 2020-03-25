@@ -16,9 +16,9 @@ export default {
   removePlayer: ({ commit }, payload) => {
     if (payload.started === true) {
       commit('removePlayer', payload.player)
-      return TOURNAMENT_SERVICE.patch(`set-player-inactive/${payload.id}`)
+      return TOURNAMENT_SERVICE.patch(`set-player-inactive/${payload.id}`, payload.msg)
     } else {
-      TOURNAMENT_SERVICE.delete(`delete-player/${payload.id}`)
+      TOURNAMENT_SERVICE.delete(`delete-player/${payload.id}?msg=${payload.msg}`)
       commit('removePlayer', payload.player)
     }
   },
@@ -137,6 +137,12 @@ export default {
       throw err
     })
   },
+
+  subscribeToPlayerKicked: ({ commit }, callback) => {
+    let slug = 'removed'
+    WEBSOCKET_SERVICE.connect('player/' + slug, slug, callback)
+  },
+
   /*
   Unsubscribe from the enpoint
   @Param subscription. Subscription object that contains id and unsubscribe function.

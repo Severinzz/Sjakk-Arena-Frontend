@@ -23,9 +23,29 @@
       />
       <v-btn
         class="error"
-        @click="removeFromTournamentPlayer"
+        @click="kickDialog = true"
       >Fjern spiller</v-btn>
     </div>
+    <v-row class="justify-center" align="center">
+      <v-dialog v-model="kickDialog" max-width="650px">
+        <v-card>
+          <v-card-title class="justify-center title">Oppgi begrunnelse for utkasting av spilleren</v-card-title>
+          <v-card-text class="card-text">
+            <p>Kan vær blankt, men annbefales å gi begrunnelse!</p>
+            <v-text-field
+              v-model="msg"
+              label="Begrunnelse"
+              required>
+            </v-text-field>
+          </v-card-text>
+          <v-card-actions class="actions">
+            <!-- User has the option to either leave or go back -->
+            <v-btn text class="error"  @click="removePlayerFromTournament">OK</v-btn>
+            <v-btn text outlined @click="kickDialog = false">Avbryt</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </div>
 </template>
 <script>
@@ -39,7 +59,9 @@ export default {
     return {
       player: null,
       removed: false,
-      okMessage: 'Spiller fjernet!',
+      okMessage: 'Spiller fjernet! Du kan nå lukke denne fanen',
+      msg: '',
+      kickDialog: false,
       // TODO: FETCH FROM SERVER
       playerList: [{
         id: 1,
@@ -99,10 +121,12 @@ export default {
     handleEntryClicked(game) {
       alert(game)
     },
-    removeFromTournamentPlayer() {
+    removePlayerFromTournament() {
+      this.kickDialog = false
       let payload = {
-        id: this.player.id,
-        started: true
+        id: this.player.user_id,
+        started: true,
+        msg: this.msg !== '' ? this.msg : 'blank'
       }
       this.removePlayer(payload).then(res => {
         if (res.status === 200) {
@@ -135,5 +159,12 @@ export default {
     max-width: 80%;
     margin: auto;
     text-align: center;
+  }
+  .card-text{
+    justify-content: center;
+    text-align: center;
+  }
+  .actions{
+    justify-content: center;
   }
 </style>

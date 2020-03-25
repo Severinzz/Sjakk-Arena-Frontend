@@ -30,6 +30,24 @@
       <div v-else>
         <h1>Something wrong in PlayerLobby.vue. waiting = {{ waiting }}</h1>
       </div>
+
+      <v-row class="justify-center" align="center">
+        <v-dialog v-model="kickedDialog" max-width="650px">
+          <v-card>
+            <v-card-title class="justify-center title">Du har blitt kastet ut av turneringen!</v-card-title>
+            <v-card-text class="card-text">
+              <h2 v-if="kickedMessage !== ''"> Begrunnet: {{ kickedMessage }}</h2>
+              <h3> Går tilbake til startsiden om: </h3>
+              <h1> {{ countDownNr }} </h1>
+            </v-card-text>
+            <v-card-actions>
+              <!-- User has the option to either leave or go back -->
+              <v-btn text color="primary" outlined @click="navigateHome">OK</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
+
     </v-container>
     <v-spacer/>
   </div>
@@ -38,6 +56,7 @@
 <script>
 import PlayerWaiting from '../components/PlayerLobby/PlayerWaiting'
 import PlayerPlaying from '../components/PlayerLobby/PlayerPlaying'
+import storage from '../common/jwt.storage'
 import { mapActions, mapState } from 'vuex'
 
 export default {
@@ -46,31 +65,81 @@ export default {
     PlayerWaiting,
     PlayerPlaying
   },
-  computed: mapState({
-    tournamentName: state => state.tournament.name,
-    tournamentStart: state => state.tournament.start,
-    tournamentEnd: state => state.tournament.end,
-    playerName: state => state.player.name,
-    points: state => state.player.points
-  }),
+  computed: {
+    ...mapState({
+      tournamentName: state => state.tournament.name,
+      tournamentStart: state => state.tournament.start,
+      tournamentEnd: state => state.tournament.end,
+      playerName: state => state.player.name,
+      points: state => state.player.points
+    })
+  },
   methods: {
     ...mapActions([
       'fetchPlayersTournament',
-      'fetchPlayer'
-    ])
+      'fetchPlayer',
+      'subscribeToPlayerKicked',
+      'unsubscribe',
+      'close'
+    ]),
+    countDown() {
+      this.countDownNr--
+      if (this.countDownNr === 0) {
+        clearInterval(this.intervalId)
+        this.navigateHome()
+      }
+    },
+    navigateHome() {
+      this.kickedDialog = false
+      storage.deleteToken()
+      this.$router.replace('/')
+    },
+    startCountDown() {
+      this.intervalId = setInterval(this.countDown, 1000)
+    }
   },
   data () {
     return {
-      waiting: false
+      waiting: false,
+      kickedMessage: '',
+      countDownNr: 6,
+      intervalId: '',
+      kickedDialog: false
     }
   },
   mounted() {
     this.fetchPlayersTournament()
     this.fetchPlayer()
+    let vm = this
+    let callback = function(res) {
+      vm.kickedMessage = res.body
+      vm.kickedDialog = true
+      vm.startCountDown()
+    }
+    this.subscribeToPlayerKicked(callback)
+  },
+  destroyed () {
+    this.unsubscribe('removed')
+    this.close()
   }
 }
 </script>
 
 <style scoped>
-
+  button{
+    margin: auto
+  }
+  .card-text{
+    justify-content: center;
+    text-align: center;
+  }
+  h1{
+    margin-top: 1em;
+  }
+  h3{
+    margin-top: 1em;
+  }
+  .title{
+    word-break: keep-all;
+  }
 </style>

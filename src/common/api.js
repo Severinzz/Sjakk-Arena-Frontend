@@ -30,8 +30,8 @@ export const API_SERVICE = {
   put(path, slug = '', params) {
     return axios.put(`${path}/${slug}`, params)
   },
-  patch(path, slug = '') {
-    return axios.patch(`${path}/${slug}`)
+  patch(path, slug = '', params) {
+    return axios.patch(`${path}/${slug}`, params)
   }
 }
 
@@ -49,8 +49,8 @@ export const TOURNAMENT_SERVICE = {
   put(params) {
     return API_SERVICE.put(this.path, params)
   },
-  patch(slug) {
-    return API_SERVICE.patch(this.path, slug)
+  patch(slug, params) {
+    return API_SERVICE.patch(this.path, slug, params)
   }
 }
 
