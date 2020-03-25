@@ -137,13 +137,12 @@ export default {
         this.removed = true
       }).catch(err => {
         if (err.status === 409) {
-          this.color = 'error'
           this.removedMessage = 'Denne spilleren tilhører ikke din turnering!'
         } else {
-          this.color = 'error'
           this.removedMessage = 'Noe gikk galt'
         }
         this.icon = 'plug'
+        this.color = 'error'
         this.removed = true
       })
     }
