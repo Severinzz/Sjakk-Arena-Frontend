@@ -16,7 +16,7 @@ export default {
   removePlayer: ({ commit }, payload) => {
     if (payload.started === true) {
       commit('removePlayer', payload.player)
-      return TOURNAMENT_SERVICE.patch(`set-player-inactive/${payload.id}`)
+      return TOURNAMENT_SERVICE.patch(`inactivatePlayer/${payload.id}`) // set-player-inactive
     } else {
       TOURNAMENT_SERVICE.delete(`delete-player/${payload.id}`)
       commit('removePlayer', payload.player)
@@ -87,6 +87,16 @@ export default {
     let slug
     started ? slug = 'leaderboard' : slug = 'players'
     WEBSOCKET_SERVICE.connect('tournament/' + slug, slug, callback)
+  },
+  /*
+    Fetch games with invalid result
+   */
+  fetchInvalidGames: ({ commit }, tournamentID) => {
+    let path = 'game/'
+    let slug = 'invalidGames/' + tournamentID
+    return API_SERVICE.get(path, slug).then(res => {
+      commit('invalidGames', res.data)
+    })
   },
   /*
     Fetch the player using the application.

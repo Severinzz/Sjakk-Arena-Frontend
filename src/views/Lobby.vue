@@ -50,6 +50,21 @@
               :id="'player' + index"
             />
         </v-row>
+        <v-row
+          align="start"
+          justify="start"
+          class="text-center"
+          >
+          <!-- games with invalid results -->
+          <games
+            v-for="(game, index) in this.getInvalidGames"
+            @click.native="handleChangeResult(game, game.game_id)"
+            :id="game.game_id"
+            :game-table="game.game_table"
+            :game-result="game.white_player_points"
+            :key="index"
+            />
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -77,7 +92,8 @@ export default {
     ...mapGetters([
       'getPlayerCount',
       'getTournament',
-      'getAllPlayers'
+      'getAllPlayers',
+      'getInvalidGames'
     ]),
     playerCount() {
       return this.getPlayerCount
@@ -89,7 +105,8 @@ export default {
       'removePlayer',
       'addPlayer',
       'fetchTournament',
-      'unsubscribe'
+      'unsubscribe',
+      'fetchInvalidGames'
     ]),
     handleRemovePlayer (player, id) {
       let payload = {
@@ -121,6 +138,7 @@ export default {
       await this.fetchTournament()
     }
     this.fetchPlayers(started)
+    this.fetchInvalidGames(this.tournamentId)
   },
   destroyed () {
     this.unsubscribe(this.subscription)
