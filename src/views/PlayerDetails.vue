@@ -4,11 +4,11 @@
       <v-alert
         class="sucsess"
         v-if="removed"
-        color="green"
+        :color="color"
         dark
-        :icon="`fas fa-check`"
+        :icon="`fas fa-${icon}`"
         transition="scale-transition">
-        {{ okMessage }}
+        {{ removedMessage }}
       </v-alert>
       <h1 class="name" v-if="player !== null"> {{ player.name }}</h1>
       <h2 class="points" v-if="player !== null">Poeng: {{ player.points }}</h2>
@@ -59,9 +59,11 @@ export default {
     return {
       player: null,
       removed: false,
-      okMessage: 'Spiller fjernet! Du kan nå lukke denne fanen',
+      removedMessage: '',
       msg: '',
       kickDialog: false,
+      color: '',
+      icon: '',
       // TODO: FETCH FROM SERVER
       playerList: [{
         id: 1,
@@ -129,9 +131,20 @@ export default {
         msg: this.msg !== '' ? this.msg : 'blank'
       }
       this.removePlayer(payload).then(res => {
-        if (res.status === 200) {
-          this.removed = true
+        this.color = 'green'
+        this.removedMessage = 'Spiller fjernet! Du kan nå lukke denne fanen'
+        this.icon = 'check'
+        this.removed = true
+      }).catch(err => {
+        if (err.status === 409) {
+          this.color = 'error'
+          this.removedMessage = 'Denne spilleren tilhører ikke din turnering!'
+        } else {
+          this.color = 'error'
+          this.removedMessage = 'Noe gikk galt'
         }
+        this.icon = 'plug'
+        this.removed = true
       })
     }
   },
