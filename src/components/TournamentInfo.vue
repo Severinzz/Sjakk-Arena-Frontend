@@ -2,7 +2,7 @@
 <div>
   <p class="pin">PIN:</p>
   <p class="pin">
-    {{ tournament.id }}
+    {{ tournament.user_id }}
   </p>
   <p class="time" v-if="!started">
     Starter: {{ formatTime(this.tournament.start) }}
