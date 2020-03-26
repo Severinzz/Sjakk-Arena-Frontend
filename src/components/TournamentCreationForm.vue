@@ -66,6 +66,7 @@
               @click:minute="$refs.firstmenu.save(startTime)"
               :color="formColor"
               :max="calcStartTime"
+              :min="minStartTime"
             >
             </v-time-picker>
           </v-menu>
@@ -157,6 +158,7 @@ export default {
       endDate: '',
       startTimeMenu: false,
       endTimeMenu: false,
+      minStartTime: '',
       email: '', // email address of tournament host
       tournamentName: '', // name of tournament
       tables: '', // number of tables used in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
@@ -285,6 +287,8 @@ export default {
   },
   created() {
     this.close()
+    let now = new Date()
+    this.minStartTime = now.getHours().toString() + ':' + now.getMinutes().toString()
   }
 }
 
