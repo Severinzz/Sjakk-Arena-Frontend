@@ -43,7 +43,7 @@
           <!-- The individual players -->
             <player
               v-for="(player, index) in this.getAllPlayers"
-              @click.native="handleRemovePlayer(player, player.id)"
+              @click.native="handleRemovePlayer(player, player.user_id)"
               :player-name="player.name"
               :player-piece="player.icon"
               :key="index"
@@ -94,7 +94,8 @@ export default {
     handleRemovePlayer (player, id) {
       let payload = {
         player: player,
-        id: id
+        id: id,
+        msg: '' // Custom message player should receive when they are kicked. Is optional
       }
       this.removePlayer(payload)
     },
