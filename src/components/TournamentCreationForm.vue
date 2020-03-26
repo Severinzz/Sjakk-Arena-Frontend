@@ -223,7 +223,7 @@ export default {
       await this.sendTournament(payload).then(res => {
         // Grabs the tournament from store so the correct tournament_id is used in the dynamic link.
         let tournament = this.getTournament()
-        this.$router.push('/lobby/' + tournament.id)
+        this.$router.push('/lobby/' + tournament.user_id)
         this.isLoading = false
       }).catch(err => {
         // Hides the loading circle and display error message
