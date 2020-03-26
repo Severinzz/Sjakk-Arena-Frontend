@@ -134,17 +134,17 @@ export default {
         this.color = 'green'
         this.removedMessage = 'Spiller fjernet! Du kan nå lukke denne fanen'
         this.icon = 'check'
-        this.removed = true
       }).catch(err => {
-        if (err.status === 409) {
+        let errStr = err.toString()
+        if (errStr.includes('400')) {
           this.removedMessage = 'Denne spilleren tilhører ikke din turnering!'
         } else {
           this.removedMessage = 'Noe gikk galt'
         }
         this.icon = 'plug'
         this.color = 'error'
-        this.removed = true
       })
+      this.removed = true
     }
   },
   async created () {
