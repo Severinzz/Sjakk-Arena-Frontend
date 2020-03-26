@@ -15,19 +15,10 @@ let player = {
 }
 let players = {}
 
-let invalidGames = {
-  game_id: LOADING_MESSAGE,
-  table: LOADING_MESSAGE,
-  white_player: LOADING_MESSAGE,
-  black_player: LOADING_MESSAGE,
-  white_player_points: LOADING_MESSAGE
-}
-
 export default {
   players,
   tournament,
   devTournament,
   player,
-  playingPlayers,
-  invalidGames
+  playingPlayers
 }

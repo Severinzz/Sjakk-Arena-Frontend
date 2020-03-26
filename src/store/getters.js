@@ -7,8 +7,5 @@ export default {
   },
   getTournament: (state) => {
     return state.tournament
-  },
-  getInvalidGame: (state) => {
-    return state.game
   }
 }

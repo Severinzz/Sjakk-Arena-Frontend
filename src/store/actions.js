@@ -92,11 +92,7 @@ export default {
     Fetch games with invalid result
    */
   fetchInvalidGames: ({ commit }, tournamentID) => {
-    let path = 'game/'
-    let slug = 'invalidGames/' + tournamentID
-    return API_SERVICE.get(path, slug).then(res => {
-      commit('invalidGames', res.data)
-    })
+
   },
   /*
     Fetch the player using the application.

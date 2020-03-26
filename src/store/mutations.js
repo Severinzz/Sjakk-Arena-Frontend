@@ -13,8 +13,5 @@ export default {
   },
   addPlayers: (state, payload) => {
     state.player = payload
-  },
-  invalidGames: (state, payload) => {
-    state.game = payload
   }
 }
