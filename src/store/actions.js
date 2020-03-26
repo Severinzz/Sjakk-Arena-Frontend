@@ -122,7 +122,7 @@ export default {
   },
   fetchResults: () => {
     return PLAYER_SERVICE.get('games').catch(err => {
-      throw err
+      throw err.response
     })
   },
   /*
@@ -136,7 +136,7 @@ export default {
    */
   sendPauseRequest: () => {
     return PLAYER_SERVICE.patch('pause').catch(err => {
-      throw err
+      throw err.response
     })
   },
   /*
@@ -144,7 +144,7 @@ export default {
    */
   sendUnpauseRequest: () => {
     return PLAYER_SERVICE.patch('unpause').catch(err => {
-      throw err
+      throw err.response
     })
   },
   /*
