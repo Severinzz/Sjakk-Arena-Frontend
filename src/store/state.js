@@ -16,11 +16,13 @@ let player = {
   points: LOADING_MESSAGE
 }
 let players = {}
+let activeTournament = false
 
 export default {
   players,
   tournament,
   devTournament,
   player,
-  playingPlayers
+  playingPlayers,
+  activeTournament
 }

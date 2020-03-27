@@ -69,27 +69,31 @@ export default {
   data () {
     return {
       intervalId: '',
-      subscribed: false,
-      subscription: 'players'
+      subscribed: false
     }
   },
   computed: {
     ...mapGetters([
       'getPlayerCount',
       'getTournament',
-      'getAllPlayers'
+      'getAllPlayers',
+      'isTournamentActive'
     ]),
     playerCount() {
       return this.getPlayerCount
+    },
+    tournamentActive() {
+      return this.isTournamentActive
     }
   },
   methods: {
     ...mapActions([
-      'fetchPlayers',
       'removePlayer',
       'addPlayer',
       'fetchTournament',
-      'unsubscribe'
+      'unsubscribeAll',
+      'subscribeToLobbySubscriptions',
+      'isTournamentActive'
     ]),
     handleRemovePlayer (player, id) {
       let payload = {
@@ -113,18 +117,22 @@ export default {
           this.startTournament()
         }
       }
+    },
+    tournamentActive: function (tournamentActive) {
+      if (tournamentActive) {
+        this.startTournament()
+      }
     }
   },
-
   async created () {
     let started = false
     if (this.getTournament.tournament_name === undefined) {
       await this.fetchTournament()
     }
-    this.fetchPlayers(started)
+    await this.subscribeToLobbySubscriptions({ started: started, vm: this })
   },
   destroyed () {
-    this.unsubscribe(this.subscription)
+    this.unsubscribeAll()
   }
 }
 </script>

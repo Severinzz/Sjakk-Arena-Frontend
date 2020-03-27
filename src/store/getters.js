@@ -7,5 +7,8 @@ export default {
   },
   getTournament: (state) => {
     return state.tournament
+  },
+  isTournamentActive: (state) => {
+    return state.activeTournament
   }
 }

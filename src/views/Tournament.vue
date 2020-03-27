@@ -93,7 +93,7 @@ export default {
     ]),
     // https://stackoverflow.com/questions/46622209/how-to-limit-iteration-of-elements-in-v-for/54836170#54836170
     playerList () {
-      return this.limit ? this.getAllPlayers.slice(0, this.limit) : this.getAllPlayers
+      return this.getAllPlayers.length > this.limit ? this.getAllPlayers.slice(0, this.limit) : this.getAllPlayers
     },
     playerCount() {
       return this.getAllPlayers.length
@@ -101,7 +101,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'fetchPlayers',
+      'subscribeToTournamentSubscriptions',
       'fetchTournament',
       'unsubscribe',
       'close'
@@ -132,7 +132,7 @@ export default {
         this.activeTournament = this.getTournament
       })
     }
-    this.fetchPlayers(started)
+    this.subscribeToTournamentSubscriptions({ vm: this, started: started })
   },
   destroyed () {
     this.unsubscribe('leaderboard')
