@@ -16,9 +16,9 @@ export default {
   removePlayer: ({ commit }, payload) => {
     if (payload.started === true) {
       commit('removePlayer', payload.player)
-      return TOURNAMENT_SERVICE.patch(`set-player-inactive/${payload.id}`)
+      return TOURNAMENT_SERVICE.patch(`set-player-inactive/${payload.id}`, payload.msg)
     } else {
-      TOURNAMENT_SERVICE.delete(`delete-player/${payload.id}`)
+      TOURNAMENT_SERVICE.delete(`delete-player/${payload.id}?msg=${payload.msg}`)
       commit('removePlayer', payload.player)
     }
   },
@@ -28,7 +28,7 @@ export default {
   sendTournament: ({ commit }, tournament) => {
     return API_SERVICE.post('new-tournament', tournament).then(res => {
       // Adds the tournament ID received from the server to the payload.
-      tournament['id'] = res.data.tournament_id
+      tournament['user_id'] = res.data.tournament_id
       addToken(res.data.jwt)
       // Adds the payload (tournament) to the state in store.
       commit('addTournament', tournament)
@@ -50,21 +50,17 @@ export default {
   /*
     Fetch a tournament from the server. Use uuid if token linked to a tournament user is absent
    */
-  fetchTournament: ({ commit }, uuid) => {
-    if (uuid === undefined) {
-      return TOURNAMENT_SERVICE.get('information').then(res => {
-        commit('addTournament', res.data)
-      })
-    } else {
-      return API_SERVICE.get(`sign-in/${uuid}`).then(res => {
-        addToken(res.data.jwt)
-        // Formats the tournament to the correct format for the store.
-        const job = JSON.parse(res.data.tournament)
-        commit('addTournament', job)
-      }).then(res => {
-        API_SERVICE.setHeader()
-      })
-    }
+  fetchTournament: ({ commit }) => {
+    return TOURNAMENT_SERVICE.get('information').then(res => {
+      commit('addTournament', res.data)
+    })
+  },
+  signInUUID: ({ NULL }, uuid) => {
+    return API_SERVICE.get(`sign-in/${uuid}`).then(res => {
+      addToken(res.data.jwt)
+    }).then(res => {
+      API_SERVICE.setHeader()
+    })
   },
   /*
     Fetch the tournament a player is enrolled in
@@ -124,6 +120,12 @@ export default {
       throw err
     })
   },
+
+  subscribeToPlayerKicked: ({ commit }, callback) => {
+    let slug = 'removed'
+    WEBSOCKET_SERVICE.connect('player/' + slug, slug, callback)
+  },
+
   /*
   Unsubscribe from the enpoint
   @Param subscription. Subscription object that contains id and unsubscribe function.

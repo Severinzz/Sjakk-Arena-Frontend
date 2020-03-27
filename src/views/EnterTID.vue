@@ -58,7 +58,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'fetchTournament'
+      'fetchTournament',
+      'signInUUID'
     ]),
     ...mapGetters([
       'getTournament'
@@ -66,14 +67,17 @@ export default {
     async submit() {
       this.error = false
       this.isLoading = true
-      this.fetchTournament(this.tournamentId).then(res => {
-        let tournament = this.getTournament()
-        this.isLoading = false
-        if (tournament.active) {
-          this.$router.push('/tournament/' + `${tournament.id}`)
-        } else {
-          this.$router.push('/lobby/' + `${tournament.id}`)
-        }
+      let vm = this
+      this.signInUUID(this.tournamentId).then(res => {
+        vm.fetchTournament().then(res => {
+          vm.isLoading = false
+          let tournament = vm.getTournament()
+          if (tournament.active) {
+            this.$router.push('/tournament/' + `${tournament.user_id}`)
+          } else {
+            this.$router.push('/lobby/' + `${tournament.user_id}`)
+          }
+        })
       }).catch(err => {
         this.isLoading = false
         this.error = true
