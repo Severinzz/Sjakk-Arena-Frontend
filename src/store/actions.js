@@ -74,20 +74,7 @@ export default {
       commit('addTournament', res.data)
     })
   },
-  /*
-    Fetch players enrolled in a tournament
-   */
-  fetchPlayers: ({ commit }, started) => {
-    const callback = function(res) {
-      let players = JSON.parse(res.body)
-      if (players.length >= 0) {
-        commit('addPlayers', players)
-      }
-    }
-    let slug
-    started ? slug = 'leaderboard' : slug = 'players'
-    WEBSOCKET_SERVICE.connect('tournament/' + slug, slug, callback)
-  },
+
   /*
     Fetch the player using the application.
    */
@@ -145,9 +132,46 @@ export default {
     WEBSOCKET_SERVICE.unsubscribe(subscription)
   },
   /*
+  Unsubscribe all STOMP subscriptions
+   */
+  unsubscribeAll: ({ NULL }) => {
+    WEBSOCKET_SERVICE.unsubscribeAll()
+  },
+  /*
   Close the websocket.
    */
   close: () => {
     WEBSOCKET_SERVICE.close()
+  },
+  subscribeToLobbySubscriptions: ({ commit, dispatch }, payload) => {
+    let activeSubscription
+    let playerSubscription
+    dispatch('getActiveSubscription').then(res => { activeSubscription = res }).then(res =>
+      dispatch('getPlayerSubscription', [payload.started]).then(res => { playerSubscription = res })
+    ).then(res => WEBSOCKET_SERVICE.connect([activeSubscription, playerSubscription]))
+  },
+  subscribeToTournamentSubscriptions: ({ commit, dispatch }, payload) => {
+    let playerSubscription
+    dispatch('getPlayerSubscription', [payload.started]).then(res => { playerSubscription = res }).then(res =>
+      WEBSOCKET_SERVICE.connect([playerSubscription]
+      ))
+  },
+  getActiveSubscription: (vm) => {
+    let activeCallback = function(res) {
+      let active = JSON.parse(res.body).active
+      vm.commit('setTournamentActive', active)
+    }
+    return { path: 'tournament/active', callback: activeCallback }
+  },
+  getPlayerSubscription: (vm, started) => {
+    let playerCallback = function(res) {
+      let players = JSON.parse(res.body)
+      if (players.length >= 0) {
+        vm.commit('addPlayers', players)
+      }
+    }
+    let slug
+    started[0] ? slug = 'leaderboard' : slug = 'players'
+    return { path: 'tournament/' + slug, callback: playerCallback }
   }
 }

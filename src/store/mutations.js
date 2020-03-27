@@ -13,5 +13,8 @@ export default {
   },
   addPlayers: (state, payload) => {
     state.player = payload
+  },
+  setTournamentActive: (state, active) => {
+    state.activeTournament = active
   }
 }

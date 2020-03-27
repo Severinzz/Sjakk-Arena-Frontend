@@ -6,24 +6,28 @@ import jwt from './jwt.storage'
 let socket
 let client
 let subscriptions = {}
-let connected
 
 const WEBSOCKET = {
   /*
   Subscribes to the correct endpoint on the backend.
    */
-  connect(path, tag, callback) {
-    // If a stomp is connected to the backend, just subscribe. Else connect to the backend and subscribe.
-    if (connected === true) {
-      subscriptions[tag] = client.subscribe('/user/queue/' + path, callback)
-      client.send('/app/' + path, function (msg) {})
-    } else {
-      init()
-      client.connect(this.setupHeader(), function() {
-        connected = true
-        subscriptions[tag] = client.subscribe('/user/queue/' + path, callback)
-        client.send('/app/' + path, function (msg) {})
-      })
+  connect(newSubscriptions) {
+    init()
+    client.connect(this.setupHeader(), function() {
+      for (let i in newSubscriptions) {
+        subscriptions[newSubscriptions[i].path] = client.subscribe('/user/queue/' + newSubscriptions[i].path, newSubscriptions[i].callback)
+        client.send('/app/' + newSubscriptions[i].path, function (msg) {})
+      }
+    })
+  },
+  /*
+  Unsubscribe from the backend
+  @param subscription An subscription object containing subscription id and a unsubscribe function.
+   */
+  unsubscribeAll() {
+    for (let tag in subscriptions) {
+      subscriptions[tag].unsubscribe()
+      delete subscriptions[tag]
     }
   },
   /*
@@ -42,7 +46,6 @@ const WEBSOCKET = {
   close() {
     if (socket !== null && socket !== undefined) {
       socket.close()
-      connected = false
     }
   },
   setupHeader() {
