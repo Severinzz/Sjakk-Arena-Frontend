@@ -80,7 +80,7 @@ export default {
         await VM.fetchInvalidGames().then(res => {
           VM.disapprovedGames = res.data
           console.log(VM.disapprovedGames)
-        }).catch( err => {
+        }).catch(err => {
           throw err.response
         })
       }, this.timeInterval)

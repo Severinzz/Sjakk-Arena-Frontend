@@ -87,8 +87,11 @@ export default {
   /*
     Fetch games with invalid result
    */
-  fetchInvalidGames: ({ commit }, tournamentID) => {
-    console.log('Getting games with invalid results for tournament: ' + tournamentID)
+  fetchInvalidGames: () => {
+    console.log('Getting games with invalid results for tournament')
+    return TOURNAMENT_SERVICE.get('games').catch(err => {
+      throw err.response
+    })
   },
   /*
     Fetch the player using the application.
