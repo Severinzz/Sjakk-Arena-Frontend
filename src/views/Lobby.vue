@@ -50,21 +50,9 @@
               :id="'player' + index"
             />
         </v-row>
-        <v-row
-          align="start"
-          justify="start"
-          class="text-center"
-          >
-          <!-- games with invalid results -->
-          <games
-            v-for="(game, index) in this.getInvalidGames"
-            @click.native="handleChangeResult(game, game.game_id)"
-            :id="game.game_id"
-            :game-table="game.game_table"
-            :game-result="game.white_player_points"
-            :key="index"
-            />
-        </v-row>
+        <div v-if="invalidGames">
+          <InvalidGames></InvalidGames>
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -74,10 +62,12 @@
 import TournamentInfo from '@/components/TournamentInfo'
 import Player from '@/components/Player'
 import { mapActions, mapGetters } from 'vuex'
+import InvalidGames from '../components/InvalidGames'
 
 export default {
   name: 'Lobby',
   components: {
+    InvalidGames,
     TournamentInfo,
     Player
   },
@@ -85,15 +75,15 @@ export default {
     return {
       intervalId: '',
       subscribed: false,
-      subscription: 'players'
+      subscription: 'players',
+      invalidGames: true
     }
   },
   computed: {
     ...mapGetters([
       'getPlayerCount',
       'getTournament',
-      'getAllPlayers',
-      'getInvalidGames'
+      'getAllPlayers'
     ]),
     playerCount() {
       return this.getPlayerCount
@@ -105,13 +95,13 @@ export default {
       'removePlayer',
       'addPlayer',
       'fetchTournament',
-      'unsubscribe',
-      'fetchInvalidGames'
+      'unsubscribe'
     ]),
     handleRemovePlayer (player, id) {
       let payload = {
         player: player,
-        id: id
+        id: id,
+        msg: '' // Custom message player should receive when they are kicked. Is optional
       }
       this.removePlayer(payload)
     },
@@ -138,7 +128,6 @@ export default {
       await this.fetchTournament()
     }
     this.fetchPlayers(started)
-    this.fetchInvalidGames(this.tournamentId)
   },
   destroyed () {
     this.unsubscribe(this.subscription)

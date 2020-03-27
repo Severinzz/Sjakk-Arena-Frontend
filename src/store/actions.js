@@ -50,21 +50,17 @@ export default {
   /*
     Fetch a tournament from the server. Use uuid if token linked to a tournament user is absent
    */
-  fetchTournament: ({ commit }, uuid) => {
-    if (uuid === undefined) {
-      return TOURNAMENT_SERVICE.get('information').then(res => {
-        commit('addTournament', res.data)
-      })
-    } else {
-      return API_SERVICE.get(`sign-in/${uuid}`).then(res => {
-        addToken(res.data.jwt)
-        // Formats the tournament to the correct format for the store.
-        const job = JSON.parse(res.data.tournament)
-        commit('addTournament', job)
-      }).then(res => {
-        API_SERVICE.setHeader()
-      })
-    }
+  fetchTournament: ({ commit }) => {
+    return TOURNAMENT_SERVICE.get('information').then(res => {
+      commit('addTournament', res.data)
+    })
+  },
+  signInUUID: ({ NULL }, uuid) => {
+    return API_SERVICE.get(`sign-in/${uuid}`).then(res => {
+      addToken(res.data.jwt)
+    }).then(res => {
+      API_SERVICE.setHeader()
+    })
   },
   /*
     Fetch the tournament a player is enrolled in
