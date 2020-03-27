@@ -89,7 +89,7 @@ export default {
    */
   fetchInvalidGames: () => {
     console.log('Getting games with invalid results for tournament')
-    return TOURNAMENT_SERVICE.get('games').catch(err => {
+    return TOURNAMENT_SERVICE.get('invalidGames').catch(err => {
       throw err.response
     })
   },

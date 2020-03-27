@@ -30,44 +30,8 @@ export default {
   data () {
     return {
       limit: 10,
-      timeInderval: 5000,
-      disapprovedGames: [
-        {
-          game_id: 1,
-          white_player_name: 'Magnus',
-          black_player_name: 'Albus Dumbledore',
-          table: 4,
-          white_player_points: 1
-        },
-        {
-          game_id: 3,
-          white_player_name: 'Cevita',
-          black_player_name: 'Coop',
-          table: 2,
-          white_player_points: 0.5
-        },
-        {
-          game_id: 5,
-          white_player_name: 'Kåre',
-          black_player_name: 'Hikaru',
-          table: 1,
-          white_player_points: 0
-        },
-        {
-          game_id: 4,
-          white_player_name: 'Svein',
-          black_player_name: 'Magnus',
-          table: 5,
-          white_player_points: 1
-        },
-        {
-          game_id: 10,
-          white_player_name: 'Hikaru',
-          black_player_name: 'Capablanca',
-          table: 4,
-          white_player_points: 0.5
-        }
-      ]
+      timeInterval: 5000,
+      disapprovedGames: []
     }
   },
   methods: {
