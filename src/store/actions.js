@@ -122,8 +122,11 @@ export default {
   },
 
   subscribeToPlayerKicked: ({ commit }, callback) => {
-    let slug = 'removed'
-    WEBSOCKET_SERVICE.connect('player/' + slug, slug, callback)
+    let newSubscription = {
+      path: 'player/removed',
+      callback: callback
+    }
+    WEBSOCKET_SERVICE.connect([newSubscription])
   },
 
   /*
