@@ -92,8 +92,7 @@ export default {
       'addPlayer',
       'fetchTournament',
       'unsubscribeAll',
-      'subscribeToLobbySubscriptions',
-      'isTournamentActive'
+      'subscribeToLobbySubscriptions'
     ]),
     handleRemovePlayer (player, id) {
       let payload = {
@@ -107,7 +106,7 @@ export default {
       this.$router.go(-1)
     },
     startTournament() {
-      this.$router.replace('/tournament/' + this.getTournament.id)
+      this.$router.replace('/tournament/' + this.getTournament.user_id)
     }
   },
   watch: {

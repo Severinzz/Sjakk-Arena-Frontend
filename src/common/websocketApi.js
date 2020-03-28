@@ -6,19 +6,27 @@ import jwt from './jwt.storage'
 let socket
 let client
 let subscriptions = {}
+let connected = false
 
 const WEBSOCKET = {
   /*
   Subscribes to the correct endpoint on the backend.
    */
   connect(newSubscriptions) {
-    init()
-    client.connect(this.setupHeader(), function() {
+    if (connected) {
       for (let i in newSubscriptions) {
         subscriptions[newSubscriptions[i].path] = client.subscribe('/user/queue/' + newSubscriptions[i].path, newSubscriptions[i].callback)
         client.send('/app/' + newSubscriptions[i].path, function (msg) {})
       }
-    })
+    } else {
+      init()
+      client.connect(this.setupHeader(), function() {
+        for (let i in newSubscriptions) {
+          subscriptions[newSubscriptions[i].path] = client.subscribe('/user/queue/' + newSubscriptions[i].path, newSubscriptions[i].callback)
+          client.send('/app/' + newSubscriptions[i].path, function (msg) {})
+        }
+      })
+    }
   },
   /*
   Unsubscribe from the backend
@@ -46,6 +54,7 @@ const WEBSOCKET = {
   close() {
     if (socket !== null && socket !== undefined) {
       socket.close()
+      connected = false
     }
   },
   setupHeader() {
@@ -61,6 +70,7 @@ Initialises the socket. Connect to backend
 function init() {
   socket = SockJS(config.API_URL + '/ws')
   client = Stomp.over(socket)
+  connected = true
 }
 
 export default WEBSOCKET
