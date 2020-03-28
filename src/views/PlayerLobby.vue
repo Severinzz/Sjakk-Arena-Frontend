@@ -42,7 +42,7 @@
             </v-card-text>
             <v-card-actions>
               <!-- User has the option to either leave or go back -->
-              <v-btn text color="primary" outlined @click="navigateHome">OK</v-btn>
+              <v-btn text color="primary" outlined @click="navigateHome">Gå tilbake nå</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -86,6 +86,7 @@ export default {
       this.countDownNr--
       if (this.countDownNr === 0) {
         clearInterval(this.intervalId)
+        this.kickedDialog = false
         this.navigateHome()
       }
     },

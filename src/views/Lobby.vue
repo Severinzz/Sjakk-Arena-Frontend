@@ -92,8 +92,7 @@ export default {
       'addPlayer',
       'fetchTournament',
       'unsubscribeAll',
-      'subscribeToLobbySubscriptions',
-      'isTournamentActive'
+      'subscribeToLobbySubscriptions'
     ]),
     handleRemovePlayer (player, id) {
       let payload = {
