@@ -106,7 +106,7 @@ export default {
       this.$router.go(-1)
     },
     startTournament() {
-      this.$router.replace('/tournament/' + this.getTournament.id)
+      this.$router.replace('/tournament/' + this.getTournament.user_id)
     }
   },
   watch: {
