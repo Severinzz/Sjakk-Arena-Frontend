@@ -103,10 +103,10 @@ export default {
   methods: {
     ...mapActions([
       'fetchInvalidGames',
-      'sendGameResultHost'
+      'hostSendGameResult'
     ]),
     registerResult () {
-      this.sendGameResultHost(this.gameID, this.result).then(res => {
+      this.hostSendGameResult(this.gameID, this.result).then(res => {
         this.resultDialog = false
       })
     },
