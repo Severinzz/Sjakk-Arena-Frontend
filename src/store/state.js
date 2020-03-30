@@ -17,7 +17,6 @@ let player = {
 }
 let players = {}
 let activeTournament = false
-
 export default {
   players,
   tournament,
