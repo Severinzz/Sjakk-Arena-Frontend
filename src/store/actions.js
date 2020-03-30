@@ -182,14 +182,25 @@ export default {
     started[0] ? slug = 'leaderboard' : slug = 'players'
     return { path: 'tournament/' + slug, callback: playerCallback }
   },
+  getActiveGameSubscription: ({ commit }) => {
+    let newGameCallback = function (res) {
+      let newGame = JSON.parse(res.body)
+      commit('setActiveGame', newGame)
+      commit('setPaired', true)
+    }
+    return { path: 'player/active-game', callback: newGameCallback }
+  },
   subscribeToPlayerLobbySubscriptions: ({ commit, dispatch }, playerKickedCallback) => {
     let playerKickedSubscription = {
       path: 'player/removed',
       callback: playerKickedCallback
     }
     let tournamentActiveSubscription
+    let activeGameSubscription
     dispatch('getActiveSubscription', ['player'])
       .then(res => { tournamentActiveSubscription = res })
-      .then(res => WEBSOCKET_SERVICE.connect([playerKickedSubscription, tournamentActiveSubscription]))
+      .then(dispatch('getActiveGameSubscription').then(res => { activeGameSubscription = res }))
+      .then(res => WEBSOCKET_SERVICE.connect([playerKickedSubscription, tournamentActiveSubscription,
+        activeGameSubscription]))
   }
 }

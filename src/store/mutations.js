@@ -16,5 +16,11 @@ export default {
   },
   setTournamentActive: (state, active) => {
     state.activeTournament = active
+  },
+  setPaired: (state, paired) => {
+    state.paired = paired
+  },
+  setActiveGame: (state, activeGame) => {
+    state.activeGame = activeGame
   }
 }
