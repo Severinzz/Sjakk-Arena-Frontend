@@ -14,7 +14,7 @@
             <th class="body-1"><strong>Parti ID: </strong>{{Game.game_id}}, <strong>Bord: </strong>{{Game.table}}</th>
             <td class="body-1"><strong>Spillere:</strong> {{Game.white_player_name}} og {{Game.black_player_name}}</td>
             <td class="body-1">, <strong>Hvit</strong> spiller poeng: {{Game.white_player_points}}</td>
-            <v-btn small color="primary" rounded @click="changeResultDialogState()">Endre resultat</v-btn>
+            <v-btn small color="primary" rounded @click="editGame(Game.game_id)">Endre resultat</v-btn>
           </tbody>
         </table>
       </v-layout>
@@ -26,7 +26,7 @@
     <v-row class="justify-center" align="center">
       <v-dialog v-model="resultDialog" persistent max-width="650px">
         <v-card>
-          <v-card-title class="justify-center">Bestemmer resultat for:</v-card-title>
+          <v-card-title class="justify-center">Bestemmer resultat for parti ID:  {{this.ID}}</v-card-title>
           <v-card-text>
             <v-row class="justify-center">
               <!-- Radio buttons used to register result; https://vuetifyjs.com/en/components/dialogs -->
@@ -95,16 +95,14 @@ export default {
       limit: 10,
       timeInterval: 5000,
       disapprovedGames: [],
-      resultDialog: false
+      resultDialog: false,
+      result: ''
     }
   },
   methods: {
     ...mapActions([
       'fetchInvalidGames'
     ]),
-    /*
-      Register the result of the currently active game
-    */
     registerResult () {
       this.sendGameResult(this.result).then(res => {
         this.resultDialog = false
@@ -120,8 +118,9 @@ export default {
         })
       }, this.timeInterval)
     },
-    changeResultDialogState () {
-      this.resultDialog = !this.resultDialog
+    editGame (gameID) {
+      this.ID = gameID
+      this.resultDialog = true
     }
   },
   computed: {
