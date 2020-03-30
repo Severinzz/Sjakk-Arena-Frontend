@@ -130,7 +130,7 @@ export default {
     Host send a game and its result to the server.
    */
   sendGameResultHost: ({ commit }, gameID, result) => {
-    return TOURNAMENT_SERVICE.put('changeResult', gameID, result)
+    return TOURNAMENT_SERVICE.patch('changeResult', gameID, result)
   },
   /*
     Send pause request

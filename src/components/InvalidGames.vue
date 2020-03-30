@@ -14,7 +14,7 @@
             <th class="body-1"><strong>Parti ID: </strong>{{Game.game_id}}, <strong>Bord: </strong>{{Game.table}}</th>
             <td class="body-1"><strong>Spillere:</strong> {{Game.white_player_name}} og {{Game.black_player_name}}</td>
             <td class="body-1">, <strong>Hvit</strong> spiller poeng: {{Game.white_player_points}}</td>
-            <v-btn small color="primary" rounded @click="editGame(Game.game_id)">Endre resultat</v-btn>
+            <v-btn small color="primary" rounded x-small @click="editGame(Game.game_id)">Endre resultat</v-btn>
           </tbody>
         </table>
       </v-layout>
@@ -22,7 +22,7 @@
   </v-layout>
 
   <!-- Use dialog box to let host change result for a game -->
-  <div v-if(resultDialog)>
+  <div v-if="resultDialog">
     <v-row class="justify-center" align="center">
       <v-dialog v-model="resultDialog" persistent max-width="650px">
         <v-card>
