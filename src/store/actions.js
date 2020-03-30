@@ -120,7 +120,11 @@ export default {
       throw err
     })
   },
-
+  sendStartRequest: () => {
+    return TOURNAMENT_SERVICE.patch('start').catch(err => {
+      throw err
+    })
+  },
   subscribeToPlayerKicked: ({ commit }, callback) => {
     let newSubscription = {
       path: 'player/removed',
