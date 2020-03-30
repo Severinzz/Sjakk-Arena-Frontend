@@ -127,6 +127,12 @@ export default {
     return PLAYER_SERVICE.put('add-result', result)
   },
   /*
+    Host send a game and its result to the server.
+   */
+  sendGameResultHost: ({ commit }, gameID, result) => {
+    return TOURNAMENT_SERVICE.put('changeResult', gameID, result)
+  },
+  /*
     Send pause request
    */
   sendPauseRequest: () => {

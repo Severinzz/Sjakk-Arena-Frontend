@@ -76,7 +76,7 @@
               text
               color="primary"
               outlined
-              @click="registerResult">Send inn</v-btn>
+              @click="registerResult()">Send inn</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -96,7 +96,8 @@ export default {
       timeInterval: 5000,
       disapprovedGames: [],
       resultDialog: false,
-      result: ''
+      result: '',
+      gameID: ''
     }
   },
   methods: {
@@ -104,7 +105,7 @@ export default {
       'fetchInvalidGames'
     ]),
     registerResult () {
-      this.sendGameResult(this.result).then(res => {
+      this.sendGameResultHost(this.gameID, this.result).then(res => {
         this.resultDialog = false
       })
     },
@@ -119,7 +120,7 @@ export default {
       }, this.timeInterval)
     },
     editGame (gameID) {
-      this.ID = gameID
+      this.gameID = gameID
       this.resultDialog = true
     }
   },
