@@ -120,6 +120,11 @@ export default {
       throw err
     })
   },
+  sendStartRequest: () => {
+    return TOURNAMENT_SERVICE.patch('start').catch(err => {
+      throw err
+    })
+  },
   /*
   Unsubscribe from the enpoint
   @Param subscription. Subscription object that contains id and unsubscribe function.
