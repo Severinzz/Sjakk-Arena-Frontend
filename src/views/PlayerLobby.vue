@@ -80,7 +80,7 @@ export default {
       'fetchPlayersTournament',
       'fetchPlayer',
       'subscribeToPlayerLobbySubscriptions',
-      'unsubscribe',
+      'unsubscribeAll',
       'close'
     ]),
     countDown() {
@@ -120,7 +120,7 @@ export default {
     this.subscribeToPlayerLobbySubscriptions(callback)
   },
   destroyed () {
-    this.unsubscribe('removed')
+    this.unsubscribeAll()
     this.close()
   }
 }

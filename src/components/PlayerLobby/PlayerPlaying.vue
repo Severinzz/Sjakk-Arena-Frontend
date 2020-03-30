@@ -200,7 +200,7 @@
 import PlayerPaired from './PlayerPaired'
 import PlayerNotPaired from './PlayerNotPaired'
 import EarlierResults from './EarlierResults'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'PlayerPlaying',
@@ -216,13 +216,17 @@ export default {
     PlayerNotPaired,
     EarlierResults
   },
+  computed: {
+    ...mapState({
+      paired: state => state.paired
+    })
+  },
   data() {
     return {
       resultDialog: false,
       leaveDialog: false,
       pastResults: false,
       pause: false,
-      paired: false,
       pauseButtonText: 'Ta pause',
       pastResultsText: 'Tidligere parti',
       result: ''
@@ -240,12 +244,15 @@ export default {
     ...mapGetters([
       'getTournament'
     ]),
+    ...mapMutations([
+      'setPaired'
+    ]),
     /*
       Register the result of the currently active game
     */
     registerResult () {
       this.sendGameResult(this.result).then(res => {
-        this.paired = false
+        this.setPaired(false)
         this.resultDialog = false
       })
     },
