@@ -88,7 +88,7 @@ export default {
    */
   sendLeaveRequest: ({ commit }, started) => {
     let slug
-    started ? slug = 'set-inactive' : slug = 'delete-player'
+    started ? slug = 'leave-tournament' : slug = 'delete-player'
     return PLAYER_SERVICE.patch(slug).then(res => {
       deleteToken()
     })
