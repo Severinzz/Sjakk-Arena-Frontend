@@ -120,7 +120,7 @@
       <!-- end of code from vuetifyjs.com -->
       <v-btn
         id="submit-btn"
-        class="mr-4"
+        class=""
         color="primary"
         @click="validate">
         Send
@@ -302,7 +302,7 @@ export default {
     margin-left: 0.5em;
     margin-right: 0.5em;
   }
-  #cancel-btn{
+  #cancel-btn, #clear-btn{
     margin-left: 1%;
   }
   #cancel-btn, #submit-btn, #clear-btn{
