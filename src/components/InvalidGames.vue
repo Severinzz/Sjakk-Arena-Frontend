@@ -14,11 +14,74 @@
             <th class="body-1"><strong>Parti ID: </strong>{{Game.game_id}}, <strong>Bord: </strong>{{Game.table}}</th>
             <td class="body-1"><strong>Spillere:</strong> {{Game.white_player_name}} og {{Game.black_player_name}}</td>
             <td class="body-1">, <strong>Hvit</strong> spiller poeng: {{Game.white_player_points}}</td>
+            <v-btn small color="primary" rounded @click="changeResultDialogState()">Endre resultat</v-btn>
           </tbody>
         </table>
       </v-layout>
     </v-container>
   </v-layout>
+
+  <!-- Use dialog box to let host change result for a game -->
+  <div v-if(resultDialog)>
+    <v-row class="justify-center" align="center">
+      <v-dialog v-model="resultDialog" persistent max-width="650px">
+        <v-card>
+          <v-card-title class="justify-center">Bestemmer resultat for:</v-card-title>
+          <v-card-text>
+            <v-row class="justify-center">
+              <!-- Radio buttons used to register result; https://vuetifyjs.com/en/components/dialogs -->
+              <v-radio-group
+                v-model="result"
+                :mandatory="true"
+                inline-block
+              >
+                <v-col cols="4">
+                  <v-radio
+                    class="radio"
+                    label="Hvit seier"
+                    value="1"
+                  >
+                    <v-spacer />
+                  </v-radio>
+                </v-col>
+                <v-col cols="4">
+                  <v-radio
+                    class="radio"
+                    label="Remis"
+                    value="0.5"
+                  >
+                    <v-spacer />
+                  </v-radio>
+                </v-col>
+                <v-col cols="4">
+                  <v-radio
+                    class="radio"
+                    label="Sort seier"
+                    value="0"
+                  >
+                    <v-spacer />
+                  </v-radio>
+                </v-col>
+              </v-radio-group>
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn
+              text
+              @click="resultDialog=false"
+            >Avbryt
+            </v-btn>
+            <v-btn
+              text
+              color="primary"
+              outlined
+              @click="registerResult">Send inn</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+  </div>
 </v-card>
 </template>
 
@@ -31,7 +94,8 @@ export default {
     return {
       limit: 10,
       timeInterval: 5000,
-      disapprovedGames: []
+      disapprovedGames: [],
+      resultDialog: false
     }
   },
   methods: {
@@ -43,7 +107,6 @@ export default {
     */
     registerResult () {
       this.sendGameResult(this.result).then(res => {
-        this.paired = false
         this.resultDialog = false
       })
     },
@@ -52,11 +115,13 @@ export default {
       this.intervalID = setInterval(async function () {
         await VM.fetchInvalidGames().then(res => {
           VM.disapprovedGames = res.data
-          console.log(VM.disapprovedGames)
         }).catch(err => {
           throw err.response
         })
       }, this.timeInterval)
+    },
+    changeResultDialogState () {
+      this.resultDialog = !this.resultDialog
     }
   },
   computed: {
