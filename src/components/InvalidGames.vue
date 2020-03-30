@@ -26,7 +26,7 @@
     <v-row class="justify-center" align="center">
       <v-dialog v-model="resultDialog" persistent max-width="650px">
         <v-card>
-          <v-card-title class="justify-center">Bestemmer resultat for parti ID:  {{this.ID}}</v-card-title>
+          <v-card-title class="justify-center">Bestemmer resultat for parti ID:  {{this.gameID}}</v-card-title>
           <v-card-text>
             <v-row class="justify-center">
               <!-- Radio buttons used to register result; https://vuetifyjs.com/en/components/dialogs -->
@@ -76,7 +76,7 @@
               text
               color="primary"
               outlined
-              @click="registerResult()">Send inn</v-btn>
+              @click="registerResult">Send inn</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -102,7 +102,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'fetchInvalidGames'
+      'fetchInvalidGames',
+      'sendGameResultHost'
     ]),
     registerResult () {
       this.sendGameResultHost(this.gameID, this.result).then(res => {
