@@ -1,5 +1,8 @@
 <template>
-  <v-container class="content-wrapper" fluid>
+  <v-container class="content-wrapper mb-12" fluid>
+    <alert-box v-if="error"
+    :error-message="errorMessage"
+    error-icon="fas fa-plug"/>
     <v-row>
       <v-col cols="2">
         <div class="info-wrapper">
@@ -59,17 +62,20 @@
 import TournamentInfo from '@/components/TournamentInfo'
 import Player from '@/components/Player'
 import { mapActions, mapGetters } from 'vuex'
+import AlertBox from '@/components/AlertBox'
 
 export default {
   name: 'Lobby',
   components: {
+    AlertBox,
     TournamentInfo,
     Player
   },
   data () {
     return {
       intervalId: '',
-      subscribed: false
+      error: false,
+      errorMessage: ''
     }
   },
   computed: {
@@ -92,7 +98,8 @@ export default {
       'addPlayer',
       'fetchTournament',
       'unsubscribeAll',
-      'subscribeToLobbySubscriptions'
+      'subscribeToLobbySubscriptions',
+      'sendStartRequest'
     ]),
     handleRemovePlayer (player, id) {
       let payload = {
@@ -106,7 +113,13 @@ export default {
       this.$router.go(-1)
     },
     startTournament() {
-      this.$router.replace('/tournament/' + this.getTournament.user_id)
+      this.sendStartRequest()
+        .then(res => {
+          this.$router.replace('/tournament/' + this.getTournament.user_id)
+        }).catch(err => {
+          this.error = true
+          this.errorMessage = err + '. Prøv igjen senere!'
+        })
     }
   },
   watch: {
