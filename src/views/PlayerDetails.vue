@@ -135,8 +135,7 @@ export default {
         this.removedMessage = 'Spiller fjernet! Du kan nå lukke denne fanen'
         this.icon = 'check'
       }).catch(err => {
-        let errStr = err.toString()
-        if (errStr.includes('400')) {
+        if (err.response.status === 400) {
           this.removedMessage = 'Denne spilleren tilhører ikke din turnering!'
         } else {
           this.removedMessage = 'Noe gikk galt'
@@ -153,6 +152,11 @@ export default {
     }
     await this.hostFetchPlayer(payload).then(res => {
       this.player = res.data
+    }).catch(err => {
+      this.removedMessage = 'Error code: ' + err.response.status + ', ' + err.response.data.message
+      this.icon = 'plug'
+      this.color = 'error'
+      this.removed = true
     })
   }
 }

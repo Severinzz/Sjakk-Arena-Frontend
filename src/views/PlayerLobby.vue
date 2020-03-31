@@ -65,6 +65,15 @@ export default {
     PlayerWaiting,
     PlayerPlaying
   },
+  data () {
+    return {
+      waiting: false,
+      kickedMessage: '',
+      countDownNr: 15,
+      intervalId: '',
+      kickedDialog: false
+    }
+  },
   computed: {
     ...mapState({
       tournamentName: state => state.tournament.name,
@@ -97,15 +106,6 @@ export default {
     },
     startCountDown() {
       this.intervalId = setInterval(this.countDown, 1000)
-    }
-  },
-  data () {
-    return {
-      waiting: false,
-      kickedMessage: '',
-      countDownNr: 6,
-      intervalId: '',
-      kickedDialog: false
     }
   },
   mounted() {

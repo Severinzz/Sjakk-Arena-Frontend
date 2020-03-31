@@ -22,7 +22,6 @@ export default {
   name: 'App',
   components: { AppHeader, AppFooter, TileHeaderSpace },
   created () {
-    console.log(jwtService.getToken())
     if (jwtService.getToken() !== null) {
       API_SERVICE.setHeader()
     }

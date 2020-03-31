@@ -42,7 +42,8 @@ export default {
     return {
       limit: 10,
       timeInterval: 5000,
-      spillArray: []
+      spillArray: [],
+      errMsg: ''
     }
   },
   methods: {
@@ -55,9 +56,8 @@ export default {
       this.intervalID = setInterval(async function () {
         await VM.fetchResults().then(res => {
           VM.spillArray = res.data
-          console.log(VM.spillArray)
         }).catch(err => {
-          throw err
+          VM.handleErr(err)
         })
       }, this.timeInterval)
     },
@@ -65,7 +65,17 @@ export default {
       const VM = this
       this.fetchResults().then(res => {
         VM.spillArray = res.data
+      }).catch(err => {
+        VM.handleErr(err)
       })
+    },
+    handleErr(err) {
+      clearInterval(this.intervalID)
+      if (err.response.status === 404) {
+        this.errMsg = '404, finner ikke resultat listen. Kontakt vert/systemansvarlig'
+      } else {
+        this.errMsg = 'Error code: ' + err.response.status + ', ' + err.response.data.message
+      }
     }
   },
   computed: {
