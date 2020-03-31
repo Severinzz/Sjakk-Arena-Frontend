@@ -19,6 +19,7 @@ export default {
   },
   clearPlayers: (state) => {
     state.player = []
+  },
   setPaired: (state, paired) => {
     state.paired = paired
   },
