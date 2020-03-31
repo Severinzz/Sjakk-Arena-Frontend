@@ -17,12 +17,21 @@ let player = {
 }
 let players = {}
 let activeTournament = false
-
+let paired = false
+let activeGame = {
+  table: LOADING_MESSAGE,
+  opponent: LOADING_MESSAGE,
+  colour: LOADING_MESSAGE
+}
+let points = NaN
 export default {
   players,
   tournament,
   devTournament,
   player,
   playingPlayers,
-  activeTournament
+  activeTournament,
+  paired,
+  activeGame,
+  points
 }

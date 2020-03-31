@@ -1,38 +1,45 @@
 <template>
   <!-- This is loaded when system has found an opponent for player -->
-    <span>
+  <span>
       <h1 class="compTitle">Ditt neste parti:</h1>
       <h2 class="Info">Bord: <strong>{{ table }}</strong></h2>
       <h2 class="Info">Farge: <strong>{{ colour }}</strong></h2>
-      <h2 class="buttomInfo">Motstander: <strong>{{ nextOpponent }}</strong></h2>
+      <h2 class="buttomInfo">Motstander: <strong>{{ opponent }}</strong></h2>
     </span>
 </template>
 
 <script>
+
+import { mapGetters, mapState } from 'vuex'
+
 export default {
   name: 'PlayerPaired',
-  data () {
-    return {
-      nextOpponent: 'Magnus Carlsen',
-      colour: 'Sort',
-      table: '1'
-    }
+  computed: {
+    ...mapGetters([
+      'getActiveGame',
+      'getPlayer'
+    ]),
+    ...mapState({
+      table: state => state.activeGame.table,
+      colour: state => state.activeGame.colour,
+      opponent: state => state.activeGame.opponent
+    })
   }
 }
 </script>
 
 <style scoped>
-  .compTitle{
+  .compTitle {
     margin-top: 0.5em;
     font-size: 18px;
   }
 
-  .Info{
+  .Info {
     margin-top: 0.5em;
     font-size: 22px;
   }
 
-  .buttomInfo{
+  .buttomInfo {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     font-size: 18px;
