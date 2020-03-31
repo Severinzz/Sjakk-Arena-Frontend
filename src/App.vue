@@ -1,11 +1,13 @@
 <template>
   <v-app>
-    <v-content transition="slide-x-transition">
-      <AppHeader></AppHeader>
-      <TileHeaderSpace></TileHeaderSpace>
-      <router-view></router-view>
-      <AppFooter></AppFooter>
-    </v-content>
+      <div class="app-container">
+      <AppHeader class="header"></AppHeader>
+      <TileHeaderSpace class="tile-space"></TileHeaderSpace>
+        <div class="route-view">
+      <router-view class=""></router-view>
+          </div>
+      <AppFooter class="footer"></AppFooter>
+      </div>
   </v-app>
 </template>
 
@@ -13,13 +15,38 @@
 import AppFooter from './components/AppFooter'
 import AppHeader from './components/AppHeader'
 import TileHeaderSpace from './components/TileHeaderSpace'
+import { API_SERVICE } from './common/api'
+import jwtService from './common/jwt.storage'
 
 export default {
   name: 'App',
-  components: { AppHeader, AppFooter, TileHeaderSpace }
+  components: { AppHeader, AppFooter, TileHeaderSpace },
+  created () {
+    if (jwtService.getToken() !== null) {
+      API_SERVICE.setHeader()
+    }
+  }
 
 }
 </script>
 
 <style>
+  .v-application--wrap{
+    min-height: 0 !important;
+  }
+  .app-container{
+    flex-direction: column;
+    display: flex;
+    height: 97vh;
+  }
+   .header{
+     max-height: 112px;
+  }
+  .route-view{
+    flex: 1 0 auto;
+  }
+  .footer{
+    flex-shrink: 0;
+    margin-bottom: -1.2%;
+  }
 </style>

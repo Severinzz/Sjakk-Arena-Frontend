@@ -1,5 +1,8 @@
 <template>
-  <v-container class="content-wrapper" fluid>
+  <v-container class="content-wrapper mb-12" fluid>
+    <alert-box v-if="error"
+    :error-message="errorMessage"
+    error-icon="fas fa-plug"/>
     <v-row>
       <v-col cols="2">
         <div class="info-wrapper">
@@ -43,7 +46,7 @@
           <!-- The individual players -->
             <player
               v-for="(player, index) in this.getAllPlayers"
-              @click.native="handleRemovePlayer(player, player.id)"
+              @click.native="handleRemovePlayer(player, player.user_id)"
               :player-name="player.name"
               :player-piece="player.icon"
               :key="index"
@@ -59,37 +62,44 @@
 import TournamentInfo from '@/components/TournamentInfo'
 import Player from '@/components/Player'
 import { mapActions, mapGetters } from 'vuex'
+import AlertBox from '@/components/AlertBox'
 
 export default {
   name: 'Lobby',
   components: {
+    AlertBox,
     TournamentInfo,
     Player
   },
   data () {
     return {
       intervalId: '',
-      subscribed: false,
-      subscription: 'players'
+      error: false,
+      errorMessage: ''
     }
   },
   computed: {
     ...mapGetters([
       'getPlayerCount',
       'getTournament',
-      'getAllPlayers'
+      'getAllPlayers',
+      'isTournamentActive'
     ]),
     playerCount() {
       return this.getPlayerCount
+    },
+    tournamentActive() {
+      return this.isTournamentActive
     }
   },
   methods: {
     ...mapActions([
-      'fetchPlayers',
       'removePlayer',
       'addPlayer',
       'fetchTournament',
-      'unsubscribe'
+      'unsubscribeAll',
+      'subscribeToLobbySubscriptions',
+      'sendStartRequest'
     ]),
     handleRemovePlayer (player, id) {
       let payload = {
@@ -103,7 +113,13 @@ export default {
       this.$router.go(-1)
     },
     startTournament() {
-      this.$router.replace('/tournament/' + this.getTournament.id)
+      this.sendStartRequest()
+        .then(res => {
+          this.$router.replace('/tournament/' + this.getTournament.user_id)
+        }).catch(err => {
+          this.error = true
+          this.errorMessage = err + '. Prøv igjen senere!'
+        })
     }
   },
   watch: {
@@ -113,28 +129,32 @@ export default {
           this.startTournament()
         }
       }
+    },
+    tournamentActive: function (tournamentActive) {
+      if (tournamentActive) {
+        this.startTournament()
+      }
     }
   },
-
   async created () {
     let started = false
     if (this.getTournament.tournament_name === undefined) {
       await this.fetchTournament()
     }
-    this.fetchPlayers(started)
+    await this.subscribeToLobbySubscriptions({ started: started, vm: this })
   },
   destroyed () {
-    this.unsubscribe(this.subscription)
+    this.unsubscribeAll()
   }
 }
 </script>
 
-<style>
+<style scoped>
   .content-wrapper {
     padding: 0 0 2% 0;
   }
 
-  .numberOfPlayers {
+   .numberOfPlayers {
     font-size: 1.5em;
   }
 

@@ -18,7 +18,7 @@
     v-if="activeButton !== lastButton">
       &raquo;
     </v-btn>
-      <p>Side {{ activeButton }} av {{ visibleButtons.length }}</p>
+      <p>Side {{ activeButton }} av {{ lastButton }}</p>
   </div>
 </template>
 
@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       activeButton: 1,
-      lastButton: this.numberOfItems / this.prPage
+      lastButton: Math.ceil(this.numberOfItems / this.prPage)
     }
   },
   methods: {

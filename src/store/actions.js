@@ -16,9 +16,9 @@ export default {
   removePlayer: ({ commit }, payload) => {
     if (payload.started === true) {
       commit('removePlayer', payload.player)
-      return TOURNAMENT_SERVICE.patch(`set-player-inactive/${payload.id}`) // set-player-inactive
+      return TOURNAMENT_SERVICE.patch(`set-player-inactive/${payload.id}`, payload.msg)
     } else {
-      TOURNAMENT_SERVICE.delete(`delete-player/${payload.id}`)
+      TOURNAMENT_SERVICE.delete(`delete-player/${payload.id}?msg=${payload.msg}`)
       commit('removePlayer', payload.player)
     }
   },
@@ -28,7 +28,7 @@ export default {
   sendTournament: ({ commit }, tournament) => {
     return API_SERVICE.post('new-tournament', tournament).then(res => {
       // Adds the tournament ID received from the server to the payload.
-      tournament['id'] = res.data.tournament_id
+      tournament['user_id'] = res.data.tournament_id
       addToken(res.data.jwt)
       // Adds the payload (tournament) to the state in store.
       commit('addTournament', tournament)
@@ -70,20 +70,7 @@ export default {
       commit('addTournament', res.data)
     })
   },
-  /*
-    Fetch players enrolled in a tournament
-   */
-  fetchPlayers: ({ commit }, started) => {
-    const callback = function(res) {
-      let players = JSON.parse(res.body)
-      if (players.length >= 0) {
-        commit('addPlayers', players)
-      }
-    }
-    let slug
-    started ? slug = 'leaderboard' : slug = 'players'
-    WEBSOCKET_SERVICE.connect('tournament/' + slug, slug, callback)
-  },
+
   /*
     Fetch games with invalid result
    */
@@ -149,6 +136,11 @@ export default {
       throw err.response
     })
   },
+  sendStartRequest: () => {
+    return TOURNAMENT_SERVICE.patch('start').catch(err => {
+      throw err
+    })
+  },
   /*
   Unsubscribe from the enpoint
   @Param subscription. Subscription object that contains id and unsubscribe function.
@@ -157,9 +149,83 @@ export default {
     WEBSOCKET_SERVICE.unsubscribe(subscription)
   },
   /*
+  Unsubscribe all STOMP subscriptions
+   */
+  unsubscribeAll: ({ NULL }) => {
+    WEBSOCKET_SERVICE.unsubscribeAll()
+  },
+  /*
   Close the websocket.
    */
   close: () => {
     WEBSOCKET_SERVICE.close()
+  },
+  subscribeToLobbySubscriptions: ({ commit, dispatch }, payload) => {
+    let activeSubscription
+    let playerSubscription
+    dispatch('getActiveSubscription', ['tournament']).then(res => {
+      activeSubscription = res
+    }).then(res =>
+      dispatch('getPlayerSubscription', [payload.started]).then(res => {
+        playerSubscription = res
+      })
+    ).then(res => WEBSOCKET_SERVICE.connect([activeSubscription, playerSubscription]))
+  },
+  subscribeToTournamentSubscriptions: ({ commit, dispatch }, payload) => {
+    let playerSubscription
+    dispatch('getPlayerSubscription', [payload.started]).then(res => {
+      playerSubscription = res
+    }).then(res =>
+      WEBSOCKET_SERVICE.connect([playerSubscription]
+      ))
+  },
+  getActiveSubscription: ({ commit }, userRole) => {
+    let activeCallback = function (res) {
+      let active = JSON.parse(res.body).active
+      commit('setTournamentActive', active)
+    }
+    let path = userRole[0] === 'player' ? 'player/tournament-active' : 'tournament/active'
+    return { path: path, callback: activeCallback }
+  },
+  getPlayerSubscription: ({ commit }, started) => {
+    let playerCallback = function (res) {
+      let players = JSON.parse(res.body)
+      if (players.length >= 0) {
+        commit('addPlayers', players)
+      }
+    }
+    let slug
+    started[0] ? slug = 'leaderboard' : slug = 'players'
+    return { path: 'tournament/' + slug, callback: playerCallback }
+  },
+  getActiveGameSubscription: ({ commit }) => {
+    let newGameCallback = function (res) {
+      let newGame = JSON.parse(res.body)
+      commit('setActiveGame', newGame)
+      commit('setPaired', true)
+    }
+    return { path: 'player/active-game', callback: newGameCallback }
+  },
+  getPointsSubscription: ({ commit }) => {
+    let pointCallback = function (res) {
+      let points = JSON.parse(res.body).points
+      commit('setPoints', points)
+    }
+    return { path: 'player/points', callback: pointCallback }
+  },
+  subscribeToPlayerLobbySubscriptions: ({ commit, dispatch }, playerKickedCallback) => {
+    let playerKickedSubscription = {
+      path: 'player/removed',
+      callback: playerKickedCallback
+    }
+    let tournamentActiveSubscription
+    let activeGameSubscription
+    let pointsSubscription
+    dispatch('getActiveSubscription', ['player'])
+      .then(res => { tournamentActiveSubscription = res })
+      .then(dispatch('getActiveGameSubscription').then(res => { activeGameSubscription = res }))
+      .then(dispatch('getPointsSubscription').then(res => { pointsSubscription = res }))
+      .then(res => WEBSOCKET_SERVICE.connect([playerKickedSubscription, tournamentActiveSubscription,
+        activeGameSubscription, pointsSubscription]))
   }
 }

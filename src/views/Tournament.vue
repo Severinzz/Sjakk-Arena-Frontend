@@ -97,7 +97,6 @@ export default {
     }
   },
   computed: {
-    // TODO: Use mapGetters instead?
     ...mapGetters([
       'getPlayerCount',
       'getTournament',
@@ -105,15 +104,15 @@ export default {
     ]),
     // https://stackoverflow.com/questions/46622209/how-to-limit-iteration-of-elements-in-v-for/54836170#54836170
     playerList () {
-      return this.limit ? this.getAllPlayers.slice(0, this.limit) : this.getAllPlayers
+      return this.getPlayerCount > this.limit ? this.getAllPlayers.slice(0, this.limit) : this.getAllPlayers
     },
     playerCount() {
-      return this.getAllPlayers.length
+      return this.getPlayerCount
     }
   },
   methods: {
     ...mapActions([
-      'fetchPlayers',
+      'subscribeToTournamentSubscriptions',
       'fetchTournament',
       'unsubscribe',
       'close'
@@ -131,7 +130,7 @@ export default {
     handlePlayerClicked(player) {
       // TODO: PRØVE Å SENDE PLAYER?
       // https://stackoverflow.com/a/47874850
-      let route = this.$router.resolve('/tournament/player/' + player.id)
+      let route = this.$router.resolve('/tournament/player/' + player.user_id)
       window.open(route.href, '_blank')
     }
   },
@@ -144,7 +143,7 @@ export default {
         this.activeTournament = this.getTournament
       })
     }
-    this.fetchPlayers(started)
+    this.subscribeToTournamentSubscriptions({ vm: this, started: started })
   },
   destroyed () {
     this.unsubscribe('leaderboard')

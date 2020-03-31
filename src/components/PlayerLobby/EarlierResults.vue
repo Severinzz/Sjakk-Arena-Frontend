@@ -20,10 +20,10 @@
                   <p v-if="games.white_player_name === playerName" class="body-2 resultDetails">Farge: Hvit</p>
                   <p v-if="games.black_player_name === playerName" class="body-2 resultDetails">Farge: Sort</p>
                   <!-- 1 = hvit seier, 0 = sort seier -->
-                    <p v-if="games.result == 1" class="body-2 resultDetails">Resultat: Hvit Seier</p>
-                    <p v-if="games.result == 0.5" class="body-2 resultDetails">Resultat: Remis</p>
-                    <p v-if="games.result == 0" class="body-2 resultDetails">Resultat: Sort Seier</p>
-                  <p v-if="games.result === null" class="body-2 resultDetails">Her har den sjedd en feil!</p>
+                    <p v-if="games.white_player_points == 1" class="body-2 resultDetails">Resultat: Hvit Seier</p>
+                    <p v-if="games.white_player_point == 0.5" class="body-2 resultDetails">Resultat: Remis</p>
+                    <p v-if="games.white_player_point == 0" class="body-2 resultDetails">Resultat: Sort Seier</p>
+                  <p v-if="games.result === null" class="body-2 resultDetails">Her har det skjedd en feil!</p>
                   <v-divider inset></v-divider> <!-- Seperator line between elements -->
                 </li>
               </ul>
@@ -42,7 +42,8 @@ export default {
     return {
       limit: 10,
       timeInterval: 5000,
-      spillArray: []
+      spillArray: [],
+      errMsg: ''
     }
   },
   methods: {
@@ -55,9 +56,8 @@ export default {
       this.intervalID = setInterval(async function () {
         await VM.fetchResults().then(res => {
           VM.spillArray = res.data
-          console.log(VM.spillArray)
         }).catch(err => {
-          throw err
+          VM.handleErr(err)
         })
       }, this.timeInterval)
     },
@@ -65,7 +65,17 @@ export default {
       const VM = this
       this.fetchResults().then(res => {
         VM.spillArray = res.data
+      }).catch(err => {
+        VM.handleErr(err)
       })
+    },
+    handleErr(err) {
+      clearInterval(this.intervalID)
+      if (err.response.status === 404) {
+        this.errMsg = '404, finner ikke resultat listen. Kontakt vert/systemansvarlig'
+      } else {
+        this.errMsg = 'Error code: ' + err.response.status + ', ' + err.response.data.message
+      }
     }
   },
   computed: {
