@@ -38,10 +38,14 @@ describe('TournamentCreationForm', () => {
   let vuetify
   let store
   let actions
+  let mutations
   beforeEach(() => {
     vuetify = new Vuetify()
     actions = {
       close: jest.fn()
+    }
+    mutations = {
+      clearPlayers: jest.fn()
     }
     store = new Vuex.Store({
       actions
