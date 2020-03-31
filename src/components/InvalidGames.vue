@@ -24,7 +24,7 @@
   <!-- Use dialog box to let host change result for a game -->
   <div v-if="resultDialog">
     <v-row class="justify-center" align="center">
-      <v-dialog v-model="resultDialog" persistent max-width="650px">
+      <v-dialog persistent max-width="650px">
         <v-card>
           <v-card-title class="justify-center">Bestemmer resultat for parti ID:  {{this.gameID}}</v-card-title>
           <v-card-text>
@@ -69,7 +69,7 @@
             <v-spacer />
             <v-btn
               text
-              @click="resultDialog=false"
+              @click="alterResultDialogState"
             >Avbryt
             </v-btn>
             <v-btn
@@ -107,7 +107,7 @@ export default {
     ]),
     registerResult () {
       this.hostSendGameResult(this.gameID, this.result).then(res => {
-        this.resultDialog = false
+        this.alterResultDialogState()
       })
     },
     loadInvalidGames () { // TODO: gjør om fram pulling til websocket updates
@@ -122,7 +122,10 @@ export default {
     },
     editGame (gameID) {
       this.gameID = gameID
-      this.resultDialog = true
+      this.alterResultDialogState()
+    },
+    alterResultDialogState () {
+      this.resultDialog = !this.resultDialog
     }
   },
   computed: {
