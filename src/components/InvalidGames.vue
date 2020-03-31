@@ -1,4 +1,5 @@
 <template>
+  <span>
 <v-card height="auto" max-width="55em">
   <v-layout column fill-height>
     <v-toolbar dense class="primary">
@@ -14,15 +15,16 @@
             <th class="body-1"><strong>Parti ID: </strong>{{Game.game_id}}, <strong>Bord: </strong>{{Game.table}}</th>
             <td class="body-1"><strong>Spillere:</strong> {{Game.white_player_name}} og {{Game.black_player_name}}</td>
             <td class="body-1">, <strong>Hvit</strong> spiller poeng: {{Game.white_player_points}}</td>
-            <v-btn small color="primary" rounded @click="editGame">Endre resultat</v-btn>
+            <v-btn small color="primary" rounded @click="editGame(Game.game_id)">Endre resultat</v-btn>
           </tbody>
         </table>
       </v-layout>
     </v-container>
   </v-layout>
+</v-card>
 
   <!-- Use dialog box to let host change result for a game -->
-  <div v-if="resultDialog">
+  <div v-if="dialogBox">
     <v-row class="justify-center" align="center">
       <v-dialog persistent max-width="650px">
         <v-card>
@@ -82,7 +84,7 @@
       </v-dialog>
     </v-row>
   </div>
-</v-card>
+  </span>
 </template>
 
 <script>
@@ -95,7 +97,7 @@ export default {
       limit: 10,
       timeInterval: 5000,
       disapprovedGames: [],
-      resultDialog: false,
+      dialogBox: false,
       result: '',
       gameID: ''
     }
@@ -129,7 +131,7 @@ export default {
       this.alterResultDialogState()
     },
     alterResultDialogState () {
-      this.resultDialog = !this.resultDialog
+      this.dialogBox = !this.dialogBox
     }
   },
   computed: {
