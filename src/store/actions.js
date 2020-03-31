@@ -16,7 +16,7 @@ export default {
   removePlayer: ({ commit }, payload) => {
     if (payload.started === true) {
       commit('removePlayer', payload.player)
-      return TOURNAMENT_SERVICE.patch(`inactivatePlayer/${payload.id}`) // set-player-inactive
+      return TOURNAMENT_SERVICE.patch(`set-player-inactive/${payload.id}`) // set-player-inactive
     } else {
       TOURNAMENT_SERVICE.delete(`delete-player/${payload.id}`)
       commit('removePlayer', payload.player)

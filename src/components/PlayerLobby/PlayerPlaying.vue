@@ -245,6 +245,7 @@ export default {
     */
     registerResult () {
       this.sendGameResult(this.result).then(res => {
+        this.paired = false
         this.resultDialog = false
       })
     },
