@@ -1,4 +1,5 @@
 <template>
+  <span>
   <v-container class="content-wrapper" fluid>
     <v-row>
       <v-col cols="2">
@@ -61,19 +62,29 @@
         </template>
       </v-simple-table>
         <!-- end -->
+        <v-divider></v-divider>
+        <!-- Invalid games component -->
+        <div v-if="invalidGames">
+      <InvalidGames></InvalidGames>
+    </div>
       </v-col>
     </v-row>
+
   </v-container>
+
+  </span>
 </template>
 
 <script>
 import TournamentInfo from '@/components/TournamentInfo'
+import InvalidGames from '@/components/InvalidGames'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Tournament',
   components: {
-    TournamentInfo
+    TournamentInfo,
+    InvalidGames
   },
   data () {
     return {
@@ -81,7 +92,8 @@ export default {
       limit: 5,
       activeTournament: '',
       leaderboard: [],
-      instance: this
+      instance: this,
+      invalidGames: true
     }
   },
   computed: {

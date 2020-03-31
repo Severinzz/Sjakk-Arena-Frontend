@@ -50,9 +50,6 @@
               :id="'player' + index"
             />
         </v-row>
-        <div v-if="invalidGames">
-          <InvalidGames></InvalidGames>
-        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -62,12 +59,10 @@
 import TournamentInfo from '@/components/TournamentInfo'
 import Player from '@/components/Player'
 import { mapActions, mapGetters } from 'vuex'
-import InvalidGames from '../components/InvalidGames'
 
 export default {
   name: 'Lobby',
   components: {
-    InvalidGames,
     TournamentInfo,
     Player
   },
@@ -75,8 +70,7 @@ export default {
     return {
       intervalId: '',
       subscribed: false,
-      subscription: 'players',
-      invalidGames: true
+      subscription: 'players'
     }
   },
   computed: {
