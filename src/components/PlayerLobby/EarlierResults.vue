@@ -20,10 +20,10 @@
                   <p v-if="games.white_player_name === playerName" class="body-2 resultDetails">Farge: Hvit</p>
                   <p v-if="games.black_player_name === playerName" class="body-2 resultDetails">Farge: Sort</p>
                   <!-- 1 = hvit seier, 0 = sort seier -->
-                    <p v-if="games.result == 1" class="body-2 resultDetails">Resultat: Hvit Seier</p>
-                    <p v-if="games.result == 0.5" class="body-2 resultDetails">Resultat: Remis</p>
-                    <p v-if="games.result == 0" class="body-2 resultDetails">Resultat: Sort Seier</p>
-                  <p v-if="games.result === null" class="body-2 resultDetails">Her har den sjedd en feil!</p>
+                    <p v-if="games.white_player_points == 1" class="body-2 resultDetails">Resultat: Hvit Seier</p>
+                    <p v-if="games.white_player_point == 0.5" class="body-2 resultDetails">Resultat: Remis</p>
+                    <p v-if="games.white_player_point == 0" class="body-2 resultDetails">Resultat: Sort Seier</p>
+                  <p v-if="games.result === null" class="body-2 resultDetails">Her har det skjedd en feil!</p>
                   <v-divider inset></v-divider> <!-- Seperator line between elements -->
                 </li>
               </ul>
