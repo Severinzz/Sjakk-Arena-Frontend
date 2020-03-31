@@ -176,7 +176,7 @@ export default {
       ],
       tournamentNameRules: [
         v => !!v || 'Turneringsnavn er påkrevd',
-        v => (v && v.length <= 40) || 'Turneringsnavn må innholde færre enn 20 karakterer' // TODO Litt kort me 20
+        v => (v && v.length <= 40) || 'Turneringsnavn må innholde færre enn 20 karakterer'
       ],
       numberFieldRules: [
         v => /^\d+$/.test(v) || 'Bare tall i dette feltet!', // If not included the number field can contain + and -
