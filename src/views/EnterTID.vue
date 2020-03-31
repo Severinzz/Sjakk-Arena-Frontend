@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import AlertBox from '../components/AlertBox'
 
 export default {
@@ -63,6 +63,9 @@ export default {
     ]),
     ...mapGetters([
       'getTournament'
+    ]),
+    ...mapMutations([
+      'clearPlayers'
     ]),
     async submit() {
       this.error = false
@@ -89,6 +92,9 @@ export default {
           this.errorMessage = str + '. Teknisk problem!'
         }
       })
+    },
+    created() {
+      this.clearPlayers()
     }
   }
 }

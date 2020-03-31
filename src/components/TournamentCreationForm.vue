@@ -144,7 +144,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import AlertBox from './AlertBox'
 import DateTime from './DateTime'
 export default {
@@ -199,6 +199,9 @@ export default {
     ]),
     ...mapGetters([
       'getTournament'
+    ]),
+    ...mapMutations([
+      'clearPlayers'
     ]),
     // Clears all input fields and errors from the form.
     clear() {
@@ -287,6 +290,7 @@ export default {
   },
   created() {
     this.close()
+    this.clearPlayers()
     let now = new Date()
     this.minStartTime = now.getHours().toString() + ':' + now.getMinutes().toString()
   }

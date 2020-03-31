@@ -16,12 +16,16 @@ import AppFooter from './components/AppFooter'
 import AppHeader from './components/AppHeader'
 import TileHeaderSpace from './components/TileHeaderSpace'
 import { API_SERVICE } from './common/api'
+import jwtService from './common/jwt.storage'
 
 export default {
   name: 'App',
   components: { AppHeader, AppFooter, TileHeaderSpace },
   created () {
-    API_SERVICE.setHeader()
+    console.log(jwtService.getToken())
+    if (jwtService.getToken() !== null) {
+      API_SERVICE.setHeader()
+    }
   }
 
 }
