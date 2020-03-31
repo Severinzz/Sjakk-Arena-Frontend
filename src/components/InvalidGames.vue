@@ -110,7 +110,7 @@ export default {
         this.alterResultDialogState()
       })
     },
-    loadInvalidGames () { // TODO: gjør om fram pulling til websocket updates
+    loadInvalidGames () { // TODO: gjør om fra pulling til websocket updates
       const VM = this
       this.intervalID = setInterval(async function () {
         await VM.fetchInvalidGames().then(res => {
