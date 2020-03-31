@@ -10,11 +10,11 @@
           <tr></tr>
           <th>Parti ID, Bord, Spillere, Poeng til hvit spiller</th>
           <tr></tr>
-          <tbody v-for="(Game, index) in gameList" v-bind:key="index" v-on:click="registerResult(Game)">
+          <tbody v-for="(Game, index) in gameList" v-bind:key="index">
             <th class="body-1"><strong>Parti ID: </strong>{{Game.game_id}}, <strong>Bord: </strong>{{Game.table}}</th>
             <td class="body-1"><strong>Spillere:</strong> {{Game.white_player_name}} og {{Game.black_player_name}}</td>
             <td class="body-1">, <strong>Hvit</strong> spiller poeng: {{Game.white_player_points}}</td>
-            <v-btn small color="primary" rounded x-small @click="editGame(Game.game_id)">Endre resultat</v-btn>
+            <v-btn small color="primary" rounded @click="editGame">Endre resultat</v-btn>
           </tbody>
         </table>
       </v-layout>
@@ -26,7 +26,7 @@
     <v-row class="justify-center" align="center">
       <v-dialog persistent max-width="650px">
         <v-card>
-          <v-card-title class="justify-center">Bestemmer resultat for parti ID:  {{this.gameID}}</v-card-title>
+          <v-card-title class="justify-center">Bestemmer resultat for parti ID:  {{ this.gameID }}</v-card-title>
           <v-card-text>
             <v-row class="justify-center">
               <!-- Radio buttons used to register result; https://vuetifyjs.com/en/components/dialogs -->
@@ -76,7 +76,7 @@
               text
               color="primary"
               outlined
-              @click="registerResult">Send inn</v-btn>
+              @click="registerResult()">Send inn</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -106,7 +106,11 @@ export default {
       'hostSendGameResult'
     ]),
     registerResult () {
-      this.hostSendGameResult(this.gameID, this.result).then(res => {
+      let payload = {
+        gameID: this.gameID,
+        result: this.result
+      }
+      this.hostSendGameResult(payload).then(res => {
         this.alterResultDialogState()
       })
     },
@@ -137,7 +141,7 @@ export default {
     this.loadInvalidGames()
   },
   destroyed() {
-    clearInterval(this.intercal)
+    clearInterval(this.interval)
   }
 }
 </script>
