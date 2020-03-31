@@ -17,6 +17,9 @@ export default {
   setTournamentActive: (state, active) => {
     state.activeTournament = active
   },
+  clearPlayers: (state) => {
+    state.player = []
+  },
   setPaired: (state, paired) => {
     state.paired = paired
   },

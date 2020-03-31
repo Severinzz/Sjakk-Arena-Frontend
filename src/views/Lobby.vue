@@ -149,12 +149,12 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .content-wrapper {
     padding: 0 0 2% 0;
   }
 
-  .numberOfPlayers {
+   .numberOfPlayers {
     font-size: 1.5em;
   }
 

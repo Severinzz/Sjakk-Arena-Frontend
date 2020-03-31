@@ -63,9 +63,7 @@ export default {
         // TODO: Dynamic routing
         this.$router.push('/player-lobby')
       }).catch(err => {
-        console.log(err)
-        var str = err.toString()
-        if (str.includes('409')) {
+        if (err.response.status === 409) {
           this.errorMessage = 'Navnet er tatt, prøv et nytt ett!'
         } else {
           this.errorMessage = 'Game pin finnes ikke!'

@@ -120,7 +120,7 @@
       <!-- end of code from vuetifyjs.com -->
       <v-btn
         id="submit-btn"
-        class="mr-4"
+        class=""
         color="primary"
         @click="validate">
         Send
@@ -144,7 +144,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import AlertBox from './AlertBox'
 import DateTime from './DateTime'
 export default {
@@ -176,7 +176,7 @@ export default {
       ],
       tournamentNameRules: [
         v => !!v || 'Turneringsnavn er påkrevd',
-        v => (v && v.length <= 40) || 'Turneringsnavn må innholde færre enn 20 karakterer' // TODO Litt kort me 20
+        v => (v && v.length <= 40) || 'Turneringsnavn må innholde færre enn 20 karakterer'
       ],
       numberFieldRules: [
         v => /^\d+$/.test(v) || 'Bare tall i dette feltet!', // If not included the number field can contain + and -
@@ -199,6 +199,9 @@ export default {
     ]),
     ...mapGetters([
       'getTournament'
+    ]),
+    ...mapMutations([
+      'clearPlayers'
     ]),
     // Clears all input fields and errors from the form.
     clear() {
@@ -287,6 +290,7 @@ export default {
   },
   created() {
     this.close()
+    this.clearPlayers()
     let now = new Date()
     this.minStartTime = now.getHours().toString() + ':' + now.getMinutes().toString()
   }
@@ -302,7 +306,7 @@ export default {
     margin-left: 0.5em;
     margin-right: 0.5em;
   }
-  #cancel-btn{
+  #cancel-btn, #clear-btn{
     margin-left: 1%;
   }
   #cancel-btn, #submit-btn, #clear-btn{

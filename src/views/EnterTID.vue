@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import AlertBox from '../components/AlertBox'
 
 export default {
@@ -64,6 +64,9 @@ export default {
     ...mapGetters([
       'getTournament'
     ]),
+    ...mapMutations([
+      'clearPlayers'
+    ]),
     async submit() {
       this.error = false
       this.isLoading = true
@@ -81,14 +84,18 @@ export default {
       }).catch(err => {
         this.isLoading = false
         this.error = true
-        var str = err.toString()
-        if (str.includes('404')) {
+        if (err.response.status === 400) {
           this.errorMessage = 'Denne IDen: "' + this.tournamentId + '", finnes ikke!'
         }
-        if (!str.includes('404')) {
-          this.errorMessage = str + '. Teknisk problem!'
+        if (err.response.status === 404) {
+          this.errorMessage = err.response.data.error + '. Teknisk problem!'
+        } else {
+          this.errorMessage = 'Error code: ' + err.response.status + ', ' + err.response.data.message
         }
       })
+    },
+    created() {
+      this.clearPlayers()
     }
   }
 }
