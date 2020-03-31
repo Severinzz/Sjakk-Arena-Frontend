@@ -72,7 +72,7 @@ export default {
       tournamentEnd: state => state.tournament.end,
       activeTournament: state => state.activeTournament,
       playerName: state => state.player.name,
-      points: state => state.player.points
+      points: state => state.points
     })
   },
   methods: {

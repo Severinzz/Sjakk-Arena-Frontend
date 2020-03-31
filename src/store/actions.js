@@ -190,6 +190,13 @@ export default {
     }
     return { path: 'player/active-game', callback: newGameCallback }
   },
+  getPointsSubscription: ({ commit }) => {
+    let pointCallback = function (res) {
+      let points = JSON.parse(res.body).points
+      commit('setPoints', points)
+    }
+    return { path: 'player/points', callback: pointCallback }
+  },
   subscribeToPlayerLobbySubscriptions: ({ commit, dispatch }, playerKickedCallback) => {
     let playerKickedSubscription = {
       path: 'player/removed',
@@ -197,10 +204,12 @@ export default {
     }
     let tournamentActiveSubscription
     let activeGameSubscription
+    let pointsSubscription
     dispatch('getActiveSubscription', ['player'])
       .then(res => { tournamentActiveSubscription = res })
       .then(dispatch('getActiveGameSubscription').then(res => { activeGameSubscription = res }))
+      .then(dispatch('getPointsSubscription').then(res => { pointsSubscription = res }))
       .then(res => WEBSOCKET_SERVICE.connect([playerKickedSubscription, tournamentActiveSubscription,
-        activeGameSubscription]))
+        activeGameSubscription, pointsSubscription]))
   }
 }

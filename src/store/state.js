@@ -23,6 +23,7 @@ let activeGame = {
   opponent: LOADING_MESSAGE,
   colour: LOADING_MESSAGE
 }
+let points = NaN
 export default {
   players,
   tournament,
@@ -31,5 +32,6 @@ export default {
   playingPlayers,
   activeTournament,
   paired,
-  activeGame
+  activeGame,
+  points
 }
