@@ -48,7 +48,8 @@ describe('TournamentCreationForm', () => {
       clearPlayers: jest.fn()
     }
     store = new Vuex.Store({
-      actions
+      actions,
+      mutations
     })
   })
 
