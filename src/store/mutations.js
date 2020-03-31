@@ -19,5 +19,13 @@ export default {
   },
   clearPlayers: (state) => {
     state.player = []
+  setPaired: (state, paired) => {
+    state.paired = paired
+  },
+  setActiveGame: (state, activeGame) => {
+    state.activeGame = activeGame
+  },
+  setPoints: (state, points) => {
+    state.points = points
   }
 }

@@ -120,15 +120,11 @@ export default {
       throw err
     })
   },
-
-  subscribeToPlayerKicked: ({ commit }, callback) => {
-    let newSubscription = {
-      path: 'player/removed',
-      callback: callback
-    }
-    WEBSOCKET_SERVICE.connect([newSubscription])
+  sendStartRequest: () => {
+    return TOURNAMENT_SERVICE.patch('start').catch(err => {
+      throw err
+    })
   },
-
   /*
   Unsubscribe from the enpoint
   @Param subscription. Subscription object that contains id and unsubscribe function.
@@ -151,32 +147,69 @@ export default {
   subscribeToLobbySubscriptions: ({ commit, dispatch }, payload) => {
     let activeSubscription
     let playerSubscription
-    dispatch('getActiveSubscription').then(res => { activeSubscription = res }).then(res =>
-      dispatch('getPlayerSubscription', [payload.started]).then(res => { playerSubscription = res })
+    dispatch('getActiveSubscription', ['tournament']).then(res => {
+      activeSubscription = res
+    }).then(res =>
+      dispatch('getPlayerSubscription', [payload.started]).then(res => {
+        playerSubscription = res
+      })
     ).then(res => WEBSOCKET_SERVICE.connect([activeSubscription, playerSubscription]))
   },
   subscribeToTournamentSubscriptions: ({ commit, dispatch }, payload) => {
     let playerSubscription
-    dispatch('getPlayerSubscription', [payload.started]).then(res => { playerSubscription = res }).then(res =>
+    dispatch('getPlayerSubscription', [payload.started]).then(res => {
+      playerSubscription = res
+    }).then(res =>
       WEBSOCKET_SERVICE.connect([playerSubscription]
       ))
   },
-  getActiveSubscription: (vm) => {
-    let activeCallback = function(res) {
+  getActiveSubscription: ({ commit }, userRole) => {
+    let activeCallback = function (res) {
       let active = JSON.parse(res.body).active
-      vm.commit('setTournamentActive', active)
+      commit('setTournamentActive', active)
     }
-    return { path: 'tournament/active', callback: activeCallback }
+    let path = userRole[0] === 'player' ? 'player/tournament-active' : 'tournament/active'
+    return { path: path, callback: activeCallback }
   },
-  getPlayerSubscription: (vm, started) => {
-    let playerCallback = function(res) {
+  getPlayerSubscription: ({ commit }, started) => {
+    let playerCallback = function (res) {
       let players = JSON.parse(res.body)
       if (players.length >= 0) {
-        vm.commit('addPlayers', players)
+        commit('addPlayers', players)
       }
     }
     let slug
     started[0] ? slug = 'leaderboard' : slug = 'players'
     return { path: 'tournament/' + slug, callback: playerCallback }
+  },
+  getActiveGameSubscription: ({ commit }) => {
+    let newGameCallback = function (res) {
+      let newGame = JSON.parse(res.body)
+      commit('setActiveGame', newGame)
+      commit('setPaired', true)
+    }
+    return { path: 'player/active-game', callback: newGameCallback }
+  },
+  getPointsSubscription: ({ commit }) => {
+    let pointCallback = function (res) {
+      let points = JSON.parse(res.body).points
+      commit('setPoints', points)
+    }
+    return { path: 'player/points', callback: pointCallback }
+  },
+  subscribeToPlayerLobbySubscriptions: ({ commit, dispatch }, playerKickedCallback) => {
+    let playerKickedSubscription = {
+      path: 'player/removed',
+      callback: playerKickedCallback
+    }
+    let tournamentActiveSubscription
+    let activeGameSubscription
+    let pointsSubscription
+    dispatch('getActiveSubscription', ['player'])
+      .then(res => { tournamentActiveSubscription = res })
+      .then(dispatch('getActiveGameSubscription').then(res => { activeGameSubscription = res }))
+      .then(dispatch('getPointsSubscription').then(res => { pointsSubscription = res }))
+      .then(res => WEBSOCKET_SERVICE.connect([playerKickedSubscription, tournamentActiveSubscription,
+        activeGameSubscription, pointsSubscription]))
   }
 }
