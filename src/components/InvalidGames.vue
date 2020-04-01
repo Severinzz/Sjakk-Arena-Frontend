@@ -47,7 +47,7 @@
                       <v-radio
                         class="radio"
                         label="Remis"
-                        value="0,5"
+                        value="0.5"
                       >
                         <v-spacer />
                       </v-radio>

@@ -96,7 +96,7 @@ export default {
   Host send a game and its result to the server.
  */
   hostSendGameResult: ({ commit }, gameIDAndResult) => {
-    let slug = 'changeResult/' + gameIDAndResult
+    let slug = 'changeResult/' + gameIDAndResult + '/'
     return TOURNAMENT_SERVICE.patch(slug)
   },
   /*
