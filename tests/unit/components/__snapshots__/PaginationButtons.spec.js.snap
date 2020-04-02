@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PaginationButtons should match snapshot 1`] = `
+<div>
+  <!----> <button type="button" class="nrButton v-btn v-btn--contained theme--light v-size--default active-button" id="button1"><span class="v-btn__content">1</span></button><button type="button" class="nrButton v-btn v-btn--contained theme--light v-size--default" id="button2"><span class="v-btn__content">2</span></button><button type="button" class="nrButton v-btn v-btn--contained theme--light v-size--default" id="button3"><span class="v-btn__content">3</span></button><button type="button" class="nrButton v-btn v-btn--contained theme--light v-size--default" id="button4"><span class="v-btn__content">4</span></button><button type="button" class="nrButton v-btn v-btn--contained theme--light v-size--default" id="button5"><span class="v-btn__content">5</span></button> <button type="button" class="right v-btn v-btn--contained theme--light v-size--default"><span class="v-btn__content">
+    »
+  </span></button>
+  <p>Side 1 av 7</p>
+</div>
+`;
