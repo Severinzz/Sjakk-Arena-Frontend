@@ -72,6 +72,15 @@ export default {
   },
 
   /*
+    Fetch games with invalid result
+   */
+  fetchInvalidGames: () => {
+    console.log('Getting games with invalid results for tournament')
+    return TOURNAMENT_SERVICE.get('invalidGames').catch(err => {
+      throw err.response
+    })
+  },
+  /*
     Fetch the player using the application.
    */
   fetchPlayer: ({ commit }) => {
@@ -82,6 +91,13 @@ export default {
   hostFetchPlayer: ({ NULL }, payload) => {
     API_SERVICE.setHeader()
     return TOURNAMENT_SERVICE.get(`player/${payload.id}`)
+  },
+  /*
+  Host send a game and its result to the server.
+ */
+  hostSendGameResult: ({ commit }, gameIDAndResult) => {
+    let slug = 'changeResult/' + gameIDAndResult + '/'
+    return TOURNAMENT_SERVICE.patch(slug)
   },
   /*
     Sends a request to leave to the server
@@ -95,7 +111,7 @@ export default {
   },
   fetchResults: () => {
     return PLAYER_SERVICE.get('games').catch(err => {
-      throw err
+      throw err.response
     })
   },
   /*
@@ -109,7 +125,7 @@ export default {
    */
   sendPauseRequest: () => {
     return PLAYER_SERVICE.patch('pause').catch(err => {
-      throw err
+      throw err.response
     })
   },
   /*
@@ -117,7 +133,7 @@ export default {
    */
   sendUnpauseRequest: () => {
     return PLAYER_SERVICE.patch('unpause').catch(err => {
-      throw err
+      throw err.response
     })
   },
   sendStartRequest: () => {
