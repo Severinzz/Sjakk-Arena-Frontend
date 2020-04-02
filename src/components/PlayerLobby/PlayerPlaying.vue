@@ -218,7 +218,8 @@ export default {
   },
   computed: {
     ...mapState({
-      paired: state => state.paired
+      paired: state => state.paired,
+      opponentId: state => state.activeGame.opponent_id
     })
   },
   data() {
@@ -251,7 +252,11 @@ export default {
       Register the result of the currently active game
     */
     registerResult () {
-      this.sendGameResult(this.result).then(res => {
+      let payload = {
+        opponent: this.opponentId,
+        result: this.result
+      }
+      this.sendGameResult(payload).then(res => {
         this.setPaired(false)
         this.resultDialog = false
       })

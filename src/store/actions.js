@@ -101,8 +101,8 @@ export default {
   /*
     Send a game result to the server.
    */
-  sendGameResult: ({ commit }, result) => {
-    return PLAYER_SERVICE.put('add-result', result)
+  sendGameResult: ({ commit }, payload) => {
+    return PLAYER_SERVICE.put(`add-result?result=${payload.result}&opponent=${payload.opponent}`)
   },
   /*
     Send pause request
