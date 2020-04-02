@@ -9,6 +9,8 @@
     <v-btn
       v-for="page in visibleButtons"
       :key="page"
+      :id="'button' + page"
+      class="nrButton"
     @click="changePage(page)"
     :class="page === activeButton ?'active-button' : ''"
     >{{ page }}</v-btn>
@@ -28,7 +30,7 @@ export default {
   props: {
     prPage: { type: Number, required: true },
     numberOfItems: { type: Number, required: true },
-    maxVisibleButtons: { type: Number, required: false, default: 5 }
+    maxVisibleButtons: { type: Number, required: false, default: 5 } // This is without the "<<" and ">>" buttons
   },
   data() {
     return {
@@ -111,5 +113,4 @@ export default {
   .active-button{
     background-color: rgb(200, 200, 200) !important;
   }
-
 </style>
