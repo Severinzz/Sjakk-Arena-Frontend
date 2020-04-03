@@ -37,6 +37,22 @@ export default {
     })
   },
   /*
+  Send tournament pause request to server.
+ */
+  sendTournamentPauseRequest: () => {
+    return TOURNAMENT_SERVICE.patch('pause').catch(res => {
+      throw res.response
+    })
+  },
+  /*
+    Send tournament unpause request to server.
+   */
+  sendTournamentUnpauseRequest: () => {
+    return TOURNAMENT_SERVICE.patch('unpause').catch(res => {
+      throw res.response
+    })
+  },
+  /*
     Send a player to the server
    */
   sendPlayer: ({ commit }, player) => {
