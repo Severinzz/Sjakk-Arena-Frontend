@@ -15,8 +15,8 @@
             <v-btn id="Games" class="mr-4">
               Parti oversikt
             </v-btn>
-            <v-btn id="Pause" class="mr-4">
-              Pause
+            <v-btn id="Pause" class="mr-4" @click="alterPauseState">
+              {{ pauseButtonText }}
             </v-btn>
             <v-btn id="Stop" color="error" class="mr-4">
               Avslutt
@@ -93,7 +93,9 @@ export default {
       activeTournament: '',
       leaderboard: [],
       instance: this,
-      invalidGames: true
+      invalidGames: true,
+      pause: false,
+      pauseButtonText: 'Pause'
     }
   },
   computed: {
@@ -115,7 +117,9 @@ export default {
       'subscribeToTournamentSubscriptions',
       'fetchTournament',
       'unsubscribe',
-      'close'
+      'close',
+      'sendTournamentPauseRequest',
+      'sendTournamentUnpauseRequest'
     ]),
     increaseLimit () {
       if (this.limit < this.playerCount) {
@@ -132,6 +136,16 @@ export default {
       // https://stackoverflow.com/a/47874850
       let route = this.$router.resolve('/tournament/player/' + player.user_id)
       window.open(route.href, '_blank')
+    },
+    alterPauseState() {
+      this.pause = !this.pause
+      if (this.pause) {
+        this.sendTournamentPauseRequest()
+        this.pauseButtonText = 'Fortsett'
+      } if (!this.pause) {
+        this.sendTournamentUnpauseRequest()
+        this.pauseButtonText = 'Pause'
+      }
     }
   },
   async created () {
