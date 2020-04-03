@@ -16,9 +16,9 @@ export default {
   removePlayer: ({ commit }, payload) => {
     if (payload.started === true) {
       commit('removePlayer', payload.player)
-      return TOURNAMENT_SERVICE.patch(`set-player-inactive/${payload.id}`, payload.msg)
+      return TOURNAMENT_SERVICE.patch(`player/inactivate/${payload.id}`, payload.msg)
     } else {
-      TOURNAMENT_SERVICE.delete(`delete-player/${payload.id}?msg=${payload.msg}`)
+      TOURNAMENT_SERVICE.delete(`player/delete/${payload.id}?msg=${payload.msg}`)
       commit('removePlayer', payload.player)
     }
   },
@@ -51,7 +51,7 @@ export default {
     Fetch a tournament from the server. Use uuid if token linked to a tournament user is absent
    */
   fetchTournament: ({ commit }) => {
-    return TOURNAMENT_SERVICE.get('information').then(res => {
+    return TOURNAMENT_SERVICE.get().then(res => {
       commit('addTournament', res.data)
     })
   },
@@ -76,7 +76,7 @@ export default {
    */
   fetchInvalidGames: () => {
     console.log('Getting games with invalid results for tournament')
-    return TOURNAMENT_SERVICE.get('invalidGames').catch(err => {
+    return TOURNAMENT_SERVICE.get('games/invalid').catch(err => {
       throw err.response
     })
   },
@@ -84,7 +84,7 @@ export default {
     Fetch the player using the application.
    */
   fetchPlayer: ({ commit }) => {
-    return PLAYER_SERVICE.get('information').then(res => {
+    return PLAYER_SERVICE.get().then(res => {
       commit('createPlayer', res.data)
     })
   },
@@ -96,7 +96,7 @@ export default {
   Host send a game and its result to the server.
  */
   hostSendGameResult: ({ commit }, gameIDAndResult) => {
-    let slug = 'changeResult/' + gameIDAndResult + '/'
+    let slug = 'games/result/' + gameIDAndResult + '/'
     return TOURNAMENT_SERVICE.patch(slug)
   },
   /*
@@ -104,13 +104,13 @@ export default {
    */
   sendLeaveRequest: ({ commit }, started) => {
     let slug
-    started ? slug = 'set-inactive' : slug = 'delete-player'
+    started ? slug = 'inactivate' : slug = 'delete'
     return PLAYER_SERVICE.patch(slug).then(res => {
       deleteToken()
     })
   },
   fetchResults: () => {
-    return PLAYER_SERVICE.get('games').catch(err => {
+    return PLAYER_SERVICE.get('games/inactive').catch(err => {
       throw err.response
     })
   },
@@ -118,7 +118,7 @@ export default {
     Send a game result to the server.
    */
   sendGameResult: ({ commit }, payload) => {
-    return PLAYER_SERVICE.put(`add-result?result=${payload.result}&opponent=${payload.opponent}`)
+    return PLAYER_SERVICE.put(`games/add-result?result=${payload.result}&opponent=${payload.opponent}`)
   },
   /*
     Send pause request
