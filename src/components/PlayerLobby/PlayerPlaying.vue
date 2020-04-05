@@ -167,6 +167,29 @@
           </v-dialog>
           </v-row>
 
+          <!-- Dialog showed when a suggestion of the active game's result is received -->
+          <v-row class="justify-center" align="center">
+            <v-dialog v-model="suggested" persistent max-width="650px">
+              <v-card>
+              <v-card-title class="justify-center"> Din motstander foreslår at {{ getResultText }}</v-card-title>
+              <v-card-text class="text-center">Vil du godkjenne dette resultatforslaget?</v-card-text>
+              <v-layout justify-center>
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn
+                    textv
+                    @click="validateResult()"
+                  >Godkjenn
+                  </v-btn>
+                  <v-btn
+                    textv
+                    @click="validateResult()">Ikke godkjenn</v-btn>
+                </v-card-actions>
+              </v-layout>
+              </v-card>
+            </v-dialog>
+          </v-row>
+
           <!-- Dialog for user if 'FORLAT TURNERING' is pressed -->
           <v-row class="justify-center" align="center">
             <v-dialog v-model="leaveDialog" persistent max-width="650px">
@@ -219,8 +242,21 @@ export default {
   computed: {
     ...mapState({
       paired: state => state.paired,
-      opponentId: state => state.activeGame.opponent_id
-    })
+      opponentId: state => state.activeGame.opponent_id,
+      suggested: state => state.resultDialog.suggested,
+      valid: state => state.resultDialog.valid,
+      suggestedResult: state => state.resultDialog.suggested_result,
+      gameId: state => state.resultDialog.game_id
+    }),
+    getResultText: function() {
+      if (this.suggestedResult === 1.0) {
+        return 'hvit vant'
+      } else if (this.suggestedResult === 0.5) {
+        return 'partiet i remis'
+      } else {
+        return 'sort vant'
+      }
+    }
   },
   data() {
     return {
@@ -240,13 +276,15 @@ export default {
       'sendGameResult',
       'sendPauseRequest',
       'sendUnpauseRequest',
-      'fetchPlayersTournament'
+      'fetchPlayersTournament',
+      'sendValidationOfResult'
     ]),
     ...mapGetters([
       'getTournament'
     ]),
     ...mapMutations([
-      'setPaired'
+      'setPaired',
+      'setSuggested'
     ]),
     /*
       Register the result of the currently active game
@@ -260,6 +298,14 @@ export default {
         this.setPaired(false)
         this.resultDialog = false
       })
+    },
+    /*
+      Validate the result of the currently active game
+    */
+    validateResult () {
+      this.sendValidationOfResult(this.gameId).then(
+        this.setSuggested(false)
+      )
     },
     /*
       The player leaves the tournament
@@ -295,6 +341,9 @@ export default {
         this.pastResultsText = 'Tidligere parti'
       }
     }
+  },
+  watch: {
+
   }
 }
 </script>

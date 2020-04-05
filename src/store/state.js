@@ -24,6 +24,12 @@ let activeGame = {
   colour: LOADING_MESSAGE
 }
 let points = NaN
+let resultDialog = {
+  suggested: false,
+  valid: false,
+  suggested_result: '',
+  game_id: ''
+}
 export default {
   players,
   tournament,
@@ -33,5 +39,6 @@ export default {
   activeTournament,
   paired,
   activeGame,
-  points
+  points,
+  resultDialog
 }

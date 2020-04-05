@@ -28,5 +28,11 @@ export default {
   },
   setPoints: (state, points) => {
     state.points = points
+  },
+  setResultDialog: (state, resultDialog) => {
+    state.resultDialog = resultDialog
+  },
+  setSuggested: (state, suggested) => {
+    state.suggested = suggested
   }
 }
