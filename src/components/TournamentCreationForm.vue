@@ -172,7 +172,7 @@ export default {
       missingStartTime: false,
       // rules
       emailRules: [
-        v => /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/.test(v) || 'Du må skrive inn en gyldig e-postadresse'
+        v => /^[A-Z\WÆØÅa-z\Wæøå0-9._%+-]+@[A-Z\WÆØÅa-z\Wæøå0-9.-]+\.[A-Z\WÆØÅa-z\Wæøå]{2,6}$/.test(v) || 'Du må skrive inn en gyldig e-postadresse'
       ],
       tournamentNameRules: [
         v => !!v || 'Turneringsnavn er påkrevd',
