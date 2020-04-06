@@ -26,9 +26,10 @@ let activeGame = {
 let points = NaN
 let resultDialog = {
   suggested: false,
-  valid: false,
   suggested_result: '',
-  game_id: ''
+  game_id: '',
+  opponents_disagree: false,
+  valid: false
 }
 export default {
   players,

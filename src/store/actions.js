@@ -162,6 +162,11 @@ export default {
       throw err
     })
   },
+  sendInvalidationOfResult: ({ commit }, gameId) => {
+    return PLAYER_SERVICE.patch(`games/${gameId}/invalidate`).catch(err => {
+      throw err
+    })
+  },
   /*
   Unsubscribe from the enpoint
   @Param subscription. Subscription object that contains id and unsubscribe function.

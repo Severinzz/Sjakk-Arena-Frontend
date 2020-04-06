@@ -33,6 +33,9 @@ export default {
     state.resultDialog = resultDialog
   },
   setSuggested: (state, suggested) => {
-    state.suggested = suggested
+    state.resultDialog.suggested = suggested
+  },
+  setOpponentsDisagree: (state, disagree) => {
+    state.resultDialog.opponents_disagree = disagree
   }
 }
