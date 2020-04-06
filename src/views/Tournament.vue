@@ -18,7 +18,10 @@
             <v-btn id="Pause" class="mr-4" @click="alterPauseState">
               {{ pauseButtonText }}
             </v-btn>
-            <v-btn id="Stop" color="error" class="mr-4">
+            <v-btn id="Stop"
+                   color="error"
+                   class="mr-4"
+                   @click="endTournament()">
               Avslutt
             </v-btn>
           </div>
@@ -119,7 +122,8 @@ export default {
       'unsubscribe',
       'close',
       'sendTournamentPauseRequest',
-      'sendTournamentUnpauseRequest'
+      'sendTournamentUnpauseRequest',
+      'sendEndRequest'
     ]),
     increaseLimit () {
       if (this.limit < this.playerCount) {
@@ -146,6 +150,11 @@ export default {
         this.sendTournamentUnpauseRequest()
         this.pauseButtonText = 'Pause'
       }
+    },
+    endTournament() {
+      this.sendEndRequest().then(res => {
+        this.$router.push('/')
+      })
     }
   },
   async created () {
