@@ -168,26 +168,13 @@
           </v-row>
 
           <!-- Dialog for user if 'FORLAT TURNERING' is pressed -->
-          <v-row class="justify-center" align="center">
-            <v-dialog v-model="leaveDialog" persistent max-width="650px">
-              <v-card>
-                <v-card-title class="justify-center">Forlat turnering</v-card-title>
-                <v-card-text>
-                  <v-row class="justify-center">
-                    <h2>Er du sikker på at du vil forlate tuneringen?</h2>
-                    <p>Denne handlingen kan <strong>ikke</strong> reverseres.</p>
-                  </v-row>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer />
-                  <!-- User has the option to either leave or go back -->
-                  <v-btn text @click="leaveTournament()">Forlat turneringen</v-btn>
-                  <v-btn text color="primary" outlined @click="leaveDialog = false">Avbryt</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-row>
-
+          <warning-dialog
+          title="Forlat turneringen"
+          action="forlate tuneringen"
+          :show-dialog="leaveDialog"
+          @carryOn="leaveTournament()"
+          @closeDialog="leaveDialog = false"
+          ></warning-dialog>
           <!-- playtime -->
           <p class="gameDetail body-2">Spilletid: {{ tournamentStart }} -> {{ tournamentEnd }} </p>
         </v-card-text>
@@ -201,6 +188,7 @@ import PlayerPaired from './PlayerPaired'
 import PlayerNotPaired from './PlayerNotPaired'
 import EarlierResults from './EarlierResults'
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
+import WarningDialog from '../WarningDialog'
 
 export default {
   name: 'PlayerPlaying',
@@ -212,6 +200,7 @@ export default {
     points: Number
   },
   components: {
+    WarningDialog,
     PlayerPaired,
     PlayerNotPaired,
     EarlierResults

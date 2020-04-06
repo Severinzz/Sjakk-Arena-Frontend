@@ -21,7 +21,7 @@
             <v-btn id="Stop"
                    color="error"
                    class="mr-4"
-                   @click="endTournament()">
+                   @click="endDialog = true">
               Avslutt
             </v-btn>
           </div>
@@ -72,9 +72,14 @@
     </div>
       </v-col>
     </v-row>
-
   </v-container>
-
+  <warning-dialog
+  title="Avslutt turnering"
+  action="avslutte turneringen"
+  :show-dialog="endDialog"
+  @carryOn="endTournament()"
+  @closeDialog="endDialog = false">
+  </warning-dialog>
   </span>
 </template>
 
@@ -82,10 +87,12 @@
 import TournamentInfo from '@/components/TournamentInfo'
 import InvalidGames from '@/components/InvalidGames'
 import { mapActions, mapGetters } from 'vuex'
+import WarningDialog from '../components/WarningDialog'
 
 export default {
   name: 'Tournament',
   components: {
+    WarningDialog,
     TournamentInfo,
     InvalidGames
   },
@@ -98,7 +105,8 @@ export default {
       instance: this,
       invalidGames: true,
       pause: false,
-      pauseButtonText: 'Pause'
+      pauseButtonText: 'Pause',
+      endDialog: false
     }
   },
   computed: {
