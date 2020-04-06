@@ -171,18 +171,20 @@
           <v-row class="justify-center" align="center">
             <v-dialog v-model="suggested" persistent max-width="650px">
               <v-card>
-              <v-card-title class="justify-center"> Din motstander foreslår at {{ getResultText }}</v-card-title>
+              <v-card-title class="justify-center"> Din motstander hevder at {{ getResultText }}</v-card-title>
               <v-card-text class="text-center">Vil du godkjenne dette resultatforslaget?</v-card-text>
               <v-layout justify-center>
                 <v-card-actions>
                   <v-spacer />
                   <v-btn
                     textv
+                    color="success"
                     @click="validateResult()"
                   >Godkjenn
                   </v-btn>
                   <v-btn
                     textv
+                    color="red"
                     @click="validateResult()">Ikke godkjenn</v-btn>
                 </v-card-actions>
               </v-layout>
