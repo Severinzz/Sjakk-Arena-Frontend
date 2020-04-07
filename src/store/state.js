@@ -25,8 +25,7 @@ let activeGame = {
 }
 let points = NaN
 let resultDialog = {
-  suggested: false,
-  suggested_result: '',
+  suggested_result: undefined,
   game_id: '',
   opponents_disagree: false,
   valid: false

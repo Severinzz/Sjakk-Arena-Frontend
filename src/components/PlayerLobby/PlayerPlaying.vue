@@ -169,8 +169,8 @@
           </v-row>
 
           <!-- Dialog shown when a suggestion of the active game's result is received -->
-          <v-row class="justify-center" align="center">
-            <v-dialog v-model="suggested" persistent max-width="650px">
+          <v-row  class="justify-center" align="center">
+            <v-dialog  v-model="showSuggestedResultDialog" persistent max-width="650px">
               <v-card>
                 <v-card-title class="justify-center"> Din motstander hevder at {{ getResultText }}</v-card-title>
                 <v-card-text class="text-center">Vil du godkjenne dette resultatforslaget?</v-card-text>
@@ -193,7 +193,6 @@
               </v-card>
             </v-dialog>
           </v-row>
-
           <!-- Dialog if opponents can't agree on the result -->
           <v-row class="justify-center" align="center">
             <v-dialog v-model="opponentsDisagree" persistent max-width="650px">
@@ -285,7 +284,6 @@ export default {
     ...mapState({
       paired: state => state.paired,
       opponentId: state => state.activeGame.opponent_id,
-      suggested: state => state.resultDialog.suggested,
       opponentsDisagree: state => state.resultDialog.opponents_disagree,
       suggestedResult: state => state.resultDialog.suggested_result,
       gameId: state => state.resultDialog.game_id,
@@ -299,6 +297,9 @@ export default {
       } else {
         return 'sort vant'
       }
+    },
+    showSuggestedResultDialog: function() {
+      return this.suggestedResult !== undefined
     }
   },
   data() {
@@ -329,7 +330,7 @@ export default {
     ]),
     ...mapMutations([
       'setPaired',
-      'setSuggested',
+      'setSuggestedResult',
       'setOpponentsDisagree'
     ]),
     /*
@@ -350,13 +351,13 @@ export default {
       */
     approveResult() {
       this.sendValidationOfResult(this.gameId).then(res => {
-        this.setSuggested(false)
+        this.setSuggestedResult(undefined)
         this.setPaired(false)
       })
     },
     disapproveResult() {
       this.sendInvalidationOfResult(this.gameId).then(res => {
-        this.setSuggested(false)
+        this.setSuggestedResult(undefined)
       })
     },
     /*
