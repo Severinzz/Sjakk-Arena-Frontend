@@ -157,6 +157,16 @@ export default {
       throw err
     })
   },
+  sendValidationOfResult: ({ commit }, gameId) => {
+    return PLAYER_SERVICE.patch(`games/${gameId}/validate`).catch(err => {
+      throw err
+    })
+  },
+  sendInvalidationOfResult: ({ commit }, gameId) => {
+    return PLAYER_SERVICE.patch(`games/${gameId}/invalidate`).catch(err => {
+      throw err
+    })
+  },
   /*
   Unsubscribe from the enpoint
   @Param subscription. Subscription object that contains id and unsubscribe function.
@@ -229,6 +239,13 @@ export default {
     }
     return { path: 'player/points', callback: pointCallback }
   },
+  getResultSubscription: ({ commit }) => {
+    let resultCallback = function(res) {
+      let resultDialog = JSON.parse(res.body)
+      commit('setResultDialog', resultDialog)
+    }
+    return { path: 'player/result', callback: resultCallback }
+  },
   subscribeToPlayerLobbySubscriptions: ({ commit, dispatch }, playerKickedCallback) => {
     let playerKickedSubscription = {
       path: 'player/removed',
@@ -237,11 +254,13 @@ export default {
     let tournamentActiveSubscription
     let activeGameSubscription
     let pointsSubscription
+    let resultSubscription
     dispatch('getActiveSubscription', ['player'])
       .then(res => { tournamentActiveSubscription = res })
       .then(dispatch('getActiveGameSubscription').then(res => { activeGameSubscription = res }))
       .then(dispatch('getPointsSubscription').then(res => { pointsSubscription = res }))
+      .then(dispatch('getResultSubscription').then(res => { resultSubscription = res }))
       .then(res => WEBSOCKET_SERVICE.connect([playerKickedSubscription, tournamentActiveSubscription,
-        activeGameSubscription, pointsSubscription]))
+        activeGameSubscription, pointsSubscription, resultSubscription]))
   }
 }
