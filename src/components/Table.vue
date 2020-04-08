@@ -1,6 +1,12 @@
 <template>
   <!-- Adapted from https://vuetifyjs.com/en/components/simple-tables/ -->
-  <div>
+  <div class="table">
+    <v-select
+      class="dropdown"
+      v-model="prPage"
+      :items="dropDownValues"
+      :label="'Pr side'"
+    />
   <v-simple-table>
     <template v-slot:default>
       <thead>
@@ -29,7 +35,7 @@
   </v-simple-table>
     <pagination-buttons
       :number-of-items="objectList.length"
-      :pr-page="5"
+      :pr-page="prPage"
       @pageChanged="handlePageChange"
     ></pagination-buttons>
   </div>
@@ -50,7 +56,8 @@ export default {
   },
   data() {
     return {
-      entryStart: 0
+      entryStart: 0,
+      dropDownValues: [1, 5, 10, 15, 20, 25, 30, 50, 70, 100]
     }
   },
   methods: {
@@ -79,5 +86,8 @@ td{
     color: black !important;
     font-size: 17px;
     background-color: rgb(200, 200, 200);
+  }
+  .dropdown {
+    max-width: 100px;
   }
 </style>

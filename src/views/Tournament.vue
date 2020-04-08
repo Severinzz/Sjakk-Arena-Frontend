@@ -32,39 +32,17 @@
       >
         <!-- Adapted from https://vuetifyjs.com/en/components/simple-tables -->
         <!-- TODO: Bytt til table komponenten -->
-      <v-simple-table>
-        <template v-slot:default>
-          <tbody>
-          <tr
-            v-for="player in playerList"
-              :key="player.name"
-            @click="handlePlayerClicked(player)"
-          >
-            <td>
-              {{ player.name }}
-            </td>
-            <td>
-              {{ player.points }}
-            </td>
-          </tr>
-          </tbody>
-          <!-- TODO: Lage knappa til en egen komponent? Mange begynn kanskje å bli veldi like -->
-          <div
-          v-if="playerCount > 0"
-          >
-          <v-btn class="tableBtn mr-4"
-            @click="increaseLimit()"
-            :disabled="limit >= playerCount">Vis flere</v-btn>
-          <v-btn class="tableBtn mr-4"
-            @click="decreaseLimit()"
-            :disabled="limit <= 5">Vis mindre</v-btn>
-          </div>
-        </template>
-      </v-simple-table>
+        <Table
+          :object-list="Array.from(getAllPlayers)"
+          :attribute-list="attributeList"
+          :heading-list="headingList"
+          @entryClicked="handlePlayerClicked"
+          id="leaderBoard"
+        />
         <!-- end -->
-        <v-divider></v-divider>
         <!-- Invalid games component -->
         <div v-if="invalidGames">
+        <v-divider></v-divider>
       <InvalidGames></InvalidGames>
     </div>
       </v-col>
@@ -77,25 +55,27 @@
 
 <script>
 import TournamentInfo from '@/components/TournamentInfo'
-import InvalidGames from '@/components/InvalidGames'
 import { mapActions, mapGetters } from 'vuex'
+import InvalidGames from '@/components/InvalidGames'
+import Table from '../components/Table'
 
 export default {
   name: 'Tournament',
   components: {
+    Table,
     TournamentInfo,
     InvalidGames
   },
   data () {
     return {
-      intervalId: '',
       limit: 5,
       activeTournament: '',
-      leaderboard: [],
       instance: this,
       invalidGames: true,
       pause: false,
-      pauseButtonText: 'Pause'
+      pauseButtonText: 'Pause',
+      attributeList: ['name', 'points'],
+      headingList: ['Plassering', 'Spiller', 'Poeng']
     }
   },
   computed: {
@@ -106,7 +86,7 @@ export default {
     ]),
     // https://stackoverflow.com/questions/46622209/how-to-limit-iteration-of-elements-in-v-for/54836170#54836170
     playerList () {
-      return this.getPlayerCount > this.limit ? this.getAllPlayers.slice(0, this.limit) : this.getAllPlayers
+      return this.getAllPlayers
     },
     playerCount() {
       return this.getPlayerCount
@@ -121,16 +101,6 @@ export default {
       'sendTournamentPauseRequest',
       'sendTournamentUnpauseRequest'
     ]),
-    increaseLimit () {
-      if (this.limit < this.playerCount) {
-        this.limit = this.limit + 5
-      }
-    },
-    decreaseLimit() {
-      if (this.limit > 5) {
-        this.limit = this.limit - 5
-      }
-    },
     handlePlayerClicked(player) {
       // TODO: PRØVE Å SENDE PLAYER?
       // https://stackoverflow.com/a/47874850
@@ -167,16 +137,23 @@ export default {
 </script>
 
 <style scoped>
+  /deep/ #leaderBoard td {
+    font-size: 2em;
+    font-weight: bold;
+  }
+  /deep/ #leaderBoard {
+    margin: 2em auto;
+  }
   .content-wrapper {
     padding: 0 0 2% 0;
   }
-
   .numberOfPlayers {
     font-size: 1.5em;
   }
   .playerTable{
     margin: auto !important;
     display: inline-block;
+    text-align: center;
   }
 
   .info-wrapper {

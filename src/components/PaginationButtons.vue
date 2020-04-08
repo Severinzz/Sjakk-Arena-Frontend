@@ -34,8 +34,7 @@ export default {
   },
   data() {
     return {
-      activeButton: 1,
-      lastButton: Math.ceil(this.numberOfItems / this.prPage)
+      activeButton: 1
     }
   },
   methods: {
@@ -82,7 +81,7 @@ export default {
     }
   },
   computed: {
-    visibleButtons() {
+    visibleButtons () {
       let button = 1
       let buttonsArr = []
       // Creates an array of all the buttons.
@@ -101,6 +100,9 @@ export default {
           // There are buttons to both right and left of the visible range.
           return buttonsArr.slice(this.minButtonNr(), this.maxButtonNr())
       }
+    },
+    lastButton () {
+      return Math.ceil(this.numberOfItems / this.prPage)
     }
   }
 }

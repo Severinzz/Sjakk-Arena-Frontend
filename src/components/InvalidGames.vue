@@ -92,6 +92,7 @@ export default {
   data () {
     return {
       limit: 10,
+      intervalID: '',
       timeInterval: 5000,
       disapprovedGames: [],
       dialogBox: false,
@@ -137,7 +138,7 @@ export default {
     this.loadInvalidGames()
   },
   destroyed() {
-    clearInterval(this.timeInterval)
+    clearInterval(this.intervalID)
   }
 }
 </script>
