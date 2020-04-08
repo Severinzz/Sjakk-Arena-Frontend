@@ -18,7 +18,10 @@
             <v-btn id="Pause" class="mr-4" @click="alterPauseState">
               {{ pauseButtonText }}
             </v-btn>
-            <v-btn id="Stop" color="error" class="mr-4">
+            <v-btn id="Stop"
+                   color="error"
+                   class="mr-4"
+                   @click="endDialog = true">
               Avslutt
             </v-btn>
           </div>
@@ -55,9 +58,15 @@
     </div>
       </v-col>
     </v-row>
-
   </v-container>
-
+  <warning-dialog
+  :title="endDialogTitle"
+  action="avslutte turneringen"
+  carry-on-button-text="Avslutt turnering"
+  :show-dialog="endDialog"
+  @carryOn="endTournament()"
+  @closeDialog="closeEndDialog()">
+  </warning-dialog>
   </span>
 </template>
 
@@ -66,11 +75,13 @@ import TournamentInfo from '@/components/TournamentInfo'
 import { mapActions, mapGetters } from 'vuex'
 import InvalidGames from '@/components/InvalidGames'
 import Table from '../components/Table'
+import WarningDialog from '../components/WarningDialog'
 
 export default {
   name: 'Tournament',
   components: {
     Table,
+    WarningDialog,
     TournamentInfo,
     InvalidGames
   },
@@ -86,6 +97,8 @@ export default {
       leaderBoardHeadingList: ['Plassering', 'Spiller', 'Poeng'],
       activeGamesAttributeList: ['table', 'white_player_name', 'black_player_name', 'start'],
       activeGamesHeadingList: ['Bord', 'Hvit spiller', 'Svart spiller', 'Startet']
+      endDialog: false,
+      endDialogTitle: 'Avslutt turnering'
     }
   },
   computed: {
@@ -94,6 +107,7 @@ export default {
       'getTournament',
       'getAllPlayers',
       'getActiveGames'
+      'isTournamentActive'
     ]),
     // Add placement to the players.
     playerList () {
@@ -121,12 +135,13 @@ export default {
   },
   methods: {
     ...mapActions([
-      'subscribeToTournamentSubscriptions',
+      'subscribeToLobbySubscriptions',
       'fetchTournament',
       'unsubscribe',
       'close',
       'sendTournamentPauseRequest',
-      'sendTournamentUnpauseRequest'
+      'sendTournamentUnpauseRequest',
+      'sendEndRequest'
     ]),
     handlePlayerClicked(player) {
       // TODO: PRØVE Å SENDE PLAYER?
@@ -147,6 +162,15 @@ export default {
     alterShowLeaderBoard() {
       this.showLeaderBoard = !this.showLeaderBoard
       this.showLeaderBoard === true ? this.alterLeaderBoardText = 'Vis parti oversikt' : this.alterLeaderBoardText = 'Vis rangerings tabell'
+      }
+    endTournament() {
+      this.sendEndRequest().then(res => {
+        this.$router.push('/')
+      })
+    },
+    closeEndDialog() {
+      this.endDialog = false
+      this.endDialogTitle = 'Avslutt turnering'
     }
   },
   async created () {
@@ -158,11 +182,19 @@ export default {
         this.activeTournament = this.getTournament
       })
     }
-    this.subscribeToTournamentSubscriptions({ vm: this, started: started })
+    this.subscribeToLobbySubscriptions({ vm: this, started: started })
   },
   destroyed () {
     this.unsubscribe('leaderboard')
     this.close()
+  },
+  watch: {
+    isTournamentActive: function(active) {
+      if (!active) {
+        this.endDialog = true
+        this.endDialogTitle = 'Tidspunktet for turneringsslutt er passert'
+      }
+    }
   }
 }
 </script>
