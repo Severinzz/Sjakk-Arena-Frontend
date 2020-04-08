@@ -252,6 +252,13 @@
             </v-dialog>
           </v-row>
 
+          <warning-dialog
+          title="Forlat turneringen"
+          action="forlate tuneringen"
+          :show-dialog="leaveDialog"
+          @carryOn="leaveTournament()"
+          @closeDialog="leaveDialog = false"
+          ></warning-dialog>
           <!-- playtime -->
           <p class="gameDetail body-2">Spilletid: {{ tournamentStart }} -> {{ tournamentEnd }} </p>
         </v-card-text>
@@ -265,6 +272,7 @@ import PlayerPaired from './PlayerPaired'
 import PlayerNotPaired from './PlayerNotPaired'
 import EarlierResults from './EarlierResults'
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
+import WarningDialog from '../WarningDialog'
 
 export default {
   name: 'PlayerPlaying',
@@ -276,6 +284,7 @@ export default {
     points: Number
   },
   components: {
+    WarningDialog,
     PlayerPaired,
     PlayerNotPaired,
     EarlierResults
