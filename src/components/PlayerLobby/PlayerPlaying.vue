@@ -310,6 +310,13 @@ export default {
     window.onhashchange = function() { // tilbake, avbryt, tilbake, avbryt, tilbake nå fører spiller til EnterTUI siden.
       window.onpopstate = function() { VM.alterLeaveDialogState() }
     } // bytt 'VM.alterLeaveDialogState()' med window.location.hash='player-lobby' er fy! dette medfører at tilbake knappen ikke funker som den skal, kan kræsje nettlesere også!!
+  },
+  watch: {
+    validResult () {
+      if (this.validResult) {
+        this.setPaired(false)
+      }
+    }
   }
 }
 </script>
