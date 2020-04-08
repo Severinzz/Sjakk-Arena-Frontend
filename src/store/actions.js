@@ -157,6 +157,11 @@ export default {
       throw err
     })
   },
+  sendEndRequest: () => {
+    return TOURNAMENT_SERVICE.patch('end').catch(err => {
+      throw err
+    })
+  },
   sendValidationOfResult: ({ commit }, gameId) => {
     return PLAYER_SERVICE.patch(`games/${gameId}/validate`).catch(err => {
       throw err
@@ -196,14 +201,6 @@ export default {
         playerSubscription = res
       })
     ).then(res => WEBSOCKET_SERVICE.connect([activeSubscription, playerSubscription]))
-  },
-  subscribeToTournamentSubscriptions: ({ commit, dispatch }, payload) => {
-    let playerSubscription
-    dispatch('getPlayerSubscription', [payload.started]).then(res => {
-      playerSubscription = res
-    }).then(res =>
-      WEBSOCKET_SERVICE.connect([playerSubscription]
-      ))
   },
   getActiveSubscription: ({ commit }, userRole) => {
     let activeCallback = function (res) {
