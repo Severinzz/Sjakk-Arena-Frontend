@@ -18,7 +18,10 @@
             <v-btn id="Pause" class="mr-4" @click="alterPauseState">
               {{ pauseButtonText }}
             </v-btn>
-            <v-btn id="Stop" color="error" class="mr-4">
+            <v-btn id="Stop"
+                   color="error"
+                   class="mr-4"
+                   @click="endDialog = true">
               Avslutt
             </v-btn>
           </div>
@@ -69,9 +72,15 @@
     </div>
       </v-col>
     </v-row>
-
   </v-container>
-
+  <warning-dialog
+  :title="endDialogTitle"
+  action="avslutte turneringen"
+  carry-on-button-text="Avslutt turnering"
+  :show-dialog="endDialog"
+  @carryOn="endTournament()"
+  @closeDialog="closeEndDialog()">
+  </warning-dialog>
   </span>
 </template>
 
@@ -79,10 +88,12 @@
 import TournamentInfo from '@/components/TournamentInfo'
 import InvalidGames from '@/components/InvalidGames'
 import { mapActions, mapGetters } from 'vuex'
+import WarningDialog from '../components/WarningDialog'
 
 export default {
   name: 'Tournament',
   components: {
+    WarningDialog,
     TournamentInfo,
     InvalidGames
   },
@@ -95,14 +106,17 @@ export default {
       instance: this,
       invalidGames: true,
       pause: false,
-      pauseButtonText: 'Pause'
+      pauseButtonText: 'Pause',
+      endDialog: false,
+      endDialogTitle: 'Avslutt turnering'
     }
   },
   computed: {
     ...mapGetters([
       'getPlayerCount',
       'getTournament',
-      'getAllPlayers'
+      'getAllPlayers',
+      'isTournamentActive'
     ]),
     // https://stackoverflow.com/questions/46622209/how-to-limit-iteration-of-elements-in-v-for/54836170#54836170
     playerList () {
@@ -114,12 +128,13 @@ export default {
   },
   methods: {
     ...mapActions([
-      'subscribeToTournamentSubscriptions',
+      'subscribeToLobbySubscriptions',
       'fetchTournament',
       'unsubscribe',
       'close',
       'sendTournamentPauseRequest',
-      'sendTournamentUnpauseRequest'
+      'sendTournamentUnpauseRequest',
+      'sendEndRequest'
     ]),
     increaseLimit () {
       if (this.limit < this.playerCount) {
@@ -146,6 +161,15 @@ export default {
         this.sendTournamentUnpauseRequest()
         this.pauseButtonText = 'Pause'
       }
+    },
+    endTournament() {
+      this.sendEndRequest().then(res => {
+        this.$router.push('/')
+      })
+    },
+    closeEndDialog() {
+      this.endDialog = false
+      this.endDialogTitle = 'Avslutt turnering'
     }
   },
   async created () {
@@ -157,11 +181,19 @@ export default {
         this.activeTournament = this.getTournament
       })
     }
-    this.subscribeToTournamentSubscriptions({ vm: this, started: started })
+    this.subscribeToLobbySubscriptions({ vm: this, started: started })
   },
   destroyed () {
     this.unsubscribe('leaderboard')
     this.close()
+  },
+  watch: {
+    isTournamentActive: function(active) {
+      if (!active) {
+        this.endDialog = true
+        this.endDialogTitle = 'Tidspunktet for turneringsslutt er passert'
+      }
+    }
   }
 }
 </script>
