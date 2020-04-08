@@ -96,7 +96,7 @@ export default {
       leaderBoardAttributeList: ['placement', 'name', 'points'],
       leaderBoardHeadingList: ['Plassering', 'Spiller', 'Poeng'],
       activeGamesAttributeList: ['table', 'white_player_name', 'black_player_name', 'start'],
-      activeGamesHeadingList: ['Bord', 'Hvit spiller', 'Svart spiller', 'Startet']
+      activeGamesHeadingList: ['Bord', 'Hvit spiller', 'Svart spiller', 'Startet'],
       endDialog: false,
       endDialogTitle: 'Avslutt turnering'
     }
@@ -106,7 +106,7 @@ export default {
       'getPlayerCount',
       'getTournament',
       'getAllPlayers',
-      'getActiveGames'
+      'getActiveGames',
       'isTournamentActive'
     ]),
     // Add placement to the players.
@@ -162,7 +162,7 @@ export default {
     alterShowLeaderBoard() {
       this.showLeaderBoard = !this.showLeaderBoard
       this.showLeaderBoard === true ? this.alterLeaderBoardText = 'Vis parti oversikt' : this.alterLeaderBoardText = 'Vis rangerings tabell'
-      }
+    },
     endTournament() {
       this.sendEndRequest().then(res => {
         this.$router.push('/')
