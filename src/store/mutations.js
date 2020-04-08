@@ -28,5 +28,14 @@ export default {
   },
   setPoints: (state, points) => {
     state.points = points
+  },
+  setResultDialog: (state, resultDialog) => {
+    state.resultDialog = resultDialog
+  },
+  setSuggestedResult: (state, suggested) => {
+    state.resultDialog.suggested_result = suggested
+  },
+  setOpponentsDisagree: (state, disagree) => {
+    state.resultDialog.opponents_disagree = disagree
   }
 }

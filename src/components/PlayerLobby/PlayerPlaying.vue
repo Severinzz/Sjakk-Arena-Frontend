@@ -11,12 +11,12 @@
           dark
           flat
         >
-          <v-spacer />
+          <v-spacer/>
           <v-toolbar-title>Turneringen har startet!</v-toolbar-title>
-          <v-spacer />
+          <v-spacer/>
         </v-toolbar>
         <v-card-text align="center">
-          <v-spacer />
+          <v-spacer/>
 
           <!-- Tournament name -->
           <h1 class="bigInfo">{{ tournamentName }}</h1>
@@ -109,62 +109,126 @@
 
           <!-- Dialog for user to input result; https://vuetifyjs.com/en/components/dialogs -->
           <v-row class="justify-center" align="center">
-          <v-dialog v-model="resultDialog" persistent max-width="650px">
-            <v-card>
-              <v-card-title class="justify-center">Resultatet ble:</v-card-title>
-              <v-card-text>
-                <v-row class="justify-center">
-                  <!-- Radio buttons used to register result; https://vuetifyjs.com/en/components/dialogs -->
-                  <v-radio-group
-                    v-model="result"
-                    :mandatory="true"
-                    inline-block
-                  >
-                    <v-col cols="4">
-                      <v-radio
-                        class="radio"
-                        label="Hvit seier"
-                        value="1"
-                      >
-                        <v-spacer />
-                      </v-radio>
-                    </v-col>
-                    <v-col cols="4">
-                      <v-radio
-                        class="radio"
-                        label="Remis"
-                        value="0.5"
-                      >
-                        <v-spacer />
-                      </v-radio>
-                    </v-col>
-                    <v-col cols="4">
-                      <v-radio
-                        class="radio"
-                        label="Sort seier"
-                        value="0"
-                      >
-                        <v-spacer />
-                      </v-radio>
-                    </v-col>
-                  </v-radio-group>
-                </v-row>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer />
-                <v-btn
-                  text
-                  @click="resultDialog=false"
-                >Avbryt
-                </v-btn>
-                <v-btn
-                  text
-                  color="primary"
-                  outlined
-                  @click="registerResult">Send inn</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+            <v-dialog v-model="resultDialog" persistent max-width="650px">
+              <v-card>
+                <v-card-title class="justify-center">Resultatet ble:</v-card-title>
+                <v-card-text>
+                  <v-row class="justify-center">
+                    <!-- Radio buttons used to register result; https://vuetifyjs.com/en/components/dialogs -->
+                    <v-radio-group
+                      v-model="result"
+                      :mandatory="true"
+                      inline-block
+                    >
+                      <v-col cols="4">
+                        <v-radio
+                          class="radio"
+                          label="Hvit seier"
+                          value="1"
+                        >
+                          <v-spacer/>
+                        </v-radio>
+                      </v-col>
+                      <v-col cols="4">
+                        <v-radio
+                          class="radio"
+                          label="Remis"
+                          value="0.5"
+                        >
+                          <v-spacer/>
+                        </v-radio>
+                      </v-col>
+                      <v-col cols="4">
+                        <v-radio
+                          class="radio"
+                          label="Sort seier"
+                          value="0"
+                        >
+                          <v-spacer/>
+                        </v-radio>
+                      </v-col>
+                    </v-radio-group>
+                  </v-row>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer/>
+                  <v-btn
+                    text
+                    @click="resultDialog=false"
+                  >Avbryt
+                  </v-btn>
+                  <v-btn
+                    text
+                    color="primary"
+                    outlined
+                    @click="registerResult">Send inn
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-row>
+
+          <!-- Dialog shown when a suggestion of the active game's result is received -->
+          <v-row  class="justify-center" align="center">
+            <v-dialog  v-model="showSuggestedResultDialog" persistent max-width="650px">
+              <v-card>
+                <v-card-title class="justify-center"> Din motstander hevder at {{ getResultText }}</v-card-title>
+                <v-card-text class="text-center">Vil du godkjenne dette resultatforslaget?</v-card-text>
+                <v-layout justify-center>
+                  <v-card-actions>
+                    <v-spacer/>
+                    <v-btn
+                      textv
+                      color="success"
+                      @click="approveResult()"
+                    >Godkjenn
+                    </v-btn>
+                    <v-btn
+                      textv
+                      color="red"
+                      @click="disapproveResult()">Ikke godkjenn
+                    </v-btn>
+                  </v-card-actions>
+                </v-layout>
+              </v-card>
+            </v-dialog>
+          </v-row>
+          <!-- Dialog if opponents can't agree on the result -->
+          <v-row class="justify-center" align="center">
+            <v-dialog v-model="opponentsDisagree" persistent max-width="650px">
+              <v-card>
+                <v-card-title class="justify-center">Dere ble ikke enige om resultatet</v-card-title>
+                <v-card-text class="text-center">Ta kontakt med turneringsvert eller prøv på nytt!
+                </v-card-text>
+                <v-layout justify-center>
+                  <v-card-actions>
+                    <v-btn
+                      textv
+                      @click="setOpponentsDisagree(false)">Lukk
+                    </v-btn>
+                  </v-card-actions>
+                </v-layout>
+              </v-card>
+            </v-dialog>
+          </v-row>
+
+          <!-- Dialog shown when result suggestion is sent -->
+          <v-row class="justify-center" align="center">
+            <v-dialog v-model="suggestionIsSent" persistent max-width="650px">
+              <v-card>
+                <v-card-title class="justify-center">Resultatforslag er sendt!</v-card-title>
+                <v-card-text class="text-center">Venter på at motstander skal godkjenne resultatet
+                </v-card-text>
+                <v-layout justify-center>
+                  <v-card-actions>
+                    <v-btn
+                      textv
+                      @click="suggestionIsSent = false">Lukk
+                    </v-btn>
+                  </v-card-actions>
+                </v-layout>
+              </v-card>
+            </v-dialog>
           </v-row>
 
           <!-- Dialog for user if 'FORLAT TURNERING' is pressed -->
@@ -179,7 +243,7 @@
                   </v-row>
                 </v-card-text>
                 <v-card-actions>
-                  <v-spacer />
+                  <v-spacer/>
                   <!-- User has the option to either leave or go back -->
                   <v-btn text @click="leaveTournament">Forlat turneringen</v-btn>
                   <v-btn text color="primary" outlined @click="leaveDialog = false">Avbryt</v-btn>
@@ -219,8 +283,24 @@ export default {
   computed: {
     ...mapState({
       paired: state => state.paired,
-      opponentId: state => state.activeGame.opponent_id
-    })
+      opponentId: state => state.activeGame.opponent_id,
+      opponentsDisagree: state => state.resultDialog.opponents_disagree,
+      suggestedResult: state => state.resultDialog.suggested_result,
+      gameId: state => state.resultDialog.game_id,
+      validResult: state => state.resultDialog.valid
+    }),
+    getResultText: function () {
+      if (this.suggestedResult === 1.0) {
+        return 'hvit vant'
+      } else if (this.suggestedResult === 0.5) {
+        return 'partiet endte i remis'
+      } else {
+        return 'sort vant'
+      }
+    },
+    showSuggestedResultDialog: function() {
+      return this.suggestedResult !== undefined
+    }
   },
   data() {
     return {
@@ -230,7 +310,8 @@ export default {
       pause: false,
       pauseButtonText: 'Ta pause',
       pastResultsText: 'Tidligere parti',
-      result: ''
+      result: '',
+      suggestionIsSent: false
     }
   },
   methods: {
@@ -240,31 +321,49 @@ export default {
       'sendGameResult',
       'sendPauseRequest',
       'sendUnpauseRequest',
-      'fetchPlayersTournament'
+      'fetchPlayersTournament',
+      'sendValidationOfResult',
+      'sendInvalidationOfResult'
     ]),
     ...mapGetters([
       'getTournament'
     ]),
     ...mapMutations([
-      'setPaired'
+      'setPaired',
+      'setSuggestedResult',
+      'setOpponentsDisagree'
     ]),
     /*
-      Register the result of the currently active game
-    */
-    registerResult () {
+        Register the result of the currently active game
+      */
+    registerResult() {
       let payload = {
         opponent: this.opponentId,
         result: this.result
       }
       this.sendGameResult(payload).then(res => {
-        this.setPaired(false)
         this.resultDialog = false
+        this.suggestionIsSent = true
       })
     },
     /*
-      The player leaves the tournament
-    */
-    async leaveTournament () {
+        Approve the result of the currently active game
+      */
+    approveResult() {
+      this.sendValidationOfResult(this.gameId).then(res => {
+        this.setSuggestedResult(undefined)
+        this.setPaired(false)
+      })
+    },
+    disapproveResult() {
+      this.sendInvalidationOfResult(this.gameId).then(res => {
+        this.setSuggestedResult(undefined)
+      })
+    },
+    /*
+        The player leaves the tournament
+      */
+    async leaveTournament() {
       await this.fetchPlayersTournament() // TODO: Bytt når websocket e inne
       let started = this.getTournament().started // TODO: Bytt når websocket e inne
       this.sendLeaveRequest(started).then(res => {
@@ -272,8 +371,8 @@ export default {
       })
     },
     /*
-      Alter the break state. The player is either taking a break or not.
-    */
+        Alter the break state. The player is either taking a break or not.
+      */
     alterBreakState() {
       this.pause = !this.pause
       if (this.pause) {
@@ -285,8 +384,8 @@ export default {
       }
     },
     /*
-      Alter the past result state. The past results is either shown or not.
-     */
+        Alter the past result state. The past results is either shown or not.
+       */
     alterPastResultsState() {
       this.pastResults = !this.pastResults
       if (this.pastResults) {
@@ -317,26 +416,33 @@ export default {
         this.setPaired(false)
       }
     }
+  },
+  watch: {
+    validResult () {
+      if (this.validResult) {
+        this.setPaired(false)
+      }
+    }
   }
 }
 </script>
 
 <style scoped>
-  .pauseDetails{
+  .pauseDetails {
     margin-top: 1em;
     margin-bottom: 1em;
     font-size: 22px;
   }
 
-  .radio{
+  .radio {
     margin-bottom: 1em;
   }
 
-  .btn{
+  .btn {
     margin-top: 0.5em;
   }
 
-  .card{
+  .card {
     display: inline;
     width: auto;
     min-width: 20em;
@@ -344,18 +450,18 @@ export default {
     height: auto;
   }
 
-  .bigInfo{
+  .bigInfo {
     text-align-all: center;
   }
 
-  .mediumInfo{
+  .mediumInfo {
     margin-top: 0.4em;
     margin-bottom: 0.25em;
     font-weight: bold;
     font-size: 21px;
   }
 
-  .minorInfo{
+  .minorInfo {
     margin-top: 0.8em;
   }
 </style>
