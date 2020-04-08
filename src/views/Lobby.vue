@@ -75,7 +75,8 @@ export default {
     return {
       intervalId: '',
       error: false,
-      errorMessage: ''
+      errorMessage: '',
+      active: false
     }
   },
   computed: {
@@ -87,9 +88,6 @@ export default {
     ]),
     playerCount() {
       return this.getPlayerCount
-    },
-    tournamentActive() {
-      return this.isTournamentActive
     }
   },
   methods: {
@@ -130,8 +128,8 @@ export default {
         }
       }
     },
-    tournamentActive: function (tournamentActive) {
-      if (tournamentActive) {
+    isTournamentActive: function (active) {
+      if (active) {
         this.startTournament()
       }
     }

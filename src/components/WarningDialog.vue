@@ -12,7 +12,7 @@
         <v-card-actions>
           <v-spacer />
           <!-- User has the option to either leave or go back -->
-          <v-btn text @click="carryOn">{{ title }}</v-btn>
+          <v-btn text @click="carryOn">{{ carryOnButtonText }}</v-btn>
           <v-btn text color="primary" outlined @click="closeDialog">Avbryt</v-btn>
         </v-card-actions>
       </v-card>
@@ -26,7 +26,8 @@ export default {
   props: {
     title: String,
     action: String,
-    showDialog: Boolean
+    showDialog: Boolean,
+    carryOnButtonText: String
   },
   methods: {
     carryOn() {

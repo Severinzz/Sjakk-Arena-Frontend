@@ -74,11 +74,12 @@
     </v-row>
   </v-container>
   <warning-dialog
-  title="Avslutt turnering"
+  :title="endDialogTitle"
   action="avslutte turneringen"
+  carry-on-button-text="Avslutt turnering"
   :show-dialog="endDialog"
   @carryOn="endTournament()"
-  @closeDialog="endDialog = false">
+  @closeDialog="closeEndDialog()">
   </warning-dialog>
   </span>
 </template>
@@ -106,14 +107,16 @@ export default {
       invalidGames: true,
       pause: false,
       pauseButtonText: 'Pause',
-      endDialog: false
+      endDialog: false,
+      endDialogTitle: 'Avslutt turnering'
     }
   },
   computed: {
     ...mapGetters([
       'getPlayerCount',
       'getTournament',
-      'getAllPlayers'
+      'getAllPlayers',
+      'isTournamentActive'
     ]),
     // https://stackoverflow.com/questions/46622209/how-to-limit-iteration-of-elements-in-v-for/54836170#54836170
     playerList () {
@@ -125,7 +128,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'subscribeToTournamentSubscriptions',
+      'subscribeToLobbySubscriptions',
       'fetchTournament',
       'unsubscribe',
       'close',
@@ -163,6 +166,10 @@ export default {
       this.sendEndRequest().then(res => {
         this.$router.push('/')
       })
+    },
+    closeEndDialog() {
+      this.endDialog = false
+      this.endDialogTitle = 'Avslutt turnering'
     }
   },
   async created () {
@@ -174,11 +181,19 @@ export default {
         this.activeTournament = this.getTournament
       })
     }
-    this.subscribeToTournamentSubscriptions({ vm: this, started: started })
+    this.subscribeToLobbySubscriptions({ vm: this, started: started })
   },
   destroyed () {
     this.unsubscribe('leaderboard')
     this.close()
+  },
+  watch: {
+    isTournamentActive: function(active) {
+      if (!active) {
+        this.endDialog = true
+        this.endDialogTitle = 'Tidspunktet for turneringsslutt er passert'
+      }
+    }
   }
 }
 </script>

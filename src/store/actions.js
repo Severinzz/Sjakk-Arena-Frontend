@@ -192,14 +192,6 @@ export default {
       })
     ).then(res => WEBSOCKET_SERVICE.connect([activeSubscription, playerSubscription]))
   },
-  subscribeToTournamentSubscriptions: ({ commit, dispatch }, payload) => {
-    let playerSubscription
-    dispatch('getPlayerSubscription', [payload.started]).then(res => {
-      playerSubscription = res
-    }).then(res =>
-      WEBSOCKET_SERVICE.connect([playerSubscription]
-      ))
-  },
   getActiveSubscription: ({ commit }, userRole) => {
     let activeCallback = function (res) {
       let active = JSON.parse(res.body).active
