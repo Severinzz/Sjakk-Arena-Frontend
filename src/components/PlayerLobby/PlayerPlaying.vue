@@ -416,13 +416,6 @@ export default {
         this.setPaired(false)
       }
     }
-  },
-  watch: {
-    validResult () {
-      if (this.validResult) {
-        this.setPaired(false)
-      }
-    }
   }
 }
 </script>
