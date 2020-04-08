@@ -199,11 +199,24 @@ export default {
   },
   subscribeToTournamentSubscriptions: ({ commit, dispatch }, payload) => {
     let playerSubscription
+    let activeGamesSubscription
     dispatch('getPlayerSubscription', [payload.started]).then(res => {
       playerSubscription = res
-    }).then(res =>
-      WEBSOCKET_SERVICE.connect([playerSubscription]
-      ))
+    })
+      .then(dispatch('getActiveGamesSubscription').then(res => { activeGamesSubscription = res }))
+      .then(res =>
+        WEBSOCKET_SERVICE.connect([playerSubscription, activeGamesSubscription]
+        ))
+  },
+  getActiveGamesSubscription: ({ commit }) => {
+    let activeGamesCallback = function (res) {
+      let activeGames = JSON.parse(res.body)
+      commit('setActiveGames', activeGames)
+    }
+    return {
+      path: 'tournament/active-games',
+      callback: activeGamesCallback
+    }
   },
   getActiveSubscription: ({ commit }, userRole) => {
     let activeCallback = function (res) {

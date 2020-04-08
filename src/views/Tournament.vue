@@ -12,8 +12,8 @@
             Antall spillere: {{ this.playerCount }}
           </p>
           <div class="button-wrapper">
-            <v-btn id="Games" class="mr-4">
-              Parti oversikt
+            <v-btn id="Games" class="mr-4" @click="alterShowLeaderBoard">
+              {{ alterLeaderBoardText }}
             </v-btn>
             <v-btn id="Pause" class="mr-4" @click="alterPauseState">
               {{ pauseButtonText }}
@@ -25,21 +25,29 @@
         </div>
       </v-col>
       <v-col class="playerTable"
-             xl="5"
+             xl="7"
              lg="5"
              md="6"
              sm="5"
       >
-        <!-- Adapted from https://vuetifyjs.com/en/components/simple-tables -->
-        <!-- TODO: Bytt til table komponenten -->
         <Table
-          :object-list="Array.from(getAllPlayers)"
-          :attribute-list="attributeList"
-          :heading-list="headingList"
+          class="leaderBoard"
+          v-if="showLeaderBoard"
+          :object-list="Array.from(playerList)"
+          :attribute-list="leaderBoardAttributeList"
+          :heading-list="leaderBoardHeadingList"
+          :autoScrollOption="true"
           @entryClicked="handlePlayerClicked"
-          id="leaderBoard"
         />
-        <!-- end -->
+        <!-- TODO: Add functionality when clicked (same as invalid games component?) -->
+        <Table
+          class="leaderBoard"
+          v-if="!showLeaderBoard"
+          :object-list="Array.from(gamesList)"
+          :attribute-list="activeGamesAttributeList"
+          :heading-list="activeGamesHeadingList"
+          :autoScrollOption="true"
+        />
         <!-- Invalid games component -->
         <div v-if="invalidGames">
         <v-divider></v-divider>
@@ -68,25 +76,44 @@ export default {
   },
   data () {
     return {
-      limit: 5,
       activeTournament: '',
-      instance: this,
       invalidGames: true,
       pause: false,
       pauseButtonText: 'Pause',
-      attributeList: ['name', 'points'],
-      headingList: ['Plassering', 'Spiller', 'Poeng']
+      showLeaderBoard: true,
+      alterLeaderBoardText: 'Vis parti oversikt',
+      leaderBoardAttributeList: ['placement', 'name', 'points'],
+      leaderBoardHeadingList: ['Plassering', 'Spiller', 'Poeng'],
+      activeGamesAttributeList: ['table', 'white_player_name', 'black_player_name', 'start'],
+      activeGamesHeadingList: ['Bord', 'Hvit spiller', 'Svart spiller', 'Startet']
     }
   },
   computed: {
     ...mapGetters([
       'getPlayerCount',
       'getTournament',
-      'getAllPlayers'
+      'getAllPlayers',
+      'getActiveGames'
     ]),
-    // https://stackoverflow.com/questions/46622209/how-to-limit-iteration-of-elements-in-v-for/54836170#54836170
+    // Add placement to the players.
     playerList () {
-      return this.getAllPlayers
+      let list = this.getAllPlayers
+      let i = 1
+      if (list.length) {
+        list.forEach(function (player) {
+          player['placement'] = i
+          i++
+        })
+      }
+      return list
+    },
+    gamesList () {
+      let list = this.getActiveGames
+      list.forEach(function (game) {
+        game['start'] = game['start'].split(' ')[1]
+        game['start'] = game['start'].split(':')[0] + ':' + game['start'].split(':')[1]
+      })
+      return list
     },
     playerCount() {
       return this.getPlayerCount
@@ -116,6 +143,10 @@ export default {
         this.sendTournamentUnpauseRequest()
         this.pauseButtonText = 'Pause'
       }
+    },
+    alterShowLeaderBoard() {
+      this.showLeaderBoard = !this.showLeaderBoard
+      this.showLeaderBoard === true ? this.alterLeaderBoardText = 'Vis parti oversikt' : this.alterLeaderBoardText = 'Vis rangerings tabell'
     }
   },
   async created () {
@@ -137,11 +168,13 @@ export default {
 </script>
 
 <style scoped>
-  /deep/ #leaderBoard td {
+  /deep/ .leaderBoard td {
     font-size: 2em;
     font-weight: bold;
   }
-  /deep/ #leaderBoard {
+  /deep/ .leaderBoard th {
+   }
+  /deep/ .leaderBoard {
     margin: 2em auto;
   }
   .content-wrapper {

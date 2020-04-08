@@ -30,11 +30,13 @@ export default {
   props: {
     prPage: { type: Number, required: true },
     numberOfItems: { type: Number, required: true },
-    maxVisibleButtons: { type: Number, required: false, default: 5 } // This is without the "<<" and ">>" buttons
+    maxVisibleButtons: { type: Number, required: false, default: 5 }, // This is without the "<<" and ">>" buttons
+    autoScroll: { type: Boolean, required: false, default: false }
   },
   data() {
     return {
-      activeButton: 1
+      activeButton: 1,
+      intervalId: ''
     }
   },
   methods: {
@@ -103,6 +105,19 @@ export default {
     },
     lastButton () {
       return Math.ceil(this.numberOfItems / this.prPage)
+    }
+  },
+  watch: {
+    autoScroll: function(autoScroll) {
+      const VM = this
+      if (autoScroll) {
+        this.intervalId = setInterval(function () {
+          VM.activeButton === VM.lastButton ? VM.activeButton = 1 : VM.activeButton = VM.activeButton + 1
+          VM.changePage(VM.activeButton)
+        }, 30000)
+      } else {
+        clearInterval(this.intervalId)
+      }
     }
   }
 }
