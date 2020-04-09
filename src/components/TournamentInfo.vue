@@ -1,9 +1,10 @@
 <template>
 <div>
-  <p class="pin">PIN:</p>
+  <p class="pinTitle">PIN:</p>
   <p class="pin">
     {{ tournament.user_id }}
   </p>
+  <h5 class="name">{{ this.tournament.tournament_name }} </h5>
   <p class="time" v-if="!started">
     Starter: {{ formatTime(this.tournament.start) }}
   </p>
@@ -64,6 +65,10 @@ export default {
     display: inline-block;
     margin: auto;
   }
+  .pinTitle{
+    font-size: 3.5em;
+    font-weight: bold;
+  }
   .pin{
     font-size: 5.5em;
     font-weight: bold;
@@ -74,5 +79,8 @@ export default {
   }
   .date{
     font-size: 2em;
+  }
+  .name{
+    font-size: 3em;
   }
 </style>
