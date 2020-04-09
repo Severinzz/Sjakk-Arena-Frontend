@@ -56,11 +56,11 @@
       </v-col>
     </v-row>
     <warning-dialog
-      title="Forlat turneringen"
-      action="forlate tuneringen"
+      title="Avslutt turneringen"
+      action="avslutte tuneringen"
       :show-dialog="leaveWarn"
-      carry-on-button-text="Forlat turnering"
-      @carryOn="leaveTournament()"
+      carry-on-button-text="Avslutt turnering"
+      @carryOn="endTournament()"
       @closeDialog="leaveWarn = false"
     ></warning-dialog>
   </v-container>
@@ -130,6 +130,9 @@ export default {
           this.error = true
           this.errorMessage = err + '. Prøv igjen senere!'
         })
+    },
+    endTournament() {
+      this.$router.push('/')
     },
     alterLeaveDialogState() {
       this.leaveWarn = !this.leaveWarn

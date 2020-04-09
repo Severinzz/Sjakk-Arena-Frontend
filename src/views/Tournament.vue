@@ -64,17 +64,9 @@
   action="avslutte turneringen"
   carry-on-button-text="Avslutt turnering"
   :show-dialog="endDialog"
-  @carryOn="endTournament()"
-  @closeDialog="closeEndDialog()">
+  @carryOn="endTournament"
+  @closeDialog="alterEndDialogState">
   </warning-dialog>
-    <warning-dialog
-      title="Forlat turneringen"
-      action="forlate tuneringen"
-      :show-dialog="leaveWarn"
-      carry-on-button-text="Forlat turnering"
-      @carryOn="leaveTournament()"
-      @closeDialog="leaveWarn = false"
-    ></warning-dialog>
   </span>
 </template>
 
@@ -107,8 +99,7 @@ export default {
       activeGamesHeadingList: ['Bord', 'Hvit spiller', 'Svart spiller', 'Startet'],
       endDialog: false,
       endDialogTitle: 'Avslutt turnering',
-      pathVar: 'tournament/',
-      leaveWarn: false
+      pathVar: 'tournament/'
     }
   },
   computed: {
@@ -178,12 +169,9 @@ export default {
         this.$router.push('/')
       })
     },
-    closeEndDialog() {
-      this.endDialog = false
+    alterEndDialogState() {
+      this.endDialog = !this.endDialog
       this.endDialogTitle = 'Avslutt turnering'
-    },
-    alterLeaveDialogState() {
-      this.leaveWarn = !this.leaveWarn
     }
   },
   mounted() {
@@ -195,7 +183,7 @@ export default {
     window.location.hash = this.pathVar + this.getTournament.user_id
     window.location.hash = this.pathVar + this.getTournament.user_id // Varsel vil nå dukke opp to ganger
     window.onhashchange = function() {
-      window.onpopstate = function() { VM.alterLeaveDialogState() }
+      window.onpopstate = function() { VM.alterEndDialogState() }
     }
   },
   async created () {
