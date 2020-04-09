@@ -88,7 +88,7 @@ export default {
       errorMessage: '',
       active: false,
       leaveWarn: false,
-      pathVar: ''
+      pathVar: 'lobby/'
     }
   },
   computed: {
@@ -141,13 +141,8 @@ export default {
       adapted from from: https://stackoverflow.com/questions/12381563/how-to-stop-browser-back-button-using-javascript
     */
     let VM = this
-    if (this.isTournamentActive) {
-      VM.pathVar = 'tournament/'
-    } if (!this.isTournamentActive) {
-      VM.pathVar = 'lobby/'
-    }
-    window.location.hash = VM.pathVar + this.getTournament.user_id
-    window.location.hash = VM.pathVar + this.getTournament.user_id // Varsel vil nå dukke opp to ganger
+    window.location.hash = this.pathVar + this.getTournament.user_id
+    window.location.hash = this.pathVar + this.getTournament.user_id // Varsel vil nå dukke opp to ganger
     window.onhashchange = function() {
       window.onpopstate = function() { VM.alterLeaveDialogState() }
     }

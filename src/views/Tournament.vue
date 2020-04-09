@@ -81,6 +81,14 @@
   @carryOn="endTournament()"
   @closeDialog="closeEndDialog()">
   </warning-dialog>
+    <warning-dialog
+      title="Forlat turneringen"
+      action="forlate tuneringen"
+      :show-dialog="leaveWarn"
+      carry-on-button-text="Forlat turnering"
+      @carryOn="leaveTournament()"
+      @closeDialog="leaveWarn = false"
+    ></warning-dialog>
   </span>
 </template>
 
@@ -108,7 +116,9 @@ export default {
       pause: false,
       pauseButtonText: 'Pause',
       endDialog: false,
-      endDialogTitle: 'Avslutt turnering'
+      endDialogTitle: 'Avslutt turnering',
+      pathVar: 'tournament/',
+      leaveWarn: false
     }
   },
   computed: {
@@ -170,6 +180,21 @@ export default {
     closeEndDialog() {
       this.endDialog = false
       this.endDialogTitle = 'Avslutt turnering'
+    },
+    alterLeaveDialogState() {
+      this.leaveWarn = !this.leaveWarn
+    }
+  },
+  mounted() {
+  /*
+    Send warning to user when back button is pressed.
+    adapted from from: https://stackoverflow.com/questions/12381563/how-to-stop-browser-back-button-using-javascript
+  */
+    let VM = this
+    window.location.hash = this.pathVar + this.getTournament.user_id
+    window.location.hash = this.pathVar + this.getTournament.user_id // Varsel vil nå dukke opp to ganger
+    window.onhashchange = function() {
+      window.onpopstate = function() { VM.alterLeaveDialogState() }
     }
   },
   async created () {
