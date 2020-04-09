@@ -135,7 +135,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'subscribeToLobbySubscriptions',
+      'subscribeToTournamentSubscriptions',
       'fetchTournament',
       'unsubscribe',
       'close',
@@ -182,7 +182,7 @@ export default {
         this.activeTournament = this.getTournament
       })
     }
-    this.subscribeToLobbySubscriptions({ vm: this, started: started })
+    this.subscribeToTournamentSubscriptions({ vm: this, started: started })
   },
   destroyed () {
     this.unsubscribe('leaderboard')

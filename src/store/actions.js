@@ -204,13 +204,15 @@ export default {
   },
   subscribeToTournamentSubscriptions: ({ commit, dispatch }, payload) => {
     let playerSubscription
+    let activeSubscription
     let activeGamesSubscription
     dispatch('getPlayerSubscription', [payload.started]).then(res => {
       playerSubscription = res
     })
       .then(dispatch('getActiveGamesSubscription').then(res => { activeGamesSubscription = res }))
+      .then(dispatch('getActiveSubscription')).then(res => { activeSubscription = res })
       .then(res =>
-        WEBSOCKET_SERVICE.connect([playerSubscription, activeGamesSubscription]
+        WEBSOCKET_SERVICE.connect([playerSubscription, activeGamesSubscription, activeSubscription]
         ))
   },
   getActiveGamesSubscription: ({ commit }) => {
