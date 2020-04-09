@@ -23,6 +23,7 @@ let activeGame = {
   opponent: LOADING_MESSAGE,
   colour: LOADING_MESSAGE
 }
+let activeGames = []
 let points = NaN
 let resultDialog = {
   suggested_result: undefined,
@@ -40,5 +41,6 @@ export default {
   paired,
   activeGame,
   points,
-  resultDialog
+  resultDialog,
+  activeGames
 }

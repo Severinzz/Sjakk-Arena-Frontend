@@ -12,8 +12,8 @@
             Antall spillere: {{ this.playerCount }}
           </p>
           <div class="button-wrapper">
-            <v-btn id="Games" class="mr-4">
-              Parti oversikt
+            <v-btn id="Games" class="mr-4" @click="alterShowLeaderBoard">
+              {{ alterLeaderBoardText }}
             </v-btn>
             <v-btn id="Pause" class="mr-4" @click="alterPauseState">
               {{ pauseButtonText }}
@@ -28,46 +28,32 @@
         </div>
       </v-col>
       <v-col class="playerTable"
-             xl="5"
+             xl="7"
              lg="5"
              md="6"
              sm="5"
       >
-        <!-- Adapted from https://vuetifyjs.com/en/components/simple-tables -->
-        <!-- TODO: Bytt til table komponenten -->
-      <v-simple-table>
-        <template v-slot:default>
-          <tbody>
-          <tr
-            v-for="player in playerList"
-              :key="player.name"
-            @click="handlePlayerClicked(player)"
-          >
-            <td>
-              {{ player.name }}
-            </td>
-            <td>
-              {{ player.points }}
-            </td>
-          </tr>
-          </tbody>
-          <!-- TODO: Lage knappa til en egen komponent? Mange begynn kanskje å bli veldi like -->
-          <div
-          v-if="playerCount > 0"
-          >
-          <v-btn class="tableBtn mr-4"
-            @click="increaseLimit()"
-            :disabled="limit >= playerCount">Vis flere</v-btn>
-          <v-btn class="tableBtn mr-4"
-            @click="decreaseLimit()"
-            :disabled="limit <= 5">Vis mindre</v-btn>
-          </div>
-        </template>
-      </v-simple-table>
-        <!-- end -->
-        <v-divider></v-divider>
+        <Table
+          class="leaderBoard"
+          v-if="showLeaderBoard"
+          :object-list="Array.from(playerList)"
+          :attribute-list="leaderBoardAttributeList"
+          :heading-list="leaderBoardHeadingList"
+          :autoScrollOption="true"
+          @entryClicked="handlePlayerClicked"
+        />
+        <!-- TODO: Add functionality when clicked (same as invalid games component?) -->
+        <Table
+          class="leaderBoard"
+          v-if="!showLeaderBoard"
+          :object-list="Array.from(gamesList)"
+          :attribute-list="activeGamesAttributeList"
+          :heading-list="activeGamesHeadingList"
+          :autoScrollOption="true"
+        />
         <!-- Invalid games component -->
         <div v-if="invalidGames">
+        <v-divider></v-divider>
       <InvalidGames></InvalidGames>
     </div>
       </v-col>
@@ -94,27 +80,31 @@
 
 <script>
 import TournamentInfo from '@/components/TournamentInfo'
-import InvalidGames from '@/components/InvalidGames'
 import { mapActions, mapGetters } from 'vuex'
+import InvalidGames from '@/components/InvalidGames'
+import Table from '../components/Table'
 import WarningDialog from '../components/WarningDialog'
 
 export default {
   name: 'Tournament',
   components: {
+    Table,
     WarningDialog,
     TournamentInfo,
     InvalidGames
   },
   data () {
     return {
-      intervalId: '',
-      limit: 5,
       activeTournament: '',
-      leaderboard: [],
-      instance: this,
       invalidGames: true,
       pause: false,
       pauseButtonText: 'Pause',
+      showLeaderBoard: true,
+      alterLeaderBoardText: 'Vis parti oversikt',
+      leaderBoardAttributeList: ['placement', 'name', 'points'],
+      leaderBoardHeadingList: ['Plassering', 'Spiller', 'Poeng'],
+      activeGamesAttributeList: ['table', 'white_player_name', 'black_player_name', 'start'],
+      activeGamesHeadingList: ['Bord', 'Hvit spiller', 'Svart spiller', 'Startet'],
       endDialog: false,
       endDialogTitle: 'Avslutt turnering',
       pathVar: 'tournament/',
@@ -126,11 +116,28 @@ export default {
       'getPlayerCount',
       'getTournament',
       'getAllPlayers',
+      'getActiveGames',
       'isTournamentActive'
     ]),
-    // https://stackoverflow.com/questions/46622209/how-to-limit-iteration-of-elements-in-v-for/54836170#54836170
+    // Add placement to the players.
     playerList () {
-      return this.getPlayerCount > this.limit ? this.getAllPlayers.slice(0, this.limit) : this.getAllPlayers
+      let list = this.getAllPlayers
+      let i = 1
+      if (list.length) {
+        list.forEach(function (player) {
+          player['placement'] = i
+          i++
+        })
+      }
+      return list
+    },
+    gamesList () {
+      let list = this.getActiveGames
+      list.forEach(function (game) {
+        game['start'] = game['start'].split(' ')[1]
+        game['start'] = game['start'].split(':')[0] + ':' + game['start'].split(':')[1]
+      })
+      return list
     },
     playerCount() {
       return this.getPlayerCount
@@ -138,7 +145,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'subscribeToLobbySubscriptions',
+      'subscribeToTournamentSubscriptions',
       'fetchTournament',
       'unsubscribe',
       'close',
@@ -146,16 +153,6 @@ export default {
       'sendTournamentUnpauseRequest',
       'sendEndRequest'
     ]),
-    increaseLimit () {
-      if (this.limit < this.playerCount) {
-        this.limit = this.limit + 5
-      }
-    },
-    decreaseLimit() {
-      if (this.limit > 5) {
-        this.limit = this.limit - 5
-      }
-    },
     handlePlayerClicked(player) {
       // TODO: PRØVE Å SENDE PLAYER?
       // https://stackoverflow.com/a/47874850
@@ -171,6 +168,10 @@ export default {
         this.sendTournamentUnpauseRequest()
         this.pauseButtonText = 'Pause'
       }
+    },
+    alterShowLeaderBoard() {
+      this.showLeaderBoard = !this.showLeaderBoard
+      this.showLeaderBoard === true ? this.alterLeaderBoardText = 'Vis partioversikt' : this.alterLeaderBoardText = 'Vis rangeringstabell'
     },
     endTournament() {
       this.sendEndRequest().then(res => {
@@ -206,7 +207,7 @@ export default {
         this.activeTournament = this.getTournament
       })
     }
-    this.subscribeToLobbySubscriptions({ vm: this, started: started })
+    this.subscribeToTournamentSubscriptions({ vm: this, started: started })
   },
   destroyed () {
     this.unsubscribe('leaderboard')
@@ -224,16 +225,25 @@ export default {
 </script>
 
 <style scoped>
+  /deep/ .leaderBoard td {
+    font-size: 2em;
+    font-weight: bold;
+  }
+  /deep/ .leaderBoard th {
+   }
+  /deep/ .leaderBoard {
+    margin: 2em auto;
+  }
   .content-wrapper {
     padding: 0 0 2% 0;
   }
-
   .numberOfPlayers {
     font-size: 1.5em;
   }
   .playerTable{
     margin: auto !important;
     display: inline-block;
+    text-align: center;
   }
 
   .info-wrapper {
