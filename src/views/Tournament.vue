@@ -161,7 +161,7 @@ export default {
     },
     alterShowLeaderBoard() {
       this.showLeaderBoard = !this.showLeaderBoard
-      this.showLeaderBoard === true ? this.alterLeaderBoardText = 'Vis parti oversikt' : this.alterLeaderBoardText = 'Vis rangerings tabell'
+      this.showLeaderBoard === true ? this.alterLeaderBoardText = 'Vis partioversikt' : this.alterLeaderBoardText = 'Vis rangeringstabell'
     },
     endTournament() {
       this.sendEndRequest().then(res => {
