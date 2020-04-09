@@ -210,7 +210,7 @@ export default {
       playerSubscription = res
     })
       .then(dispatch('getActiveGamesSubscription').then(res => { activeGamesSubscription = res }))
-      .then(dispatch('getActiveSubscription')).then(res => { activeSubscription = res })
+      .then(dispatch('getActiveSubscription', ['tournament'])).then(res => { activeSubscription = res })
       .then(res =>
         WEBSOCKET_SERVICE.connect([playerSubscription, activeGamesSubscription, activeSubscription]
         ))
