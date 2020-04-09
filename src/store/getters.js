@@ -10,5 +10,8 @@ export default {
   },
   isTournamentActive: (state) => {
     return state.activeTournament
+  },
+  getActiveGames: (state) => {
+    return state.activeGames
   }
 }

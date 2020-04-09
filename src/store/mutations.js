@@ -26,6 +26,9 @@ export default {
   setActiveGame: (state, activeGame) => {
     state.activeGame = activeGame
   },
+  setActiveGames: (state, activeGames) => {
+    state.activeGames = activeGames
+  },
   setPoints: (state, points) => {
     state.points = points
   },

@@ -1,6 +1,20 @@
 <template>
   <!-- Adapted from https://vuetifyjs.com/en/components/simple-tables/ -->
-  <div>
+  <div class="table">
+    <div class="tableMenu">
+    <v-select
+      class="dropdown"
+      v-model="prPage"
+      :items="dropDownValues"
+      :label="'Pr side'"
+    />
+    <v-switch
+      class="switch"
+      v-if="autoScrollOption"
+      v-model="autoScroll"
+      :label="switchLabel"
+    />
+    </div>
   <v-simple-table>
     <template v-slot:default>
       <thead>
@@ -29,7 +43,8 @@
   </v-simple-table>
     <pagination-buttons
       :number-of-items="objectList.length"
-      :pr-page="5"
+      :pr-page="prPage"
+      :autoScroll="autoScroll"
       @pageChanged="handlePageChange"
     ></pagination-buttons>
   </div>
@@ -46,11 +61,15 @@ export default {
     objectList: { type: Array, required: true },
     attributeList: { type: Array, required: true },
     headingList: { type: Array, required: false },
-    prPage: { type: Number, required: false, default: 5 }
+    autoScrollOption: { type: Boolean, required: false, default: false }
   },
   data() {
     return {
-      entryStart: 0
+      entryStart: 0,
+      dropDownValues: [1, 5, 10, 15, 20, 25, 30, 50, 70, 100],
+      switchLabel: 'Automatisk bla i tabell (30 sek)',
+      autoScroll: false,
+      prPage: 5
     }
   },
   methods: {
@@ -79,5 +98,16 @@ td{
     color: black !important;
     font-size: 17px;
     background-color: rgb(200, 200, 200);
+  }
+  .dropdown {
+    max-width: 100px;
+    display: inline-block;
+  }
+  .switch{
+  display: inline-block;
+  margin-left: 5em;
+  }
+  .tableMenu{
+    display: flex;
   }
 </style>

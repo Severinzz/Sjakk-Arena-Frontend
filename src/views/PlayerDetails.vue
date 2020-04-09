@@ -162,7 +162,7 @@ export default {
 }
 </script>
 <style scoped>
-  /deep/ Table{
+  /deep/ .table{
     max-width: 80%;
     margin: 2em auto;
   }
@@ -170,6 +170,7 @@ export default {
   }
   .about{
     text-align: center;
+    margin-bottom: 1%;
   }
   .sucsess{
     max-width: 80%;
