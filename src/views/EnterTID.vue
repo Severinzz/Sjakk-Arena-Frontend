@@ -83,11 +83,8 @@ export default {
       }).catch(err => {
         this.isLoading = false
         this.error = true
-        if (err.response.status === 400) {
-          this.errorMessage = 'Denne IDen: "' + this.tournamentId + '", finnes ikke!'
-        }
         if (err.response.status === 404) {
-          this.errorMessage = err.response.data.error + '. Teknisk problem!'
+          this.errorMessage = 'Denne IDen: "' + this.tournamentId + '", finnes ikke!'
         } else {
           this.errorMessage = 'Error code: ' + err.response.status + ', ' + err.response.data.message
         }

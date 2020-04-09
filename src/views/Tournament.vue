@@ -28,10 +28,11 @@
         </div>
       </v-col>
       <v-col class="playerTable"
-             xl="7"
-             lg="5"
-             md="6"
-             sm="5"
+             xl="8"
+             lg="7"
+             md="7"
+             sm="7"
+             xs="7"
       >
         <Table
           class="leaderBoard"
@@ -254,22 +255,29 @@ export default {
     height: 100%;
     padding: 0;
   }
-
-  @media (max-width: 1100px){
-    td{
-      font-size: 2em !important;
+  @media (max-width: 1480px) {
+    /deep/ .leaderBoard td, th{
+      font-size: 1.5em;
     }
   }
-
-  @media (max-width: 1000px){
-    .playerTable{
-      margin-left: 25% !important;
+  @media (max-width: 1180px){
+    /deep/.row{
+      display: block !important;
+    }
+    /deep/ .leaderBoard{
+      width: 150% !important;
+      margin-left: 5% !important;
     }
   }
-  @media (max-width: 680px) and (min-width: 350px){
-    .playerTable{
-      margin-top: 700px !important;
-      margin-left: 0 !important;
+  @media (max-width: 780px) {
+    /deep/ .leaderBoard td, th{
+      font-size: 1em;
+    }
+  }
+  @media (max-width: 600px) {
+    /deep/ .leaderBoard{
+      width: 90% !important;
+      margin-left: 5% !important;
     }
   }
 </style>

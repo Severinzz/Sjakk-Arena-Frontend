@@ -1,4 +1,5 @@
 <template>
+  <!-- Adapted from https://vuetifyjs.com/en/components/grids/ -->
   <v-container class="content-wrapper mb-12" fluid>
     <alert-box v-if="error"
     :error-message="errorMessage"
@@ -45,6 +46,7 @@
         >
           <!-- The individual players -->
             <player
+              class="player"
               v-for="(player, index) in this.getAllPlayers"
               @click.native="handleRemovePlayer(player, player.user_id)"
               :player-name="player.name"
@@ -172,5 +174,8 @@ export default {
   div.col {
     height: 100%;
     padding: 0;
+  }
+  /deep/ .player-wrapper {
+    margin: auto 5% auto 5%
   }
 </style>
