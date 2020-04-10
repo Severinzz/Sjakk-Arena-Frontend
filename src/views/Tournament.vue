@@ -64,8 +64,8 @@
   action="avslutte turneringen"
   carry-on-button-text="Avslutt turnering"
   :show-dialog="endDialog"
-  @carryOn="endTournament()"
-  @closeDialog="closeEndDialog()">
+  @carryOn="endTournament"
+  @closeDialog="alterEndDialogState">
   </warning-dialog>
   </span>
 </template>
@@ -98,7 +98,8 @@ export default {
       activeGamesAttributeList: ['table', 'white_player_name', 'black_player_name', 'start'],
       activeGamesHeadingList: ['Bord', 'Hvit spiller', 'Svart spiller', 'Startet'],
       endDialog: false,
-      endDialogTitle: 'Avslutt turnering'
+      endDialogTitle: 'Avslutt turnering',
+      pathVar: 'tournament/'
     }
   },
   computed: {
@@ -168,9 +169,21 @@ export default {
         this.$router.push('/')
       })
     },
-    closeEndDialog() {
-      this.endDialog = false
+    alterEndDialogState() {
+      this.endDialog = !this.endDialog
       this.endDialogTitle = 'Avslutt turnering'
+    }
+  },
+  mounted() {
+  /*
+    Send warning to user when back button is pressed.
+    adapted from from: https://stackoverflow.com/questions/12381563/how-to-stop-browser-back-button-using-javascript
+  */
+    let VM = this
+    window.location.hash = this.pathVar + this.getTournament.user_id
+    window.location.hash = this.pathVar + this.getTournament.user_id // Varsel vil nå dukke opp to ganger
+    window.onhashchange = function() {
+      window.onpopstate = function() { VM.alterEndDialogState() }
     }
   },
   async created () {

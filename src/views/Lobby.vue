@@ -55,6 +55,14 @@
         </v-row>
       </v-col>
     </v-row>
+    <warning-dialog
+      title="Avslutt turneringen"
+      action="avslutte tuneringen"
+      :show-dialog="leaveWarn"
+      carry-on-button-text="Avslutt turnering"
+      @carryOn="endTournament()"
+      @closeDialog="leaveWarn = false"
+    ></warning-dialog>
   </v-container>
 </template>
 
@@ -63,20 +71,24 @@ import TournamentInfo from '@/components/TournamentInfo'
 import Player from '@/components/Player'
 import { mapActions, mapGetters } from 'vuex'
 import AlertBox from '@/components/AlertBox'
+import WarningDialog from '@/components/WarningDialog'
 
 export default {
   name: 'Lobby',
   components: {
     AlertBox,
     TournamentInfo,
-    Player
+    Player,
+    WarningDialog
   },
   data () {
     return {
       intervalId: '',
       error: false,
       errorMessage: '',
-      active: false
+      active: false,
+      leaveWarn: false,
+      pathVar: 'lobby/'
     }
   },
   computed: {
@@ -118,6 +130,24 @@ export default {
           this.error = true
           this.errorMessage = err + '. Prøv igjen senere!'
         })
+    },
+    endTournament() {
+      this.$router.push('/')
+    },
+    alterLeaveDialogState() {
+      this.leaveWarn = !this.leaveWarn
+    }
+  },
+  mounted() {
+    /*
+      Send warning to user when back button is pressed.
+      adapted from from: https://stackoverflow.com/questions/12381563/how-to-stop-browser-back-button-using-javascript
+    */
+    let VM = this
+    window.location.hash = this.pathVar + this.getTournament.user_id
+    window.location.hash = this.pathVar + this.getTournament.user_id // Varsel vil nå dukke opp to ganger
+    window.onhashchange = function() {
+      window.onpopstate = function() { VM.alterLeaveDialogState() }
     }
   },
   watch: {
