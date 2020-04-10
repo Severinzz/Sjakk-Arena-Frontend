@@ -231,11 +231,11 @@
             </v-dialog>
           </v-row>
 
-          <!-- Dialog for user if 'FORLAT TURNERING' is pressed -->
           <warning-dialog
           title="Forlat turneringen"
           action="forlate tuneringen"
           :show-dialog="leaveDialog"
+          carry-on-button-text="Forlat turnering"
           @carryOn="leaveTournament()"
           @closeDialog="leaveDialog = false"
           ></warning-dialog>
@@ -382,7 +382,22 @@ export default {
       } else {
         this.pastResultsText = 'Tidligere parti'
       }
+    },
+    alterLeaveDialogState() {
+      this.leaveDialog = !this.leaveDialog
     }
+  },
+  mounted() {
+    /*
+  Send warning to user when back button is pressed.
+  adapted from from: https://stackoverflow.com/questions/12381563/how-to-stop-browser-back-button-using-javascript
+ */
+    let VM = this
+    window.location.hash = 'player-lobby'
+    window.location.hash = 'player-lobby' // Varsel vil nå dukke opp to ganger
+    window.onhashchange = function() { // tilbake, avbryt, tilbake, avbryt, tilbake nå fører spiller til EnterTUI siden.
+      window.onpopstate = function() { VM.alterLeaveDialogState() }
+    } // bytt 'VM.alterLeaveDialogState()' med window.location.hash='player-lobby' er fy! dette medfører at tilbake knappen ikke funker som den skal, kan kræsje nettlesere også!!
   },
   watch: {
     validResult () {
