@@ -6,7 +6,7 @@
 
 <script>
 import TournamentCreationForm from '@/components/TournamentCreationForm.vue'
-import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'TournamentCreation',
@@ -14,12 +14,12 @@ export default {
     TournamentCreationForm
   },
   methods: {
-    ...mapMutations([
-      'setStateToDefault'
+    ...mapActions([
+      'deleteTokenAndSetStateToDefault'
     ])
   },
   created() {
-    this.setStateToDefault()
+    this.deleteTokenAndSetStateToDefault()
   }
 }
 </script>

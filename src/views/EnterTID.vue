@@ -58,14 +58,14 @@ export default {
   methods: {
     ...mapActions([
       'fetchTournament',
-      'signInUUID'
+      'signInUUID',
+      'deleteTokenAndSetStateToDefault'
     ]),
     ...mapGetters([
       'getTournament'
     ]),
     ...mapMutations([
-      'clearPlayers',
-      'setStateToDefault'
+      'clearPlayers'
     ]),
     async submit() {
       this.error = false
@@ -96,7 +96,7 @@ export default {
     },
     created() {
       this.clearPlayers()
-      this.setStateToDefault()
+      this.deleteTokenAndSetStateToDefault()
     }
   }
 }

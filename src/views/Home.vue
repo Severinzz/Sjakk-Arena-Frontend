@@ -18,7 +18,7 @@
 // @ is an alias to /src
 import MenuTile from '@/components/MenuTile.vue'
 import TileHeaderSpace from '@/components/TileHeaderSpace'
-import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'home',
@@ -27,12 +27,12 @@ export default {
     TileHeaderSpace
   },
   methods: {
-    ...mapMutations([
-      'setStateToDefault'
+    ...mapActions([
+      'deleteTokenAndSetStateToDefault'
     ])
   },
   created() {
-    this.setStateToDefault()
+    this.deleteTokenAndSetStateToDefault()
   }
 }
 </script>

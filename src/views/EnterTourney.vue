@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
   name: 'EnterTourney',
   components: {
@@ -52,10 +52,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'sendPlayer'
-    ]),
-    ...mapMutations([
-      'setStateToDefault'
+      'sendPlayer',
+      'deleteTokenAndSetStateToDefault'
     ]),
     async submit() {
       let payload = {
@@ -96,7 +94,7 @@ export default {
     }
   },
   created() {
-    this.setStateToDefault()
+    this.deleteTokenAndSetStateToDefault()
   },
   watch: {
     playerName: function() {
