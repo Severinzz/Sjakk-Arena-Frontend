@@ -3,7 +3,7 @@
     <v-btn
       class="left"
       @click="jumpLeft"
-      v-if="activeButton !== 1">
+      v-if="activeButton !== 1 && numberOfItems > 0">
       &laquo;
     </v-btn>
     <v-btn
@@ -17,7 +17,7 @@
     <v-btn
       class="right"
       @click="jumpRight"
-    v-if="activeButton !== lastButton">
+    v-if="activeButton !== lastButton && numberOfItems > 0">
       &raquo;
     </v-btn>
       <p>Side {{ activeButton }} av {{ lastButton }}</p>
@@ -86,6 +86,7 @@ export default {
     visibleButtons () {
       let button = 1
       let buttonsArr = []
+      if (this.numberOfItems === 0) { return }
       // Creates an array of all the buttons.
       while (buttonsArr.length < this.lastButton) {
         buttonsArr.push(button)
@@ -104,7 +105,8 @@ export default {
       }
     },
     lastButton () {
-      return Math.ceil(this.numberOfItems / this.prPage)
+      let lastButton = Math.ceil(this.numberOfItems / this.prPage)
+      return lastButton > 0 ? lastButton : 1
     }
   },
   watch: {

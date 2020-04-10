@@ -24,7 +24,7 @@ export default {
   .player-wrapper {
     margin: 3% auto auto auto;
     padding: 10px;
-    width: 10%;
+    width: 15%;
     min-width: 150px;
   }
 
