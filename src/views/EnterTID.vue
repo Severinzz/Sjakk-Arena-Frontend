@@ -64,7 +64,8 @@ export default {
       'getTournament'
     ]),
     ...mapMutations([
-      'clearPlayers'
+      'clearPlayers',
+      'setStateToDefault'
     ]),
     async submit() {
       this.error = false
@@ -95,6 +96,7 @@ export default {
     },
     created() {
       this.clearPlayers()
+      this.setStateToDefault()
     }
   }
 }
