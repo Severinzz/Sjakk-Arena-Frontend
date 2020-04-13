@@ -14,7 +14,9 @@ Vue.axios.defaults.timeout = TIME_OUT
  Structure and some general methods are approximately the same as in the "real world" example.
  */
 export const API_SERVICE = {
-
+  clearHeader() {
+    Vue.axios.defaults.headers.common['Authorization'] = undefined
+  },
   setHeader() {
     Vue.axios.defaults.headers.common['Authorization'] = `Bearer ${jwtService.getToken()}`
   },

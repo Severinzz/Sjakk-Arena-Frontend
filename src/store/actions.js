@@ -282,5 +282,10 @@ export default {
       .then(dispatch('getResultSubscription').then(res => { resultSubscription = res }))
       .then(res => WEBSOCKET_SERVICE.connect([playerKickedSubscription, tournamentActiveSubscription,
         activeGameSubscription, pointsSubscription, resultSubscription]))
+  },
+  deleteTokenAndSetStateToDefault: ({ commit }) => {
+    deleteToken()
+    commit('setStateToDefault')
+    API_SERVICE.clearHeader()
   }
 }

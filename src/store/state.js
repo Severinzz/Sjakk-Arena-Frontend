@@ -4,32 +4,79 @@ import devTournament from '../data/tournament'
 // TODO: SLETT TING FRA STORE SOM IKKJE BLIR BRUKT
 // TODO: IKKJE BRUK STORE PÅ TING MAN IKKJE TRENG PÅ FLEIR SIDE/SOM MAN KAN FÅ TAKI I REST/SOCKET KALLA
 const LOADING_MESSAGE = 'loading....'
-let tournament = {
-  // Default value of tournament to prevent errors on load
-  id: LOADING_MESSAGE,
-  name: LOADING_MESSAGE,
-  start: LOADING_MESSAGE,
-  end: LOADING_MESSAGE
+let tournament = getDefaultTournament()
+let player = getDefaultPlayer()
+let players = getDefaultPlayers()
+let activeTournament = getDefaultTournamentActive()
+let paired = getDefaultPaired()
+let activeGame = getDefaultActiveGame()
+let activeGames = getDefaultActiveGames()
+let points = getDefaultPoints()
+let resultDialog = getDefaultResultDialog()
+
+function getDefaultTournament() {
+  return {
+    // Default value of tournament to prevent errors on load
+    id: LOADING_MESSAGE,
+    name: LOADING_MESSAGE,
+    start: LOADING_MESSAGE,
+    end: LOADING_MESSAGE
+  }
 }
-let player = {
-  name: LOADING_MESSAGE,
-  points: LOADING_MESSAGE
+
+function getDefaultPlayer() {
+  return {
+    name: LOADING_MESSAGE,
+    points: LOADING_MESSAGE
+  }
 }
-let players = {}
-let activeTournament = false
-let paired = false
-let activeGame = {
-  table: LOADING_MESSAGE,
-  opponent: LOADING_MESSAGE,
-  colour: LOADING_MESSAGE
+
+function getDefaultPlayers() {
+  return {}
 }
-let activeGames = []
-let points = NaN
-let resultDialog = {
-  suggested_result: undefined,
-  game_id: '',
-  opponents_disagree: false,
-  valid: false
+
+function getDefaultTournamentActive() {
+  return false
+}
+
+function getDefaultPaired() {
+  return false
+}
+
+function getDefaultActiveGame() {
+  return {
+    table: LOADING_MESSAGE,
+    opponent: LOADING_MESSAGE,
+    colour: LOADING_MESSAGE
+  }
+}
+
+function getDefaultActiveGames() {
+  return []
+}
+
+function getDefaultPoints() {
+  return NaN
+}
+
+function getDefaultResultDialog() {
+  return {
+    suggested_result: undefined,
+    game_id: '',
+    opponents_disagree: false,
+    valid: false
+  }
+}
+function setStateToDefault () {
+  this.tournament = getDefaultTournament()
+  this.player = getDefaultPlayer()
+  this.players = getDefaultPlayers()
+  this.activeTournament = getDefaultTournamentActive()
+  this.paired = getDefaultPaired()
+  this.activeGame = getDefaultActiveGame()
+  this.activeGames = getDefaultActiveGames()
+  this.points = getDefaultPoints()
+  this.resultDialog = getDefaultResultDialog()
 }
 export default {
   players,
@@ -42,5 +89,6 @@ export default {
   activeGame,
   points,
   resultDialog,
-  activeGames
+  activeGames,
+  setStateToDefault
 }
