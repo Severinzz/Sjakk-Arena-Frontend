@@ -51,7 +51,7 @@ export default {
       switchLabel: 'Automatisk bla i tabell (30 sek)',
       autoScroll: false,
       page: 1,
-      prPage: 10
+      prPage: 5
     }
   },
   methods: {
