@@ -18,12 +18,21 @@
 // @ is an alias to /src
 import MenuTile from '@/components/MenuTile.vue'
 import TileHeaderSpace from '@/components/TileHeaderSpace'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'home',
   components: {
     MenuTile,
     TileHeaderSpace
+  },
+  methods: {
+    ...mapActions([
+      'deleteTokenAndSetStateToDefault'
+    ])
+  },
+  created() {
+    this.deleteTokenAndSetStateToDefault()
   }
 }
 </script>

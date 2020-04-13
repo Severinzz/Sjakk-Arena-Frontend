@@ -58,7 +58,8 @@ export default {
   methods: {
     ...mapActions([
       'fetchTournament',
-      'signInUUID'
+      'signInUUID',
+      'deleteTokenAndSetStateToDefault'
     ]),
     ...mapGetters([
       'getTournament'
@@ -92,6 +93,7 @@ export default {
     },
     created() {
       this.clearPlayers()
+      this.deleteTokenAndSetStateToDefault()
     }
   }
 }

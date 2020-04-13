@@ -52,7 +52,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'sendPlayer'
+      'sendPlayer',
+      'deleteTokenAndSetStateToDefault'
     ]),
     async submit() {
       let payload = {
@@ -91,6 +92,9 @@ export default {
       playerName: '',
       errorMessage: ''
     }
+  },
+  created() {
+    this.deleteTokenAndSetStateToDefault()
   },
   watch: {
     playerName: function() {

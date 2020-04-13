@@ -40,5 +40,8 @@ export default {
   },
   setOpponentsDisagree: (state, disagree) => {
     state.resultDialog.opponents_disagree = disagree
+  },
+  setStateToDefault: (state) => {
+    state.setStateToDefault()
   }
 }
