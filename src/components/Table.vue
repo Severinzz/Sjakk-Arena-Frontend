@@ -2,12 +2,6 @@
   <!-- Adapted from https://vuetifyjs.com/en/components/simple-tables/ -->
   <div class="table">
     <div class="tableMenu">
-    <v-select
-      class="dropdown"
-      v-model="prPage"
-      :items="dropDownValues"
-      :label="'Pr side'"
-    />
     <v-switch
       class="switch"
       v-if="autoScrollOption"
@@ -15,93 +9,69 @@
       :label="switchLabel"
     />
     </div>
-  <v-simple-table>
-    <template v-slot:default>
-      <thead>
-      <tr>
-        <th
-        v-for="heading in headingList"
-        :key="heading">
-          {{ heading }}
-        </th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr
-        v-for="object in slicedList"
-        :key="object.id"
-        @click="onEntryClicked(object)"
-      >
-        <td
-          v-for="attribute in attributeList"
-          :key="attribute">
-          {{ object[attribute] }}
-        </td>
-      </tr>
-      </tbody>
-    </template>
-  </v-simple-table>
-    <pagination-buttons
-      :number-of-items="objectList.length"
-      :pr-page="prPage"
-      :autoScroll="autoScroll"
-      @pageChanged="handlePageChange"
-    ></pagination-buttons>
+  <v-data-table
+  :headers="headingList"
+  :items="objectList"
+  @click:row="onEntryClicked"
+  :page.sync="page"
+  :items-per-page.sync="prPage"
+  >
+  </v-data-table>
   </div>
 </template>
 
 <script>
-import PaginationButtons from './PaginationButtons'
-import _ from 'lodash'
 
 export default {
   name: 'Table',
-  components: { PaginationButtons },
   props: {
     objectList: { type: Array, required: true },
-    attributeList: { type: Array, required: true },
     headingList: { type: Array, required: false },
     autoScrollOption: { type: Boolean, required: false, default: false }
   },
   data() {
     return {
       entryStart: 0,
-      dropDownValues: [1, 5, 10, 15, 20, 25, 30, 50, 70, 100],
       switchLabel: 'Automatisk bla i tabell (30 sek)',
       autoScroll: false,
-      prPage: 5
+      page: 1,
+      prPage: 10
     }
   },
   methods: {
     onEntryClicked(entry) {
       this.$emit('entryClicked', entry)
-    },
-    // From code with mosh, React course pagination (https://codewithmosh.com/courses/357787/lectures/5706707)
-    handlePageChange(page) {
-      this.entryStart = (page - 1) * this.prPage
     }
   },
   computed: {
-    slicedList() {
-      // From code with mosh, React course pagination (https://codewithmosh.com/courses/357787/lectures/5706707)
-      return _(this.objectList).slice(this.entryStart).take(this.prPage).value()
+    lastButton () {
+      let lastButton = Math.ceil(this.objectList.length / this.prPage)
+      return lastButton > 0 ? lastButton : 1
+    }
+  },
+  watch: {
+    autoScroll: function(autoScroll) {
+      const VM = this
+      if (autoScroll) {
+        this.intervalId = setInterval(function () {
+          VM.page === VM.lastButton ? VM.page = 1 : VM.page = VM.page + 1
+        }, 30000)
+      } else {
+        clearInterval(this.intervalId)
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-td{
+  td{
   text-align: left;
-}
+  }
   th{
     color: black !important;
     font-size: 17px;
     background-color: rgb(200, 200, 200);
-  }
-  .dropdown {
-    max-width: 100px;
-    display: inline-block;
   }
   .switch{
   display: inline-block;
