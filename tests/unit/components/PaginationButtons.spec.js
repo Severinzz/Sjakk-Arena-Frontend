@@ -25,7 +25,7 @@ describe('PaginationButtons', () => {
       prPage: 3 })
     wrapper.find('#button5').trigger('click')
     await wrapper.vm.$nextTick()
-    expect(wrapper.emitted('pageChanged')[0]).toEqual([5])
+    expect(wrapper.emitted('update:page')[0]).toEqual([5])
   })
   it('should match snapshot', () => {
     const wrapper = factory({
