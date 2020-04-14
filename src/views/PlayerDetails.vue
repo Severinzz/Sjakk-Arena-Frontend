@@ -176,7 +176,7 @@ export default {
       this.icon = 'plug'
       this.color = 'error'
       this.removed = true
-      if (err.response.status === 400) {
+      if (err.response.status === 403) {
         this.removedMessage = 'Feilmelding: ' + err.response.status + '. ' + 'Du har ikke tilgang til denne spilleren, eller den finnes ikke!'
       } else {
         this.removedMessage = 'Error code: ' + err.response.status + ', ' + err.response.data.message
