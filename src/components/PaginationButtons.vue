@@ -42,7 +42,7 @@ export default {
   methods: {
     changePage(page) {
       this.activeButton = page
-      this.$emit('pageChanged', page)
+      this.$emit('update:page', page)
     },
     // Returns if there is any buttons to the left outside of the visible ones
     hasButtonsLeft() {

@@ -38,7 +38,6 @@
           class="leaderBoard"
           v-if="showLeaderBoard"
           :object-list="Array.from(playerList)"
-          :attribute-list="leaderBoardAttributeList"
           :heading-list="leaderBoardHeadingList"
           :autoScrollOption="true"
           @entryClicked="handlePlayerClicked"
@@ -48,15 +47,14 @@
           class="leaderBoard"
           v-if="!showLeaderBoard"
           :object-list="Array.from(gamesList)"
-          :attribute-list="activeGamesAttributeList"
           :heading-list="activeGamesHeadingList"
           :autoScrollOption="true"
         />
         <!-- Invalid games component -->
-        <div v-if="invalidGames">
+      <div v-if="invalidGames">
         <v-divider></v-divider>
-      <InvalidGames></InvalidGames>
-    </div>
+        <InvalidGames></InvalidGames>
+      </div>
       </v-col>
     </v-row>
   </v-container>
@@ -94,10 +92,40 @@ export default {
       pauseButtonText: 'Pause',
       showLeaderBoard: true,
       alterLeaderBoardText: 'Vis parti oversikt',
-      leaderBoardAttributeList: ['placement', 'name', 'points'],
-      leaderBoardHeadingList: ['Plassering', 'Spiller', 'Poeng'],
-      activeGamesAttributeList: ['table', 'white_player_name', 'black_player_name', 'start'],
-      activeGamesHeadingList: ['Bord', 'Hvit spiller', 'Svart spiller', 'Startet'],
+      leaderBoardHeadingList: [ {
+        text: 'Plassering',
+        align: 'start',
+        value: 'placement'
+      },
+      {
+        text: 'Spiller',
+        align: 'center',
+        value: 'name'
+      },
+      {
+        text: 'Poeng',
+        align: 'end',
+        value: 'points'
+      }],
+      activeGamesHeadingList: [
+        {
+          text: 'Bord',
+          align: 'start',
+          value: 'table'
+        },
+        {
+          text: 'Hvit spiller',
+          value: 'white_player_name'
+        },
+        {
+          text: 'Svart spiller',
+          value: 'black_player_name'
+        },
+        {
+          text: 'Startet',
+          align: 'end',
+          value: 'start'
+        }],
       endDialog: false,
       endDialogTitle: 'Avslutt turnering',
       pathVar: 'tournament/'

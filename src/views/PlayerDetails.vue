@@ -16,15 +16,14 @@
     <div>
       <Table
         :objectList="playerList"
-        :attributeList="attributeList"
         :headingList="headingList"
-        :prPage="5"
         @entryClicked="handleEntryClicked"
       />
       <v-btn
         class="error"
         @click="kickDialog = true"
-      >Fjern spiller</v-btn>
+      >Fjern spiller
+      </v-btn>
     </div>
     <v-row class="justify-center" align="center">
       <v-dialog v-model="kickDialog" max-width="650px">
@@ -40,7 +39,7 @@
           </v-card-text>
           <v-card-actions class="actions">
             <!-- User has the option to either leave or go back -->
-            <v-btn text class="error"  @click="removePlayerFromTournament">OK</v-btn>
+            <v-btn text class="error" @click="removePlayerFromTournament">OK</v-btn>
             <v-btn text outlined @click="kickDialog = false">Avbryt</v-btn>
           </v-card-actions>
         </v-card>
@@ -55,7 +54,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   components: { Table },
   name: 'PlayerDetails',
-  data () {
+  data() {
     return {
       player: null,
       removed: false,
@@ -109,7 +108,28 @@ export default {
         start: '20:30'
       }],
       attributeList: ['table', 'name', 'opponent', 'score', 'start'],
-      headingList: ['table', 'white', 'black', 'score', 'start']
+      headingList: [
+        {
+          text: 'Bord',
+          align: 'start',
+          value: 'table'
+        },
+        {
+          text: 'Hvit',
+          value: 'name'
+        },
+        {
+          text: 'Sort',
+          value: 'opponent'
+        },
+        {
+          text: 'Poeng',
+          value: 'score'
+        },
+        {
+          text: 'Startet',
+          value: 'start'
+        }]
     }
   },
   methods: {
@@ -146,7 +166,7 @@ export default {
       this.removed = true
     }
   },
-  async created () {
+  async created() {
     let payload = {
       id: this.$route.params.index
     }
@@ -166,26 +186,31 @@ export default {
 }
 </script>
 <style scoped>
-  /deep/ .table{
+  /deep/ .table {
     max-width: 80%;
     margin: 2em auto;
   }
-  /deep/ thead{
+
+  /deep/ thead {
   }
-  .about{
+
+  .about {
     text-align: center;
     margin-bottom: 1%;
   }
-  .sucsess{
+
+  .sucsess {
     max-width: 80%;
     margin: auto;
     text-align: center;
   }
-  .card-text{
+
+  .card-text {
     justify-content: center;
     text-align: center;
   }
-  .actions{
+
+  .actions {
     justify-content: center;
   }
 </style>
