@@ -86,16 +86,6 @@ export default {
       commit('addTournament', res.data)
     })
   },
-
-  /*
-    Fetch games with invalid result
-   */
-  fetchInvalidGames: () => {
-    console.log('Getting games with invalid results for tournament')
-    return TOURNAMENT_SERVICE.get('games/invalid').catch(err => {
-      throw err.response
-    })
-  },
   /*
     Fetch the player using the application.
    */
@@ -210,7 +200,7 @@ export default {
       playerSubscription = res
     })
       .then(dispatch('getActiveGamesSubscription').then(res => { activeGamesSubscription = res }))
-      .then(dispatch('getActiveSubscription', ['tournament'])).then(res => { activeSubscription = res })
+      .then(dispatch('getActiveSubscription', ['tournament']).then(res => { activeSubscription = res }))
       .then(res =>
         WEBSOCKET_SERVICE.connect([playerSubscription, activeGamesSubscription, activeSubscription]
         ))
@@ -266,6 +256,13 @@ export default {
     }
     return { path: 'player/result', callback: resultCallback }
   },
+  getInvalidGameSubscription: ({ commit }) => {
+    let invalidGameCallback = function(res) {
+      let invalidGame = JSON.parse(res.body)
+      commit('addInvalidGame', invalidGame)
+    }
+    return { path: 'tournament/games/invalid', callback: invalidGameCallback }
+  },
   subscribeToPlayerLobbySubscriptions: ({ commit, dispatch }, playerKickedCallback) => {
     let playerKickedSubscription = {
       path: 'player/removed',
@@ -287,5 +284,14 @@ export default {
     deleteToken()
     commit('setStateToDefault')
     API_SERVICE.clearHeader()
+  },
+  /*
+    Subscribe to invalid games subscriptions
+   */
+  subscribeToInvalidGamesSubscription: ({ dispatch }) => {
+    let invalidGameSubscription
+    dispatch('getInvalidGameSubscription')
+      .then(res => { invalidGameSubscription = res })
+      .then(res => WEBSOCKET_SERVICE.connect([invalidGameSubscription]))
   }
 }
