@@ -10,9 +10,10 @@ let players = getDefaultPlayers()
 let activeTournament = getDefaultTournamentActive()
 let paired = getDefaultPaired()
 let activeGame = getDefaultActiveGame()
-let activeGames = getDefaultActiveGames()
+let activeGames = getEmptyList()
 let points = getDefaultPoints()
 let resultDialog = getDefaultResultDialog()
+let invalidGames = getEmptyList()
 
 function getDefaultTournament() {
   return {
@@ -51,7 +52,7 @@ function getDefaultActiveGame() {
   }
 }
 
-function getDefaultActiveGames() {
+function getEmptyList() {
   return []
 }
 
@@ -67,6 +68,7 @@ function getDefaultResultDialog() {
     valid: false
   }
 }
+
 function setStateToDefault () {
   this.tournament = getDefaultTournament()
   this.player = getDefaultPlayer()
@@ -74,9 +76,10 @@ function setStateToDefault () {
   this.activeTournament = getDefaultTournamentActive()
   this.paired = getDefaultPaired()
   this.activeGame = getDefaultActiveGame()
-  this.activeGames = getDefaultActiveGames()
+  this.activeGames = getEmptyList()
   this.points = getDefaultPoints()
   this.resultDialog = getDefaultResultDialog()
+  this.invalidGames = getEmptyList()
 }
 export default {
   players,
@@ -90,5 +93,6 @@ export default {
   points,
   resultDialog,
   activeGames,
-  setStateToDefault
+  setStateToDefault,
+  invalidGames
 }

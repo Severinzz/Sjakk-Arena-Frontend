@@ -15,7 +15,7 @@
             <th class="body-1"><strong>Parti ID: </strong>{{Game.game_id}}, <strong>Bord: </strong>{{Game.table}}</th>
             <td class="body-1"><strong>Spillere:</strong> {{Game.white_player_name}} og {{Game.black_player_name}}</td>
             <td class="body-1">, <strong>Hvit</strong> spiller poeng: {{Game.white_player_points}}</td>
-            <v-btn small color="primary" rounded @click="editGame(Game.game_id)">Endre resultat</v-btn>
+            <v-btn small color="primary" rounded @click="editGame(Game.game_id, index)">Endre resultat</v-btn>
           </tbody>
         </table>
       </v-layout>
@@ -26,12 +26,13 @@
       :gameId="gameID"
       :dialogBox="dialogBox"
       @closeResultDialog="alterResultDialogState"
+      @resultAdded="resultAdded"
     />
   </span>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 import ChangeResultDialog from './ChangeResultDialog'
 
 export default {
@@ -42,42 +43,41 @@ export default {
       limit: 10,
       intervalID: '',
       timeInterval: 5000,
-      disapprovedGames: [],
       dialogBox: false,
       result: '',
-      gameID: 0
+      gameID: 0,
+      index: ''
     }
   },
   methods: {
     ...mapActions([
-      'fetchInvalidGames',
-      'hostSendGameResult'
+      'subscribeToInvalidGamesSubscription'
     ]),
-    loadInvalidGames () { // TODO: gjør om fra pulling til websocket updates
-      const VM = this
-      this.intervalID = setInterval(async function () {
-        await VM.fetchInvalidGames().then(res => {
-          VM.disapprovedGames = res.data
-        }).catch(err => {
-          throw err.response
-        })
-      }, this.timeInterval)
-    },
-    editGame (gameID) {
+    ...mapMutations([
+      'removeInvalidGame'
+    ]),
+    editGame (gameID, index) {
       this.gameID = gameID
+      this.index = index
       this.alterResultDialogState()
     },
     alterResultDialogState () {
       this.dialogBox = !this.dialogBox
+    },
+    resultAdded () {
+      this.removeInvalidGame(this.index)
     }
   },
   computed: {
     gameList () {
-      return this.limit ? this.disapprovedGames.slice(0, this.limit) : this.disapprovedGames
-    }
+      return this.limit ? this.invalidGames.slice(0, this.limit) : this.invalidGames
+    },
+    ...mapState({
+      invalidGames: state => state.invalidGames
+    })
   },
   created() {
-    this.loadInvalidGames()
+    this.subscribeToInvalidGamesSubscription()
   },
   destroyed() {
     clearInterval(this.intervalID)

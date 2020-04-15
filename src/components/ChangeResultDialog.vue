@@ -92,6 +92,7 @@ export default {
       let param = this.gameId + '/' + this.result
       this.hostSendGameResult(param).then(res => {
         this.alterResultDialogState()
+        this.$emit('resultAdded')
       }).catch(err => {
         this.error = true
         let status = err.response.status
