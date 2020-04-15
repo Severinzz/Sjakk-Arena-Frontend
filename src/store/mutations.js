@@ -43,5 +43,15 @@ export default {
   },
   setStateToDefault: (state) => {
     state.setStateToDefault()
+  },
+  addInvalidGame: (state, invalidGame) => {
+    if (Array.isArray(invalidGame)) {
+      state.invalidGames = invalidGame
+    } else {
+      state.invalidGames.push(invalidGame)
+    }
+  },
+  removeInvalidGame: (state, index) => {
+    state.invalidGames.splice(index, 1)
   }
 }
