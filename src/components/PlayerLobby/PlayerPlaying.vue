@@ -193,44 +193,24 @@
               </v-card>
             </v-dialog>
           </v-row>
+
           <!-- Dialog if opponents can't agree on the result -->
-          <v-row class="justify-center" align="center">
-            <v-dialog v-model="opponentsDisagree" persistent max-width="650px">
-              <v-card>
-                <v-card-title class="justify-center">Dere ble ikke enige om resultatet</v-card-title>
-                <v-card-text class="text-center">Ta kontakt med turneringsvert eller prøv på nytt!
-                </v-card-text>
-                <v-layout justify-center>
-                  <v-card-actions>
-                    <v-btn
-                      textv
-                      @click="setOpponentsDisagree(false)">Lukk
-                    </v-btn>
-                  </v-card-actions>
-                </v-layout>
-              </v-card>
-            </v-dialog>
-          </v-row>
+          <information-dialog
+            :show-dialog="opponentsDisagree"
+            title="Dere ble ikke enige om resultatet"
+            text="Ta kontakt med turneringsvert eller prøv på nytt!"
+            @closeDialog="setOpponentsDisagree(false)"
+          />
 
           <!-- Dialog shown when result suggestion is sent -->
-          <v-row class="justify-center" align="center">
-            <v-dialog v-model="suggestionIsSent" persistent max-width="650px">
-              <v-card>
-                <v-card-title class="justify-center">Resultatforslag er sendt!</v-card-title>
-                <v-card-text class="text-center">Venter på at motstander skal godkjenne resultatet
-                </v-card-text>
-                <v-layout justify-center>
-                  <v-card-actions>
-                    <v-btn
-                      textv
-                      @click="suggestionIsSent = false">Lukk
-                    </v-btn>
-                  </v-card-actions>
-                </v-layout>
-              </v-card>
-            </v-dialog>
-          </v-row>
+          <information-dialog
+            :show-dialog="suggestionIsSent"
+            title="Resultatforslag er sendt!"
+            text="Venter på at motstander skal godkjenne resultatet"
+            @closeDialog="suggestionIsSent = false"
+          />
 
+          <!-- Dialog shown when player tries to leave the tournament -->
           <warning-dialog
           title="Forlat turneringen"
           action="forlate tuneringen"
@@ -238,7 +218,7 @@
           carry-on-button-text="Forlat turnering"
           @carryOn="leaveTournament()"
           @closeDialog="leaveDialog = false"
-          ></warning-dialog>
+          />
           <!-- playtime -->
           <p class="gameDetail body-2">Spilletid: {{ tournamentStart }} -> {{ tournamentEnd }} </p>
         </v-card-text>
@@ -253,6 +233,7 @@ import PlayerNotPaired from './PlayerNotPaired'
 import EarlierResults from './EarlierResults'
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 import WarningDialog from '../WarningDialog'
+import InformationDialog from '../InformationDialog'
 
 export default {
   name: 'PlayerPlaying',
@@ -264,6 +245,7 @@ export default {
     points: Number
   },
   components: {
+    InformationDialog,
     WarningDialog,
     PlayerPaired,
     PlayerNotPaired,
