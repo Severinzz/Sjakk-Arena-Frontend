@@ -9,6 +9,7 @@
       :additional-time-pr-move="additionalTimePrMove"
       :count-down.sync="blackCountDown"
       :reset.sync="blackReset"
+      @times-up="handleTimesUpEvent('black')"
     />
 
     <!-- Config button -->
@@ -33,6 +34,7 @@
       :additional-time-pr-move="additionalTimePrMove"
       :count-down.sync="whiteCountDown"
       :reset.sync="whiteReset"
+      @times-up="handleTimesUpEvent('white')"
     />
 
     <!-- Configuration dialog -->
@@ -76,15 +78,28 @@
         </v-card>
       </v-dialog>
     </v-row>
+
+    <information-dialog
+      :show-dialog="showTimesUpDialog"
+      :title="timesUpTitle"
+      text="Lukk denne dialogboksen for å resette klokken"
+      @closeDialog="closeTimesUpDialog"
+    />
   </div>
 </template>
 
 <script>
 import ChessClockButton from '../components/ChessClockButton'
+import InformationDialog from '../components/InformationDialog'
 
 export default {
   name: 'ChessClock',
-  components: { ChessClockButton },
+  components: { ChessClockButton, InformationDialog },
+  computed: {
+    timesUpTitle: function () {
+      return this.playerWhoRunOutOfTime + ' gikk tom for tid'
+    }
+  },
   data() {
     return {
       initialTimePrPlayer: 900, // in seconds
@@ -97,6 +112,8 @@ export default {
       configAdditionalTimePrMove: undefined,
       whiteReset: false,
       blackReset: false,
+      showTimesUpDialog: false,
+      playerWhoRunOutOfTime: '',
       nonNegativeNumberRule: v => v >= 0 || 'Kan ikke være mindre enn 0',
       lessThenAMinuteRule: v => v < 59 || 'Kan maksimalt være 59'
     }
@@ -115,6 +132,19 @@ export default {
       this.blackCountDown = false
       this.whiteReset = true
       this.blackReset = true
+    },
+    handleTimesUpEvent: function (player) {
+      if (player === 'white') {
+        this.playerWhoRunOutOfTime = 'Hvit'
+      } else {
+        this.playerWhoRunOutOfTime = 'Sort'
+      }
+      this.showTimesUpDialog = true
+    },
+    closeTimesUpDialog: function () {
+      this.resetClock()
+      this.showTimesUpDialog = false
+      this.playerWhoRunOutOfTime = ''
     }
   },
   watch: {
