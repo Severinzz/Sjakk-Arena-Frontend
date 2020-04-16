@@ -97,6 +97,14 @@ const routes = [
       title: 'Spiller - '
     },
     component: () => import('../views/PlayerDetails')
+  },
+  {
+    path: '/chess-clock',
+    name: 'chessClock',
+    meta: {
+      title: 'sjakkur'
+    },
+    component: () => import('../views/ChessClock')
   }
 ]
 
