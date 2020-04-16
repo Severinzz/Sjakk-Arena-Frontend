@@ -1,4 +1,6 @@
 <template>
+
+  <!-- Player with black chessmen's button -->
   <div id="chess-clock">
     <chess-clock-button
       player="black"
@@ -6,13 +8,74 @@
       :initial-time-pr-player="initialTimePrPlayer"
       :additional-time-pr-move="additionalTimePrMove"
       :count-down.sync="blackCountDown"
+      :reset.sync="blackReset"
     />
+
+    <!-- Config button -->
+    <v-row justify="center">
+      <v-card
+        height="10%"
+        width="50vw"
+        color="deep-orange darken-3"
+        class="mx-3 my-2"
+        @click="configurationDialog = true"
+      >
+        <v-card-text class="fas fa-sliders-h text-center">
+          Konfigurer klokke
+        </v-card-text>
+      </v-card>
+    </v-row>
+
+    <!-- Player with white chessmen's button -->
     <chess-clock-button
       player="white"
       :initial-time-pr-player="initialTimePrPlayer"
       :additional-time-pr-move="additionalTimePrMove"
       :count-down.sync="whiteCountDown"
+      :reset.sync="whiteReset"
     />
+
+    <!-- Configuration dialog -->
+    <v-row class="justify-center" align="center">
+      <v-dialog v-model="configurationDialog">
+        <v-card>
+          <v-card-title class="justify-center">Konfigurer klokke</v-card-title>
+          <div class="mx-2">
+            <v-form
+            ref="form"
+            lazy-validation
+            >
+              <v-text-field
+                v-model="configMinutes"
+                label="Antall minutter spillere starter med"
+                type="number"
+                :rules="[nonNegativeNumberRule]"
+                />
+              <v-text-field
+                v-model="configSeconds"
+                label="Antall sekunder spillere starter med (0-59)"
+                type="number"
+                :rules="[nonNegativeNumberRule, lessThenAMinuteRule]"
+              />
+              <v-text-field
+                v-model="configAdditionalTimePrMove"
+                label="Ekstratid pr. trekk (sekunder)"
+                type="number"
+                :rules="[nonNegativeNumberRule]"
+              />
+            <v-btn
+              text
+              @click="configurationDialog = false"
+            >Avbryt</v-btn>
+            <v-btn
+              text
+              @click="updateClock"
+            >Oppdater</v-btn>
+            </v-form>
+          </div>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </div>
 </template>
 
@@ -27,7 +90,31 @@ export default {
       initialTimePrPlayer: 900, // in seconds
       additionalTimePrMove: 10, // in seconds
       blackCountDown: false,
-      whiteCountDown: true
+      whiteCountDown: true,
+      configurationDialog: false,
+      configMinutes: undefined,
+      configSeconds: undefined,
+      configAdditionalTimePrMove: undefined,
+      whiteReset: false,
+      blackReset: false,
+      nonNegativeNumberRule: v => v >= 0 || 'Kan ikke være mindre enn 0',
+      lessThenAMinuteRule: v => v < 59 || 'Kan maksimalt være 59'
+    }
+  },
+  methods: {
+    updateClock: function () {
+      if (this.$refs.form.validate()) {
+        this.initialTimePrPlayer = parseInt(this.configMinutes) * 60 + parseInt(this.configSeconds)
+        this.additionalTimePrMove = parseInt(this.configAdditionalTimePrMove)
+        this.configurationDialog = false
+        this.resetClock()
+      }
+    },
+    resetClock: function () {
+      this.whiteCountDown = true
+      this.blackCountDown = false
+      this.whiteReset = true
+      this.blackReset = true
     }
   },
   watch: {

@@ -1,7 +1,7 @@
 <template>
     <v-card
     :color="cardColor"
-    height="50%"
+    height="40%"
     class="mx-3"
     @click="clicked"
     :style="cardStyle"
@@ -29,6 +29,10 @@ export default {
     countDown: {
       type: Boolean,
       required: true
+    },
+    reset: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
@@ -46,7 +50,11 @@ export default {
       }
     },
     decrementTimeLeft: function() {
-      this.timeLeft -= 1
+      if (this.timeLeft > 0) {
+        this.timeLeft -= 1
+      } else {
+        this.$emit('times-up')
+      }
     }
   },
   computed: {
@@ -68,8 +76,15 @@ export default {
   },
   watch: {
     countDown: function (countDown) {
-      if (countDown) {
+      if (countDown && !this.reset) {
         this.countDownInterval = setInterval(this.decrementTimeLeft, 1000)
+      }
+    },
+    reset: function (reset) {
+      if (reset) {
+        clearInterval(this.countDownInterval)
+        this.timeLeft = this.initialTimePrPlayer
+        this.$emit('update:reset', false)
       }
     }
   }
