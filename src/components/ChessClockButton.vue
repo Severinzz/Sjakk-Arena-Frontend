@@ -1,14 +1,14 @@
 <template>
     <v-card
-    :color="color"
+    :color="cardColor"
     height="50%"
     class="mx-3"
     @click="clicked"
     :style="cardStyle"
     >
       <v-card-text
-        :class="color === 'white' ? 'black--text' : 'white--text'"
-        class="text-center display-3"> {{ time }}</v-card-text>
+        class="white--text text-center display-3"
+        > {{ time }}</v-card-text>
     </v-card>
 </template>
 
@@ -16,20 +16,37 @@
 export default {
   name: 'ChessClockButton',
   props: {
-    color: String,
+    player: String,
     rotate: {
       type: Boolean,
       default: false
+    },
+    initialTimePrPlayer: {
+      type: Number,
+      required: true
+    },
+    additionalTimePrMove: Number,
+    countDown: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
     return {
-      time: '80:00',
-      timeColor: 'red'
+      timeLeft: this.initialTimePrPlayer,
+      countDownInterval: undefined
     }
   },
   methods: {
     clicked: function () {
+      if (this.countDown) {
+        this.timeLeft += this.additionalTimePrMove
+        clearInterval(this.countDownInterval)
+        this.$emit('update:count-down', false)
+      }
+    },
+    decrementTimeLeft: function() {
+      this.timeLeft -= 1
     }
   },
   computed: {
@@ -38,6 +55,22 @@ export default {
         return { transform: 'rotate(' + 180 + 'deg)' }
       }
       return ''
+    },
+    time () {
+      let minutes = Math.floor(this.timeLeft / 60)
+      let seconds = Math.floor(this.timeLeft % 60)
+      let secondsString = seconds < 10 ? '0' + `${seconds}` : `${seconds}`
+      return minutes + ':' + secondsString
+    },
+    cardColor () {
+      return this.player === 'white' ? 'blue-grey lighten-3' : 'blue darken-4'
+    }
+  },
+  watch: {
+    countDown: function (countDown) {
+      if (countDown) {
+        this.countDownInterval = setInterval(this.decrementTimeLeft, 1000)
+      }
     }
   }
 }

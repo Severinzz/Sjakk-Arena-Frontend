@@ -1,10 +1,18 @@
 <template>
   <div id="chess-clock">
     <chess-clock-button
-      color="white"
-      rotate=true />
+      player="black"
+      :rotate=true
+      :initial-time-pr-player="initialTimePrPlayer"
+      :additional-time-pr-move="additionalTimePrMove"
+      :count-down.sync="blackCountDown"
+    />
     <chess-clock-button
-      color="grey darken-4"/>
+      player="white"
+      :initial-time-pr-player="initialTimePrPlayer"
+      :additional-time-pr-move="additionalTimePrMove"
+      :count-down.sync="whiteCountDown"
+    />
   </div>
 </template>
 
@@ -13,7 +21,27 @@ import ChessClockButton from '../components/ChessClockButton'
 
 export default {
   name: 'ChessClock',
-  components: { ChessClockButton }
+  components: { ChessClockButton },
+  data() {
+    return {
+      initialTimePrPlayer: 900, // in seconds
+      additionalTimePrMove: 10, // in seconds
+      blackCountDown: false,
+      whiteCountDown: true
+    }
+  },
+  watch: {
+    whiteCountDown: function(whiteCountDown) {
+      if (!whiteCountDown) {
+        this.blackCountDown = true
+      }
+    },
+    blackCountDown: function(blackCountDown) {
+      if (!blackCountDown) {
+        this.whiteCountDown = true
+      }
+    }
+  }
 }
 </script>
 
