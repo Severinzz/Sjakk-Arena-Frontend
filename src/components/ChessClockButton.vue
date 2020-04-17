@@ -46,24 +46,25 @@ export default {
       secondToMillisecondRatio: 1000,
       minuteToSecondRatio: 60,
       intervalStart: 0,
-      timeLeft: this.initialTimePrPlayer * 1000, // in ms
+      remainingTime: this.initialTimePrPlayer * 1000, // in ms
       countDownInterval: undefined
     }
   },
   methods: {
     clicked: function () {
       if (this.countDown) {
-        this.timeLeft += this.additionalTimePrMove * this.secondToMillisecondRatio
+        this.remainingTime += this.additionalTimePrMove * this.secondToMillisecondRatio
         clearInterval(this.countDownInterval)
         this.$emit('update:count-down', false)
       }
     },
-    decrementTimeLeft: function() {
-      if (this.timeLeft > 0) {
+    reduceRemainingTime: function() {
+      if (this.remainingTime > 0) {
         let now = new Date().getTime()
-        this.timeLeft -= now - this.intervalStart
+        this.remainingTime -= (now - this.intervalStart)
         this.intervalStart = now
       } else {
+        clearInterval(this.countDownInterval)
         this.$emit('times-up')
       }
     }
@@ -76,10 +77,10 @@ export default {
       return ''
     },
     time () {
-      let minutes = Math.floor(this.timeLeft / (this.minuteToSecondRatio * this.secondToMillisecondRatio))
-      let seconds = Math.floor((this.timeLeft % (this.minuteToSecondRatio * this.secondToMillisecondRatio)) / this.secondToMillisecondRatio)
+      let minutes = Math.floor(this.remainingTime / (this.minuteToSecondRatio * this.secondToMillisecondRatio))
+      let seconds = Math.floor((this.remainingTime % (this.minuteToSecondRatio * this.secondToMillisecondRatio)) / this.secondToMillisecondRatio)
       let secondsString = seconds < 10 ? '0' + `${seconds}` : `${seconds}`
-      return minutes + ':' + secondsString
+      return minutes >= 0 ? minutes + ':' + secondsString : '0:00'
     },
     cardColor () {
       return this.player === 'white' ? 'blue-grey lighten-3' : 'blue darken-4'
@@ -89,16 +90,19 @@ export default {
     countDown: function (countDown) {
       if (countDown && !this.reset) {
         this.intervalStart = new Date().getTime()
-        this.countDownInterval = setInterval(this.decrementTimeLeft, 100)
+        this.countDownInterval = setInterval(this.reduceRemainingTime, 100)
       }
     },
     reset: function (reset) {
       if (reset) {
         clearInterval(this.countDownInterval)
-        this.timeLeft = this.initialTimePrPlayer * this.secondToMillisecondRatio
+        this.remainingTime = this.initialTimePrPlayer * this.secondToMillisecondRatio
         this.$emit('update:reset', false)
       }
     }
+  },
+  destroyed() {
+    clearInterval(this.countDownInterval)
   }
 }
 </script>
