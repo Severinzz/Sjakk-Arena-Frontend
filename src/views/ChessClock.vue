@@ -115,7 +115,7 @@ export default {
       showTimesUpDialog: false,
       playerWhoRunOutOfTime: '',
       nonNegativeNumberRule: v => v >= 0 || 'Kan ikke være mindre enn 0',
-      lessThenAMinuteRule: v => v < 59 || 'Kan maksimalt være 59'
+      lessThenAMinuteRule: v => v < 60 || 'Kan maksimalt være 59'
     }
   },
   methods: {
