@@ -16,7 +16,10 @@
 export default {
   name: 'ChessClockButton',
   props: {
-    player: String,
+    player: {
+      type: String,
+      required: true
+    },
     rotate: {
       type: Boolean,
       default: false
@@ -25,7 +28,10 @@ export default {
       type: Number,
       required: true
     },
-    additionalTimePrMove: Number,
+    additionalTimePrMove: {
+      type: Number,
+      required: true
+    },
     countDown: {
       type: Boolean,
       required: true
