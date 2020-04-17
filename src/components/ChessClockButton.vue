@@ -61,9 +61,10 @@ export default {
     reduceRemainingTime: function() {
       if (this.remainingTime > 0) {
         let now = new Date().getTime()
-        this.remainingTime -= now - this.intervalStart
+        this.remainingTime -= (now - this.intervalStart)
         this.intervalStart = now
       } else {
+        clearInterval(this.countDownInterval)
         this.$emit('times-up')
       }
     }
@@ -99,6 +100,9 @@ export default {
         this.$emit('update:reset', false)
       }
     }
+  },
+  destroyed() {
+    clearInterval(this.countDownInterval)
   }
 }
 </script>
