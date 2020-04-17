@@ -58,14 +58,6 @@
       </v-col>
     </v-row>
   </v-container>
-  <warning-dialog
-  :title="endDialogTitle"
-  action="avslutte turneringen"
-  carry-on-button-text="Avslutt turnering"
-  :show-dialog="endDialog"
-  @carryOn="endTournament"
-  @closeDialog="alterEndDialogState">
-  </warning-dialog>
   </span>
 </template>
 
@@ -74,13 +66,11 @@ import TournamentInfo from '@/components/TournamentInfo'
 import { mapActions, mapGetters } from 'vuex'
 import InvalidGames from '@/components/InvalidGames'
 import Table from '../components/Table'
-import WarningDialog from '../components/WarningDialog'
 
 export default {
   name: 'Tournament',
   components: {
     Table,
-    WarningDialog,
     TournamentInfo,
     InvalidGames
   },
@@ -127,8 +117,7 @@ export default {
           value: 'start'
         }],
       endDialog: false,
-      endDialogTitle: 'Avslutt turnering',
-      pathVar: 'tournament/'
+      endDialogTitle: 'Avslutt turnering'
     }
   },
   computed: {
@@ -192,27 +181,6 @@ export default {
     alterShowLeaderBoard() {
       this.showLeaderBoard = !this.showLeaderBoard
       this.showLeaderBoard === true ? this.alterLeaderBoardText = 'Vis partioversikt' : this.alterLeaderBoardText = 'Vis rangeringstabell'
-    },
-    endTournament() {
-      this.sendEndRequest().then(res => {
-        this.$router.push('/')
-      })
-    },
-    alterEndDialogState() {
-      this.endDialog = !this.endDialog
-      this.endDialogTitle = 'Avslutt turnering'
-    }
-  },
-  mounted() {
-  /*
-    Send warning to user when back button is pressed.
-    adapted from from: https://stackoverflow.com/questions/12381563/how-to-stop-browser-back-button-using-javascript
-  */
-    let VM = this
-    window.location.hash = this.pathVar + this.getTournament.user_id
-    window.location.hash = this.pathVar + this.getTournament.user_id // Varsel vil nå dukke opp to ganger
-    window.onhashchange = function() {
-      window.onpopstate = function() { VM.alterEndDialogState() }
     }
   },
   async created () {
