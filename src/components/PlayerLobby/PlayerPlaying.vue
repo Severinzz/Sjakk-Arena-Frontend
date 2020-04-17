@@ -45,66 +45,51 @@
           <v-divider></v-divider>
 
           <!-- Buttons -->
-          <!-- Register result -->
           <v-container>
-            <v-btn
-              class="btn"
-              color="primary"
-              v-if="paired"
-              block
-              rounded
-              depressed
-              @click="resultDialog = true"
-            >
-              Registrer resultat
-            </v-btn>
+            <!-- Register result -->
+            <oval-button
+            :primary="true"
+            v-if="paired"
+            text="Registrer resultat"
+            @buttonClicked="resultDialog = true"
+            />
+
             <!-- Leave tournament -->
-            <v-btn
-              class="btn"
-              block
-              rounded
-              depressed
-              @click="leaveDialog = true"
-            >
-              Forlat turnering
-            </v-btn>
+            <oval-button
+              text="Forlat turnering"
+              @buttonClicked="leaveDialog = true"
+            />
+
             <!-- break -->
-            <v-btn
-              class="btn"
-              :color="pause ? 'primary' : ''"
-              block
+            <oval-button
+              :text="pauseButtonText"
+              :primary="pause"
               v-if="!paired"
-              rounded
-              depressed
-              @click="alterBreakState"
-            >
-              {{ pauseButtonText }}
-            </v-btn>
+              @buttonClicked="alterBreakState"
+            />
+
+            <!-- Chess clock -->
+            <oval-button
+              text="Sjakkur"
+              @buttonClicked="showChessClock"
+            />
+
             <!-- Past results -->
-            <v-btn
-              class="btn"
-              :color="pastResults ? 'primary' : ''"
-              block
-              rounded
-              depressed
-              @click="alterPastResultsState"
-            >
-              {{ pastResultsText }}
-            </v-btn>
+            <oval-button
+              :primary="pastResults"
+              :text="pastResultsText"
+              @buttonClicked="alterPastResultsState"
+            />
+
           </v-container>
 
           <div v-if="pastResults">
             <EarlierResults></EarlierResults>
-            <v-btn
-              class="btn"
-              :color="pastResults ? 'primary' : ''"
-              block
-              rounded
-              depressed
-              @click="alterPastResultsState"
-            >
-              {{ pastResultsText }}
-            </v-btn>
+            <oval-button
+              :primary="pastResults"
+              :text="pastResultsText"
+              @buttonClicked="alterPastResultsState"
+            />
           </div>
 
           <!-- Dialog for user to input result; https://vuetifyjs.com/en/components/dialogs -->
@@ -234,6 +219,7 @@ import EarlierResults from './EarlierResults'
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 import WarningDialog from '../WarningDialog'
 import InformationDialog from '../InformationDialog'
+import OvalButton from '../OvalButton'
 
 export default {
   name: 'PlayerPlaying',
@@ -249,7 +235,8 @@ export default {
     WarningDialog,
     PlayerPaired,
     PlayerNotPaired,
-    EarlierResults
+    EarlierResults,
+    OvalButton
   },
   computed: {
     ...mapState({
@@ -367,6 +354,10 @@ export default {
     },
     alterLeaveDialogState() {
       this.leaveDialog = !this.leaveDialog
+    },
+    showChessClock() {
+      let route = this.$router.resolve('/chess-clock')
+      window.open(route.href, '_blank')
     }
   },
   mounted() {
