@@ -43,21 +43,26 @@ export default {
   },
   data() {
     return {
-      timeLeft: this.initialTimePrPlayer,
+      secondToMillisecondRatio: 1000,
+      minuteToSecondRatio: 60,
+      intervalStart: 0,
+      timeLeft: this.initialTimePrPlayer * 1000, // in ms
       countDownInterval: undefined
     }
   },
   methods: {
     clicked: function () {
       if (this.countDown) {
-        this.timeLeft += this.additionalTimePrMove
+        this.timeLeft += this.additionalTimePrMove * this.secondToMillisecondRatio
         clearInterval(this.countDownInterval)
         this.$emit('update:count-down', false)
       }
     },
     decrementTimeLeft: function() {
       if (this.timeLeft > 0) {
-        this.timeLeft -= 1
+        let now = new Date().getTime()
+        this.timeLeft -= now - this.intervalStart
+        this.intervalStart = now
       } else {
         this.$emit('times-up')
       }
@@ -71,8 +76,8 @@ export default {
       return ''
     },
     time () {
-      let minutes = Math.floor(this.timeLeft / 60)
-      let seconds = Math.floor(this.timeLeft % 60)
+      let minutes = Math.floor(this.timeLeft / (this.minuteToSecondRatio * this.secondToMillisecondRatio))
+      let seconds = Math.floor((this.timeLeft % (this.minuteToSecondRatio * this.secondToMillisecondRatio)) / this.secondToMillisecondRatio)
       let secondsString = seconds < 10 ? '0' + `${seconds}` : `${seconds}`
       return minutes + ':' + secondsString
     },
@@ -83,13 +88,14 @@ export default {
   watch: {
     countDown: function (countDown) {
       if (countDown && !this.reset) {
-        this.countDownInterval = setInterval(this.decrementTimeLeft, 1000)
+        this.intervalStart = new Date().getTime()
+        this.countDownInterval = setInterval(this.decrementTimeLeft, 100)
       }
     },
     reset: function (reset) {
       if (reset) {
         clearInterval(this.countDownInterval)
-        this.timeLeft = this.initialTimePrPlayer
+        this.timeLeft = this.initialTimePrPlayer * this.secondToMillisecondRatio
         this.$emit('update:reset', false)
       }
     }
