@@ -164,6 +164,6 @@ export default {
 
 <style scoped>
   #chess-clock {
-    height:100%;
+    height:80vh;
   }
 </style>
