@@ -28,10 +28,22 @@
 export default {
   name: 'PaginationButtons',
   props: {
-    prPage: { type: Number, required: true },
-    numberOfItems: { type: Number, required: true },
-    maxVisibleButtons: { type: Number, required: false, default: 5 }, // This is without the "<<" and ">>" buttons
-    autoScroll: { type: Boolean, required: false, default: false }
+    prPage: {
+      type: Number,
+      default: 5
+    },
+    numberOfItems: {
+      type: Number,
+      required: true
+    },
+    maxVisibleButtons: { // This is without the "<<" and ">>" buttons
+      type: Number,
+      default: 5
+    },
+    autoScroll: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {

@@ -9,8 +9,17 @@
 export default {
   name: 'Player',
   props: {
-    playerName: { type: String, required: true },
-    playerPiece: { type: String, required: false }
+    playerName: {
+      type: String,
+      required: true
+    },
+    playerPiece: {
+      type: String,
+      default: 'fas fa-chess-queen fa-3x',
+      validator: value => {
+        return value.indexOf('fa-') > -1 // Checks if the icon is from fontawesome
+      }
+    }
   }
 }
 </script>

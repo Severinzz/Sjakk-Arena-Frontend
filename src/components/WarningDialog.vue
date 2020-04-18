@@ -24,10 +24,22 @@
 export default {
   name: 'WarningDialog',
   props: {
-    title: String,
-    action: String,
-    showDialog: Boolean,
-    carryOnButtonText: String
+    title: {
+      type: String,
+      required: true
+    },
+    action: {
+      type: String,
+      required: true
+    },
+    showDialog: {
+      type: Boolean,
+      required: true
+    },
+    carryOnButtonText: {
+      type: String,
+      default: 'Fortsett'
+    }
   },
   methods: {
     carryOn() {

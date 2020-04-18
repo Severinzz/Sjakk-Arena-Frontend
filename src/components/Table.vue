@@ -40,9 +40,18 @@ export default {
   name: 'Table',
   components: { PaginationButtons },
   props: {
-    objectList: { type: Array, required: true },
-    headingList: { type: Array, required: false },
-    autoScrollOption: { type: Boolean, required: false, default: false }
+    objectList: {
+      type: Array,
+      required: true
+    },
+    headingList: {
+      type: Array,
+      required: true
+    },
+    autoScrollOption: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {

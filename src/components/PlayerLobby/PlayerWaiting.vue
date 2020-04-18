@@ -24,11 +24,26 @@
 export default {
   name: 'PlayerWaiting',
   props: {
-    tournamentName: String,
-    tournamentStart: String,
-    tournamentEnd: String,
-    playerName: String,
-    points: Number
+    tournamentName: {
+      String,
+      default: 'Sjakk-Arena turnering'
+    },
+    tournamentStart: {
+      type: String,
+      required: true
+    },
+    tournamentEnd: {
+      type: String,
+      required: false
+    },
+    playerName: {
+      type: String,
+      required: true
+    },
+    points: {
+      type: Number,
+      required: true
+    }
   }
 }
 </script>

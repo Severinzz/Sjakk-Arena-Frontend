@@ -2,7 +2,7 @@
   <v-alert
     color="red"
     dark
-    :icon="this.errorIcon"
+    :icon="errorIcon"
     transition="scale-transition">
     {{ errorMessage }}
   </v-alert>
@@ -12,8 +12,17 @@
 export default {
   name: 'AlertBox',
   props: {
-    errorMessage: { type: String, required: true },
-    errorIcon: { type: String, required: true }
+    errorMessage: {
+      type: String,
+      required: true
+    },
+    errorIcon: {
+      type: String,
+      required: true,
+      validator: value => {
+        return value.indexOf('fa-') > -1 // Checks if the icon is from fontawesome
+      }
+    }
   }
 }
 </script>

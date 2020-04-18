@@ -110,11 +110,10 @@
       <!-- End time and date-->
         <date-time
           v-if="useEndTime"
-          :min-date="new Date().toISOString().slice(0, 10)"
           :min-time="startTime"
           :rules="endTimeRules"
           :event-name="'endDateTime'"
-          @endDateTime="onEndDateTime"></date-time>
+          @endDateTime="onEndDateTime"/>
       </v-col>
       </v-row>
       <!-- end of code from vuetifyjs.com -->
@@ -157,8 +156,7 @@ export default {
       currentDate: new Date().toISOString().slice(0, 10),
       endDate: '',
       startTimeMenu: false,
-      endTimeMenu: false,
-      minStartTime: '',
+      minStartTime: new Date().getHours().toString() + ':' + new Date().getMinutes().toString(),
       email: '', // email address of tournament host
       tournamentName: '', // name of tournament
       tables: '', // number of tables used in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
@@ -172,7 +170,7 @@ export default {
       missingStartTime: false,
       // rules
       emailRules: [
-        v => /^[A-Z\WÆØÅa-z\Wæøå0-9._%+-]+@[A-Z\WÆØÅa-z\Wæøå0-9.-]+\.[A-Z\WÆØÅa-z\Wæøå]{2,6}$/.test(v) || 'Du må skrive inn en gyldig e-postadresse'
+        v => /^[A-ZÆØÅa-zæøå0-9._%+-]+@[A-ZÆØÅa-zæøå0-9.-]+\.[A-ZÆØÅa-zæøå]{2,6}$/.test(v) || 'Du må skrive inn en gyldig e-postadresse'
       ],
       tournamentNameRules: [
         v => !!v || 'Turneringsnavn er påkrevd',
@@ -291,8 +289,6 @@ export default {
   created() {
     this.close()
     this.clearPlayers()
-    let now = new Date()
-    this.minStartTime = now.getHours().toString() + ':' + now.getMinutes().toString()
   }
 }
 

@@ -240,7 +240,7 @@
           @closeDialog="leaveDialog = false"
           ></warning-dialog>
           <!-- playtime -->
-          <p class="gameDetail body-2">Spilletid: {{ tournamentStart }} -> {{ tournamentEnd }} </p>
+          <p v-if="tournamentEnd" class="gameDetail body-2">Spilletid: {{ tournamentStart }} -> {{ tournamentEnd }} </p>
         </v-card-text>
       </v-card>
     </v-row>
@@ -257,11 +257,26 @@ import WarningDialog from '../WarningDialog'
 export default {
   name: 'PlayerPlaying',
   props: {
-    tournamentName: String,
-    tournamentStart: String,
-    tournamentEnd: String,
-    playerName: String,
-    points: Number
+    tournamentName: {
+      type: String,
+      default: 'Sjakk-Arena turnering'
+    },
+    tournamentStart: {
+      type: String,
+      required: true
+    },
+    tournamentEnd: {
+      type: String,
+      required: false
+    },
+    playerName: {
+      type: String,
+      required: true
+    },
+    points: {
+      type: Number,
+      required: true
+    }
   },
   components: {
     WarningDialog,

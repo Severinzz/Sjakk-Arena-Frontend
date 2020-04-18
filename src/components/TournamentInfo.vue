@@ -21,8 +21,20 @@
 export default {
   name: 'TournamentInfo',
   props: {
-    tournament: { type: Object, required: true },
-    started: { type: Boolean, required: true }
+    tournament: {
+      type: Object,
+      required: true,
+      validator: value => {
+        const valueHasId = value.user_id !== undefined || null
+        const valueHasName = value.tournament_name !== '' || undefined || null
+        const hasStartTime = value.start !== ''
+        return valueHasId && valueHasName && hasStartTime
+      }
+    },
+    started: {
+      type: Boolean,
+      required: true
+    }
   },
   computed: {
     endDate() {
