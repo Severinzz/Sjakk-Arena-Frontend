@@ -50,6 +50,13 @@ export default {
   props: {
     source: String
   },
+  data () {
+    return {
+      gamePin: '',
+      playerName: '',
+      errorMessage: ''
+    }
+  },
   methods: {
     ...mapActions([
       'sendPlayer',
@@ -86,16 +93,6 @@ export default {
     }
     // End of stack overflow
   },
-  data () {
-    return {
-      gamePin: '',
-      playerName: '',
-      errorMessage: ''
-    }
-  },
-  created() {
-    this.deleteTokenAndSetStateToDefault()
-  },
   watch: {
     playerName: function() {
       if (this.playerName.length > 20) {
@@ -103,6 +100,9 @@ export default {
         this.playerName = this.playerName.substring(0, Math.min(this.playerName.length, 20))
       }
     }
+  },
+  created() {
+    this.deleteTokenAndSetStateToDefault()
   }
 }
 </script>

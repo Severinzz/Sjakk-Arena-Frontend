@@ -21,30 +21,13 @@
 </template>
 
 <script>
+import { playerMixin } from '../../mixins/playerMixin'
+
 export default {
   name: 'PlayerWaiting',
-  props: {
-    tournamentName: {
-      String,
-      default: 'Sjakk-Arena turnering'
-    },
-    tournamentStart: {
-      type: String,
-      required: true
-    },
-    tournamentEnd: {
-      type: String,
-      required: false
-    },
-    playerName: {
-      type: String,
-      required: true
-    },
-    points: {
-      type: Number,
-      required: true
-    }
-  }
+  mixins: [
+    playerMixin
+  ]
 }
 </script>
 

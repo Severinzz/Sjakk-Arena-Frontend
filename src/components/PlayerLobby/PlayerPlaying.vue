@@ -253,36 +253,33 @@ import PlayerNotPaired from './PlayerNotPaired'
 import EarlierResults from './EarlierResults'
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 import WarningDialog from '../WarningDialog'
+import { leavePageWarningMixin } from '../../mixins/leavePageWarningMixin'
+import { playerMixin } from '../../mixins/playerMixin'
 
 export default {
   name: 'PlayerPlaying',
-  props: {
-    tournamentName: {
-      type: String,
-      default: 'Sjakk-Arena turnering'
-    },
-    tournamentStart: {
-      type: String,
-      required: true
-    },
-    tournamentEnd: {
-      type: String,
-      required: false
-    },
-    playerName: {
-      type: String,
-      required: true
-    },
-    points: {
-      type: Number,
-      required: true
-    }
-  },
   components: {
     WarningDialog,
     PlayerPaired,
     PlayerNotPaired,
     EarlierResults
+  },
+  mixins: [
+    leavePageWarningMixin,
+    playerMixin
+  ],
+  data() {
+    return {
+      resultDialog: false,
+      leaveDialog: false,
+      pastResults: false,
+      pause: false,
+      pauseButtonText: 'Ta pause',
+      pastResultsText: 'Tidligere parti',
+      result: '',
+      suggestionIsSent: false,
+      pathVar: 'player-lobby'
+    }
   },
   computed: {
     ...mapState({
@@ -304,18 +301,6 @@ export default {
     },
     showSuggestedResultDialog: function() {
       return this.suggestedResult !== undefined
-    }
-  },
-  data() {
-    return {
-      resultDialog: false,
-      leaveDialog: false,
-      pastResults: false,
-      pause: false,
-      pauseButtonText: 'Ta pause',
-      pastResultsText: 'Tidligere parti',
-      result: '',
-      suggestionIsSent: false
     }
   },
   methods: {
@@ -398,21 +383,9 @@ export default {
         this.pastResultsText = 'Tidligere parti'
       }
     },
-    alterLeaveDialogState() {
+    alterLeavePageDialogState() {
       this.leaveDialog = !this.leaveDialog
     }
-  },
-  mounted() {
-    /*
-  Send warning to user when back button is pressed.
-  adapted from from: https://stackoverflow.com/questions/12381563/how-to-stop-browser-back-button-using-javascript
- */
-    let VM = this
-    window.location.hash = 'player-lobby'
-    window.location.hash = 'player-lobby' // Varsel vil nå dukke opp to ganger
-    window.onhashchange = function() { // tilbake, avbryt, tilbake, avbryt, tilbake nå fører spiller til EnterTUI siden.
-      window.onpopstate = function() { VM.alterLeaveDialogState() }
-    } // bytt 'VM.alterLeaveDialogState()' med window.location.hash='player-lobby' er fy! dette medfører at tilbake knappen ikke funker som den skal, kan kræsje nettlesere også!!
   },
   watch: {
     validResult () {

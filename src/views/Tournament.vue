@@ -64,7 +64,7 @@
   carry-on-button-text="Avslutt turnering"
   :show-dialog="endDialog"
   @carryOn="endTournament"
-  @closeDialog="alterEndDialogState">
+  @closeDialog="alterLeavePageDialogState">
   </warning-dialog>
   </span>
 </template>
@@ -75,6 +75,7 @@ import { mapActions, mapGetters } from 'vuex'
 import InvalidGames from '@/components/InvalidGames'
 import Table from '../components/Table'
 import WarningDialog from '../components/WarningDialog'
+import { leavePageWarningMixin } from '../mixins/leavePageWarningMixin'
 
 export default {
   name: 'Tournament',
@@ -84,6 +85,9 @@ export default {
     TournamentInfo,
     InvalidGames
   },
+  mixins: [
+    leavePageWarningMixin
+  ],
   data () {
     return {
       activeTournament: '',
@@ -198,21 +202,9 @@ export default {
         this.$router.push('/')
       })
     },
-    alterEndDialogState() {
+    alterLeavePageDialogState() {
       this.endDialog = !this.endDialog
       this.endDialogTitle = 'Avslutt turnering'
-    }
-  },
-  mounted() {
-  /*
-    Send warning to user when back button is pressed.
-    adapted from from: https://stackoverflow.com/questions/12381563/how-to-stop-browser-back-button-using-javascript
-  */
-    let VM = this
-    window.location.hash = this.pathVar + this.getTournament.user_id
-    window.location.hash = this.pathVar + this.getTournament.user_id // Varsel vil nå dukke opp to ganger
-    window.onhashchange = function() {
-      window.onpopstate = function() { VM.alterEndDialogState() }
     }
   },
   async created () {
@@ -225,6 +217,7 @@ export default {
       })
     }
     this.subscribeToTournamentSubscriptions({ vm: this, started: started })
+    this.pathVar = this.pathVar + this.activeTournament.user_id
   },
   destroyed () {
     this.unsubscribe('leaderboard')
