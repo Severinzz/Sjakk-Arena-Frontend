@@ -3,7 +3,7 @@
     <v-btn
       class="left"
       @click="jumpLeft"
-      v-if="activeButton !== 1 && numberOfItems > 0">
+      v-if="showJumpLeft">
       &laquo;
     </v-btn>
     <v-btn
@@ -17,7 +17,7 @@
     <v-btn
       class="right"
       @click="jumpRight"
-    v-if="activeButton !== lastButton && numberOfItems > 0">
+    v-if="showJumpRight">
       &raquo;
     </v-btn>
       <p>Side {{ activeButton }} av {{ lastButton }}</p>
@@ -48,7 +48,9 @@ export default {
   data() {
     return {
       activeButton: 1,
-      intervalId: ''
+      intervalId: '',
+      showJumpLeft: false,
+      showJumpRight: false
     }
   },
   methods: {
@@ -62,7 +64,7 @@ export default {
     },
     // Checks if there is any buttons to the right outside of the visible ones
     hasButtonsRight() {
-      return this.maxButtonNr() <= this.lastButton
+      return this.maxButtonNr() < this.lastButton
     },
     // Returns the index of the lowest visible number
     minButtonNr() {
@@ -92,26 +94,41 @@ export default {
       } else {
         this.changePage(this.maxButtonNr() + 1)
       }
+    },
+    alterShowJumpLeft(show) {
+      this.showJumpLeft = show
+    },
+    alterShowJumpRight(show) {
+      this.showJumpRight = show
     }
   },
   computed: {
     visibleButtons () {
       let button = 1
       let buttonsArr = []
-      if (this.numberOfItems === 0) { return }
       // Creates an array of all the buttons.
       while (buttonsArr.length < this.lastButton) {
         buttonsArr.push(button)
         button++
       }
       switch (true) {
+        case this.maxVisibleButtons >= this.lastButton:
+          this.alterShowJumpLeft(false)
+          this.alterShowJumpRight(false)
+          return buttonsArr
         // If there are no buttons to the left of the visible range
         case !this.hasButtonsLeft():
+          this.alterShowJumpLeft(false)
+          this.alterShowJumpRight(true)
           return buttonsArr.slice(0, this.maxVisibleButtons)
         // No buttons to the right of the visible range
         case !this.hasButtonsRight():
+          this.alterShowJumpLeft(true)
+          this.alterShowJumpRight(false)
           return buttonsArr.slice(this.lastButton - this.maxVisibleButtons, this.lastButton)
         default:
+          this.alterShowJumpLeft(true)
+          this.alterShowJumpRight(true)
           // There are buttons to both right and left of the visible range.
           return buttonsArr.slice(this.minButtonNr(), this.maxButtonNr())
       }
