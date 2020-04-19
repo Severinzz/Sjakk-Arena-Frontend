@@ -143,9 +143,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import AlertBox from './AlertBox'
 import DateTime from './DateTime'
+
 export default {
   name: 'TournamentCreationForm',
   components: { AlertBox, DateTime },
@@ -195,9 +196,6 @@ export default {
       'sendTournament',
       'close'
     ]),
-    ...mapGetters([
-      'getTournament'
-    ]),
     ...mapMutations([
       'clearPlayers'
     ]),
@@ -225,8 +223,7 @@ export default {
       // Sends the given information in the form to the server.
       await this.sendTournament(payload).then(res => {
         // Grabs the tournament from store so the correct tournament_id is used in the dynamic link.
-        let tournament = this.getTournament()
-        this.$router.push('/lobby/' + tournament.user_id)
+        this.$router.push('/lobby/' + this.tournament.user_id)
         this.isLoading = false
       }).catch(err => {
         // Hides the loading circle and display error message
@@ -279,6 +276,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      tournament: state => state.tournament.tournament
+    }),
     calcStartTime() {
       if (this.currentDate === this.endDate) {
         return this.endTime

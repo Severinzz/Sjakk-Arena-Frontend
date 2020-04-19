@@ -3,30 +3,42 @@ import Stomp from 'stompjs'
 import config from './config'
 import jwt from './jwt.storage'
 
-let socket
-let client
+let socket = {}
+let client = {}
 let subscriptions = {}
-let connected = false
-
+let initialised = false
+let subQueue = []
+let connected = 3
 const WEBSOCKET = {
   /*
   Subscribes to the correct endpoint on the backend.
    */
-  connect(newSubscriptions) {
-    if (connected) {
-      for (let i in newSubscriptions) {
-        subscriptions[newSubscriptions[i].path] = client.subscribe('/user/queue/' + newSubscriptions[i].path, newSubscriptions[i].callback)
-        client.send('/app/' + newSubscriptions[i].path, function (msg) {})
-      }
-    } else {
+  connect(newSubscription) {
+    if (initialised === false) {
       init()
-      client.connect(this.setupHeader(), function() {
-        for (let i in newSubscriptions) {
-          subscriptions[newSubscriptions[i].path] = client.subscribe('/user/queue/' + newSubscriptions[i].path, newSubscriptions[i].callback)
-          client.send('/app/' + newSubscriptions[i].path, function (msg) {})
-        }
-      })
     }
+    switch (connected) {
+      case 0: // connecting
+        subQueue.push(newSubscription)
+        break
+      case 1: // OPEN
+        this.subscribe(newSubscription)
+        break
+      default:
+        connected = 0
+        client.connect(this.setupHeader(), function () {
+          connected = 1
+          subscriptions[newSubscription] = client.subscribe('/user/queue/' + newSubscription.path, newSubscription.callback)
+          client.send('/app/' + newSubscription.path, function (msg) {
+          })
+          subToQueue()
+        })
+    }
+  },
+  subscribe(newSubscription) {
+    subscriptions[newSubscription] = client.subscribe('/user/queue/' + newSubscription.path, newSubscription.callback)
+    client.send('/app/' + newSubscription.path, function (msg) {
+    })
   },
   /*
   Unsubscribe from the backend
@@ -54,7 +66,8 @@ const WEBSOCKET = {
   close() {
     if (socket !== null && socket !== undefined) {
       socket.close()
-      connected = false
+      initialised = false
+      connected = 3
     }
   },
   setupHeader() {
@@ -64,13 +77,21 @@ const WEBSOCKET = {
   }
 }
 
+function subToQueue() {
+  if (subQueue.length < 1) { return }
+  for (let i in subQueue) {
+    WEBSOCKET.subscribe(subQueue[i])
+  }
+  subQueue = []
+}
+
 /*
 Initialises the socket. Connect to backend
  */
 function init() {
   socket = SockJS(config.API_URL + '/ws')
   client = Stomp.over(socket)
-  connected = true
+  initialised = true
 }
 
 export default WEBSOCKET

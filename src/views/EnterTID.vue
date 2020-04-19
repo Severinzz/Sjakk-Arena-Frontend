@@ -40,8 +40,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 import AlertBox from '../components/AlertBox'
+
 export default {
   name: 'enterTID',
   components: {
@@ -61,9 +62,6 @@ export default {
       'signInUUID',
       'deleteTokenAndSetStateToDefault'
     ]),
-    ...mapGetters([
-      'getTournament'
-    ]),
     ...mapMutations([
       'clearPlayers'
     ]),
@@ -74,11 +72,10 @@ export default {
       this.signInUUID(this.tournamentId).then(res => {
         vm.fetchTournament().then(res => {
           vm.isLoading = false
-          let tournament = vm.getTournament()
-          if (tournament.active) {
-            this.$router.push('/tournament/' + `${tournament.user_id}`)
+          if (vm.tournament.active) {
+            this.$router.push('/tournament/' + `${vm.tournament.user_id}`)
           } else {
-            this.$router.push('/lobby/' + `${tournament.user_id}`)
+            this.$router.push('/lobby/' + `${vm.tournament.user_id}`)
           }
         })
       }).catch(err => {
@@ -90,11 +87,16 @@ export default {
           this.errorMessage = 'Error code: ' + err.response.status + ', ' + err.response.data.message
         }
       })
-    },
-    created() {
-      this.clearPlayers()
-      this.deleteTokenAndSetStateToDefault()
     }
+  },
+  computed: {
+    ...mapState({
+      tournament: state => state.tournament.tournament
+    })
+  },
+  created() {
+    this.clearPlayers()
+    // this.deleteTokenAndSetStateToDefault()
   }
 }
 </script>

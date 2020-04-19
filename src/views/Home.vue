@@ -32,7 +32,7 @@ export default {
     ])
   },
   created() {
-    this.deleteTokenAndSetStateToDefault()
+    // this.deleteTokenAndSetStateToDefault()
   }
 }
 </script>

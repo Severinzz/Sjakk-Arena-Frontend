@@ -45,11 +45,6 @@
 import { mapActions } from 'vuex'
 export default {
   name: 'EnterTourney',
-  components: {
-  },
-  props: {
-    source: String
-  },
   data () {
     return {
       gamePin: '',

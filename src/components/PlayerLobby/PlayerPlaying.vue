@@ -17,7 +17,7 @@
         </v-toolbar>
         <v-card-text align="center">
           <v-spacer/>
-
+          <!-- Remember to check mixin for some values -->
           <!-- Tournament name -->
           <h1 class="bigInfo">{{ tournamentName }}</h1>
 
@@ -251,10 +251,10 @@
 import PlayerPaired from './PlayerPaired'
 import PlayerNotPaired from './PlayerNotPaired'
 import EarlierResults from './EarlierResults'
-import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 import WarningDialog from '../WarningDialog'
-import { leavePageWarningMixin } from '../../mixins/leavePageWarningMixin'
-import { playerMixin } from '../../mixins/playerMixin'
+import { leavePageWarningMixin } from '../../mixins/leavePageWarning.mixin'
+import { playerMixin } from '../../mixins/player.mixin'
 
 export default {
   name: 'PlayerPlaying',
@@ -284,11 +284,12 @@ export default {
   computed: {
     ...mapState({
       paired: state => state.paired,
-      opponentId: state => state.activeGame.opponent_id,
-      opponentsDisagree: state => state.resultDialog.opponents_disagree,
-      suggestedResult: state => state.resultDialog.suggested_result,
-      gameId: state => state.resultDialog.game_id,
-      validResult: state => state.resultDialog.valid
+      opponentId: state => state.games.activeGame.opponent_id,
+      opponentsDisagree: state => state.games.resultDialog.opponents_disagree,
+      suggestedResult: state => state.games.resultDialog.suggested_result,
+      gameId: state => state.games.resultDialog.game_id,
+      validResult: state => state.games.resultDialog.valid,
+      active: state => state.tournament.activeTournament
     }),
     getResultText: function () {
       if (this.suggestedResult === 1.0) {
@@ -306,16 +307,11 @@ export default {
   methods: {
     ...mapActions([
       'sendLeaveRequest',
-      'sendDeleteRequest',
       'sendGameResult',
       'sendPauseRequest',
       'sendUnpauseRequest',
-      'fetchPlayersTournament',
       'sendValidationOfResult',
       'sendInvalidationOfResult'
-    ]),
-    ...mapGetters([
-      'getTournament'
     ]),
     ...mapMutations([
       'setPaired',
@@ -341,6 +337,7 @@ export default {
     approveResult() {
       this.sendValidationOfResult(this.gameId).then(res => {
         this.setSuggestedResult(undefined)
+        this.setSuggestedResult(undefined)
         this.setPaired(false)
       })
     },
@@ -353,9 +350,7 @@ export default {
         The player leaves the tournament
       */
     async leaveTournament() {
-      await this.fetchPlayersTournament() // TODO: Bytt når websocket e inne
-      let started = this.getTournament().started // TODO: Bytt når websocket e inne
-      this.sendLeaveRequest(started).then(res => {
+      this.sendLeaveRequest(this.active).then(res => {
         this.$router.push('/')
       })
     },
@@ -393,6 +388,9 @@ export default {
         this.setPaired(false)
       }
     }
+  },
+  mounted() {
+    this.setupBrowserWarning()
   }
 }
 </script>

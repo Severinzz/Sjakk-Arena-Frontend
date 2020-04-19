@@ -76,21 +76,26 @@ export default {
   },
   computed: {
     ...mapState({
-      tournamentName: state => state.tournament.name,
-      tournamentStart: state => state.tournament.start,
-      tournamentEnd: state => state.tournament.end,
-      activeTournament: state => state.activeTournament,
-      playerName: state => state.player.name,
-      points: state => state.points
+      tournament: state => state.tournament,
+      tournamentName: state => state.tournament.tournament.name,
+      tournamentStart: state => state.tournament.tournament.start,
+      tournamentEnd: state => state.tournament.tournament.end,
+      activeTournament: state => state.tournament.activeTournament,
+      playerName: state => state.players.player.name,
+      points: state => state.players.points
     })
   },
   methods: {
     ...mapActions([
       'fetchPlayersTournament',
       'fetchPlayer',
-      'subscribeToPlayerLobbySubscriptions',
       'unsubscribeAll',
-      'close'
+      'close',
+      'subscribeToTournamentActive',
+      'subscribeToActiveGame',
+      'subscribeToPoints',
+      'subscribeToSuggestedResult',
+      'subscribeToPlayerKicked'
     ]),
     countDown() {
       this.countDownNr--
@@ -109,7 +114,7 @@ export default {
       this.intervalId = setInterval(this.countDown, 1000)
     }
   },
-  mounted() {
+  created() {
     this.fetchPlayersTournament()
     this.fetchPlayer()
     let vm = this
@@ -118,7 +123,11 @@ export default {
       vm.kickedDialog = true
       vm.startCountDown()
     }
-    this.subscribeToPlayerLobbySubscriptions(callback)
+    this.subscribeToTournamentActive('player')
+    this.subscribeToActiveGame()
+    this.subscribeToPoints()
+    this.subscribeToSuggestedResult()
+    this.subscribeToPlayerKicked(callback)
   },
   destroyed () {
     this.unsubscribeAll()
