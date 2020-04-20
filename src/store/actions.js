@@ -237,8 +237,12 @@ export default {
   getActiveGameSubscription: ({ commit }) => {
     let newGameCallback = function (res) {
       let newGame = JSON.parse(res.body)
-      commit('setActiveGame', newGame)
-      commit('setPaired', true)
+      if (newGame.active) {
+        commit('setActiveGame', newGame)
+        commit('setPaired', true)
+      } else {
+        commit('setPaired', false)
+      }
     }
     return { path: 'player/active-game', callback: newGameCallback }
   },
