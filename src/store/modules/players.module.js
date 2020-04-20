@@ -3,16 +3,8 @@ import { addToken, deleteToken } from '../../common/jwt.storage'
 import WEBSOCKET_SERVICE from '../../common/websocketApi'
 const LOADING_MESSAGE = 'loading....'
 
-export const state = {
-  player: {
-    name: LOADING_MESSAGE,
-    points: LOADING_MESSAGE
-  },
-  players: [],
-  playingPlayers: [],
-  paired: false,
-  points: NaN
-}
+export const state = setDefaultState()
+
 export const mutations = {
   addPlayer: (state, player) => {
     state.players.push(player)
@@ -42,12 +34,21 @@ export const mutations = {
   setPoints: (state, points) => {
     // TODO: heller endre player objektet sin points?
     state.points = points
+  },
+
+  resetPlayerState: (state) => {
+    // https://github.com/vuejs/vuex/issues/1118
+    Object.assign(state, setDefaultState())
   }
 }
 export const actions = {
 
-  setPlayerPaired: ({ commit }) => {
-    commit('setPaired')
+  resetPlayer: ({ commit }) => {
+    commit('resetPlayerState')
+  },
+
+  setPlayerPaired: ({ commit }, paired) => {
+    commit('setPaired', paired)
   },
 
   /*
@@ -135,7 +136,7 @@ export const actions = {
       }
     }
     let slug
-    started[0] ? slug = 'leaderboard' : slug = 'players'
+    started ? slug = 'leaderboard' : slug = 'players'
     let sub = { path: 'tournament/' + slug, callback: playerCallback }
     WEBSOCKET_SERVICE.connect(sub)
   },
@@ -163,5 +164,18 @@ export const getters = {
   },
   getAllPlayers: (state) => {
     return state.player
+  }
+}
+
+function setDefaultState() {
+  return {
+    player: {
+      name: LOADING_MESSAGE,
+      points: LOADING_MESSAGE
+    },
+    players: [],
+    playingPlayers: [],
+    paired: false,
+    points: NaN
   }
 }

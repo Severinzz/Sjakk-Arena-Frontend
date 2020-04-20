@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { deleteToken } from '../common/jwt.storage'
+import { API_SERVICE } from '../common/api'
 
 import * as games from '@/store/modules/games.module'
 import * as players from '@/store/modules/players.module'
@@ -12,5 +14,14 @@ export default new Vuex.Store({
     games,
     players,
     tournament
+  },
+  actions: {
+    resetAllStatesAndToken: ({ dispatch }) => {
+      deleteToken()
+      API_SERVICE.clearHeader()
+      dispatch('resetTournament')
+      dispatch('resetPlayer')
+      dispatch('resetGames')
+    }
   }
 })

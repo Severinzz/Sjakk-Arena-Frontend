@@ -193,8 +193,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'sendTournament',
-      'close'
+      'sendTournament'
     ]),
     ...mapMutations([
       'clearPlayers'
@@ -287,7 +286,6 @@ export default {
     }
   },
   created() {
-    this.close()
     this.clearPlayers()
   }
 }

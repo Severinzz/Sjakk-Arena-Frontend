@@ -75,7 +75,8 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import AlertBox from '@/components/AlertBox'
 import WarningDialog from '@/components/WarningDialog'
 import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
-
+import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
+import WEBSOCKET from '../common/websocketApi'
 export default {
   name: 'Lobby',
   components: {
@@ -85,7 +86,8 @@ export default {
     WarningDialog
   },
   mixins: [
-    leavePageWarningMixin
+    leavePageWarningMixin,
+    tournamentAndLobbyMixin
   ],
   data () {
     return {
@@ -161,18 +163,13 @@ export default {
       }
     }
   },
-  async created () {
-    let started = false
-    if (typeof this.tournament.user_id === 'string') {
-      await this.fetchTournament().then(() => {})
+  beforeRouteLeave(to, from, next) {
+    if (to.name === 'tournament') {
+      WEBSOCKET.unsubscribe('tournament/players')
+    } else {
+      WEBSOCKET.unsubscribeAll()
     }
-    this.pathVar = this.pathVar + this.tournament.user_id
-    this.subscribeToTournamentActive('tournament')
-    this.subscribeToPlayers(started)
-    this.setupBrowserWarning()
-  },
-  destroyed () {
-    this.unsubscribeAll()
+    next()
   }
 }
 </script>

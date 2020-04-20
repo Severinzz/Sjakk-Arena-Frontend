@@ -18,7 +18,8 @@
 // @ is an alias to /src
 import MenuTile from '@/components/MenuTile.vue'
 import TileHeaderSpace from '@/components/TileHeaderSpace'
-import { mapActions } from 'vuex'
+import { clearTokenAndStateMixin } from '../mixins/clearTokenAndState.mixin'
+import WEBSOCKET from '../common/websocketApi'
 
 export default {
   name: 'home',
@@ -26,13 +27,11 @@ export default {
     MenuTile,
     TileHeaderSpace
   },
-  methods: {
-    ...mapActions([
-      'deleteTokenAndSetStateToDefault'
-    ])
-  },
+  mixins: [
+    clearTokenAndStateMixin
+  ],
   created() {
-    // this.deleteTokenAndSetStateToDefault()
+    WEBSOCKET.close()
   }
 }
 </script>

@@ -3,24 +3,26 @@ import { addToken } from '../../common/jwt.storage'
 import WEBSOCKET_SERVICE from '../../common/websocketApi'
 const LOADING_MESSAGE = 'loading....'
 
-export const state = {
-  tournament: {
-    user_id: LOADING_MESSAGE,
-    tournament_name: LOADING_MESSAGE,
-    start: LOADING_MESSAGE,
-    end: LOADING_MESSAGE
-  },
-  activeTournament: false
-}
+export const state = setDefaultState()
 export const mutations = {
   addTournament: (state, tournament) => {
     state.tournament = tournament
+    state.activeTournament = tournament.active
   },
   setTournamentActive: (state, active) => {
-    state.tournament.active = active
+    state.activeTournament = active
+  },
+  resetTournamentState: (state) => {
+    // https://github.com/vuejs/vuex/issues/1118
+    Object.assign(state, setDefaultState())
   }
 }
 export const actions = {
+
+  resetTournament: ({ commit }) => {
+    commit('resetTournamentState')
+  },
+
   /*
     Send a tournament to the server.
    */
@@ -93,18 +95,30 @@ export const actions = {
     })
   },
 
-  subscribeToTournamentActive: ({ commit }, userRole) => {
+  subscribeToTournamentActive: ({ commit }, { userRole }) => {
     let activeCallback = function (res) {
       let active = JSON.parse(res.body).active
       commit('setTournamentActive', active)
     }
-    let path = userRole[0] === 'player' ? 'player/tournament-active' : 'tournament/active'
+    let path = userRole === 'player' ? 'player/tournament-active' : 'tournament/active'
     let sub = { path: path, callback: activeCallback }
     WEBSOCKET_SERVICE.connect(sub)
   }
 }
 export const getters = {
   isTournamentActive: (state) => {
-    return state.activeTournament.active
+    return state.activeTournament
+  }
+}
+
+function setDefaultState() {
+  return {
+    tournament: {
+      user_id: LOADING_MESSAGE,
+      tournament_name: LOADING_MESSAGE,
+      start: LOADING_MESSAGE,
+      end: LOADING_MESSAGE
+    },
+    activeTournament: false
   }
 }

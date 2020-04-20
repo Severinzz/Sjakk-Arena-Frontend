@@ -2,15 +2,7 @@ import { PLAYER_SERVICE, TOURNAMENT_SERVICE } from '../../common/api'
 import WEBSOCKET_SERVICE from '../../common/websocketApi'
 const LOADING_MESSAGE = 'loading....'
 
-export const state = {
-  activeGame: {
-    table: LOADING_MESSAGE,
-    opponent: LOADING_MESSAGE,
-    colour: LOADING_MESSAGE
-  },
-  activeGames: [],
-  invalidGames: []
-}
+export const state = setDefaultState()
 export const mutations = {
   addInvalidGame: (state, invalidGame) => {
     if (Array.isArray(invalidGame)) {
@@ -30,10 +22,29 @@ export const mutations = {
 
   setActiveGames: (state, activeGames) => {
     state.activeGames = activeGames
+  },
+
+  resetGamesState: (state) => {
+    // https://github.com/vuejs/vuex/issues/1118
+    Object.assign(state, setDefaultState())
+  },
+
+  setResultDialog: (state, resultDialog) => {
+    state.resultDialog = resultDialog
+  },
+
+  setSuggestedResult: (state, suggested) => {
+    state.resultDialog.suggested_result = suggested
+  },
+
+  setOpponentsDisagree: (state, disagree) => {
+    state.resultDialog.opponents_disagree = disagree
   }
 }
 export const actions = {
-
+  resetGames: ({ commit }) => {
+    commit('resetGamesState')
+  },
   /*
   Host send a game and its result to the server.
  */
@@ -95,7 +106,8 @@ export const actions = {
       let resultDialog = JSON.parse(res.body)
       commit('setResultDialog', resultDialog)
     }
-    return { path: 'player/result', callback: resultCallback }
+    let sub = { path: 'player/result', callback: resultCallback }
+    WEBSOCKET_SERVICE.connect(sub)
   },
 
   subscribeToInvalidGames: ({ commit }) => {
@@ -108,4 +120,22 @@ export const actions = {
   }
 }
 export const getters = {
+}
+
+function setDefaultState() {
+  return {
+    activeGame: {
+      table: LOADING_MESSAGE,
+      opponent: LOADING_MESSAGE,
+      colour: LOADING_MESSAGE
+    },
+    resultDialog: {
+      suggested_result: undefined,
+      game_id: '',
+      opponents_disagree: false,
+      valid: false
+    },
+    activeGames: [],
+    invalidGames: []
+  }
 }

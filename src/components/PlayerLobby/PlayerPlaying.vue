@@ -283,7 +283,7 @@ export default {
   },
   computed: {
     ...mapState({
-      paired: state => state.paired,
+      paired: state => state.players.paired,
       opponentId: state => state.games.activeGame.opponent_id,
       opponentsDisagree: state => state.games.resultDialog.opponents_disagree,
       suggestedResult: state => state.games.resultDialog.suggested_result,

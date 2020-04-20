@@ -40,14 +40,18 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import AlertBox from '../components/AlertBox'
+import { clearTokenAndStateMixin } from '../mixins/clearTokenAndState.mixin'
 
 export default {
   name: 'enterTID',
   components: {
     AlertBox
   },
+  mixins: [
+    clearTokenAndStateMixin
+  ],
   data () {
     return {
       tournamentId: '',
@@ -61,9 +65,6 @@ export default {
       'fetchTournament',
       'signInUUID',
       'deleteTokenAndSetStateToDefault'
-    ]),
-    ...mapMutations([
-      'clearPlayers'
     ]),
     async submit() {
       this.error = false
@@ -93,10 +94,6 @@ export default {
     ...mapState({
       tournament: state => state.tournament.tournament
     })
-  },
-  created() {
-    this.clearPlayers()
-    // this.deleteTokenAndSetStateToDefault()
   }
 }
 </script>

@@ -76,6 +76,7 @@ import InvalidGames from '@/components/InvalidGames'
 import Table from '../components/Table'
 import WarningDialog from '../components/WarningDialog'
 import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
+import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
 
 export default {
   name: 'Tournament',
@@ -86,7 +87,8 @@ export default {
     InvalidGames
   },
   mixins: [
-    leavePageWarningMixin
+    leavePageWarningMixin,
+    tournamentAndLobbyMixin
   ],
   data () {
     return {
@@ -137,14 +139,12 @@ export default {
   computed: {
     ...mapState({
       tournament: state => state.tournament.tournament,
+      isTournamentActive: state => state.tournament.activeTournament,
       activeGames: state => state.games.activeGames
     }),
     ...mapGetters([
       'getPlayerCount',
-      'getTournament',
-      'getAllPlayers',
-      'getActiveGames',
-      'isTournamentActive'
+      'getAllPlayers'
     ]),
     // Add placement to the players.
     playerList () {
@@ -210,20 +210,7 @@ export default {
     }
   },
   async created () {
-    let started = true
-    // If the tournament id is a string then it wil get the tournament from the server since the id should always be int.
-    if (typeof this.tournament.user_id === 'string') {
-      await this.fetchTournament()
-    }
-    this.subscribeToPlayers(started)
-    this.subscribeToTournamentActive('tournament')
     this.subscribeToActiveGames()
-    this.pathVar = this.pathVar + this.tournament.user_id
-    this.setupBrowserWarning()
-  },
-  destroyed () {
-    this.unsubscribe('leaderboard')
-    this.close()
   },
   watch: {
     isTournamentActive: function(active) {

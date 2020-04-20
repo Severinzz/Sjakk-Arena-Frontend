@@ -28,7 +28,7 @@ const WEBSOCKET = {
         connected = 0
         client.connect(this.setupHeader(), function () {
           connected = 1
-          subscriptions[newSubscription] = client.subscribe('/user/queue/' + newSubscription.path, newSubscription.callback)
+          subscriptions[newSubscription.path] = client.subscribe('/user/queue/' + newSubscription.path, newSubscription.callback)
           client.send('/app/' + newSubscription.path, function (msg) {
           })
           subToQueue()
@@ -36,7 +36,7 @@ const WEBSOCKET = {
     }
   },
   subscribe(newSubscription) {
-    subscriptions[newSubscription] = client.subscribe('/user/queue/' + newSubscription.path, newSubscription.callback)
+    subscriptions[newSubscription.path] = client.subscribe('/user/queue/' + newSubscription.path, newSubscription.callback)
     client.send('/app/' + newSubscription.path, function (msg) {
     })
   },
@@ -64,7 +64,7 @@ const WEBSOCKET = {
   Checks if a websocket is open, does nothing if not. Closes the socket if there is one open
    */
   close() {
-    if (socket !== null && socket !== undefined) {
+    if (typeof socket.close === 'function') {
       socket.close()
       initialised = false
       connected = 3
