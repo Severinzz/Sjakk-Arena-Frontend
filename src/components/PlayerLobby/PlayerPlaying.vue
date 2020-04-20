@@ -306,7 +306,6 @@ export default {
     approveResult() {
       this.sendValidationOfResult(this.gameId).then(res => {
         this.setSuggestedResult(undefined)
-        this.setSuggestedResult(undefined)
         this.setPaired(false)
       })
     },

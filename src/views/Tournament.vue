@@ -132,7 +132,8 @@ export default {
           value: 'start'
         }],
       endDialog: false,
-      endDialogTitle: 'Avslutt turnering'
+      endDialogTitle: 'Avslutt turnering',
+      pathVar: 'tournament/'
     }
   },
   computed: {

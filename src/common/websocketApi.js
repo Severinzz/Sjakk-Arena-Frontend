@@ -3,19 +3,19 @@ import Stomp from 'stompjs'
 import config from './config'
 import jwt from './jwt.storage'
 
-let socket = {}
-let client = {}
-let subscriptions = {}
-let initialised = false
-let subQueue = []
-let connected = 3
-
-const Connection = {
+const CONNECTION = {
   CONNECTING: 0,
   OPEN: 1,
   CLOSING: 2,
   CLOSED: 3
 }
+
+let socket = {}
+let client = {}
+let subscriptions = {}
+let initialised = false
+let subQueue = []
+let connected = CONNECTION.CLOSED
 
 const WEBSOCKET = {
   /*
@@ -26,16 +26,16 @@ const WEBSOCKET = {
       init()
     }
     switch (connected) {
-      case Connection.CONNECTING:
+      case CONNECTION.CONNECTING:
         subQueue.push(newSubscription)
         break
-      case Connection.OPEN:
+      case CONNECTION.OPEN:
         this.subscribe(newSubscription)
         break
       default:
-        connected = 0
+        connected = CONNECTION.CONNECTING
         client.connect(this.setupHeader(), function () {
-          connected = 1
+          connected = CONNECTION.OPEN
           subscriptions[newSubscription.path] = client.subscribe('/user/queue/' + newSubscription.path, newSubscription.callback)
           client.send('/app/' + newSubscription.path, function (msg) {
           })
@@ -75,7 +75,7 @@ const WEBSOCKET = {
     if (typeof socket.close === 'function') {
       socket.close()
       initialised = false
-      connected = 3
+      connected = CONNECTION.CLOSED
     }
   },
   setupHeader() {
