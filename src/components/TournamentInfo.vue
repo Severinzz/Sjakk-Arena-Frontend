@@ -14,20 +14,10 @@
   <p class="date" v-if="endDate">
     Dato: {{ formatEndDate() }}
   </p>
-  <warning-dialog
-    :title="endDialogTitle"
-    action="avslutte turneringen"
-    carry-on-button-text="Avslutt turnering"
-    :show-dialog="endDialog"
-    @carryOn="endTournament"
-    @closeDialog="alterEndDialogState">
-  </warning-dialog>
 </div>
 </template>
 
 <script>
-import WarningDialog from '../components/WarningDialog'
-
 export default {
   name: 'TournamentInfo',
   props: {
@@ -46,9 +36,6 @@ export default {
       required: true
     }
   },
-  components: {
-    WarningDialog
-  },
   computed: {
     endDate() {
       if (this.tournament.end !== undefined && this.tournament.end !== null) {
@@ -57,13 +44,6 @@ export default {
         return endDate !== currentDate
       }
       return false
-    }
-  },
-  data () {
-    return {
-      pathVar: '',
-      endDialog: false,
-      endDialogTitle: 'Avslutt turnering'
     }
   },
   methods: {
@@ -90,42 +70,6 @@ export default {
       } else {
         return this.tournament.end.split(' ')[0]
       }
-    },
-    alterEndDialogState() {
-      this.endDialog = !this.endDialog
-      this.endDialogTitle = 'Avslutt turnering'
-    },
-    endTournament() {
-      this.sendEndRequest().then(res => {
-        this.$router.push('/')
-      })
-    },
-    /*
-      Set pathVar to correct value, if tournament is started or not.
-     */
-    setPathVar() {
-      if (this.started) {
-        this.pathVar = 'tournament/'
-      } else {
-        this.pathVar = 'lobby/'
-      }
-    }
-  },
-  mounted() {
-    this.setPathVar()
-    /*
-      Send warning to user when back button is pressed.
-      adapted from from: https://stackoverflow.com/questions/12381563/how-to-stop-browser-back-button-using-javascript
-    */
-    let VM = this
-    let tournamentPin = window.location.href.split('/').pop()
-    // above adapted from: https://developer.mozilla.org/en-US/docs/Web/API/Window/location
-    // and https://stackoverflow.com/questions/4092325/how-to-remove-part-of-a-string-before-a-in-javascript
-    // hent det som er etter siste '/'-tegnet
-    window.location.hash = this.pathVar + tournamentPin
-    window.location.hash = this.pathVar + tournamentPin // Varsel vil nå dukke opp to ganger
-    window.onhashchange = function() {
-      window.onpopstate = function() { VM.alterEndDialogState() }
     }
   }
 }

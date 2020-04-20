@@ -90,7 +90,7 @@ export default {
       type: String,
       default: new Date().getHours().toString() + ':' + (new Date().getMinutes().toString() < 10 ? '0' : '') + new Date().getMinutes().toString(),
       validator: value => {
-        return /^(([0-2][0-5])|([\d])):[0-5][\d]$/.test(value) || value.length === 0 // Incase they open endtime before starttime.
+        return /^(([0-2][0-9])|([\d])):[0-5][\d]$/.test(value) || value.length === 0 // Incase they open endtime before starttime.
       }
     },
     minDate: { // The minimum date that can be picked
