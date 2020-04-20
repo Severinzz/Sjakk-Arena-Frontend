@@ -77,6 +77,7 @@ import WarningDialog from '@/components/WarningDialog'
 import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
 import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
 import WEBSOCKET from '../common/websocketApi'
+
 export default {
   name: 'Lobby',
   components: {

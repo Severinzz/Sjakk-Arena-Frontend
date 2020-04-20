@@ -45,66 +45,51 @@
           <v-divider></v-divider>
 
           <!-- Buttons -->
-          <!-- Register result -->
           <v-container>
-            <v-btn
-              class="btn"
-              color="primary"
-              v-if="paired"
-              block
-              rounded
-              depressed
-              @click="resultDialog = true"
-            >
-              Registrer resultat
-            </v-btn>
+            <!-- Register result -->
+            <oval-button
+            :primary="true"
+            v-if="paired"
+            text="Registrer resultat"
+            @buttonClicked="resultDialog = true"
+            />
+
             <!-- Leave tournament -->
-            <v-btn
-              class="btn"
-              block
-              rounded
-              depressed
-              @click="leaveDialog = true"
-            >
-              Forlat turnering
-            </v-btn>
+            <oval-button
+              text="Forlat turnering"
+              @buttonClicked="leaveDialog = true"
+            />
+
             <!-- break -->
-            <v-btn
-              class="btn"
-              :color="pause ? 'primary' : ''"
-              block
+            <oval-button
+              :text="pauseButtonText"
+              :primary="pause"
               v-if="!paired"
-              rounded
-              depressed
-              @click="alterBreakState"
-            >
-              {{ pauseButtonText }}
-            </v-btn>
+              @buttonClicked="alterBreakState"
+            />
+
+            <!-- Chess clock -->
+            <oval-button
+              text="Sjakkur"
+              @buttonClicked="showChessClock"
+            />
+
             <!-- Past results -->
-            <v-btn
-              class="btn"
-              :color="pastResults ? 'primary' : ''"
-              block
-              rounded
-              depressed
-              @click="alterPastResultsState"
-            >
-              {{ pastResultsText }}
-            </v-btn>
+            <oval-button
+              :primary="pastResults"
+              :text="pastResultsText"
+              @buttonClicked="alterPastResultsState"
+            />
+
           </v-container>
 
           <div v-if="pastResults">
             <EarlierResults></EarlierResults>
-            <v-btn
-              class="btn"
-              :color="pastResults ? 'primary' : ''"
-              block
-              rounded
-              depressed
-              @click="alterPastResultsState"
-            >
-              {{ pastResultsText }}
-            </v-btn>
+            <oval-button
+              :primary="pastResults"
+              :text="pastResultsText"
+              @buttonClicked="alterPastResultsState"
+            />
           </div>
 
           <!-- Dialog for user to input result; https://vuetifyjs.com/en/components/dialogs -->
@@ -193,44 +178,24 @@
               </v-card>
             </v-dialog>
           </v-row>
+
           <!-- Dialog if opponents can't agree on the result -->
-          <v-row class="justify-center" align="center">
-            <v-dialog v-model="opponentsDisagree" persistent max-width="650px">
-              <v-card>
-                <v-card-title class="justify-center">Dere ble ikke enige om resultatet</v-card-title>
-                <v-card-text class="text-center">Ta kontakt med turneringsvert eller prøv på nytt!
-                </v-card-text>
-                <v-layout justify-center>
-                  <v-card-actions>
-                    <v-btn
-                      textv
-                      @click="setOpponentsDisagree(false)">Lukk
-                    </v-btn>
-                  </v-card-actions>
-                </v-layout>
-              </v-card>
-            </v-dialog>
-          </v-row>
+          <information-dialog
+            :show-dialog="opponentsDisagree"
+            title="Dere ble ikke enige om resultatet"
+            text="Ta kontakt med turneringsvert eller prøv på nytt!"
+            @closeDialog="setOpponentsDisagree(false)"
+          />
 
           <!-- Dialog shown when result suggestion is sent -->
-          <v-row class="justify-center" align="center">
-            <v-dialog v-model="suggestionIsSent" persistent max-width="650px">
-              <v-card>
-                <v-card-title class="justify-center">Resultatforslag er sendt!</v-card-title>
-                <v-card-text class="text-center">Venter på at motstander skal godkjenne resultatet
-                </v-card-text>
-                <v-layout justify-center>
-                  <v-card-actions>
-                    <v-btn
-                      textv
-                      @click="suggestionIsSent = false">Lukk
-                    </v-btn>
-                  </v-card-actions>
-                </v-layout>
-              </v-card>
-            </v-dialog>
-          </v-row>
+          <information-dialog
+            :show-dialog="suggestionIsSent"
+            title="Resultatforslag er sendt!"
+            text="Venter på at motstander skal godkjenne resultatet"
+            @closeDialog="suggestionIsSent = false"
+          />
 
+          <!-- Dialog shown when player tries to leave the tournament -->
           <warning-dialog
           title="Forlat turneringen"
           action="forlate tuneringen"
@@ -238,7 +203,7 @@
           carry-on-button-text="Forlat turnering"
           @carryOn="leaveTournament()"
           @closeDialog="leaveDialog = false"
-          ></warning-dialog>
+          />
           <!-- playtime -->
           <p v-if="tournamentEnd" class="gameDetail body-2">Spilletid: {{ tournamentStart }} -> {{ tournamentEnd }} </p>
         </v-card-text>
@@ -255,14 +220,18 @@ import { mapActions, mapState, mapMutations } from 'vuex'
 import WarningDialog from '../WarningDialog'
 import { leavePageWarningMixin } from '../../mixins/leavePageWarning.mixin'
 import { playerMixin } from '../../mixins/player.mixin'
+import InformationDialog from '../InformationDialog'
+import OvalButton from '../OvalButton'
 
 export default {
   name: 'PlayerPlaying',
   components: {
+    InformationDialog,
     WarningDialog,
     PlayerPaired,
     PlayerNotPaired,
-    EarlierResults
+    EarlierResults,
+    OvalButton
   },
   mixins: [
     leavePageWarningMixin,
@@ -380,6 +349,10 @@ export default {
     },
     alterLeavePageDialogState() {
       this.leaveDialog = !this.leaveDialog
+    },
+    showChessClock() {
+      let route = this.$router.resolve('/chess-clock')
+      window.open(route.href, '_blank')
     }
   },
   watch: {

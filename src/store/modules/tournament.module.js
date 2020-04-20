@@ -18,7 +18,6 @@ export const mutations = {
   }
 }
 export const actions = {
-
   resetTournament: ({ commit }) => {
     commit('resetTournamentState')
   },
@@ -75,7 +74,6 @@ export const actions = {
 
   /*
   Fetch the tournament a player is enrolled in.
-  IDENTISK til fetchTournament frontend men, forskjellig formatering på backend.
  */
   fetchPlayersTournament: ({ commit }) => {
     return PLAYER_SERVICE.get('tournament').then(res => {

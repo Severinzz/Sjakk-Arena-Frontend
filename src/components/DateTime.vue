@@ -88,7 +88,7 @@ export default {
     },
     minTime: { // The minimum time that can be picked
       type: String,
-      default: new Date().getHours().toString() + ':' + new Date().getMinutes().toString(),
+      default: new Date().getHours().toString() + ':' + (new Date().getMinutes().toString() < 10 ? '0' : '') + new Date().getMinutes().toString(),
       validator: value => {
         return /^(([0-2][0-5])|([\d])):[0-5][\d]$/.test(value) || value.length === 0 // Incase they open endtime before starttime.
       }

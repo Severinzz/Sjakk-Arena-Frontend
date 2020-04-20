@@ -42,7 +42,6 @@ export const mutations = {
   }
 }
 export const actions = {
-
   resetPlayer: ({ commit }) => {
     commit('resetPlayerState')
   },

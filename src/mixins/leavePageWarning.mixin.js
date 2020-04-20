@@ -11,9 +11,6 @@ export const leavePageWarningMixin = {
       window.onhashchange = function() {
         window.onpopstate = function() { VM.alterLeavePageDialogState() }
       }
-    },
-    fuckof() {
-      alert('fuckof')
     }
   }
 }

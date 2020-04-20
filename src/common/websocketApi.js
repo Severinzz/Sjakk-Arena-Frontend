@@ -9,6 +9,14 @@ let subscriptions = {}
 let initialised = false
 let subQueue = []
 let connected = 3
+
+const Connection = {
+  CONNECTING: 0,
+  OPEN: 1,
+  CLOSING: 2,
+  CLOSED: 3
+}
+
 const WEBSOCKET = {
   /*
   Subscribes to the correct endpoint on the backend.
@@ -18,10 +26,10 @@ const WEBSOCKET = {
       init()
     }
     switch (connected) {
-      case 0: // connecting
+      case Connection.CONNECTING:
         subQueue.push(newSubscription)
         break
-      case 1: // OPEN
+      case Connection.OPEN:
         this.subscribe(newSubscription)
         break
       default:

@@ -49,7 +49,9 @@ export default {
   methods: {
     // Returns the start time in the correct format.
     formatTime(dateTime) {
-      if (dateTime.includes('loading')) { return dateTime }
+      if (dateTime.includes('loading')) {
+        return dateTime
+      }
       let timeArr
       if (dateTime.includes('T')) {
         timeArr = dateTime.split('T')

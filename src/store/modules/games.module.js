@@ -94,8 +94,12 @@ export const actions = {
   subscribeToActiveGame: ({ commit, dispatch }) => {
     let newGameCallback = function (res) {
       let newGame = JSON.parse(res.body)
-      commit('setActiveGame', newGame)
-      dispatch('setPlayerPaired', true)
+      if (newGame.active) {
+        commit('setActiveGame', newGame)
+        dispatch('setPlayerPaired', true)
+      } else {
+        commit('setPaired', false)
+      }
     }
     let sub = { path: 'player/active-game', callback: newGameCallback }
     WEBSOCKET_SERVICE.connect(sub)
