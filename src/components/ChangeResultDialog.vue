@@ -74,8 +74,14 @@ export default {
   name: 'ChangeResultDialog',
   components: { AlertBox },
   props: {
-    gameId: { type: Number, required: true },
-    dialogBox: { type: Boolean, required: true }
+    gameId: {
+      type: Number,
+      required: true
+    },
+    dialogBox: {
+      type: Boolean,
+      required: true
+    }
   },
   data () {
     return {

@@ -6,20 +6,15 @@
 
 <script>
 import TournamentCreationForm from '@/components/TournamentCreationForm.vue'
-import { mapActions } from 'vuex'
+import { clearTokenAndStateMixin } from '../mixins/clearTokenAndState.mixin'
 
 export default {
   name: 'TournamentCreation',
   components: {
     TournamentCreationForm
   },
-  methods: {
-    ...mapActions([
-      'deleteTokenAndSetStateToDefault'
-    ])
-  },
-  created() {
-    this.deleteTokenAndSetStateToDefault()
-  }
+  mixins: [
+    clearTokenAndStateMixin
+  ]
 }
 </script>

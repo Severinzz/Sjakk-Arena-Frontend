@@ -3,7 +3,7 @@
     <v-container>
       <!-- Let the system decide what to load when we are waiting -->
       <!-- https://vuejs.org/v2/guide/conditional.html -->
-      <div v-if="!activeTournament">
+      <div v-if="!isTournamentActive">
         <PlayerWaiting
           :tournament-name="tournamentName"
           :tournament-start="tournamentStart"
@@ -15,7 +15,7 @@
       </div>
 
       <!-- Let the system decide what to load when we are not waiting -->
-      <div v-else-if="activeTournament">
+      <div v-else-if="isTournamentActive">
         <PlayerPlaying
           :tournament-name="tournamentName"
           :tournament-start="tournamentStart"
@@ -28,7 +28,7 @@
 
       <!-- Something goes wrong -->
       <div v-else>
-        <h1>Something wrong in PlayerLobby.vue. activeTournament = {{ activeTournament }}</h1>
+        <h1>Something wrong in PlayerLobby.vue. isTournamentActive = {{ activeTournament }}</h1>
       </div>
 
       <v-row class="justify-center" align="center">
@@ -57,6 +57,7 @@
 import PlayerWaiting from '../components/PlayerLobby/PlayerWaiting'
 import PlayerPlaying from '../components/PlayerLobby/PlayerPlaying'
 import storage from '../common/jwt.storage'
+import WEBSOCKET from '../common/websocketApi'
 import { mapActions, mapState } from 'vuex'
 
 export default {
@@ -76,21 +77,24 @@ export default {
   },
   computed: {
     ...mapState({
-      tournamentName: state => state.tournament.name,
-      tournamentStart: state => state.tournament.start,
-      tournamentEnd: state => state.tournament.end,
-      activeTournament: state => state.activeTournament,
-      playerName: state => state.player.name,
-      points: state => state.points
+      tournament: state => state.tournament,
+      tournamentName: state => state.tournament.tournament.name,
+      tournamentStart: state => state.tournament.tournament.start,
+      tournamentEnd: state => state.tournament.tournament.end,
+      isTournamentActive: state => state.tournament.activeTournament,
+      playerName: state => state.players.player.name,
+      points: state => state.players.points
     })
   },
   methods: {
     ...mapActions([
       'fetchPlayersTournament',
       'fetchPlayer',
-      'subscribeToPlayerLobbySubscriptions',
-      'unsubscribeAll',
-      'close'
+      'subscribeToTournamentActive',
+      'subscribeToActiveGame',
+      'subscribeToPoints',
+      'subscribeToSuggestedResult',
+      'subscribeToPlayerKicked'
     ]),
     countDown() {
       this.countDownNr--
@@ -103,13 +107,14 @@ export default {
     navigateHome() {
       this.kickedDialog = false
       storage.deleteToken()
+      clearInterval(this.intervalId)
       this.$router.replace('/')
     },
     startCountDown() {
       this.intervalId = setInterval(this.countDown, 1000)
     }
   },
-  mounted() {
+  created() {
     this.fetchPlayersTournament()
     this.fetchPlayer()
     let vm = this
@@ -118,11 +123,15 @@ export default {
       vm.kickedDialog = true
       vm.startCountDown()
     }
-    this.subscribeToPlayerLobbySubscriptions(callback)
+    this.subscribeToTournamentActive({ userRole: 'player' })
+    this.subscribeToActiveGame()
+    this.subscribeToPoints()
+    this.subscribeToSuggestedResult()
+    this.subscribeToPlayerKicked(callback)
   },
   destroyed () {
-    this.unsubscribeAll()
-    this.close()
+    WEBSOCKET.unsubscribeAll()
+    WEBSOCKET.close()
   }
 }
 </script>

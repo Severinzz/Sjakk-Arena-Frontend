@@ -21,7 +21,7 @@
             readonly
             required
             v-on="on"
-            :rules="rules"
+            :rules="rules !== undefined ? rules : []"
             @click="openDateMenu()"
             @change="onChange"
           >
@@ -78,12 +78,44 @@ export default {
     }
   },
   props: {
-    eventName: { type: String }, // Name of the event that should be emitted
-    rules: { type: Array }, // Rules of the input field. See https://vuetifyjs.com/en/components/text-fields
-    minTime: { type: String }, // The minimum time that can be picked
-    minDate: { type: String }, // The minimum date that can be picked
-    maxTime: { type: String }, // The highest the clock wil allow
-    maxDate: { type: String } // The furthest calender wil allow
+    eventName: { // Name of the event that should be emitted
+      type: String,
+      default: 'endDateTime'
+    },
+    rules: { // Rules of the input field. See https://vuetifyjs.com/en/components/text-fields
+      type: Array,
+      required: false
+    },
+    minTime: { // The minimum time that can be picked
+      type: String,
+      default: new Date().getHours().toString() + ':' + (new Date().getMinutes().toString() < 10 ? '0' : '') + new Date().getMinutes().toString(),
+      validator: value => {
+        return /^(([0-2][0-9])|([\d])):[0-5][\d]$/.test(value) || value.length === 0 // Incase they open endtime before starttime.
+      }
+    },
+    minDate: { // The minimum date that can be picked
+      type: String,
+      default: new Date().toISOString().slice(0, 10),
+      validator: value => {
+        // regex from https://stackoverflow.com/a/22061879
+        return /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/.test(value)
+      }
+    },
+    maxTime: { // The highest the clock wil allow
+      type: String,
+      required: false,
+      validator: value => {
+        return /^(([0-2][0-5])|([\d])):[0-5][\d]$/.test(value)
+      }
+    },
+    maxDate: { // The furthest calender wil allow
+      type: String,
+      required: false,
+      validator: value => {
+        // regex from https://stackoverflow.com/a/22061879
+        return /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/.test(value)
+      }
+    }
   },
   methods: {
     openTimeMenu() {

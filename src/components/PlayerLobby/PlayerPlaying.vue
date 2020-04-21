@@ -17,7 +17,7 @@
         </v-toolbar>
         <v-card-text align="center">
           <v-spacer/>
-
+          <!-- Remember to check mixin for some values -->
           <!-- Tournament name -->
           <h1 class="bigInfo">{{ tournamentName }}</h1>
 
@@ -205,7 +205,7 @@
           @closeDialog="leaveDialog = false"
           />
           <!-- playtime -->
-          <p class="gameDetail body-2">Spilletid: {{ tournamentStart }} -> {{ tournamentEnd }} </p>
+          <p v-if="tournamentEnd" class="gameDetail body-2">Spilletid: {{ tournamentStart }} -> {{ tournamentEnd }} </p>
         </v-card-text>
       </v-card>
     </v-row>
@@ -216,20 +216,15 @@
 import PlayerPaired from './PlayerPaired'
 import PlayerNotPaired from './PlayerNotPaired'
 import EarlierResults from './EarlierResults'
-import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 import WarningDialog from '../WarningDialog'
+import { leavePageWarningMixin } from '../../mixins/leavePageWarning.mixin'
+import { playerMixin } from '../../mixins/player.mixin'
 import InformationDialog from '../InformationDialog'
 import OvalButton from '../OvalButton'
 
 export default {
   name: 'PlayerPlaying',
-  props: {
-    tournamentName: String,
-    tournamentStart: String,
-    tournamentEnd: String,
-    playerName: String,
-    points: Number
-  },
   components: {
     InformationDialog,
     WarningDialog,
@@ -238,14 +233,32 @@ export default {
     EarlierResults,
     OvalButton
   },
+  mixins: [
+    leavePageWarningMixin,
+    playerMixin
+  ],
+  data() {
+    return {
+      resultDialog: false,
+      leaveDialog: false,
+      pastResults: false,
+      pause: false,
+      pauseButtonText: 'Ta pause',
+      pastResultsText: 'Tidligere parti',
+      result: '',
+      suggestionIsSent: false,
+      pathVar: 'player-lobby'
+    }
+  },
   computed: {
     ...mapState({
-      paired: state => state.paired,
-      opponentId: state => state.activeGame.opponent_id,
-      opponentsDisagree: state => state.resultDialog.opponents_disagree,
-      suggestedResult: state => state.resultDialog.suggested_result,
-      gameId: state => state.resultDialog.game_id,
-      validResult: state => state.resultDialog.valid
+      paired: state => state.players.paired,
+      opponentId: state => state.games.activeGame.opponent_id,
+      opponentsDisagree: state => state.games.resultDialog.opponents_disagree,
+      suggestedResult: state => state.games.resultDialog.suggested_result,
+      gameId: state => state.games.resultDialog.game_id,
+      validResult: state => state.games.resultDialog.valid,
+      active: state => state.tournament.activeTournament
     }),
     getResultText: function () {
       if (this.suggestedResult === 1.0) {
@@ -260,31 +273,14 @@ export default {
       return this.suggestedResult !== undefined
     }
   },
-  data() {
-    return {
-      resultDialog: false,
-      leaveDialog: false,
-      pastResults: false,
-      pause: false,
-      pauseButtonText: 'Ta pause',
-      pastResultsText: 'Tidligere parti',
-      result: '',
-      suggestionIsSent: false
-    }
-  },
   methods: {
     ...mapActions([
       'sendLeaveRequest',
-      'sendDeleteRequest',
       'sendGameResult',
       'sendPauseRequest',
       'sendUnpauseRequest',
-      'fetchPlayersTournament',
       'sendValidationOfResult',
       'sendInvalidationOfResult'
-    ]),
-    ...mapGetters([
-      'getTournament'
     ]),
     ...mapMutations([
       'setPaired',
@@ -322,9 +318,7 @@ export default {
         The player leaves the tournament
       */
     async leaveTournament() {
-      await this.fetchPlayersTournament() // TODO: Bytt når websocket e inne
-      let started = this.getTournament().started // TODO: Bytt når websocket e inne
-      this.sendLeaveRequest(started).then(res => {
+      this.sendLeaveRequest(this.active).then(res => {
         this.$router.push('/')
       })
     },
@@ -352,7 +346,7 @@ export default {
         this.pastResultsText = 'Tidligere parti'
       }
     },
-    alterLeaveDialogState() {
+    alterLeavePageDialogState() {
       this.leaveDialog = !this.leaveDialog
     },
     showChessClock() {
@@ -360,24 +354,15 @@ export default {
       window.open(route.href, '_blank')
     }
   },
-  mounted() {
-    /*
-  Send warning to user when back button is pressed.
-  adapted from from: https://stackoverflow.com/questions/12381563/how-to-stop-browser-back-button-using-javascript
- */
-    let VM = this
-    window.location.hash = 'player-lobby'
-    window.location.hash = 'player-lobby' // Varsel vil nå dukke opp to ganger
-    window.onhashchange = function() { // tilbake, avbryt, tilbake, avbryt, tilbake nå fører spiller til EnterTUI siden.
-      window.onpopstate = function() { VM.alterLeaveDialogState() }
-    } // bytt 'VM.alterLeaveDialogState()' med window.location.hash='player-lobby' er fy! dette medfører at tilbake knappen ikke funker som den skal, kan kræsje nettlesere også!!
-  },
   watch: {
     validResult () {
       if (this.validResult) {
         this.setPaired(false)
       }
     }
+  },
+  mounted() {
+    this.setupBrowserWarning()
   }
 }
 </script>

@@ -48,8 +48,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'fetchResults',
-      'fetchPlayer'
+      'fetchResults'
     ]),
     loadResults () {
       const VM = this
@@ -82,7 +81,9 @@ export default {
     gameList () {
       return this.limit ? this.spillArray.slice(0, this.limit) : this.result
     },
-    ...mapState({ playerName: state => state.player.name })
+    ...mapState({
+      playerName: state => state.players.player.name
+    })
   },
   created () {
     this.initialResults()

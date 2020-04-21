@@ -8,7 +8,7 @@
       <v-col cols="2">
         <div class="info-wrapper">
           <tournament-info
-            :tournament="this.getTournament"
+            :tournament="this.tournament"
             :started="false"
           />
           <p class="numberOfPlayers">
@@ -57,37 +57,58 @@
         </v-row>
       </v-col>
     </v-row>
+    <warning-dialog
+      title="Avslutt turneringen"
+      action="avslutte tuneringen"
+      :show-dialog="leaveWarn"
+      carry-on-button-text="Avslutt turnering"
+      @carryOn="endTournament()"
+      @closeDialog="alterLeavePageDialogState"
+    ></warning-dialog>
   </v-container>
 </template>
 
 <script>
 import TournamentInfo from '@/components/TournamentInfo'
 import Player from '@/components/Player'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import AlertBox from '@/components/AlertBox'
+import WarningDialog from '@/components/WarningDialog'
+import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
+import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
+import WEBSOCKET from '../common/websocketApi'
 
 export default {
   name: 'Lobby',
   components: {
     AlertBox,
     TournamentInfo,
-    Player
+    Player,
+    WarningDialog
   },
+  mixins: [
+    leavePageWarningMixin,
+    tournamentAndLobbyMixin
+  ],
   data () {
     return {
       intervalId: '',
       error: false,
       errorMessage: '',
-      active: false
+      active: false,
+      leaveWarn: false,
+      pathVar: 'lobby/'
     }
   },
   computed: {
     ...mapGetters([
       'getPlayerCount',
-      'getTournament',
-      'getAllPlayers',
-      'isTournamentActive'
+      'getAllPlayers'
     ]),
+    ...mapState({
+      tournament: state => state.tournament.tournament,
+      isTournamentActive: state => state.tournament.activeTournament
+    }),
     playerCount() {
       return this.getPlayerCount
     }
@@ -98,14 +119,15 @@ export default {
       'addPlayer',
       'fetchTournament',
       'unsubscribeAll',
-      'subscribeToLobbySubscriptions',
-      'sendStartRequest'
+      'sendStartRequest',
+      'subscribeToPlayers',
+      'subscribeToTournamentActive'
     ]),
     handleRemovePlayer (player, id) {
       let payload = {
         player: player,
         id: id,
-        msg: '' // Custom message player should receive when they are kicked. Is optional
+        msg: '' // Custom message player should receive when they are kicked. Is optional/future feature.
       }
       this.removePlayer(payload)
     },
@@ -115,7 +137,7 @@ export default {
     startTournament() {
       this.sendStartRequest()
         .then(res => {
-          this.$router.replace('/tournament/' + this.getTournament.user_id)
+          this.$router.replace('/tournament/' + this.tournament.user_id)
         }).catch(err => {
           this.error = true
           this.errorMessage = err + '. Prøv igjen senere!'
@@ -123,11 +145,14 @@ export default {
     },
     endTournament() {
       this.$router.push('/')
+    },
+    alterLeavePageDialogState() {
+      this.leaveWarn = !this.leaveWarn
     }
   },
   watch: {
     playerCount: function(playerCount) {
-      if (this.getTournament.early_start !== true) { } else {
+      if (this.tournament.early_start !== true) { } else {
         if (playerCount >= 2) {
           this.startTournament()
         }
@@ -139,15 +164,13 @@ export default {
       }
     }
   },
-  async created () {
-    let started = false
-    if (this.getTournament.tournament_name === undefined) {
-      await this.fetchTournament()
+  beforeRouteLeave(to, from, next) {
+    if (to.name === 'tournament') {
+      WEBSOCKET.unsubscribe('tournament/players')
+    } else {
+      WEBSOCKET.unsubscribeAll()
     }
-    await this.subscribeToLobbySubscriptions({ started: started, vm: this })
-  },
-  destroyed () {
-    this.unsubscribeAll()
+    next()
   }
 }
 </script>

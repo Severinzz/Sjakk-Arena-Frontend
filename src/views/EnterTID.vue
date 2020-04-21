@@ -11,7 +11,7 @@
           />
           <v-card class="elevation-12">
             <v-toolbar color="primary" dark flat>
-              <v-toolbar-title>Fyll inn turneringsID</v-toolbar-title>
+              <v-toolbar-title>Fyll inn adminID</v-toolbar-title>
             </v-toolbar>
             <v-card-text>
               <v-form>
@@ -40,13 +40,18 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import AlertBox from '../components/AlertBox'
+import { clearTokenAndStateMixin } from '../mixins/clearTokenAndState.mixin'
+
 export default {
   name: 'enterTID',
   components: {
     AlertBox
   },
+  mixins: [
+    clearTokenAndStateMixin
+  ],
   data () {
     return {
       tournamentId: '',
@@ -61,12 +66,6 @@ export default {
       'signInUUID',
       'deleteTokenAndSetStateToDefault'
     ]),
-    ...mapGetters([
-      'getTournament'
-    ]),
-    ...mapMutations([
-      'clearPlayers'
-    ]),
     async submit() {
       this.error = false
       this.isLoading = true
@@ -74,11 +73,10 @@ export default {
       this.signInUUID(this.tournamentId).then(res => {
         vm.fetchTournament().then(res => {
           vm.isLoading = false
-          let tournament = vm.getTournament()
-          if (tournament.active) {
-            this.$router.push('/tournament/' + `${tournament.user_id}`)
+          if (vm.tournament.active) {
+            this.$router.push('/tournament/' + `${vm.tournament.user_id}`)
           } else {
-            this.$router.push('/lobby/' + `${tournament.user_id}`)
+            this.$router.push('/lobby/' + `${vm.tournament.user_id}`)
           }
         })
       }).catch(err => {
@@ -90,11 +88,12 @@ export default {
           this.errorMessage = 'Error code: ' + err.response.status + ', ' + err.response.data.message
         }
       })
-    },
-    created() {
-      this.clearPlayers()
-      this.deleteTokenAndSetStateToDefault()
     }
+  },
+  computed: {
+    ...mapState({
+      tournament: state => state.tournament.tournament
+    })
   }
 }
 </script>

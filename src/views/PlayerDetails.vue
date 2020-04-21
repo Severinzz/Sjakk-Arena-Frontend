@@ -49,7 +49,7 @@
 </template>
 <script>
 import Table from '@/components/Table'
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   components: { Table },
@@ -133,9 +133,6 @@ export default {
     }
   },
   methods: {
-    ...mapGetters([
-      'getAllPlayers'
-    ]),
     ...mapActions([
       'removePlayer',
       'hostFetchPlayer'

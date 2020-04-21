@@ -5,11 +5,11 @@
       <v-col cols="2">
         <div class="info-wrapper">
           <tournament-info
-            :tournament="this.activeTournament"
+            :tournament="this.tournament"
             :started="true"
           />
           <p class="numberOfPlayers">
-            Antall spillere: {{ this.playerCount }}
+            Antall spillere: {{ this.getPlayerCount }}
           </p>
           <div class="button-wrapper">
             <v-btn id="Games" class="mr-4" @click="alterShowLeaderBoard">
@@ -42,7 +42,7 @@
           :autoScrollOption="true"
           @entryClicked="handlePlayerClicked"
         />
-        <!-- TODO: Add functionality when clicked (same as invalid games component?) -->
+        <!-- TODO: Add functionality when clicked (set result or something) -->
         <Table
           class="leaderBoard"
           v-if="!showLeaderBoard"
@@ -58,25 +58,40 @@
       </v-col>
     </v-row>
   </v-container>
+  <warning-dialog
+  :title="endDialogTitle"
+  action="avslutte turneringen"
+  carry-on-button-text="Avslutt turnering"
+  :show-dialog="endDialog"
+  @carryOn="endTournament"
+  @closeDialog="alterLeavePageDialogState">
+  </warning-dialog>
   </span>
 </template>
 
 <script>
 import TournamentInfo from '@/components/TournamentInfo'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import InvalidGames from '@/components/InvalidGames'
 import Table from '../components/Table'
+import WarningDialog from '../components/WarningDialog'
+import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
+import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
 
 export default {
   name: 'Tournament',
   components: {
     Table,
+    WarningDialog,
     TournamentInfo,
     InvalidGames
   },
+  mixins: [
+    leavePageWarningMixin,
+    tournamentAndLobbyMixin
+  ],
   data () {
     return {
-      activeTournament: '',
       invalidGames: true,
       pause: false,
       pauseButtonText: 'Pause',
@@ -117,16 +132,19 @@ export default {
           value: 'start'
         }],
       endDialog: false,
-      endDialogTitle: 'Avslutt turnering'
+      endDialogTitle: 'Avslutt turnering',
+      pathVar: 'tournament/'
     }
   },
   computed: {
+    ...mapState({
+      tournament: state => state.tournament.tournament,
+      isTournamentActive: state => state.tournament.activeTournament,
+      activeGames: state => state.games.activeGames
+    }),
     ...mapGetters([
       'getPlayerCount',
-      'getTournament',
-      'getAllPlayers',
-      'getActiveGames',
-      'isTournamentActive'
+      'getAllPlayers'
     ]),
     // Add placement to the players.
     playerList () {
@@ -141,26 +159,25 @@ export default {
       return list
     },
     gamesList () {
-      let list = this.getActiveGames
+      let list = this.activeGames
       list.forEach(function (game) {
         game['start'] = game['start'].split(' ')[1]
         game['start'] = game['start'].split(':')[0] + ':' + game['start'].split(':')[1]
       })
       return list
-    },
-    playerCount() {
-      return this.getPlayerCount
     }
   },
   methods: {
     ...mapActions([
-      'subscribeToTournamentSubscriptions',
       'fetchTournament',
       'unsubscribe',
       'close',
       'sendTournamentPauseRequest',
       'sendTournamentUnpauseRequest',
-      'sendEndRequest'
+      'sendEndRequest',
+      'subscribeToPlayers',
+      'subscribeToTournamentActive',
+      'subscribeToActiveGames'
     ]),
     handlePlayerClicked(player) {
       // TODO: PRØVE Å SENDE PLAYER?
@@ -181,22 +198,19 @@ export default {
     alterShowLeaderBoard() {
       this.showLeaderBoard = !this.showLeaderBoard
       this.showLeaderBoard === true ? this.alterLeaderBoardText = 'Vis partioversikt' : this.alterLeaderBoardText = 'Vis rangeringstabell'
+    },
+    endTournament() {
+      this.sendEndRequest().then(res => {
+        this.$router.push('/')
+      })
+    },
+    alterLeavePageDialogState() {
+      this.endDialog = !this.endDialog
+      this.endDialogTitle = 'Avslutt turnering'
     }
   },
   async created () {
-    let started = true
-    // If the tournament id is a string then it wil get the tournament from the server since the id should always be int.
-    this.activeTournament = this.getTournament
-    if (typeof this.activeTournament.id === 'string') {
-      await this.fetchTournament().then(() => {
-        this.activeTournament = this.getTournament
-      })
-    }
-    this.subscribeToTournamentSubscriptions({ vm: this, started: started })
-  },
-  destroyed () {
-    this.unsubscribe('leaderboard')
-    this.close()
+    this.subscribeToActiveGames()
   },
   watch: {
     isTournamentActive: function(active) {

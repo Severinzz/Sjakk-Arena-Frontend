@@ -43,17 +43,23 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { clearTokenAndStateMixin } from '../mixins/clearTokenAndState.mixin'
+
 export default {
   name: 'EnterTourney',
-  components: {
-  },
-  props: {
-    source: String
+  mixins: [
+    clearTokenAndStateMixin
+  ],
+  data () {
+    return {
+      gamePin: '',
+      playerName: '',
+      errorMessage: ''
+    }
   },
   methods: {
     ...mapActions([
-      'sendPlayer',
-      'deleteTokenAndSetStateToDefault'
+      'sendPlayer'
     ]),
     async submit() {
       let payload = {
@@ -86,18 +92,8 @@ export default {
     }
     // End of stack overflow
   },
-  data () {
-    return {
-      gamePin: '',
-      playerName: '',
-      errorMessage: ''
-    }
-  },
-  created() {
-    this.deleteTokenAndSetStateToDefault()
-  },
   watch: {
-    playerName: function() {
+    playerName: function () {
       if (this.playerName.length > 20) {
         // https://stackoverflow.com/a/8499776
         this.playerName = this.playerName.substring(0, Math.min(this.playerName.length, 20))

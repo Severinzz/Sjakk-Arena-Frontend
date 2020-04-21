@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'subscribeToInvalidGamesSubscription'
+      'subscribeToInvalidGames'
     ]),
     ...mapMutations([
       'removeInvalidGame'
@@ -73,11 +73,11 @@ export default {
       return this.limit ? this.invalidGames.slice(0, this.limit) : this.invalidGames
     },
     ...mapState({
-      invalidGames: state => state.invalidGames
+      invalidGames: state => state.games.invalidGames
     })
   },
   created() {
-    this.subscribeToInvalidGamesSubscription()
+    this.subscribeToInvalidGames()
   },
   destroyed() {
     clearInterval(this.intervalID)
