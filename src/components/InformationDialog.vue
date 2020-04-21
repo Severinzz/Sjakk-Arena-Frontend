@@ -1,6 +1,13 @@
 <template>
-  <v-row class="justify-center" align="center">
-    <v-dialog v-model="showDialog" persistent max-width="650px">
+  <v-row
+    class="justify-center"
+    align="center"
+  >
+    <v-dialog
+      v-model="showDialog"
+      persistent
+      max-width="650px"
+    >
       <v-card>
         <v-card-title class="justify-center">{{ title }}</v-card-title>
         <v-card-text class="text-center"> {{ text }}
@@ -9,7 +16,9 @@
           <v-card-actions>
             <v-btn
               textv
-              @click="closeDialog">Lukk
+              @click="closeDialog"
+            >
+              Lukk
             </v-btn>
           </v-card-actions>
         </v-layout>

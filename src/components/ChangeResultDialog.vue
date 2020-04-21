@@ -53,13 +53,17 @@
           <v-btn
             text
             @click="alterResultDialogState"
-          >Avbryt
+          >
+            Avbryt
           </v-btn>
           <v-btn
             text
             color="primary"
             outlined
-            @click="registerResult">Send inn</v-btn>
+            @click="registerResult"
+          >
+            Send inn
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
