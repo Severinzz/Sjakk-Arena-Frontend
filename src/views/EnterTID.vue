@@ -11,7 +11,7 @@
           />
           <v-card class="elevation-12">
             <v-toolbar color="primary" dark flat>
-              <v-toolbar-title>Fyll inn turneringsID</v-toolbar-title>
+              <v-toolbar-title>Fyll inn adminID</v-toolbar-title>
             </v-toolbar>
             <v-card-text>
               <v-form>
