@@ -6,6 +6,7 @@
             <v-col cols="12">
               <v-row align="center" justify="center">
                   <MenuTile tileText="Spill turnering" color="red" icon="fa-chess-knight" link="/enter-tourney"></MenuTile>
+                  <MenuTile tileText="Bruk Sjakkur" color="orange" icon="fa-chess-board" link="/chess-clock"></MenuTile> <!-- TODO: make our own clock logo -->
                   <MenuTile tileText="Opprett turnering" color="blue" icon="fa-chess-board" link="/tournament-creation"></MenuTile>
                   <MenuTile tileText="Skriv inn adminID" color="#dbf436" icon="fa-id-card" link="/enter-TID"></MenuTile>
               </v-row>
