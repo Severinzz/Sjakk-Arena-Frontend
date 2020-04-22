@@ -1,34 +1,11 @@
 <template>
   <div class="about">
-    <h1 align="center">This is an about page</h1>
+    <h1 align="center">Om Sjakk Arena</h1>
     <v-container>
       <v-row class="justify-xl-start" align="stretch" justify="end">
         <v-col cols="12" sm="6" md="6">
-          <p>Denne webapplikasjonen ble laget av studenter fra NTNU Ålesund i bacheloroppgave fra Aalesunds Schaklag.
-            <br>
-            Applikasjonen lar deg som turneringsvert sette opp turnering hvor du bestemmer start-og slutt-tidspunkt.
-            Applikasjonen sørger deretter for å matche riktige spillere basert på opptjente poeng mot hverandre, farge
-            og hvilket bord de skal spille på, samt vise poengoversikt og spillerne i turneringen. Som vert kan du også
-            sette resultat for partier skulle spillerne ikke være enige med hverandre.
-            <br>
-          </p>
-          <p>
-            Som spiller vil applikasjonen la deg registreres til en turnering med et ønsket navn.
-            Du vil etterhvert som turneringen starter bli tildelt en motspiller, bord og farge. Når dere har fullført
-            partiet skal dere registrere resultatet, den som først registrer vil sende denne som forslag til sin motspiller.
-            Denne motspilleren vil da få valget om å godkjenne eller underkjenne forslaget. Blir forslaget underkjent
-            vil begge spillerne bli bedt om å gå til turneringsvert som da vil bestemme resultatet. Dette vil koste begge
-            spillerne tid, så dette bør ungås om turneringen har høy spilltempo.
-            <strong> Husk at verten kan velge å kaste ut spillere!</strong>
-          </p>
-        </v-col>
-        <v-col>
-          <p>Skulle det være mangel på sjakklokke for turneringen finnes dette også i applikasjonen, denne fungerer
-            slik at en spiller setter opp ønsket starttid og inkrement. Denne spilleren deler da telefonen med sin motspiller.
-            Klokken virker da som vanlig sjakkur hvor en spiller gjør sitt trekk og trykker på sin knapp på uret for å
-            la motspiller gjøre sitt trekk. <router-link to="/chess-clock" target="_blank">Klikk her for å åpne i ny fane.</router-link>
-          </p>
-          <v-card> <!-- Adapted from: https://vuetifyjs.com/en/components/data-tables/ -->
+          <p>Denne webapplikasjonen ble laget av studenter fra NTNU Ålesund i bacheloroppgave fra Aalesunds Schaklag.</p>
+          <v-card locale="no-NO" loading-text="Henter terminologier, vennligst vent..."> <!-- Adapted from: https://vuetifyjs.com/en/components/data-tables/ -->
             <v-card-title>
               Termologier
               <v-spacer></v-spacer>
@@ -41,11 +18,34 @@
               ></v-text-field>
             </v-card-title>
             <v-data-table class="justify-center"
-              :headers="headers"
-              :items="termologi"
-              :search="search"
+                          :headers="headers"
+                          :items="terminologi"
+                          :search="search"
+                          items-per-page="5"
             ></v-data-table>
           </v-card>
+        </v-col>
+        <v-col>
+          <p>Skulle det være mangel på sjakklokke for turneringen finnes dette også i applikasjonen, denne fungerer
+            slik at en spiller setter opp ønsket starttid og inkrement. Denne spilleren deler da telefonen med sin motspiller.
+            Klokken virker da som vanlig sjakkur hvor en spiller gjør sitt trekk og trykker på sin knapp på uret for å
+            la motspiller gjøre sitt trekk. <router-link to="/chess-clock" target="_blank">Klikk her for å åpne i ny fane.</router-link>
+          </p>
+          <p>
+            Applikasjonen lar deg som turneringsvert sette opp turnering hvor du bestemmer start-og slutt-tidspunkt.
+            Applikasjonen sørger deretter for å matche riktige spillere basert på opptjente poeng mot hverandre, farge
+            og hvilket bord de skal spille på, samt vise poengoversikt og spillerne i turneringen. Som vert kan du også
+            sette resultat for partier skulle spillerne ikke være enige med hverandre.
+          </p>
+          <p>
+            Som spiller vil applikasjonen la deg registreres til en turnering med et ønsket navn.
+            Du vil etterhvert som turneringen starter bli tildelt en motspiller, bord og farge. Når dere har fullført
+            partiet skal dere registrere resultatet, den som først registrer vil sende denne som forslag til sin motspiller.
+            Denne motspilleren vil da få valget om å godkjenne eller underkjenne forslaget. Blir forslaget underkjent
+            vil begge spillerne bli bedt om å gå til turneringsvert som da vil bestemme resultatet. Dette vil koste begge
+            spillerne tid, så dette bør ungås om turneringen har høy spilltempo.
+            <strong> Husk at verten kan velge å kaste ut spillere!</strong>
+          </p>
         </v-col>
       </v-row>
     </v-container>
@@ -59,13 +59,13 @@ export default {
       search: '',
       headers: [
         {
-          text: 'Termologier (sjakk)',
+          text: 'Terminologi (sjakk)',
           align: 'center',
           value: 'term'
         },
         { text: 'Betydning', value: 'betydning' }
       ],
-      termologi: [
+      terminologi: [
         {
           term: 'Remis',
           betydning: 'Uavgjort'
