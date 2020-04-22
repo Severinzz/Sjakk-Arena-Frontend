@@ -52,7 +52,7 @@ export default {
   mixins: [
     clearTokenAndStateMixin
   ],
-  data () {
+  data() {
     return {
       tournamentId: '',
       errorMessage: '',
@@ -82,7 +82,9 @@ export default {
       }).catch(err => {
         this.isLoading = false
         this.error = true
-        if (err.response.status === 404) {
+        if (err.response === undefined) {
+          this.errorMessage = err + '. Prøv igjen senere!'
+        } else if (err.response.status === 404) {
           this.errorMessage = 'Denne IDen: "' + this.tournamentId + '", finnes ikke!'
         } else {
           this.errorMessage = 'Error code: ' + err.response.status + ', ' + err.response.data.message
@@ -99,7 +101,7 @@ export default {
 </script>
 
 <style scoped>
-  .loadingCircle{
+  .loadingCircle {
     margin-left: 45%;
   }
 </style>
