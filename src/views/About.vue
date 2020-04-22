@@ -5,10 +5,14 @@
       <v-row class="justify-xl-start" align="stretch" justify="end">
         <v-col cols="12" sm="6" md="6">
           <p>Denne webapplikasjonen ble laget av studenter fra NTNU Ålesund i bacheloroppgave fra Aalesunds Schaklag.</p>
-          <v-card locale="no-NO" loading-text="Henter terminologier, vennligst vent..." color="grey lighten-2"> <!-- Adapted from: https://vuetifyjs.com/en/components/data-tables/ -->
+          <v-card
+            locale="no-NO"
+            loading-text="Henter terminologier, vennligst vent..."
+            color="grey lighten-2">
+            <!-- Adapted from: https://vuetifyjs.com/en/components/data-tables/ -->
             <v-card-title>
               Termologier
-              <v-spacer></v-spacer>
+              <v-spacer/>
               <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"
@@ -29,7 +33,8 @@
           <p>Skulle det være mangel på sjakklokke for turneringen finnes dette også i applikasjonen, denne fungerer
             slik at en spiller setter opp ønsket starttid og inkrement. Denne spilleren deler da telefonen med sin motspiller.
             Klokken virker da som vanlig sjakkur hvor en spiller gjør sitt trekk og trykker på sin knapp på uret for å
-            la motspiller gjøre sitt trekk. <router-link to="/chess-clock" target="_blank">Klikk her for å åpne i ny fane.</router-link>
+            la motspiller gjøre sitt trekk.
+            <router-link to="/chess-clock" target="_blank">Klikk her for å åpne i ny fane.</router-link>
           </p>
           <p>
             Applikasjonen lar deg som turneringsvert sette opp turnering hvor du bestemmer start-og slutt-tidspunkt.
