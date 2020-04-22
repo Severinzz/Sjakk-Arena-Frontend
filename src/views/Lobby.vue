@@ -152,10 +152,8 @@ export default {
   },
   watch: {
     playerCount: function(playerCount) {
-      if (this.tournament.early_start !== true) { } else {
-        if (playerCount >= 2) {
-          this.startTournament()
-        }
+      if (this.tournament.early_start && !this.tournament.finished && playerCount >= 2) {
+        this.startTournament()
       }
     },
     isTournamentActive: function (active) {
