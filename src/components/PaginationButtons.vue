@@ -3,7 +3,8 @@
     <v-btn
       class="left"
       @click="jumpLeft"
-      v-if="showJumpLeft">
+      v-if="showJumpLeft"
+    >
       &laquo;
     </v-btn>
     <v-btn
@@ -13,11 +14,14 @@
       class="nrButton"
     @click="changePage(page)"
     :class="page === activeButton ?'active-button' : ''"
-    >{{ page }}</v-btn>
+    >
+      {{ page }}
+    </v-btn>
     <v-btn
       class="right"
       @click="jumpRight"
-    v-if="showJumpRight">
+    v-if="showJumpRight"
+    >
       &raquo;
     </v-btn>
       <p>Side {{ activeButton }} av {{ lastButton }}</p>

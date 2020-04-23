@@ -3,7 +3,8 @@
     color="red"
     dark
     :icon="errorIcon"
-    transition="scale-transition">
+    transition="scale-transition"
+  >
     {{ errorMessage }}
   </v-alert>
 </template>

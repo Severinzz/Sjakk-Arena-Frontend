@@ -1,21 +1,43 @@
 <template>
   <span>
-<v-card height="auto" max-width="55em">
-  <v-layout column fill-height>
-    <v-toolbar dense class="primary">
+<v-card
+  height="auto"
+  max-width="55em"
+>
+  <v-layout
+    column
+    fill-height
+  >
+    <v-toolbar
+      dense
+      class="primary"
+    >
       <v-toolbar-title>Spill med ugyldige resultater</v-toolbar-title>
     </v-toolbar>
-    <v-container fluid fill-height>
+    <v-container
+      fluid
+      fill-height
+    >
       <v-layout>
         <table justify-center>
           <tr></tr>
           <th>Parti ID, Bord, Spillere, Poeng til hvit spiller</th>
           <tr></tr>
-          <tbody v-for="(Game, index) in gameList" v-bind:key="index">
+          <tbody
+            v-for="(Game, index) in gameList"
+            v-bind:key="index"
+          >
             <th class="body-1"><strong>Parti ID: </strong>{{Game.game_id}}, <strong>Bord: </strong>{{Game.table}}</th>
             <td class="body-1"><strong>Spillere:</strong> {{Game.white_player_name}} og {{Game.black_player_name}}</td>
             <td class="body-1">, <strong>Hvit</strong> spiller poeng: {{Game.white_player_points}}</td>
-            <v-btn small color="primary" rounded @click="editGame(Game.game_id, index)">Endre resultat</v-btn>
+            <v-btn
+              small
+              color="primary"
+              rounded
+              @click="editGame(Game.game_id, index)"
+            >
+              Endre resultat
+            </v-btn>
           </tbody>
         </table>
       </v-layout>

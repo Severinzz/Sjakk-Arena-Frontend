@@ -32,17 +32,27 @@
           v-if="dateMenu"
           v-model="date"
           :min="minDate"
-          :max="maxDate">
+          :max="maxDate"
+        >
           <v-btn text
             color="primary"
             :disabled="date === ''"
-            @click="openTimeMenu()">OK</v-btn>
+            @click="openTimeMenu()"
+          >
+            OK
+          </v-btn>
           <v-btn text
             color="primary"
-            @click="dateMenu = false">Cancel</v-btn>
+            @click="dateMenu = false"
+          >
+            Cancel
+          </v-btn>
           <v-btn text
                  color="primary"
-                 @click="clearMenu()">Clear</v-btn>
+                 @click="clearMenu()"
+          >
+            Clear
+          </v-btn>
         </v-date-picker>
         <v-time-picker
           v-if="timeMenu"
