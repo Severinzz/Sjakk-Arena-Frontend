@@ -15,6 +15,12 @@
                     link="/enter-tourney"
                   />
                   <menu-tile
+                    tileText="Bruk Sjakkur"
+                    color="orange"
+                    icon="fa-stopwatch"
+                    link="/chess-clock"
+                    />
+                  <menu-tile
                     tileText="Opprett turnering"
                     color="blue"
                     icon="fa-chess-board"

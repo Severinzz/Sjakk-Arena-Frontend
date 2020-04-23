@@ -21,7 +21,7 @@
         class="mx-3 my-2"
         @click="configurationDialog = true"
       >
-        <v-card-text class="fas fa-sliders-h text-center">
+        <v-card-text class="fas fa-sliders-h text-center white--text">
           Konfigurer klokke
         </v-card-text>
       </v-card>
