@@ -8,11 +8,6 @@
       ref="form"
       lazy-validation
     >
-     <alert-box
-     v-if="error"
-     :errorMessage="errorMessage"
-     :errorIcon="'fas fa-plug'"
-     />
       <v-toolbar dark color="primary">
         <v-toolbar-title>Turneringsinformasjon</v-toolbar-title>
       </v-toolbar>
@@ -144,12 +139,11 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
-import AlertBox from './AlertBox'
 import DateTime from './DateTime'
 
 export default {
   name: 'TournamentCreationForm',
-  components: { AlertBox, DateTime },
+  components: { DateTime },
   data () {
     return {
       startTime: '', // start time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
@@ -165,8 +159,6 @@ export default {
       earlyStart: false, // true if the tournament will start when two players are registered
       formColor: 'blue', // color to be used in form elements
       isLoading: false,
-      errorMessage: '',
-      error: false,
       useEndTime: false,
       missingStartTime: false,
       // rules
@@ -226,9 +218,8 @@ export default {
         this.isLoading = false
       }).catch(err => {
         // Hides the loading circle and display error message
+        this.$emit('error', err)
         this.isLoading = false
-        this.error = true
-        this.errorMessage = err + '. Prøv igjen senere!'
       })
     },
     validate() {

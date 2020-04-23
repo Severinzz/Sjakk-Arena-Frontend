@@ -51,29 +51,27 @@ export default {
       'fetchResults'
     ]),
     loadResults () {
-      const VM = this
-      this.intervalID = setInterval(async function () {
-        await VM.fetchResults().then(res => {
-          VM.spillArray = res.data
-        }).catch(err => {
-          VM.handleErr(err)
-        })
-      }, this.timeInterval)
+      this.intervalID = setInterval(this.requestEarlierResults, this.timeInterval)
     },
-    initialResults () {
-      const VM = this
+    requestEarlierResults() {
       this.fetchResults().then(res => {
-        VM.spillArray = res.data
+        this.spillArray = res.data
       }).catch(err => {
-        VM.handleErr(err)
+        this.handleErr(err)
       })
     },
     handleErr(err) {
+      this.$emit('error', err)
       clearInterval(this.intervalID)
-      if (err.response.status === 404) {
-        this.errMsg = '404, finner ikke resultat listen. Kontakt vert/systemansvarlig'
+      if (err.response !== undefined) {
+        this.handleErrorResponse(err.response)
+      }
+    },
+    handleErrorResponse(response) {
+      if (response.status === 404) {
+        this.errMsg = '404, finner ikke resultatlisten. Kontakt vert/systemansvarlig'
       } else {
-        this.errMsg = 'Error code: ' + err.response.status + ', ' + err.response.data.message
+        this.errMsg = 'Error code: ' + response.status + ', ' + response.data.message
       }
     }
   },
@@ -86,7 +84,7 @@ export default {
     })
   },
   created () {
-    this.initialResults()
+    this.requestEarlierResults()
     this.loadResults()
   },
   destroyed () {

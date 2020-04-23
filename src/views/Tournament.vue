@@ -53,7 +53,7 @@
         <!-- Invalid games component -->
       <div v-if="invalidGames">
         <v-divider></v-divider>
-        <InvalidGames></InvalidGames>
+        <invalid-games @error="handleError"/>
       </div>
       </v-col>
     </v-row>
@@ -207,6 +207,9 @@ export default {
     alterLeavePageDialogState() {
       this.endDialog = !this.endDialog
       this.endDialogTitle = 'Avslutt turnering'
+    },
+    handleError(err) {
+      this.$emit('error', err)
     }
   },
   async created () {

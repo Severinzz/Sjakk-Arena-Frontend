@@ -27,6 +27,7 @@
       :dialogBox="dialogBox"
       @closeResultDialog="alterResultDialogState"
       @resultAdded="resultAdded"
+      @error="handleError"
     />
   </span>
 </template>
@@ -66,6 +67,9 @@ export default {
     },
     resultAdded () {
       this.removeInvalidGame(this.index)
+    },
+    handleError(err) {
+      this.$emit('error', err)
     }
   },
   computed: {

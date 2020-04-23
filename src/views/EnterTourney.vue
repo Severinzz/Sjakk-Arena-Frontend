@@ -4,11 +4,6 @@
         <v-container class="fill-height" fluid>
           <v-row align="center" justify="center">
             <v-col cols="12" sm="8" md="4">
-              <alert-box
-                v-if="error"
-                :errorMessage="errorAlertMessage"
-                :errorIcon="'fas fa-plug'"
-              />
               <v-card class="elevation-12">
                 <v-toolbar color="primary" dark flat>
                   <v-toolbar-title>Fyll in game pin og spillenavn</v-toolbar-title>
@@ -49,11 +44,9 @@
 <script>
 import { mapActions } from 'vuex'
 import { clearTokenAndStateMixin } from '../mixins/clearTokenAndState.mixin'
-import AlertBox from '../components/AlertBox'
 
 export default {
   name: 'EnterTourney',
-  components: { AlertBox },
   mixins: [
     clearTokenAndStateMixin
   ],
@@ -79,22 +72,14 @@ export default {
         // TODO: Dynamic routing
         this.$router.push('/player-lobby')
       }).catch(err => {
-        if (err.response === undefined) {
-          this.handleErrorWithUndefinedResponse(err)
-        } else {
-          this.handleErrorWithDefinedResponse(err)
+        this.$emit('error', err)
+        if (err.response !== undefined) {
+          this.handleErrorResponse(err.response)
         }
       })
     },
-    handleErrorWithUndefinedResponse(err) {
-      this.error = true
-      this.errorAlertMessage = err + '. Prøv igjen senere!'
-      this.errorMessage = ''
-    },
-    handleErrorWithDefinedResponse(err) {
-      this.error = false
-      this.errorAlertMessage = ''
-      if (err.response.status === 409) {
+    handleErrorResponse (response) {
+      if (response.status === 409) {
         this.errorMessage = 'Navnet er tatt, prøv et nytt ett!'
       } else {
         this.errorMessage = 'Game pin finnes ikke!'

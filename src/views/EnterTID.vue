@@ -4,11 +4,6 @@
     <v-container class="fill-height" fluid>
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="4">
-          <alert-box
-            v-if="error"
-            :errorMessage="errorMessage"
-            :errorIcon="'fas fa-plug'"
-          />
           <v-card class="elevation-12">
             <v-toolbar color="primary" dark flat>
               <v-toolbar-title>Fyll inn adminID</v-toolbar-title>
@@ -25,6 +20,7 @@
                 ></v-progress-circular>
                 <!-- No limits for the input field, might be needed to changed -->
                 <v-text-field v-model="tournamentId" label="TurneringsID" placeholder="1337" type="text"/>
+                <div id="error">{{ errorMessage }}</div>
               </v-form>
               <v-card-actions>
                 <v-spacer />
@@ -41,14 +37,10 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import AlertBox from '../components/AlertBox'
 import { clearTokenAndStateMixin } from '../mixins/clearTokenAndState.mixin'
 
 export default {
   name: 'enterTID',
-  components: {
-    AlertBox
-  },
   mixins: [
     clearTokenAndStateMixin
   ],
@@ -56,7 +48,6 @@ export default {
     return {
       tournamentId: '',
       errorMessage: '',
-      error: false,
       isLoading: false
     }
   },
@@ -80,16 +71,19 @@ export default {
           }
         })
       }).catch(err => {
-        this.isLoading = false
-        this.error = true
-        if (err.response === undefined) {
-          this.errorMessage = err + '. Prøv igjen senere!'
-        } else if (err.response.status === 404) {
-          this.errorMessage = 'Denne IDen: "' + this.tournamentId + '", finnes ikke!'
-        } else {
-          this.errorMessage = 'Error code: ' + err.response.status + ', ' + err.response.data.message
+        this.$emit('error', err)
+        if (err.response !== undefined) {
+          this.handleErrorResponse(err.response)
         }
       })
+    },
+    handleErrorResponse(response) {
+      this.isLoading = false
+      if (response.status === 404) {
+        this.errorMessage = 'Denne IDen: "' + this.tournamentId + '", finnes ikke!'
+      } else {
+        this.errorMessage = 'Error code: ' + response.status + ', ' + response.data.message
+      }
     }
   },
   computed: {
@@ -103,5 +97,8 @@ export default {
 <style scoped>
   .loadingCircle {
     margin-left: 45%;
+  }
+  #error{
+    color: #FF5252;
   }
 </style>

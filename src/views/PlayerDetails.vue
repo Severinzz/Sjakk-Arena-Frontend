@@ -152,15 +152,21 @@ export default {
         this.removedMessage = 'Spiller fjernet! Du kan nå lukke denne fanen'
         this.icon = 'check'
       }).catch(err => {
-        if (err.response.status === 400) {
-          this.removedMessage = 'Denne spilleren tilhører ikke din turnering!'
-        } else {
-          this.removedMessage = 'Noe gikk galt'
+        this.$emit('error', err)
+        if (err.response !== undefined) {
+          this.handleErrorResponse(err.response)
         }
-        this.icon = 'plug'
-        this.color = 'error'
       })
       this.removed = true
+    },
+    handleErrorResponse (response) {
+      if (response.status === 400 || response.status === 403) {
+        this.removedMessage = 'Feilmelding: ' + response.status + '. ' + 'Du har ikke tilgang til denne spilleren!'
+      } else {
+        this.removedMessage = 'Error code: ' + response.status + ', ' + response.data.message
+      }
+      this.icon = 'plug'
+      this.color = 'error'
     }
   },
   async created() {
@@ -170,14 +176,11 @@ export default {
     await this.hostFetchPlayer(payload).then(res => {
       this.player = res.data
     }).catch(err => {
-      this.icon = 'plug'
-      this.color = 'error'
-      this.removed = true
-      if (err.response.status === 403) {
-        this.removedMessage = 'Feilmelding: ' + err.response.status + '. ' + 'Du har ikke tilgang til denne spilleren, eller den finnes ikke!'
-      } else {
-        this.removedMessage = 'Error code: ' + err.response.status + ', ' + err.response.data.message
+      this.$emit('error', err)
+      if (err.response !== undefined) {
+        this.handleErrorResponse(err.response)
       }
+      this.removed = true
     })
   }
 }

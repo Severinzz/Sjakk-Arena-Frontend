@@ -1,6 +1,6 @@
 <template>
   <div class="tournament-creation">
-    <TournamentCreationForm></TournamentCreationForm>
+    <tournament-creation-form @error="handleError"/>
   </div>
 </template>
 
@@ -15,6 +15,11 @@ export default {
   },
   mixins: [
     clearTokenAndStateMixin
-  ]
+  ],
+  methods: {
+    handleError(err) {
+      this.$emit('error', err)
+    }
+  }
 }
 </script>

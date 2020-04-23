@@ -16,14 +16,14 @@
 
       <!-- Let the system decide what to load when we are not waiting -->
       <div v-else-if="isTournamentActive">
-        <PlayerPlaying
+        <player-playing
           :tournament-name="tournamentName"
           :tournament-start="tournamentStart"
           :tournament-end="tournamentEnd"
           :player-name="playerName"
           :points="points"
-        >
-        </PlayerPlaying>
+          @error="handleError"
+        />
       </div>
 
       <!-- Something goes wrong -->
@@ -103,6 +103,9 @@ export default {
         this.kickedDialog = false
         this.navigateHome()
       }
+    },
+    handleError(err) {
+      this.$emit('error', err)
     },
     navigateHome() {
       this.kickedDialog = false
