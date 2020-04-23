@@ -14,10 +14,10 @@
                     icon="fa-chess-knight"
                     link="/enter-tourney"
                   />
-                  <menu-tile 
+                  <menu-tile
                     tileText="Bruk Sjakkur"
                     color="orange"
-                    icon="fa-stopwatch" 
+                    icon="fa-stopwatch"
                     link="/chess-clock"
                     />
                   <menu-tile
