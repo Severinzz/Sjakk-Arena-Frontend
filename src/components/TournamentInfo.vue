@@ -5,13 +5,22 @@
     {{ tournament.user_id }}
   </p>
   <h5 class="name">{{ this.tournament.tournament_name }} </h5>
-  <p class="time" v-if="!started">
+  <p
+    class="time"
+    v-if="!started"
+  >
     Starter: {{ formatTime(this.tournament.start) }}
   </p>
-  <p class="time" v-if="tournament.end">
+  <p
+    class="time"
+    v-if="tournament.end"
+  >
     Slutter: {{ formatTime(this.tournament.end) }}
   </p>
-  <p class="date" v-if="endDate">
+  <p
+    class="date"
+    v-if="endDate"
+  >
     Dato: {{ formatEndDate() }}
   </p>
 </div>

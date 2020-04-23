@@ -1,6 +1,9 @@
 <template>
   <!-- This page is only loaded when tournament has started -->
-  <v-container class="justify-center" fluid>
+  <v-container
+    class="justify-center"
+    fluid
+  >
     <v-row
       class="justify-center"
       align="center"
@@ -25,16 +28,16 @@
           <h3 class="minorInfo">{{ playerName }}</h3>
           <h3 class="mediumInfo">Poeng: {{ points }}</h3>
 
-          <v-divider></v-divider>
+          <v-divider/>
 
           <!-- Do player have an opponent? -->
           <div v-if="paired">
-            <PlayerPaired></PlayerPaired>
+            <player-paired/>
           </div>
 
           <!-- Player do not have opponent -->
           <div v-else-if="!pause">
-            <PlayerNotPaired></PlayerNotPaired>
+            <player-not-paired/>
           </div>
 
           <!-- If user is on a break  -->
@@ -42,7 +45,7 @@
             <p class="pauseDetails">Du har nå pause.</p>
           </div>
 
-          <v-divider></v-divider>
+          <v-divider/>
 
           <!-- Buttons -->
           <v-container>
@@ -84,7 +87,7 @@
           </v-container>
 
           <div v-if="pastResults">
-            <EarlierResults></EarlierResults>
+            <earlier-results/>
             <oval-button
               :primary="pastResults"
               :text="pastResultsText"
@@ -93,8 +96,16 @@
           </div>
 
           <!-- Dialog for user to input result; https://vuetifyjs.com/en/components/dialogs -->
-          <v-row class="justify-center" align="center">
-            <v-dialog v-model="resultDialog" persistent max-width="650px">
+          <!-- TODO change to ChangeResultDialog -->
+          <v-row
+            class="justify-center"
+            align="center"
+          >
+            <v-dialog
+              v-model="resultDialog"
+              persistent
+              max-width="650px"
+            >
               <v-card>
                 <v-card-title class="justify-center">Resultatet ble:</v-card-title>
                 <v-card-text>
@@ -140,13 +151,16 @@
                   <v-btn
                     text
                     @click="resultDialog=false"
-                  >Avbryt
+                  >
+                    Avbryt
                   </v-btn>
                   <v-btn
                     text
                     color="primary"
                     outlined
-                    @click="registerResult">Send inn
+                    @click="registerResult"
+                  >
+                    Send inn
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -154,8 +168,16 @@
           </v-row>
 
           <!-- Dialog shown when a suggestion of the active game's result is received -->
-          <v-row  class="justify-center" align="center">
-            <v-dialog  v-model="showSuggestedResultDialog" persistent max-width="650px">
+          <!-- TODO change to warning dialog -->
+          <v-row
+            class="justify-center"
+            align="center"
+          >
+            <v-dialog
+              v-model="showSuggestedResultDialog"
+              persistent
+              max-width="650px"
+            >
               <v-card>
                 <v-card-title class="justify-center"> Din motstander hevder at {{ getResultText }}</v-card-title>
                 <v-card-text class="text-center">Vil du godkjenne dette resultatforslaget?</v-card-text>
@@ -166,12 +188,15 @@
                       textv
                       color="success"
                       @click="approveResult()"
-                    >Godkjenn
+                    >
+                      Godkjenn
                     </v-btn>
                     <v-btn
                       textv
                       color="red"
-                      @click="disapproveResult()">Ikke godkjenn
+                      @click="disapproveResult()"
+                    >
+                      Ikke godkjenn
                     </v-btn>
                   </v-card-actions>
                 </v-layout>
@@ -205,7 +230,12 @@
           @closeDialog="leaveDialog = false"
           />
           <!-- playtime -->
-          <p v-if="tournamentEnd" class="gameDetail body-2">Spilletid: {{ tournamentStart }} -> {{ tournamentEnd }} </p>
+          <p
+            v-if="tournamentEnd"
+           class="gameDetail body-2"
+          >
+            Spilletid: {{ tournamentStart }} -> {{ tournamentEnd }}
+          </p>
         </v-card-text>
       </v-card>
     </v-row>

@@ -1,9 +1,19 @@
 <template>
   <!-- This is loaded when player is waiting for game start -->
-  <v-container class="justify-center" fluid>
-    <v-row class="justify-center" align="center">
+  <v-container
+    class="justify-center"
+    fluid
+  >
+    <v-row
+      class="justify-center"
+      align="center"
+    >
       <v-card class="elevation-12, card">
-        <v-toolbar color="primary" dark flat>
+        <v-toolbar
+          color="primary"
+          dark
+          flat
+        >
           <v-spacer />
           <v-toolbar-title>Venter på spillstart...</v-toolbar-title>
           <v-spacer />

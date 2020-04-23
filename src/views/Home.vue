@@ -4,11 +4,34 @@
     <v-container fluid>
           <v-row>
             <v-col cols="12">
-              <v-row align="center" justify="center">
-                  <MenuTile tileText="Spill turnering" color="red" icon="fa-chess-knight" link="/enter-tourney"/>
-                  <MenuTile tileText="Bruk Sjakkur" color="orange" icon="fa-chess-board" link="/chess-clock"/> <!-- TODO: make our own clock logo -->
-                  <MenuTile tileText="Opprett turnering" color="blue" icon="fa-chess-board" link="/tournament-creation"/>
-                  <MenuTile tileText="Skriv inn adminID" color="#dbf436" icon="fa-id-card" link="/enter-TID"/>
+              <v-row
+                align="center"
+                justify="center"
+              >
+                  <menu-tile
+                    tileText="Spill turnering"
+                    color="red"
+                    icon="fa-chess-knight"
+                    link="/enter-tourney"
+                  />
+                  <menu-tile 
+                    tileText="Bruk Sjakkur"
+                    color="orange"
+                    icon="fa-stopwatch" 
+                    link="/chess-clock"
+                    />
+                  <menu-tile
+                    tileText="Opprett turnering"
+                    color="blue"
+                    icon="fa-chess-board"
+                    link="/tournament-creation"
+                  />
+                  <menu-tile
+                    tileText="Skriv inn adminID"
+                    color="#dbf436"
+                    icon="fa-id-card"
+                    link="/enter-TID"
+                  />
               </v-row>
             </v-col>
           </v-row>

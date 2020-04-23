@@ -9,7 +9,7 @@
         color="indigo"
         indeterminate
         class="progress_style"
-      ></v-progress-circular>
+      />
     </span>
 </template>
 

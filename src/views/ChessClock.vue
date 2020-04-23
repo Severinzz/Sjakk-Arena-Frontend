@@ -38,7 +38,10 @@
     />
 
     <!-- Configuration dialog -->
-    <v-row class="justify-center" align="center">
+    <v-row
+      class="justify-center"
+      align="center"
+    >
       <v-dialog v-model="configurationDialog">
         <v-card>
           <v-card-title class="justify-center">Konfigurer klokke</v-card-title>
@@ -65,14 +68,18 @@
                 type="number"
                 :rules="[nonNegativeNumberRule]"
               />
-            <v-btn
-              text
-              @click="configurationDialog = false"
-            >Avbryt</v-btn>
-            <v-btn
-              text
-              @click="updateClock"
-            >Oppdater</v-btn>
+              <v-btn
+                text
+                @click="configurationDialog = false"
+              >
+                Avbryt
+              </v-btn>
+              <v-btn
+                text
+                @click="updateClock"
+              >
+                Oppdater
+              </v-btn>
             </v-form>
           </div>
         </v-card>

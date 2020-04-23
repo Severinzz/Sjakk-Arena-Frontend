@@ -6,9 +6,7 @@
     @click="clicked"
     :style="cardStyle"
     >
-      <v-card-text
-        class="white--text text-center display-3"
-        > {{ time }}</v-card-text>
+      <v-card-text class="white--text text-center display-3"> {{ time }}</v-card-text>
     </v-card>
 </template>
 
