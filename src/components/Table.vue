@@ -15,20 +15,22 @@
       :label="switchLabel"
     />
     </div>
-  <v-data-table
-  :headers="headingList"
-  :items="objectList"
-  @click:row="onEntryClicked"
-  :page.sync="page"
-  :items-per-page.sync="prPage"
-  hide-default-footer
-  > </v-data-table>
+    <v-data-table
+      :headers="headingList"
+      :items="objectList"
+      @click:row="onEntryClicked"
+      :page.sync="page"
+      :items-per-page.sync="prPage"
+      hide-default-footer
+    >
+  </v-data-table>
     <pagination-buttons
       :number-of-items="objectList.length"
       :pr-page="prPage"
       :autoScroll="autoScroll"
       :page.sync="page"
-    ></pagination-buttons>
+    >
+    </pagination-buttons>
   </div>
 </template>
 

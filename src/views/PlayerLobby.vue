@@ -4,14 +4,13 @@
       <!-- Let the system decide what to load when we are waiting -->
       <!-- https://vuejs.org/v2/guide/conditional.html -->
       <div v-if="!isTournamentActive">
-        <PlayerWaiting
+        <player-waiting
           :tournament-name="tournamentName"
           :tournament-start="tournamentStart"
           :tournament-end="tournamentEnd"
           :player-name="playerName"
           :points="points"
-        >
-        </PlayerWaiting>
+        />
       </div>
 
       <!-- Let the system decide what to load when we are not waiting -->
@@ -31,8 +30,14 @@
         <h1>Something wrong in PlayerLobby.vue. isTournamentActive = {{ activeTournament }}</h1>
       </div>
 
-      <v-row class="justify-center" align="center">
-        <v-dialog v-model="kickedDialog" max-width="650px">
+      <v-row
+        class="justify-center"
+        align="center"
+      >
+        <v-dialog
+          v-model="kickedDialog"
+          max-width="650px"
+        >
           <v-card>
             <v-card-title class="justify-center title">Du har blitt kastet ut av turneringen!</v-card-title>
             <v-card-text class="card-text">
@@ -42,12 +47,18 @@
             </v-card-text>
             <v-card-actions>
               <!-- User has the option to either leave or go back -->
-              <v-btn text color="primary" outlined @click="navigateHome">Gå tilbake nå</v-btn>
+              <v-btn
+                text
+                color="primary"
+                outlined
+                @click="navigateHome"
+              >
+                Gå tilbake nå
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-row>
-
     </v-container>
     <v-spacer/>
   </div>

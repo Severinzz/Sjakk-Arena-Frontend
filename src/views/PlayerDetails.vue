@@ -7,11 +7,22 @@
         :color="color"
         dark
         :icon="`fas fa-${icon}`"
-        transition="scale-transition">
+        transition="scale-transition"
+      >
         {{ removedMessage }}
       </v-alert>
-      <h1 class="name" v-if="player !== null"> {{ player.name }}</h1>
-      <h2 class="points" v-if="player !== null">Poeng: {{ player.points }}</h2>
+      <h1
+        class="name"
+        v-if="player !== null"
+      >
+        {{ player.name }}
+      </h1>
+      <h2
+        class="points"
+        v-if="player !== null"
+      >
+        Poeng: {{ player.points }}
+      </h2>
     </div>
     <div>
       <Table
@@ -22,11 +33,18 @@
       <v-btn
         class="error"
         @click="kickDialog = true"
-      >Fjern spiller
+      >
+        Fjern spiller
       </v-btn>
     </div>
-    <v-row class="justify-center" align="center">
-      <v-dialog v-model="kickDialog" max-width="650px">
+    <v-row
+      class="justify-center"
+      align="center"
+    >
+      <v-dialog
+        v-model="kickDialog"
+        max-width="650px"
+      >
         <v-card>
           <v-card-title class="justify-center title">Oppgi begrunnelse for utkasting av spilleren</v-card-title>
           <v-card-text class="card-text">
@@ -34,13 +52,26 @@
             <v-text-field
               v-model="msg"
               label="Begrunnelse"
-              required>
+              required
+            >
             </v-text-field>
           </v-card-text>
           <v-card-actions class="actions">
             <!-- User has the option to either leave or go back -->
-            <v-btn text class="error" @click="removePlayerFromTournament">OK</v-btn>
-            <v-btn text outlined @click="kickDialog = false">Avbryt</v-btn>
+            <v-btn
+              text
+              class="error"
+              @click="removePlayerFromTournament"
+            >
+              OK
+            </v-btn>
+            <v-btn
+              text
+              outlined
+              @click="kickDialog = false"
+            >
+              Avbryt
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>

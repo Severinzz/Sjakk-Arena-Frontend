@@ -12,16 +12,25 @@
             Antall spillere: {{ this.getPlayerCount }}
           </p>
           <div class="button-wrapper">
-            <v-btn id="Games" class="mr-4" @click="alterShowLeaderBoard">
+            <v-btn
+              id="Games"
+              class="mr-4"
+              @click="alterShowLeaderBoard"
+            >
               {{ alterLeaderBoardText }}
             </v-btn>
-            <v-btn id="Pause" class="mr-4" @click="alterPauseState">
+            <v-btn
+              id="Pause"
+              class="mr-4"
+              @click="alterPauseState"
+            >
               {{ pauseButtonText }}
             </v-btn>
             <v-btn id="Stop"
                    color="error"
                    class="mr-4"
-                   @click="endDialog = true">
+                   @click="endDialog = true"
+            >
               Avslutt
             </v-btn>
           </div>
@@ -52,7 +61,7 @@
         />
         <!-- Invalid games component -->
       <div v-if="invalidGames">
-        <v-divider></v-divider>
+        <v-divider/>
         <invalid-games @error="handleError"/>
       </div>
       </v-col>
@@ -64,8 +73,8 @@
   carry-on-button-text="Avslutt turnering"
   :show-dialog="endDialog"
   @carryOn="endTournament"
-  @closeDialog="alterLeavePageDialogState">
-  </warning-dialog>
+  @closeDialog="alterLeavePageDialogState"
+  />
   </span>
 </template>
 

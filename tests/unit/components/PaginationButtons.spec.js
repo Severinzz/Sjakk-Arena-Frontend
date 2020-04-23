@@ -18,7 +18,6 @@ const factory = (propsData) => {
 }
 
 describe('PaginationButtons', () => {
-
   it('should emit event with the number of the clicked button', async() => {
     const wrapper = factory({
       numberOfItems: 20,

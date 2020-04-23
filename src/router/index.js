@@ -28,7 +28,7 @@ const routes = [
     path: '/about',
     name: 'about',
     meta: {
-      title: 'Om sjakk arena'
+      title: 'Om Sjakk Arena'
     },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
