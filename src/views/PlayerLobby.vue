@@ -59,6 +59,7 @@ import PlayerPlaying from '../components/PlayerLobby/PlayerPlaying'
 import storage from '../common/jwt.storage'
 import WEBSOCKET from '../common/websocketApi'
 import { mapActions, mapState } from 'vuex'
+import { API_SERVICE } from '../common/api'
 
 export default {
   name: 'PlayerLobby',
@@ -112,9 +113,47 @@ export default {
     },
     startCountDown() {
       this.intervalId = setInterval(this.countDown, 1000)
+    },
+    fetchPublicKey() {
+      return API_SERVICE.get('', 'pushnotification')
+    },
+    getRegistration() {
+      return navigator.serviceWorker.getRegistrations('http://localhost:8081/')
+    },
+    getSubscription(registration, applicationServerKey) {
+      const subOptions = {
+        userVisibleOnly: true,
+        applicationServerKey: applicationServerKey
+      }
+      return registration.pushManager.subscribe(subOptions)
+    },
+    sendSubscription(subscription) {
+      API_SERVICE.post('pushnotification', subscription)
+    },
+    subscribeToPushNotifications() {
+      this.fetchPublicKey().then(publicKey => {
+        this.getRegistration().then(registration => {
+          this.getSubscription(registration[0], publicKey.data).then(subscription => {
+            this.sendSubscription(JSON.parse(JSON.stringify(subscription)))
+          })
+        })
+      })
+    },
+    // Adapted from https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/message_event
+    async unsubscribePushNotification() {
+      await navigator.serviceWorker.ready.then(async reg => {
+        await reg.pushManager.getSubscription().then(async subscription => {
+          await subscription.unsubscribe().then(async res => {
+            await API_SERVICE.delete('pushnotification', 'unsubscribe').then(res => {
+            })
+          }).catch(error => {
+            console.log(error)
+          })
+        })
+      })
     }
   },
-  created() {
+  async created() {
     this.fetchPlayersTournament()
     this.fetchPlayer()
     let vm = this
@@ -128,6 +167,33 @@ export default {
     this.subscribeToPoints()
     this.subscribeToSuggestedResult()
     this.subscribeToPlayerKicked(callback)
+    if ('PushManager' in window && 'Notification' in window) {
+      await navigator.serviceWorker.ready.then(async function () {
+        // Request notifiaction permission.
+        switch (Notification.permission) {
+          case 'granted':
+            vm.subscribeToPushNotifications(vm)
+            break
+          case 'denied':
+            console.warn('Treng tilgang til notifikasjoner for å gi besked om nytt spill er funnet.')
+            break
+          default:
+            document.getElementById('root').style.opacity = '0.5'
+            Notification.requestPermission().then(permission => {
+              document.getElementById('root').style.opacity = '1'
+              if (permission === 'granted') {
+                vm.subscribeToPushNotifications()
+              } else {
+                console.warn('Treng tilgang til notifikasjoner for å gi besked om nytt spill er funnet.')
+              }
+            })
+        }
+      })
+    }
+  },
+  async beforeRouteLeave(to, from, next) {
+    await this.unsubscribePushNotification()
+    next()
   },
   destroyed () {
     WEBSOCKET.unsubscribeAll()
