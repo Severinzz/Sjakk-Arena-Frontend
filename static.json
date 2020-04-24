@@ -1,0 +1,8 @@
+{
+  "_comment": "https://cli.vuejs.org/guide/deployment.html#heroku",
+  "root": "dist",
+  "clean_urls": true,
+  "routes": {
+    "/**": "index.html"
+  }
+}
