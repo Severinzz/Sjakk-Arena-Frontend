@@ -21,12 +21,18 @@ import jwtService from './common/jwt.storage'
 export default {
   name: 'App',
   components: { AppHeader, AppFooter, TileHeaderSpace },
-  created () {
+  async created () {
     if (jwtService.getToken() !== null) {
       API_SERVICE.setHeader()
     }
+    let sw
+    await navigator.serviceWorker.getRegistrations(process.env.VUE_APP_SJAKK_ARENA_ROOT_PAGE).then(res => {
+      sw = res
+    })
+    if (sw === undefined) {
+      navigator.serviceWorker.register('./serviceworker.js')
+    }
   }
-
 }
 </script>
 

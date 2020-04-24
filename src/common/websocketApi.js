@@ -97,7 +97,7 @@ function subToQueue() {
 Initialises the socket. Connect to backend
  */
 function init() {
-  socket = SockJS(config.API_URL + '/ws')
+  socket = SockJS(config.API_URL + '/wss')
   client = Stomp.over(socket)
   initialised = true
 }
