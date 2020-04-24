@@ -8,6 +8,7 @@ export const leavePageWarningMixin = {
       let VM = this
       window.location.hash = this.pathVar
       window.location.hash = this.pathVar // Varsel vil nå dukke opp to ganger
+      console.log(window.location.hash)
       window.onhashchange = function() {
         window.onpopstate = function() { VM.alterLeavePageDialogState() }
       }

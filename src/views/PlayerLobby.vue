@@ -177,6 +177,7 @@ export default {
     this.subscribeToPoints()
     this.subscribeToSuggestedResult()
     this.subscribeToPlayerKicked(callback)
+    console.log('PushManager' in window && 'Notification' in window)
     if ('PushManager' in window && 'Notification' in window) {
       await navigator.serviceWorker.ready.then(async function () {
         // Request notifiaction permission.
@@ -190,6 +191,7 @@ export default {
           default:
             document.getElementById('root').style.opacity = '0.5'
             Notification.requestPermission().then(permission => {
+              console.log(permission)
               document.getElementById('root').style.opacity = '1'
               if (permission === 'granted') {
                 vm.subscribeToPushNotifications()
