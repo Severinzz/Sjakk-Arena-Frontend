@@ -31,7 +31,7 @@ export default {
       console.log(res)
       sw = res
     })
-    if (sw === undefined) {
+    if (sw === undefined || sw.length < 1) {
       console.log('if proceded')
       navigator.serviceWorker.register('./serviceworker.js').then(res => {
         console.log(res)
