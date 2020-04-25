@@ -124,12 +124,15 @@ export default {
     startCountDown() {
       this.intervalId = setInterval(this.countDown, 1000)
     },
+    // Gets the public key from backend.
     fetchPublicKey() {
       return API_SERVICE.get('', 'pushnotification')
     },
+    // Gets the service worker registration from the current site.
     getRegistration() {
       return navigator.serviceWorker.getRegistrations(process.env.VUE_APP_SJAKK_ARENA_ROOT_PAGE)
     },
+    // Gets subscription from browser's push manager
     getSubscription(registration, applicationServerKey) {
       const subOptions = {
         userVisibleOnly: true,
@@ -137,6 +140,7 @@ export default {
       }
       return registration.pushManager.subscribe(subOptions)
     },
+    // Send subscription object to backend.
     sendSubscription(subscription) {
       API_SERVICE.post('pushnotification', subscription)
     },
@@ -150,10 +154,13 @@ export default {
       })
     },
     // Adapted from https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/message_event
+    // Unsubscribe from push notifications.
     async unsubscribePushNotification() {
       await navigator.serviceWorker.ready.then(async reg => {
         await reg.pushManager.getSubscription().then(async subscription => {
+          // Unsubscribe from browser's push manager.
           await subscription.unsubscribe().then(async res => {
+            // Delete subscription from backend.
             await API_SERVICE.delete('pushnotification', 'unsubscribe').then(res => {
             })
           }).catch(error => {
@@ -178,22 +185,25 @@ export default {
     this.subscribeToSuggestedResult()
     this.subscribeToPlayerKicked(callback)
     console.log('PushManager' in window && 'Notification' in window)
-    if ('PushManager' in window && 'Notification' in window) {
+    if ('PushManager' in window && 'Notification' in window && 'serviceWorker' in navigator) {
       await navigator.serviceWorker.ready.then(async function () {
         // Request notifiaction permission.
         switch (Notification.permission) {
           case 'granted':
+            // Begin subscription chain.
             vm.subscribeToPushNotifications(vm)
             break
           case 'denied':
             console.warn('Treng tilgang til notifikasjoner for å gi besked om nytt spill er funnet.')
             break
           default:
+            // Make site "transparent" while user decides. To make "decision box" be more in focus.
             document.getElementById('root').style.opacity = '0.5'
             Notification.requestPermission().then(permission => {
               console.log(permission)
               document.getElementById('root').style.opacity = '1'
               if (permission === 'granted') {
+                // Begin subscription chain.
                 vm.subscribeToPushNotifications()
               } else {
                 console.warn('Treng tilgang til notifikasjoner for å gi besked om nytt spill er funnet.')
@@ -204,7 +214,9 @@ export default {
     }
   },
   async beforeRouteLeave(to, from, next) {
-    await this.unsubscribePushNotification()
+    if ('serviceWorker' in navigator) {
+      await this.unsubscribePushNotification()
+    }
     next()
   },
   destroyed () {

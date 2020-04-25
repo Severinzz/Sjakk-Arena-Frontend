@@ -25,17 +25,17 @@ export default {
     if (jwtService.getToken() !== null) {
       API_SERVICE.setHeader()
     }
-    let sw
-    console.log(sw)
-    await navigator.serviceWorker.getRegistrations(process.env.VUE_APP_SJAKK_ARENA_ROOT_PAGE).then(res => {
-      console.log(res)
-      sw = res
-    })
-    if (sw === undefined || sw.length < 1) {
-      console.log('if proceded')
-      navigator.serviceWorker.register('./serviceworker.js').then(res => {
-        console.log(res)
+    if ('serviceWorker' in Navigator) {
+      let sw
+      await navigator.serviceWorker.getRegistrations(process.env.VUE_APP_SJAKK_ARENA_ROOT_PAGE).then(res => {
+        sw = res
       })
+      if (sw === undefined || sw.length < 1) {
+        console.log('if proceded')
+        navigator.serviceWorker.register('./serviceworker.js').then(res => {
+          console.log(res)
+        })
+      }
     }
   }
 }
