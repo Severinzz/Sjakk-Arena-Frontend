@@ -1,6 +1,13 @@
 <template>
-  <v-row class="justify-center" align="center">
-    <v-dialog v-model="showDialog" persistent max-width="650px">
+  <v-row
+    class="justify-center"
+    align="center"
+  >
+    <v-dialog
+      v-model="showDialog"
+      persistent
+      max-width="650px"
+    >
       <v-card>
         <v-card-title class="justify-center"> {{ title }}</v-card-title>
         <v-card-text>
@@ -12,8 +19,20 @@
         <v-card-actions>
           <v-spacer />
           <!-- User has the option to either leave or go back -->
-          <v-btn text @click="carryOn">{{ carryOnButtonText }}</v-btn>
-          <v-btn text color="primary" outlined @click="closeDialog">Avbryt</v-btn>
+          <v-btn
+            text
+            @click="carryOn"
+          >
+            {{ carryOnButtonText }}
+          </v-btn>
+          <v-btn
+            text
+            color="primary"
+            outlined
+            @click="closeDialog"
+          >
+            Avbryt
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

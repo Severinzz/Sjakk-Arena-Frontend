@@ -1,7 +1,11 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <v-container class="justify-center form">
     <!-- Adapted from: https://stackoverflow.com/questions/48969510/the-form-is-not-center-aligned-vertically-centered-middle -->
-    <v-row row wrap align-center>
+    <v-row
+      row
+      wrap
+      align-center
+    >
       <v-col>
     <v-card>
     <v-form
@@ -13,7 +17,10 @@
      :errorMessage="errorMessage"
      :errorIcon="'fas fa-plug'"
      />
-      <v-toolbar dark color="primary">
+      <v-toolbar
+        dark
+        color="primary"
+      >
         <v-toolbar-title>Turneringsinformasjon</v-toolbar-title>
       </v-toolbar>
       <!-- Name of tournament -->
@@ -78,7 +85,8 @@
             color="purple"
             indeterminate
             v-if="isLoading === true"
-          ></v-progress-circular>
+          >
+          </v-progress-circular>
         </v-spacer>
       </v-row>
       <!-- end of code from vuetifyjs.com -->
@@ -97,23 +105,31 @@
         label="Max antall runder"
         type="number"
         :rules="numberFieldRules"
-      ></v-text-field>
+      >
+      </v-text-field>
       <v-switch
         label="Start når to spillere er påmeldt"
         v-model="earlyStart">
-      </v-switch><v-switch
+      </v-switch>
+      <v-switch
         label="Bruk sluttid"
-        v-model="useEndTime"></v-switch>
+        v-model="useEndTime"
+      >
+      </v-switch>
       <!-- code from https://vuetifyjs.com/en/components/time-pickers-->
       <v-row>
-      <v-col cols="12" sm="5">
+      <v-col
+        cols="12"
+        sm="5"
+      >
       <!-- End time and date-->
         <date-time
           v-if="useEndTime"
           :min-time="startTime"
           :rules="endTimeRules"
           :event-name="'endDateTime'"
-          @endDateTime="onEndDateTime"/>
+          @endDateTime="onEndDateTime"
+        />
       </v-col>
       </v-row>
       <!-- end of code from vuetifyjs.com -->
@@ -121,17 +137,20 @@
         id="submit-btn"
         class=""
         color="primary"
-        @click="validate">
+        @click="validate"
+      >
         Send
       </v-btn>
       <v-btn
         id="clear-btn"
-        @click="clear">
+        @click="clear"
+      >
         Tøm
       </v-btn>
       <v-btn
         id="cancel-btn"
-        @click="cancel">
+        @click="cancel"
+      >
         Avbryt
       </v-btn>
       </div>

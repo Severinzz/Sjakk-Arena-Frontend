@@ -1,6 +1,13 @@
 <template>
-  <v-toolbar extended app color="blue darken-4">
-    <img id="logo" :src="require('@/assets/Logo-v11.png')">
+  <v-toolbar
+    extended
+    app
+    color="blue darken-4"
+  >
+    <img
+      id="logo"
+      :src="require('@/assets/Logo-v11.png')"
+    >
   </v-toolbar>
 </template>
 

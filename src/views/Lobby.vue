@@ -1,9 +1,14 @@
 <template>
   <!-- Adapted from https://vuetifyjs.com/en/components/grids/ -->
-  <v-container class="content-wrapper mb-12" fluid>
-    <alert-box v-if="error"
-    :error-message="errorMessage"
-    error-icon="fas fa-plug"/>
+  <v-container
+    class="content-wrapper mb-12"
+    fluid
+  >
+    <alert-box
+      v-if="error"
+      :error-message="errorMessage"
+      error-icon="fas fa-plug"
+    />
     <v-row>
       <v-col cols="2">
         <div class="info-wrapper">
@@ -19,12 +24,14 @@
               id="start"
               color="primary"
               class="mr-4"
-              @click="startTournament">
+              @click="startTournament"
+            >
               Start
             </v-btn>
             <v-btn id="cancel"
                    class="mr-4"
-                   @click="cancel">
+                   @click="cancel"
+            >
               Avbryt
             </v-btn>
           </div>
@@ -64,7 +71,7 @@
       carry-on-button-text="Avslutt turnering"
       @carryOn="endTournament()"
       @closeDialog="alterLeavePageDialogState"
-    ></warning-dialog>
+    />
   </v-container>
 </template>
 
@@ -152,10 +159,8 @@ export default {
   },
   watch: {
     playerCount: function(playerCount) {
-      if (this.tournament.early_start !== true) { } else {
-        if (playerCount >= 2) {
-          this.startTournament()
-        }
+      if (this.tournament.early_start && !this.tournament.finished && playerCount >= 2) {
+        this.startTournament()
       }
     },
     isTournamentActive: function (active) {
