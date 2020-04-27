@@ -14,6 +14,12 @@
           sm="8"
           md="4"
         >
+          <v-alert
+            type="error"
+            v-if="alertError"
+          >
+            {{ alertErrorMessage }}
+          </v-alert>
           <v-card class="elevation-12">
             <v-toolbar
               color="primary"
@@ -23,7 +29,10 @@
               <v-toolbar-title>Fyll inn adminID</v-toolbar-title>
             </v-toolbar>
             <v-card-text>
-              <v-form>
+              <v-form
+                ref="form"
+                lazy-validation
+              >
                 <v-progress-circular
                   class="loadingCircle"
                   :size="50"
@@ -38,6 +47,8 @@
                   label="TurneringsID"
                   placeholder="1337"
                   type="text"
+                  :rules="adminIdRules"
+                  required
                 />
                 <div id="error">{{ errorMessage }}</div>
               </v-form>
@@ -72,7 +83,11 @@ export default {
     return {
       tournamentId: '',
       errorMessage: '',
-      isLoading: false
+      isLoading: false,
+      alertError: false,
+      adminIdRules: [
+        v => !!v || 'Du må skrive inn adminID'
+      ]
     }
   },
   methods: {
@@ -82,31 +97,40 @@ export default {
       'deleteTokenAndSetStateToDefault'
     ]),
     async submit() {
-      this.error = false
-      this.isLoading = true
-      let vm = this
-      this.signInUUID(this.tournamentId).then(res => {
-        vm.fetchTournament().then(res => {
-          vm.isLoading = false
-          if (vm.tournament.active) {
-            this.$router.push('/tournament/' + `${vm.tournament.user_id}`)
+      if (this.$refs.form.validate()) {
+        this.error = false
+        this.isLoading = true
+        let vm = this
+        this.signInUUID(this.tournamentId).then(res => {
+          vm.fetchTournament().then(res => {
+            vm.isLoading = false
+            if (vm.tournament.active) {
+              this.$router.push('/tournament/' + `${vm.tournament.user_id}`)
+            } else {
+              this.$router.push('/lobby/' + `${vm.tournament.user_id}`)
+            }
+          })
+        }).catch(err => {
+          this.isLoading = false
+          if (err.response !== undefined) {
+            this.handleErrorResponse(err.response)
           } else {
-            this.$router.push('/lobby/' + `${vm.tournament.user_id}`)
+            this.errorMessage = ''
+            this.alertError = true
+            this.alertErrorMessage = err + '. Prøv igjen senere!'
           }
         })
-      }).catch(err => {
-        this.$emit('error', err)
-        if (err.response !== undefined) {
-          this.handleErrorResponse(err.response)
-        }
-      })
+      }
     },
     handleErrorResponse(response) {
       this.isLoading = false
       if (response.status === 404) {
+        this.alertError = false
         this.errorMessage = 'Denne IDen: "' + this.tournamentId + '", finnes ikke!'
       } else {
-        this.errorMessage = 'Error code: ' + response.status + ', ' + response.data.message
+        this.alertErrorMessage = ''
+        this.alertErrorMessage = 'Error code: ' + response.status + ', ' + response.data.message
+        this.alertError = true
       }
     }
   },
