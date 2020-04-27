@@ -3,16 +3,8 @@
       <div class="app-container">
         <app-header class="header"/>
         <tile-header-space class="tile-space"/>
-          <alert-box
-            v-if="error"
-            :errorMessage="errorMessage"
-            errorIcon="fas fa-plug"
-          />
         <div class="route-view">
-        <router-view
-          class=""
-          @error="showErrorMessage"
-        />
+          <router-view/>
         </div>
         <app-footer class="footer"/>
     </div>
@@ -25,35 +17,13 @@ import AppHeader from './components/AppHeader'
 import TileHeaderSpace from './components/TileHeaderSpace'
 import { API_SERVICE } from './common/api'
 import jwtService from './common/jwt.storage'
-import AlertBox from './components/AlertBox'
 
 export default {
   name: 'App',
-  components: { AlertBox, AppHeader, AppFooter, TileHeaderSpace },
-  data() {
-    return {
-      error: false,
-      errorMessage: ''
-    }
-  },
+  components: { AppHeader, AppFooter, TileHeaderSpace },
   created () {
     if (jwtService.getToken() !== null) {
       API_SERVICE.setHeader()
-    }
-  },
-  methods: {
-    showErrorMessage(err) {
-      if (err.response === undefined) {
-        this.error = true
-        this.errorMessage = err + '. Prøv igjen senere!'
-      } else {
-        this.error = false
-      }
-    }
-  },
-  watch: {
-    $route() {
-      this.error = false
     }
   }
 }
