@@ -114,7 +114,7 @@ export const actions = {
  */
   sendPauseRequest: () => {
     return PLAYER_SERVICE.patch('pause').catch(err => {
-      throw err.response
+      throw err
     })
   },
 
@@ -123,7 +123,7 @@ export const actions = {
  */
   sendUnpauseRequest: () => {
     return PLAYER_SERVICE.patch('unpause').catch(err => {
-      throw err.response
+      throw err
     })
   },
 

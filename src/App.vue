@@ -1,13 +1,13 @@
 <template>
   <v-app>
       <div class="app-container">
-      <AppHeader class="header"></AppHeader>
-      <TileHeaderSpace class="tile-space"></TileHeaderSpace>
+        <app-header class="header"/>
+        <tile-header-space class="tile-space"/>
         <div class="route-view">
-      <router-view class=""></router-view>
-          </div>
-      <AppFooter class="footer"></AppFooter>
-      </div>
+          <router-view/>
+        </div>
+        <app-footer class="footer"/>
+    </div>
   </v-app>
 </template>
 
