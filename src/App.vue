@@ -21,9 +21,16 @@ import jwtService from './common/jwt.storage'
 export default {
   name: 'App',
   components: { AppHeader, AppFooter, TileHeaderSpace },
-  created () {
+  async created() {
     if (jwtService.getToken() !== null) {
       API_SERVICE.setHeader()
+    }
+    let sw
+    await navigator.serviceWorker.getRegistrations('http://localhost:8081/').then(res => {
+      sw = res
+    })
+    if (sw === undefined || sw.length < 1) {
+      await navigator.serviceWorker.register('./serviceworker.js')
     }
   }
 }
