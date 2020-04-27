@@ -183,9 +183,10 @@ export default {
         this.removedMessage = 'Spiller fjernet! Du kan nå lukke denne fanen'
         this.icon = 'check'
       }).catch(err => {
-        this.$emit('error', err)
         if (err.response !== undefined) {
           this.handleErrorResponse(err.response)
+        } else {
+          this.handleError(err)
         }
       })
       this.removed = true
@@ -198,6 +199,11 @@ export default {
       }
       this.icon = 'plug'
       this.color = 'error'
+    },
+    handleError(err) {
+      this.removedMessage = err + '. Prøv igjen senere!'
+      this.icon = 'plug'
+      this.color = 'error'
     }
   },
   async created() {
@@ -207,9 +213,10 @@ export default {
     await this.hostFetchPlayer(payload).then(res => {
       this.player = res.data
     }).catch(err => {
-      this.$emit('error', err)
       if (err.response !== undefined) {
         this.handleErrorResponse(err.response)
+      } else {
+        this.handleError(err)
       }
       this.removed = true
     })
