@@ -44,7 +44,12 @@
           </v-row>
         </v-card-text>
         <v-row class="justify-center">
-          <div id="error"> {{ errorMessage }} </div>
+          <v-alert
+            v-if="error"
+            type="error"
+          >
+            {{ errorMessage }}
+          </v-alert>
         </v-row>
         <v-card-actions>
           <v-spacer />
@@ -86,6 +91,7 @@ export default {
   data () {
     return {
       result: '',
+      error: false,
       errorMessage: ''
     }
   },
@@ -99,6 +105,7 @@ export default {
         this.alterResultDialogState()
         this.$emit('resultAdded')
       }).catch(err => {
+        this.error = true
         if (err.response !== undefined) {
           this.handleErrorResponse(err.response)
         } else {
