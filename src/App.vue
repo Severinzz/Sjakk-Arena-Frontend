@@ -29,8 +29,8 @@ export default {
     await navigator.serviceWorker.getRegistrations('http://localhost:8081/').then(res => {
       sw = res
     })
-    if (sw === undefined) {
-      navigator.serviceWorker.register('./serviceworker.js')
+    if (sw === undefined || sw.length < 1) {
+      await navigator.serviceWorker.register('./serviceworker.js')
     }
   }
 }

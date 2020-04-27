@@ -114,12 +114,15 @@ export default {
     startCountDown() {
       this.intervalId = setInterval(this.countDown, 1000)
     },
+    // Gets the public key from backend.
     fetchPublicKey() {
       return API_SERVICE.get('', 'pushnotification')
     },
+    // Gets the service worker registration from the current site.
     getRegistration() {
       return navigator.serviceWorker.getRegistrations('http://localhost:8081/')
     },
+    // Gets subscription from browser's push manager
     getSubscription(registration, applicationServerKey) {
       const subOptions = {
         userVisibleOnly: true,
@@ -127,9 +130,11 @@ export default {
       }
       return registration.pushManager.subscribe(subOptions)
     },
+    // Send subscription object to backend.
     sendSubscription(subscription) {
       API_SERVICE.post('pushnotification', subscription)
     },
+    // Subscribes to push notifications
     subscribeToPushNotifications() {
       this.fetchPublicKey().then(publicKey => {
         this.getRegistration().then(registration => {
@@ -140,20 +145,51 @@ export default {
       })
     },
     // Adapted from https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/message_event
+    // Unsubscribe from push notifications.
     async unsubscribePushNotification() {
       await navigator.serviceWorker.ready.then(async reg => {
         await reg.pushManager.getSubscription().then(async subscription => {
-          await subscription.unsubscribe().then(async res => {
-            await API_SERVICE.delete('pushnotification', 'unsubscribe').then(res => {
+          if (subscription !== null) {
+            await subscription.unsubscribe().then(async res => {
+              await API_SERVICE.delete('pushnotification', 'unsubscribe').then(res => {
+              })
+            }).catch(error => {
+              console.log(error)
             })
-          }).catch(error => {
-            console.log(error)
-          })
+          }
         })
       })
+    },
+
+    async setupPushNotifications() {
+      const VM = this
+      if ('PushManager' in window && 'Notification' in window) {
+        await navigator.serviceWorker.ready.then(async function () {
+          // Request notifiaction permission.
+          switch (Notification.permission) {
+            case 'granted':
+              VM.subscribeToPushNotifications()
+              break
+            case 'denied':
+              console.warn('Treng tilgang til notifikasjoner for å gi besked om nytt spill er funnet.')
+              break
+            default:
+              // Make site "transparent" while user decides. To make "decision box" be more in focus.
+              document.getElementById('root').style.opacity = '0.5'
+              Notification.requestPermission().then(permission => {
+                document.getElementById('root').style.opacity = '1'
+                if (permission === 'granted') {
+                  VM.subscribeToPushNotifications()
+                } else {
+                  console.warn('Treng tilgang til notifikasjoner for å gi besked om nytt spill er funnet.')
+                }
+              })
+          }
+        })
+      }
     }
   },
-  async created() {
+  created() {
     this.fetchPlayersTournament()
     this.fetchPlayer()
     let vm = this
@@ -167,32 +203,13 @@ export default {
     this.subscribeToPoints()
     this.subscribeToSuggestedResult()
     this.subscribeToPlayerKicked(callback)
-    if ('PushManager' in window && 'Notification' in window) {
-      await navigator.serviceWorker.ready.then(async function () {
-        // Request notifiaction permission.
-        switch (Notification.permission) {
-          case 'granted':
-            vm.subscribeToPushNotifications(vm)
-            break
-          case 'denied':
-            console.warn('Treng tilgang til notifikasjoner for å gi besked om nytt spill er funnet.')
-            break
-          default:
-            document.getElementById('root').style.opacity = '0.5'
-            Notification.requestPermission().then(permission => {
-              document.getElementById('root').style.opacity = '1'
-              if (permission === 'granted') {
-                vm.subscribeToPushNotifications()
-              } else {
-                console.warn('Treng tilgang til notifikasjoner for å gi besked om nytt spill er funnet.')
-              }
-            })
-        }
-      })
-    }
+
+    this.setupPushNotifications()
   },
   async beforeRouteLeave(to, from, next) {
-    await this.unsubscribePushNotification()
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      await this.unsubscribePushNotification()
+    }
     next()
   },
   destroyed () {
