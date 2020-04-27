@@ -21,7 +21,6 @@
           :tournament-end="tournamentEnd"
           :player-name="playerName"
           :points="points"
-          @error="handleError"
         />
       </div>
 
@@ -114,9 +113,6 @@ export default {
         this.kickedDialog = false
         this.navigateHome()
       }
-    },
-    handleError(err) {
-      this.$emit('error', err)
     },
     navigateHome() {
       this.kickedDialog = false

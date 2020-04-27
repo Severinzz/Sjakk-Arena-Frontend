@@ -87,7 +87,7 @@
           </v-container>
 
           <div v-if="pastResults">
-            <earlier-results @error="handleError"/>
+            <earlier-results/>
             <oval-button
               :primary="pastResults"
               :text="pastResultsText"
@@ -382,9 +382,6 @@ export default {
     showChessClock() {
       let route = this.$router.resolve('/chess-clock')
       window.open(route.href, '_blank')
-    },
-    handleError(err) {
-      this.$emit('error', err)
     }
   },
   watch: {
