@@ -7,6 +7,12 @@
       align-center
     >
       <v-col>
+        <v-alert
+        type="error"
+        v-if="alertError"
+        >
+          {{ errorMessage }}
+        </v-alert>
     <v-card>
     <v-form
       ref="form"
@@ -180,6 +186,8 @@ export default {
       isLoading: false,
       useEndTime: false,
       missingStartTime: false,
+      alertError: false,
+      errorMessage: '',
       // rules
       emailRules: [
         v => /^[A-ZÆØÅa-zæøå0-9._%+-]+@[A-ZÆØÅa-zæøå0-9.-]+\.[A-ZÆØÅa-zæøå]{2,6}$/.test(v) || 'Du må skrive inn en gyldig e-postadresse'
@@ -218,7 +226,7 @@ export default {
         this.missingStartTime = true
         return
       }
-      this.error = false
+      this.alertError = false
       this.isLoading = true
       // Setup the JSON object to be sent to the server
       let payload = {
@@ -237,7 +245,8 @@ export default {
         this.isLoading = false
       }).catch(err => {
         // Hides the loading circle and display error message
-        this.$emit('error', err)
+        this.alertError = true
+        this.errorMessage = err + '. Prøv igjen senere'
         this.isLoading = false
       })
     },
