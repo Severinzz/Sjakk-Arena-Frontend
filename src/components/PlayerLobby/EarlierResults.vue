@@ -21,7 +21,13 @@
       >
         <v-layout>
           <!-- https://stackoverflow.com/a/54836170/12885810 -->
-          <ul>
+          <v-alert
+            type="error"
+            v-if="error"
+            >
+            {{ errMsg }}
+          </v-alert>
+          <ul v-if="!error">
             <h6
               v-if="gameList.length == 0"
               class="body-1">
@@ -98,6 +104,7 @@ export default {
       limit: 10,
       timeInterval: 5000,
       spillArray: [],
+      error: false,
       errMsg: ''
     }
   },
@@ -116,10 +123,12 @@ export default {
       })
     },
     handleErr(err) {
-      this.$emit('error', err)
+      this.error = true
       clearInterval(this.intervalID)
       if (err.response !== undefined) {
         this.handleErrorResponse(err.response)
+      } else {
+        this.errMsg = err + '. Prøv igjen senere!'
       }
     },
     handleErrorResponse(response) {
