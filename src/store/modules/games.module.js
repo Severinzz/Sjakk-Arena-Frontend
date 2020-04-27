@@ -56,7 +56,7 @@ export const actions = {
   // Commit istede for å sende til komponent ?
   fetchResults: () => {
     return PLAYER_SERVICE.get('games/inactive').catch(err => {
-      throw err.response
+      throw err
     })
   },
 

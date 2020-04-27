@@ -14,6 +14,12 @@
               sm="8"
               md="4"
             >
+              <v-alert
+                type="error"
+                v-if="alertError"
+              >
+                {{ errorMessage }}
+              </v-alert>
               <v-card class="elevation-12">
                 <v-toolbar
                   color="primary"
@@ -76,7 +82,9 @@ export default {
     return {
       gamePin: '',
       playerName: '',
-      errorMessage: ''
+      errorAlertMessage: '',
+      errorMessage: '',
+      alertError: false
     }
   },
   methods: {
@@ -92,12 +100,21 @@ export default {
         // TODO: Dynamic routing
         this.$router.push('/player-lobby')
       }).catch(err => {
-        if (err.response.status === 409) {
-          this.errorMessage = 'Navnet er tatt, prøv et nytt ett!'
+        if (err.response !== undefined) {
+          this.alertError = false
+          this.handleErrorResponse(err.response)
         } else {
-          this.errorMessage = 'Game pin finnes ikke!'
+          this.alertError = true
+          this.errorMessage = err + '. Prøv igjen senere!'
         }
       })
+    },
+    handleErrorResponse (response) {
+      if (response.status === 409) {
+        this.errorMessage = 'Navnet er tatt, prøv et nytt ett!'
+      } else {
+        this.errorMessage = 'Game pin finnes ikke!'
+      }
     },
     validate() {
       if (this.$refs.form.validate()) {

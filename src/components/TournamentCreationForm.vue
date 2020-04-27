@@ -7,16 +7,17 @@
       align-center
     >
       <v-col>
+        <v-alert
+        type="error"
+        v-if="alertError"
+        >
+          {{ errorMessage }}
+        </v-alert>
     <v-card>
     <v-form
       ref="form"
       lazy-validation
     >
-     <alert-box
-     v-if="error"
-     :errorMessage="errorMessage"
-     :errorIcon="'fas fa-plug'"
-     />
       <v-toolbar
         dark
         color="primary"
@@ -163,12 +164,11 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
-import AlertBox from './AlertBox'
 import DateTime from './DateTime'
 
 export default {
   name: 'TournamentCreationForm',
-  components: { AlertBox, DateTime },
+  components: { DateTime },
   data () {
     return {
       startTime: '', // start time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
@@ -184,10 +184,10 @@ export default {
       earlyStart: false, // true if the tournament will start when two players are registered
       formColor: 'blue', // color to be used in form elements
       isLoading: false,
-      errorMessage: '',
-      error: false,
       useEndTime: false,
       missingStartTime: false,
+      alertError: false,
+      errorMessage: '',
       // rules
       emailRules: [
         v => /^[A-ZÆØÅa-zæøå0-9._%+-]+@[A-ZÆØÅa-zæøå0-9.-]+\.[A-ZÆØÅa-zæøå]{2,6}$/.test(v) || 'Du må skrive inn en gyldig e-postadresse'
@@ -226,7 +226,7 @@ export default {
         this.missingStartTime = true
         return
       }
-      this.error = false
+      this.alertError = false
       this.isLoading = true
       // Setup the JSON object to be sent to the server
       let payload = {
@@ -245,9 +245,9 @@ export default {
         this.isLoading = false
       }).catch(err => {
         // Hides the loading circle and display error message
+        this.alertError = true
+        this.errorMessage = err + '. Prøv igjen senere'
         this.isLoading = false
-        this.error = true
-        this.errorMessage = err + '. Prøv igjen senere!'
       })
     },
     validate() {
