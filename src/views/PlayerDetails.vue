@@ -5,7 +5,6 @@
         class="sucsess"
         v-if="removed"
         :color="color"
-        dark
         :icon="`fas fa-${icon}`"
         transition="scale-transition"
       >
