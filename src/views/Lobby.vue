@@ -4,6 +4,11 @@
     class="content-wrapper mb-12"
     fluid
   >
+    <v-alert
+    type="error"
+    v-if="alertError">
+      {{ errorMessage }}
+    </v-alert>
     <v-row>
       <v-col cols="2">
         <div class="info-wrapper">
@@ -95,7 +100,8 @@ export default {
       intervalId: '',
       active: false,
       leaveWarn: false,
-      pathVar: 'lobby/'
+      pathVar: 'lobby/',
+      alertError: false
     }
   },
   computed: {
@@ -137,7 +143,8 @@ export default {
         .then(res => {
           this.$router.replace('/tournament/' + this.tournament.user_id)
         }).catch(err => {
-          this.$emit('error', err)
+          this.alertError = true
+          this.errorMessage = err + '. Prøv igjen senere!'
         })
     },
     endTournament() {
