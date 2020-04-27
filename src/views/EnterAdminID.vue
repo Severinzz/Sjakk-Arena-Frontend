@@ -1,5 +1,5 @@
 <template>
-  <div class="EnterTID">
+  <div class="EnterAdminID">
     <!-- // Kilde: https://github.com/vuetifyjs/vuetify/blob/master/packages/docs/src/layouts/layouts/demos/centered.vue -->
     <v-container
       class="fill-height"
@@ -43,8 +43,8 @@
                 />
                 <!-- No limits for the input field, might be needed to changed -->
                 <v-text-field
-                  v-model="tournamentId"
-                  label="TurneringsID"
+                  v-model="adminID"
+                  label="adminID"
                   placeholder="1337"
                   type="text"
                   :rules="adminIdRules"
@@ -75,13 +75,13 @@ import { mapActions, mapState } from 'vuex'
 import { clearTokenAndStateMixin } from '../mixins/clearTokenAndState.mixin'
 
 export default {
-  name: 'enterTID',
+  name: 'EnterAdminID',
   mixins: [
     clearTokenAndStateMixin
   ],
   data() {
     return {
-      tournamentId: '',
+      adminID: '',
       errorMessage: '',
       isLoading: false,
       alertError: false,
@@ -101,7 +101,7 @@ export default {
         this.error = false
         this.isLoading = true
         let vm = this
-        this.signInUUID(this.tournamentId).then(res => {
+        this.signInUUID(this.adminID).then(res => {
           vm.fetchTournament().then(res => {
             vm.isLoading = false
             if (vm.tournament.active) {
@@ -126,9 +126,9 @@ export default {
       this.isLoading = false
       if (response.status === 404) {
         this.alertError = false
-        this.errorMessage = 'Denne IDen: "' + this.tournamentId + '", finnes ikke!'
+        this.errorMessage = 'Denne IDen: "' + this.adminID + '", finnes ikke!'
       } else {
-        this.alertErrorMessage = ''
+        this.errorMessage = ''
         this.alertErrorMessage = 'Error code: ' + response.status + ', ' + response.data.message
         this.alertError = true
       }
