@@ -14,6 +14,12 @@
               sm="8"
               md="4"
             >
+              <v-alert
+                type="error"
+                v-if="alertError"
+              >
+                {{ errorMessage }}
+              </v-alert>
               <v-card class="elevation-12">
                 <v-toolbar
                   color="primary"
@@ -78,7 +84,7 @@ export default {
       playerName: '',
       errorAlertMessage: '',
       errorMessage: '',
-      error: false
+      alertError: false
     }
   },
   methods: {
@@ -94,9 +100,12 @@ export default {
         // TODO: Dynamic routing
         this.$router.push('/player-lobby')
       }).catch(err => {
-        this.$emit('error', err)
         if (err.response !== undefined) {
+          this.alertError = false
           this.handleErrorResponse(err.response)
+        } else {
+          this.alertError = true
+          this.errorMessage = err + '. Prøv igjen senere!'
         }
       })
     },
