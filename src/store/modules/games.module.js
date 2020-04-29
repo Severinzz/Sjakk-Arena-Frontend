@@ -121,15 +121,6 @@ export const actions = {
     }
     let sub = { path: 'tournament/games/invalid', callback: invalidGameCallback }
     WEBSOCKET_SERVICE.connect(sub)
-  },
-
-  /*
-    Send image from user to backend.
-   */
-  sendGameImage: ( { payload } ) {
-    return PLAYER_SERVICE.put(`/${gameId}/image/` + payload).catch(err => {
-      throw err;
-    })
   }
 }
 export const getters = {

@@ -127,6 +127,15 @@ export const actions = {
     })
   },
 
+  /*
+    Send image from user to backend.
+   */
+  sendGameImage: ({ payload }, gameId) => {
+    return PLAYER_SERVICE.put(`/${gameId}/image/` + payload).catch(err => {
+      throw err
+    })
+  },
+
   subscribeToPlayers: ({ commit }, started) => {
     let playerCallback = function (res) {
       let players = JSON.parse(res.body)
