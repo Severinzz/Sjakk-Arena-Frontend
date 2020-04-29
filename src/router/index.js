@@ -105,6 +105,14 @@ const routes = [
       title: 'sjakkur'
     },
     component: () => import('../views/ChessClock')
+  },
+  {
+    path: '/Uploader',
+    name: 'ImageUploader',
+    meta: {
+      title: 'Last opp bilde'
+    },
+    component: () => import('../components/ImageUploader')
   }
 ]
 

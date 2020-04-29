@@ -5,6 +5,7 @@
         <router-link to="/about" target="_blank"> trykk her.
         </router-link>
       </strong>
+      <router-link to="/uploader">Bilde opplasting</router-link>
     </div>
     <v-spacer></v-spacer>
     <div>&copy; {{ new Date().getFullYear() }}</div>
