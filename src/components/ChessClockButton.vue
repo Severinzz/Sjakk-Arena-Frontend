@@ -41,8 +41,8 @@ export default {
   },
   data() {
     return {
-      secondToMillisecondRatio: 1000,
-      minuteToSecondRatio: 60,
+      millisecondToSecondRatio: 1000,
+      secondToMinuteRatio: 60,
       intervalStart: 0,
       remainingTime: this.initialTimePrPlayer * 1000, // in ms
       countDownInterval: undefined
@@ -51,7 +51,7 @@ export default {
   methods: {
     clicked: function () {
       if (this.countDown) {
-        this.remainingTime += this.additionalTimePrMove * this.secondToMillisecondRatio
+        this.remainingTime += this.additionalTimePrMove * this.millisecondToSecondRatio
         clearInterval(this.countDownInterval)
         this.$emit('update:count-down', false)
       }
@@ -75,8 +75,8 @@ export default {
       return ''
     },
     time () {
-      let minutes = Math.floor(this.remainingTime / (this.minuteToSecondRatio * this.secondToMillisecondRatio))
-      let seconds = Math.floor((this.remainingTime % (this.minuteToSecondRatio * this.secondToMillisecondRatio)) / this.secondToMillisecondRatio)
+      let minutes = Math.floor(this.remainingTime / (this.secondToMinuteRatio * this.millisecondToSecondRatio))
+      let seconds = Math.floor((this.remainingTime % (this.secondToMinuteRatio * this.millisecondToSecondRatio)) / this.millisecondToSecondRatio)
       let secondsString = seconds < 10 ? '0' + `${seconds}` : `${seconds}`
       return minutes >= 0 ? minutes + ':' + secondsString : '0:00'
     },
@@ -94,7 +94,7 @@ export default {
     reset: function (reset) {
       if (reset) {
         clearInterval(this.countDownInterval)
-        this.remainingTime = this.initialTimePrPlayer * this.secondToMillisecondRatio
+        this.remainingTime = this.initialTimePrPlayer * this.millisecondToSecondRatio
         this.$emit('update:reset', false)
       }
     }
