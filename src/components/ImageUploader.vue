@@ -3,13 +3,13 @@
     <p>Test side for bilde opplasting, skal ikke være med i pull request!</p>
     <v-file-input
       :rules="rules"
-      v-model="selectedFile"
       accept="image/png, image/jpeg, image/jpg"
       placeholder="Maks 10MB .PNG, .jpg eller .jpeg"
       prepend-icon="mdi-camera"
       label="Last opp sluttstilling"
       counter
       :show-size="1000"
+      id="game_image"
       @change="onFileSelected"
       />
     <v-btn @click="uploadFile">Last opp bilde</v-btn>
@@ -32,18 +32,17 @@ export default {
     ...mapActions([
       'sendGameImage'
     ]),
-    onFileSelected (event) {
+    onFileSelected () {
+      this.selectedFile = document.getElementById('game_image').files[0]
       if (!this.selectedFile) { return console.log('Ikke valgt fil.') }
-      this.selectedFile = event.target.files[0]
       console.log(this.selectedFile)
     },
     uploadFile () {
-      if (!this.selectedFile) { this.data = 'Ingen bilde valgt.'; return this.data }
-      const VM = this
+      this.selectedFile = document.getElementById('game_image').files[0]
       const FD = new FormData()
       FD.append('image', this.selectedFile, this.selectedFile.name)
-      VM.sendGameImage(FD, 13).then(res => {
-        console.log('Sent')
+      this.sendGameImage(FD).then(res => {
+        console.log('Sent ' + FD.get(this.selectedFile))
       })
     }
   }

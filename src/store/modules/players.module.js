@@ -130,8 +130,8 @@ export const actions = {
   /*
     Send image from user to backend.
    */
-  sendGameImage: (formData, gameId) => {
-    console.log('Image sent for game: ' + gameId)
+  sendGameImage: (formData) => {
+    console.log(formData)
     // return PLAYER_SERVICE.put(`/${gameId}/image/` + payload).catch(err => {
     //   throw err
     // })
