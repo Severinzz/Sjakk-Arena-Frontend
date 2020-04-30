@@ -4,18 +4,9 @@ const LOADING_MESSAGE = 'loading....'
 
 export const state = setDefaultState()
 export const mutations = {
-  addInvalidGame: (state, invalidGame) => {
-    if (Array.isArray(invalidGame)) {
-      state.invalidGames = invalidGame
-    } else {
-      state.invalidGames.push(invalidGame)
-    }
+  addInvalidGames: (state, invalidGame) => {
+    state.invalidGames = invalidGame
   },
-
-  removeInvalidGame: (state, index) => {
-    state.invalidGames.splice(index, 1)
-  },
-
   setActiveGame: (state, activeGame) => {
     state.activeGame = activeGame
   },
@@ -116,8 +107,8 @@ export const actions = {
 
   subscribeToInvalidGames: ({ commit }) => {
     let invalidGameCallback = function (res) {
-      let invalidGame = JSON.parse(res.body)
-      commit('addInvalidGame', invalidGame)
+      let invalidGames = JSON.parse(res.body)
+      commit('addInvalidGames', invalidGames)
     }
     let sub = { path: 'tournament/games/invalid', callback: invalidGameCallback }
     WEBSOCKET_SERVICE.connect(sub)
