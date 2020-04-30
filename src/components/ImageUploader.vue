@@ -13,7 +13,7 @@
       @change="onFileSelected"
       />
 
-    <input type="file" style="display: none" @change="onFileSelected" ref="fileInput">
+    <input type="file" style="display: none" @change="onFileSelected" ref="fileInput" capture="camera">
     <v-btn @click="$refs.fileInput.click()">Velg bilde</v-btn>
     <v-btn @click="uploadFile">Last opp bilde</v-btn>
   </div>
