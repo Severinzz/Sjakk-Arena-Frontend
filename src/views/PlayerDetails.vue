@@ -10,12 +10,14 @@
       >
         {{ removedMessage }}
       </v-alert>
+      <!-- player's name -->
       <h1
         class="name"
         v-if="player !== null"
       >
         {{ player.name }}
       </h1>
+      <!-- player's points -->
       <h2
         class="points"
         v-if="player !== null"
@@ -23,11 +25,11 @@
         Poeng: {{ player.points }}
       </h2>
     </div>
+    <!-- Table containing the games of the player -->
     <div>
       <Table
-        :objectList="playerList"
+        :objectList="games"
         :headingList="headingList"
-        @entryClicked="handleEntryClicked"
       />
       <v-btn
         class="error"
@@ -40,6 +42,7 @@
       class="justify-center"
       align="center"
     >
+      <!-- A dialog box the tournament host can use t0 remove a player from the tournament -->
       <v-dialog
         v-model="kickDialog"
         max-width="650px"
@@ -87,74 +90,30 @@ export default {
   data() {
     return {
       player: null,
-      removed: false,
-      removedMessage: '',
-      msg: '',
-      kickDialog: false,
-      color: '',
-      icon: '',
-      // TODO: FETCH FROM SERVER
-      playerList: [{
-        id: 1,
-        table: 1,
-        name: 'Magnus',
-        opponent: 'Anand',
-        score: '1-0',
-        start: '20:30'
-      }, {
-        id: 2,
-        table: 1,
-        name: 'Magnus',
-        opponent: 'Ding Liren',
-        score: '0-1',
-        start: '20:30'
-      }, {
-        id: 3,
-        table: 1,
-        name: 'Magnus',
-        opponent: 'Maxim VL',
-        score: '0-1',
-        start: '20:30'
-      }, {
-        id: 4,
-        table: 1,
-        name: 'Magnus',
-        opponent: 'Wang Hao',
-        score: '1-0',
-        start: '20:30'
-      }, {
-        id: 5,
-        table: 1,
-        name: 'Magnus',
-        opponent: '(ノಠ益ಠ)ノ彡┻━┻',
-        score: '0.5-0.5',
-        start: '20:30'
-      }, {
-        id: 6,
-        table: 1,
-        name: 'Magnus',
-        opponent: '(ノಠ益ಠ)ノ彡┻━┻',
-        score: '1-0',
-        start: '20:30'
-      }],
-      attributeList: ['table', 'name', 'opponent', 'score', 'start'],
-      headingList: [
+      removed: false, // whether the player is removed
+      removedMessage: '', // A message shown when the player is removed
+      msg: '', // a message sent to the removed player
+      kickDialog: false, // whether to show the kick dialog
+      color: '', // the color of the alert box
+      icon: '', // the icon of the alert boc
+      games: [], // the player's games
+      headingList: [ // headings used in the game table
         {
           text: 'Bord',
           align: 'start',
           value: 'table'
         },
         {
-          text: 'Hvit',
-          value: 'name'
+          text: 'Farge',
+          value: 'colour'
         },
         {
-          text: 'Sort',
+          text: 'Motstander',
           value: 'opponent'
         },
         {
-          text: 'Poeng',
-          value: 'score'
+          text: 'Resultat',
+          value: 'result'
         },
         {
           text: 'Startet',
@@ -165,11 +124,12 @@ export default {
   methods: {
     ...mapActions([
       'removePlayer',
-      'hostFetchPlayer'
+      'hostFetchPlayer',
+      'fetchPlayersInactiveGames'
     ]),
-    handleEntryClicked(game) {
-      alert(game)
-    },
+    /*
+    Removes the player from the tournament
+     */
     removePlayerFromTournament() {
       this.kickDialog = false
       let payload = {
@@ -182,11 +142,7 @@ export default {
         this.removedMessage = 'Spiller fjernet! Du kan nå lukke denne fanen'
         this.icon = 'check'
       }).catch(err => {
-        if (err.response !== undefined) {
-          this.handleErrorResponse(err.response)
-        } else {
-          this.handleError(err)
-        }
+        this.handleError(err)
       })
       this.removed = true
     },
@@ -200,9 +156,13 @@ export default {
       this.color = 'error'
     },
     handleError(err) {
-      this.removedMessage = err + '. Prøv igjen senere!'
-      this.icon = 'plug'
-      this.color = 'error'
+      if (err.response !== undefined) {
+        this.handleErrorResponse(err.response)
+      } else {
+        this.removedMessage = err + '. Prøv igjen senere!'
+        this.icon = 'plug'
+        this.color = 'error'
+      }
     }
   },
   async created() {
@@ -212,12 +172,13 @@ export default {
     await this.hostFetchPlayer(payload).then(res => {
       this.player = res.data
     }).catch(err => {
-      if (err.response !== undefined) {
-        this.handleErrorResponse(err.response)
-      } else {
-        this.handleError(err)
-      }
+      this.handleError(err)
       this.removed = true
+    })
+    await this.fetchPlayersInactiveGames(payload).then(res => {
+      this.games = res.data
+    }).catch(err => {
+      this.handleError(err)
     })
   }
 }
