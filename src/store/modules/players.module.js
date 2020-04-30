@@ -1,4 +1,4 @@
-import { API_SERVICE, PLAYER_SERVICE, TOURNAMENT_SERVICE } from '../../common/api'
+import { API_SERVICE, FILE_SERVICE, PLAYER_SERVICE, TOURNAMENT_SERVICE } from '../../common/api'
 import { addToken, deleteToken } from '../../common/jwt.storage'
 import WEBSOCKET_SERVICE from '../../common/websocketApi'
 const LOADING_MESSAGE = 'loading....'
@@ -130,11 +130,11 @@ export const actions = {
   /*
     Send image from user to backend.
    */
-  sendGameImage: (formData) => {
-    console.log(formData)
-    // return PLAYER_SERVICE.put(`/${gameId}/image/` + payload).catch(err => {
-    //   throw err
-    // })
+  sendGameImage: (payload) => {
+    let slug = '/upload'
+    return FILE_SERVICE.post(slug, '/' + payload).catch(err => {
+      throw err
+    })
   },
 
   subscribeToPlayers: ({ commit }, started) => {

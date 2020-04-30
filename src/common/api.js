@@ -68,3 +68,13 @@ export const PLAYER_SERVICE = {
     return API_SERVICE.put(this.path, slug, payload)
   }
 }
+
+export const FILE_SERVICE = {
+  path: 'playerFile',
+  post(slug) {
+    return API_SERVICE.post(this.path, slug)
+  },
+  get(slug) {
+    return API_SERVICE.get(this.path, slug)
+  }
+}

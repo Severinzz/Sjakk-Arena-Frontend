@@ -12,12 +12,16 @@
       id="game_image"
       @change="onFileSelected"
       />
+
+    <input type="file" style="display: none" @change="onFileSelected" ref="fileInput">
+    <v-btn @click="$refs.fileInput.click()">Velg bilde</v-btn>
     <v-btn @click="uploadFile">Last opp bilde</v-btn>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import { Coverage as uploadEvent } from 'istanbul-lib-coverage'
 
 export default {
   name: 'ImageUploader',
@@ -32,17 +36,19 @@ export default {
     ...mapActions([
       'sendGameImage'
     ]),
-    onFileSelected () {
-      this.selectedFile = document.getElementById('game_image').files[0]
+    onFileSelected (event) {
+      this.selectedFile = event.target.files[0]
+      // this.selectedFile = document.getElementById('game_image').files[0]
       if (!this.selectedFile) { return console.log('Ikke valgt fil.') }
       console.log(this.selectedFile)
     },
     uploadFile () {
-      this.selectedFile = document.getElementById('game_image').files[0]
+      if (!this.selectedFile) { return console.log('Vennligst velg et bilde') }
       const FD = new FormData()
       FD.append('image', this.selectedFile, this.selectedFile.name)
-      this.sendGameImage(FD).then(res => {
-        console.log('Sent ' + FD.get(this.selectedFile))
+      this.sendGameImage(FD, {
+        onUploadProgess: upLoadEvent => { console.log('Upload Progress: ' + Math.round(uploadEvent.loaded / uploadEvent.total * 100) + '%') } }).then(res => {
+        console.log(res)
       })
     }
   }
