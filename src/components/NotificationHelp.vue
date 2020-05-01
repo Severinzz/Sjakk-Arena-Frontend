@@ -6,7 +6,7 @@
       grow
     >
       <v-tab
-        v-for="item in helpPageData"
+        v-for="item in data"
         :key="item.title">
         <v-icon>
           {{ item.icon }}
@@ -26,7 +26,7 @@
                   disabled
                   v-model="notificationsEnabled"
       />
-      <v-tab-item v-for="(item, index) in helpPageData"
+      <v-tab-item v-for="(item, index) in data"
                   :key="index">
       <h1>
         {{item.title}}
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import * as helpPageData from '@/data/helpPageData'
+import notificationHelpPageData from '@/data/notificationHelpPageData'
 
 export default {
   name: 'NotificationHelp',
@@ -55,7 +55,7 @@ export default {
     return {
       tab: null,
       notificationsEnabled: Notification.permission === 'granted',
-      helpPageData: helpPageData.helpPageData
+      data: notificationHelpPageData
     }
   },
   computed: {

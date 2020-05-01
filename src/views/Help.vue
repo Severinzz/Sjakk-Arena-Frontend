@@ -15,11 +15,17 @@
 
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          VERT
+          <HelpPanels
+            class="hostPanels"
+            :data="hostHelpPageData"
+          />
         </v-tab-item>
 
         <v-tab-item>
-          SPILLER
+          <HelpPanels
+            class="hostPanels"
+            :data="playerHelpPageData"
+          />
         </v-tab-item>
 
         <v-tab-item>
@@ -39,29 +45,36 @@
 
 <script>
 import NotificationHelp from '../components/NotificationHelp'
+import HelpPanels from '@/components/HelpPanels'
+import hostHelpPageData from '@/data/hostHelpPage'
+import playerHelpPageData from '@/data/playerHelpPage'
+
 export default {
   name: 'Help',
-  components: { NotificationHelp },
+  components: { NotificationHelp, HelpPanels },
   data () {
     return {
-      tab: 2,
+      tab: null,
       items: [
         'Vert', 'Spiller', 'Notifikasjoner'
       ],
-      browserHasNotifications: 'PushManager' in window && 'Notification' in window && 'serviceWorker' in navigator
+      browserHasNotifications: 'PushManager' in window && 'Notification' in window && 'serviceWorker' in navigator,
+      hostHelpPageData: hostHelpPageData,
+      playerHelpPageData: playerHelpPageData
     }
   }
 }
 </script>
 
 <style scoped>
-  .active-tab{
-    background-color: #626e60;
-  }
   .not-supported{
     color: red
   }
   #helpRoot{
     text-align: center;
+  }
+  .hostPanels{
+    max-width: 85%;
+    margin: 2% auto auto auto;
   }
 </style>

@@ -5,7 +5,7 @@ const MOBILEDESCRIPTION = 'Her kan du ser hvordan man kan endre varslings instil
 const DESKTOPDESCRIPTION = 'Her kan du se hvordan man endrer varslings instillingene til nettstedet. ' +
   'Du kan også trykke på tannhjulet i varselen for å enkelt endre instillinger.'
 
-export const helpPageData = [{
+const notificationHelpPageData = [{
   title: 'Mozilla Firefox',
   icon: 'fab fa-firefox-browser',
   description: DESKTOPDESCRIPTION,
@@ -78,3 +78,5 @@ export const helpPageData = [{
   ]
 }
 ]
+
+export default notificationHelpPageData

@@ -1,6 +1,9 @@
 <template>
   <v-footer color="#f5f5f5">
-    <div class="footerTxt">Trenger du hjelp eller ønsker å vite mer om applikasjonen
+    <div class="footerTxt">
+      Trenger du
+      <router-link to="/help" target="_blank"> hjelp  </router-link>
+      eller ønsker å vite mer om applikasjonen
       <strong>
         <router-link to="/about" target="_blank"> trykk her.
         </router-link>
