@@ -30,7 +30,7 @@
                     tileText="Skriv inn adminID"
                     color="#dbf436"
                     icon="fa-id-card"
-                    link="/enter-TID"
+                    link="/enter-AID"
                   />
               </v-row>
             </v-col>

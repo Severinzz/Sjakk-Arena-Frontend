@@ -4,11 +4,11 @@
     class="content-wrapper mb-12"
     fluid
   >
-    <alert-box
-      v-if="error"
-      :error-message="errorMessage"
-      error-icon="fas fa-plug"
-    />
+    <v-alert
+    type="error"
+    v-if="alertError">
+      {{ errorMessage }}
+    </v-alert>
     <v-row>
       <v-col cols="2">
         <div class="info-wrapper">
@@ -79,7 +79,6 @@
 import TournamentInfo from '@/components/TournamentInfo'
 import Player from '@/components/Player'
 import { mapActions, mapGetters, mapState } from 'vuex'
-import AlertBox from '@/components/AlertBox'
 import WarningDialog from '@/components/WarningDialog'
 import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
 import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
@@ -88,7 +87,6 @@ import WEBSOCKET from '../common/websocketApi'
 export default {
   name: 'Lobby',
   components: {
-    AlertBox,
     TournamentInfo,
     Player,
     WarningDialog
@@ -100,11 +98,10 @@ export default {
   data () {
     return {
       intervalId: '',
-      error: false,
-      errorMessage: '',
       active: false,
       leaveWarn: false,
-      pathVar: 'lobby/'
+      pathVar: 'lobby/',
+      alertError: false
     }
   },
   computed: {
@@ -146,7 +143,7 @@ export default {
         .then(res => {
           this.$router.replace('/tournament/' + this.tournament.user_id)
         }).catch(err => {
-          this.error = true
+          this.alertError = true
           this.errorMessage = err + '. Prøv igjen senere!'
         })
     },

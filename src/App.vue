@@ -1,13 +1,13 @@
 <template>
   <v-app>
       <div class="app-container">
-      <AppHeader class="header"></AppHeader>
-      <TileHeaderSpace class="tile-space"></TileHeaderSpace>
+        <app-header class="header"/>
+        <tile-header-space class="tile-space"/>
         <div class="route-view">
-      <router-view class=""></router-view>
-          </div>
-      <AppFooter class="footer"></AppFooter>
-      </div>
+          <router-view/>
+        </div>
+        <app-footer class="footer"/>
+    </div>
   </v-app>
 </template>
 
@@ -21,12 +21,18 @@ import jwtService from './common/jwt.storage'
 export default {
   name: 'App',
   components: { AppHeader, AppFooter, TileHeaderSpace },
-  created () {
+  async created() {
     if (jwtService.getToken() !== null) {
       API_SERVICE.setHeader()
     }
+    let sw
+    await navigator.serviceWorker.getRegistrations('http://localhost:8081/').then(res => {
+      sw = res
+    })
+    if (sw === undefined || sw.length < 1) {
+      await navigator.serviceWorker.register('./serviceworker.js')
+    }
   }
-
 }
 </script>
 

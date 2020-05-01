@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import EnterTourney from '../views/EnterTourney'
-import EnterTID from '../views/EnterTID'
+import EnterAdminID from '../views/EnterAdminID'
 import TournamentCreation from '../views/TournamentCreation.vue'
 import PlayerLobby from '../views/PlayerLobby'
 
@@ -55,12 +55,12 @@ const routes = [
   },
   {
     // Add host enter tournament ID from views for the router to use
-    path: '/enter-TID',
-    name: 'Enter TID',
+    path: '/enter-AID',
+    name: 'Enter AdminID',
     meta: {
-      title: 'Skriv inn admin kode'
+      title: 'Skriv inn adminID'
     },
-    component: EnterTID
+    component: EnterAdminID
   },
   {
     path: '/tournament-creation',

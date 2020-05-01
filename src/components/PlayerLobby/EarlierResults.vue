@@ -21,7 +21,13 @@
       >
         <v-layout>
           <!-- https://stackoverflow.com/a/54836170/12885810 -->
-          <ul>
+          <v-alert
+            type="error"
+            v-if="error"
+            >
+            {{ errMsg }}
+          </v-alert>
+          <ul v-if="!error">
             <h6
               v-if="gameList.length == 0"
               class="body-1">
@@ -98,6 +104,7 @@ export default {
       limit: 10,
       timeInterval: 5000,
       spillArray: [],
+      error: false,
       errMsg: ''
     }
   },
@@ -105,30 +112,30 @@ export default {
     ...mapActions([
       'fetchResults'
     ]),
-    loadResults() {
-      const VM = this
-      this.intervalID = setInterval(async function () {
-        await VM.fetchResults().then(res => {
-          VM.spillArray = res.data
-        }).catch(err => {
-          VM.handleErr(err)
-        })
-      }, this.timeInterval)
+    loadResults () {
+      this.intervalID = setInterval(this.requestEarlierResults, this.timeInterval)
     },
-    initialResults() {
-      const VM = this
+    requestEarlierResults() {
       this.fetchResults().then(res => {
-        VM.spillArray = res.data
+        this.spillArray = res.data
       }).catch(err => {
-        VM.handleErr(err)
+        this.handleErr(err)
       })
     },
     handleErr(err) {
+      this.error = true
       clearInterval(this.intervalID)
-      if (err.response.status === 404) {
-        this.errMsg = '404, finner ikke resultat listen. Kontakt vert/systemansvarlig'
+      if (err.response !== undefined) {
+        this.handleErrorResponse(err.response)
       } else {
-        this.errMsg = 'Error code: ' + err.response.status + ', ' + err.response.data.message
+        this.errMsg = err + '. Prøv igjen senere!'
+      }
+    },
+    handleErrorResponse(response) {
+      if (response.status === 404) {
+        this.errMsg = '404, finner ikke resultatlisten. Kontakt vert/systemansvarlig'
+      } else {
+        this.errMsg = 'Error code: ' + response.status + ', ' + response.data.message
       }
     }
   },
@@ -140,8 +147,8 @@ export default {
       playerName: state => state.players.player.name
     })
   },
-  created() {
-    this.initialResults()
+  created () {
+    this.requestEarlierResults()
     this.loadResults()
   },
   destroyed() {

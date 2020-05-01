@@ -5,7 +5,6 @@
         class="sucsess"
         v-if="removed"
         :color="color"
-        dark
         :icon="`fas fa-${icon}`"
         transition="scale-transition"
       >
@@ -183,15 +182,27 @@ export default {
         this.removedMessage = 'Spiller fjernet! Du kan nå lukke denne fanen'
         this.icon = 'check'
       }).catch(err => {
-        if (err.response.status === 400) {
-          this.removedMessage = 'Denne spilleren tilhører ikke din turnering!'
+        if (err.response !== undefined) {
+          this.handleErrorResponse(err.response)
         } else {
-          this.removedMessage = 'Noe gikk galt'
+          this.handleError(err)
         }
-        this.icon = 'plug'
-        this.color = 'error'
       })
       this.removed = true
+    },
+    handleErrorResponse (response) {
+      if (response.status === 400 || response.status === 403) {
+        this.removedMessage = 'Feilmelding: ' + response.status + '. ' + 'Du har ikke tilgang til denne spilleren!'
+      } else {
+        this.removedMessage = 'Error code: ' + response.status + ', ' + response.data.message
+      }
+      this.icon = 'plug'
+      this.color = 'error'
+    },
+    handleError(err) {
+      this.removedMessage = err + '. Prøv igjen senere!'
+      this.icon = 'plug'
+      this.color = 'error'
     }
   },
   async created() {
@@ -201,14 +212,12 @@ export default {
     await this.hostFetchPlayer(payload).then(res => {
       this.player = res.data
     }).catch(err => {
-      this.icon = 'plug'
-      this.color = 'error'
-      this.removed = true
-      if (err.response.status === 403) {
-        this.removedMessage = 'Feilmelding: ' + err.response.status + '. ' + 'Du har ikke tilgang til denne spilleren, eller den finnes ikke!'
+      if (err.response !== undefined) {
+        this.handleErrorResponse(err.response)
       } else {
-        this.removedMessage = 'Error code: ' + err.response.status + ', ' + err.response.data.message
+        this.handleError(err)
       }
+      this.removed = true
     })
   }
 }
