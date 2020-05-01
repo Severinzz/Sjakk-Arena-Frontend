@@ -1,12 +1,17 @@
 <template>
   <v-expansion-panels>
-    <v-expansion-panel v-for="item in data" :key="item.title">
-      <v-expansion-panel-header>{{ item.title }}</v-expansion-panel-header>
+    <v-expansion-panel v-for="item in data"
+                       :key="item.title">
+      <v-expansion-panel-header>
+        {{ item.title }}
+      </v-expansion-panel-header>
       <v-expansion-panel-content>
         <div class="content-container"
              v-for="(image, index) in item.images"
              :key="index+10">
-          <img :src="image"/>
+          <img :src="image"
+               :title="item.altTags[index]"
+               :alt="item.altTags[index]"/>
           <p>
             {{ item.texts[index] }}
           </p>

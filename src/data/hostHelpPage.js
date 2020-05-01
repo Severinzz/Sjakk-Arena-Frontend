@@ -8,6 +8,9 @@ const hostHelpPageData = [{
   ],
   images: [
     require('@/assets/help-page/host/create_tournament.jpg')
+  ],
+  altTags: [
+    'Skjema for å opprette turnering'
   ]
 },
 {
@@ -23,6 +26,11 @@ const hostHelpPageData = [{
     require('@/assets/help-page/host/lobby.jpg'),
     require('@/assets/help-page/host/player_details.jpg'),
     require('@/assets/help-page/host/kick_player.jpg')
+  ],
+  altTags: [
+    'Vert lobby med spillere',
+    'Spiller detaljer side',
+    'Dialog boks med input for å gi begrunnelse for utkastelse.'
   ]
 },
 {
@@ -36,6 +44,10 @@ const hostHelpPageData = [{
   images: [
     require('@/assets/help-page/host/tournament(leaderboard).jpg'),
     require('@/assets/help-page/host/tournament(active_games).jpg')
+  ],
+  altTags: [
+    'Turneringsside med pil som viser knappen for å vise parti oversikt',
+    'Turneringsside med pil som viser knappen for å vise rangeringstabell'
   ]
 },
 {
@@ -50,6 +62,10 @@ const hostHelpPageData = [{
   images: [
     require('@/assets/help-page/host/invalid_results.jpg'),
     require('@/assets/help-page/host/change_result.jpg')
+  ],
+  altTags: [
+    'Turneringsside som viser hvor vert kan sette resultat på partier med ugyldig resultat',
+    'Dialog boks for å sette resultat'
   ]
 },
 {
@@ -62,6 +78,10 @@ const hostHelpPageData = [{
   images: [
     require('@/assets/help-page/host/pause_tournament.jpg'),
     require('@/assets/help-page/host/continue_tournament.jpg')
+  ],
+  altTags: [
+    'Turneringsside med pil som viser knappen for å sette turnering på pasue',
+    'Turneringsside med pil som viser knappen for fortsette turneringen'
   ]
 },
 {
@@ -72,6 +92,9 @@ const hostHelpPageData = [{
   ],
   images: [
     require('@/assets/help-page/host/adminId.jpg')
+  ],
+  altTags: [
+    'Skjema for å skrive inn admin id'
   ]
 }
 ]

@@ -30,7 +30,7 @@
 
         <v-tab-item>
           <NotificationHelp v-if="browserHasNotifications"/>
-          <div v-if="!browserHasNotifications">
+          <div v-else-if="!browserHasNotifications">
           <h1 class="not-supported">
             Beklager! Din enhet eller nettleser støtter ikke push-varsler
           </h1>

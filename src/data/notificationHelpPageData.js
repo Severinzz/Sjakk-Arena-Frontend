@@ -18,6 +18,9 @@ const notificationHelpPageData = [{
   ],
   images: [
     require('@/assets/help-page/firefox/firefox2.png')
+  ],
+  altTags: [
+    'Dialog box for å endre varslings instillinger'
   ]
 },
 {
@@ -34,6 +37,11 @@ const notificationHelpPageData = [{
     require('@/assets/help-page/chrome/chrome1.png'),
     require('@/assets/help-page/chrome/chrome2.png'),
     require('@/assets/help-page/chrome/chrome3.png')
+  ],
+  altTags: [
+    'Pil til hengelås i adressefelt',
+    'Pil til side instillinger i dialog box fra hengelås',
+    'Pil til notifikasjons instillinger i instilling siden'
   ]
 },
 {
@@ -52,6 +60,12 @@ const notificationHelpPageData = [{
     require('@/assets/help-page/mobile/chrome/chrome_mobile2.png'),
     require('@/assets/help-page/mobile/chrome/chrome_mobile3.png'),
     require('@/assets/help-page/mobile/chrome/android.png')
+  ],
+  altTags: [
+    'Pil til hengelås i adressefelt',
+    'Pil til side instillinger i dialog box fra hengelås',
+    'Pil til notifikasjons instillinger i instilling siden',
+    'Notifikasjon instillinger for android telefoner'
   ]
 },
 {
@@ -75,6 +89,14 @@ const notificationHelpPageData = [{
     require('@/assets/help-page/mobile/samsung-int/Samsung_int4.png'),
     require('@/assets/help-page/mobile/samsung-int/Samsung_int5.png'),
     require('@/assets/help-page/mobile/samsung-int/Samsung_int6.png')
+  ],
+  altTags: [
+    'Pil til menyen i nettleseren',
+    'Pil til instillinger i nettleser menyen',
+    'Internett-instillinger side, med pil til nettsteder og nedlastinger.',
+    'Nettsteder og nedlastinger side, med pil til varsler',
+    'Pil til meny i varsler siden',
+    'Side for å skru av og på varsler for nettlesern eller enkelt sider.'
   ]
 }
 ]

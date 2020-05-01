@@ -8,6 +8,10 @@ const playerHelpPageData = [{
   images: [
     require('@/assets/help-page/player/play_home.jpg'),
     require('@/assets/help-page/player/enter_tournament.jpg')
+  ],
+  altTags: [
+    'Hjemmesiden',
+    'Skjema for å bli med i turnering'
   ]
 },
 {
@@ -21,6 +25,10 @@ const playerHelpPageData = [{
   images: [
     require('@/assets/help-page/player/leave_tournament.jpg'),
     require('@/assets/help-page/player/leave_tournament_box.jpg')
+  ],
+  altTags: [
+    'Knapp for å forlate turnering',
+    'Dialog box for å varsle om at det ikke er en reversibel funksjon'
   ]
 },
 {
@@ -33,6 +41,10 @@ const playerHelpPageData = [{
   images: [
     require('@/assets/help-page/player/show_past_results.jpg'),
     require('@/assets/help-page/player/past_results.jpg')
+  ],
+  altTags: [
+    'Spiller side med pil som viser knappen for å sette turnering på pasue',
+    'Spiller side med pil som viser knappen for fortsette turneringen'
   ]
 },
 {
@@ -49,6 +61,11 @@ const playerHelpPageData = [{
     require('@/assets/help-page/player/show_chess_clock.jpg'),
     require('@/assets/help-page/player/chess_clock.jpg'),
     require('@/assets/help-page/player/chess_clock_config.jpg')
+  ],
+  altTags: [
+    'Spiller side med pil som viser sjakkur',
+    'Sjakkuret',
+    'Dialog box for konfigurasjon av sjakkur'
   ]
 },
 {
@@ -62,6 +79,10 @@ const playerHelpPageData = [{
   images: [
     require('@/assets/help-page/player/take_break.jpg'),
     require('@/assets/help-page/player/continue_tournament.jpg')
+  ],
+  altTags: [
+    'Spiller side med pil som viser knappen for å sette turnering på pasue',
+    'Spiller side med pil som viser knappen for fortsette turneringen'
   ]
 },
 {
@@ -79,6 +100,11 @@ const playerHelpPageData = [{
     require('@/assets/help-page/player/register_result_box.jpg'),
     require('@/assets/help-page/player/validate_result.jpg')
 
+  ],
+  altTags: [
+    'Spiller side med pil som viser knappen for å registrere resultat',
+    'Dialog box for å registrere resultat',
+    'Dialog box for å validere resultat'
   ]
 }
 ]
