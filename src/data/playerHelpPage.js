@@ -34,9 +34,9 @@ const playerHelpPageData = [{
 {
   title: 'Se tidligere spillte partier',
   texts: [
-    'For å se en oversikt over dine tidligere spillte parti i turneringen benytter du deg av "Tidligere parti" knappen' +
-      ' Denne vil åpne en tabell under som inneholder alle partiene. Benytt samme knappen for å fjerne listen',
-    'Om du ikke har spilt noen partier enda, så vil en tabell med teksten "Du har jo ikke spilt enda!" vises'
+    'For å se en oversikt over dine tidligere spillte parti i turneringen benytter du deg av "Tidligere parti" knappen.' +
+      ' Denne vil åpne en tabell under som inneholder alle partiene. Benytt samme knappen for å fjerne listen.',
+    'Om du ikke har spilt noen partier enda, så vil en tabell med teksten "Du har jo ikke spilt enda!" vises.'
   ],
   images: [
     require('@/assets/help-page/player/show_past_results.jpg'),
@@ -74,7 +74,7 @@ const playerHelpPageData = [{
     'Spillere kan selv velge å ta pause fra turneringen, dette gjøres enkelt ved å benytte "pause" kanppen. Dette kan' +
       ' kun gjøres mens spilleren venter på at applikasjonen skal tildele ett nytt parti.',
     ' Når spilleren har tatt pause blir de ikke tildelt nytt parti før de velger å fortsette turneringen igjen.' +
-      ' for å fortsette turneringen benytter spilleren knappen som ligger i den samme posisjonen. "forstsett spill".'
+      ' For å fortsette turneringen benytter spilleren knappen som ligger i den samme posisjonen. "forstsett spill".'
   ],
   images: [
     require('@/assets/help-page/player/take_break.jpg'),

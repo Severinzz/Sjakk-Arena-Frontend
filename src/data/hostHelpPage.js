@@ -36,9 +36,9 @@ const hostHelpPageData = [{
 {
   title: 'Oversikt over pågående partier',
   texts: [
-    'For å få en oversikt over pågående partier bruker du knappen som heter "Vis parti oversikt"' +
-    'denne ligger under turneringsinformasjonen. (tittlel, pin, antall spillere etc..). Når den er trykkt vil tabellen' +
-      'som ligger midt på siden bli byttet ut med en tabell som inneholder de på gående partiene.',
+    'For å få en oversikt over pågående partier bruker du knappen som heter "Vis parti oversikt".' +
+    ' Denne ligger under turneringsinformasjonen. (tittlel, pin, antall spillere etc..). Når den er trykkt vil tabellen' +
+      ' som ligger midt på siden bli byttet ut med en tabell som inneholder de på gående partiene.',
     'Du kan enkelt bytte tilbake til å vise rangeringstabellen ved å benytte den samme knappen. '
   ],
   images: [
@@ -71,8 +71,8 @@ const hostHelpPageData = [{
 {
   title: 'Sett turnering på pause',
   texts: [
-    'I sidebaren der turneringsinformasjonen ligger er det også en knapp for å sette turneringen på pause. Dette gjør at' +
-      'ingen nye partier vil bli tildelt før turneringen starter igjen. Alle pågående parti vil kunne fortsette som normalt.',
+    'I sidebaren der turneringsinformasjonen ligger, er det også en knapp for å sette turneringen på pause. Dette gjør at' +
+      ' ingen nye partier vil bli tildelt før turneringen starter igjen. Alle pågående parti vil kunne fortsette som normalt.',
     'For å starte turneringen igjen er det bare å benytte den samme knappen.'
   ],
   images: [
@@ -87,8 +87,8 @@ const hostHelpPageData = [{
 {
   title: 'AdminID',
   texts: [
-    'Når en turnering blir opprettet vil verten få en unik kode som kan benyttes til å gi andre tilgang som vert om det.' +
-      'skulle være ønskelig.'
+    'Når en turnering blir opprettet vil verten få en unik kode på epost. Denne kan en sende videre til andre slik at' +
+      ' de kan hjelpe til med å administrere turneringen.'
   ],
   images: [
     require('@/assets/help-page/host/adminId.jpg')
