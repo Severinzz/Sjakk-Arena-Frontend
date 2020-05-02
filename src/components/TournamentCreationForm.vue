@@ -171,16 +171,16 @@ export default {
   components: { DateTime },
   data () {
     return {
-      startTime: '', // start time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
-      endTime: '', // end time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT) // TODO: burde kunne endre senere
+      startTime: '', // start time of tournament
+      endTime: '', // end time of tournament
       currentDate: new Date().toISOString().slice(0, 10),
       endDate: '',
       startTimeMenu: false,
       minStartTime: new Date().getHours().toString() + ':' + new Date().getMinutes().toString(),
       email: '', // email address of tournament host
       tournamentName: '', // name of tournament
-      tables: '', // number of tables used in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
-      rounds: '', // maximum number of rounds in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
+      tables: '', // number of tables used in the tournament
+      rounds: '', // maximum number of rounds in the tournament
       earlyStart: false, // true if the tournament will start when two players are registered
       formColor: 'blue', // color to be used in form elements
       isLoading: false,
@@ -198,7 +198,7 @@ export default {
       ],
       numberFieldRules: [
         v => /^\d+$/.test(v) || 'Bare tall i dette feltet!', // If not included the number field can contain + and -
-        v => v < 256 || 'Må vær mindre enn 256!' // TODO MIGHT NOT WANT IT TO BE THE SAME FOR EACH NUMBER FIELD
+        v => v < 256 || 'Må vær mindre enn 256!'
       ],
       endTimeRules: [
         v => !v || this.checkTime() ||
