@@ -128,7 +128,4 @@ export default {
 </script>
 
 <style scoped>
-  #error{
-    color: #FF5252;
-  }
 </style>

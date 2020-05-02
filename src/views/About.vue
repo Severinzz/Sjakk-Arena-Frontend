@@ -2,8 +2,15 @@
   <div class="about">
     <h1 align="center">Om Sjakk Arena</h1>
     <v-container>
-      <v-row class="justify-xl-start" align="stretch" justify="end">
-        <v-col cols="12" sm="6" md="6">
+      <v-row
+        class="justify-xl-start"
+        align="stretch"
+        justify="end"
+      >
+        <v-col
+          cols="12"
+          sm="6"
+          md="6">
           <p>Denne webapplikasjonen ble laget av studenter fra NTNU Ålesund i bacheloroppgave fra Aalesunds Schaklag.</p>
           <v-card
             locale="no-NO"

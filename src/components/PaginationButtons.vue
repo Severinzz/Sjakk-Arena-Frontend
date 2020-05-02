@@ -154,6 +154,9 @@ export default {
         clearInterval(this.intervalId)
       }
     }
+  },
+  destroyed() {
+    clearInterval(this.intervalId)
   }
 }
 </script>

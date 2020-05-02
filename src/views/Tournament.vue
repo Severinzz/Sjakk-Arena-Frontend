@@ -180,7 +180,6 @@ export default {
     ...mapActions([
       'fetchTournament',
       'unsubscribe',
-      'close',
       'sendTournamentPauseRequest',
       'sendTournamentUnpauseRequest',
       'sendEndRequest',
@@ -189,7 +188,6 @@ export default {
       'subscribeToActiveGames'
     ]),
     handlePlayerClicked(player) {
-      // TODO: PRØVE Å SENDE PLAYER?
       // https://stackoverflow.com/a/47874850
       let route = this.$router.resolve('/tournament/player/' + player.user_id)
       window.open(route.href, '_blank')
@@ -272,10 +270,6 @@ export default {
     text-align: center;
     width: 100%;
     margin-top: 10%;
-  }
-
-  .tableBtn{
-    margin-top: 5%;
   }
 
   td{

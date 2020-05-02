@@ -205,8 +205,7 @@ export default {
           'Sluttid kan ikke vær lik eller mindre start tiden!'
       ],
       startTimeRules: [
-        v => !!v || 'Starttid er påkrevd',
-        v => (v.length = 0) || 'fisk'
+        v => !!v || 'Starttid er påkrevd'
       ]
     }
   },
