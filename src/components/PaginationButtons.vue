@@ -58,28 +58,46 @@ export default {
     }
   },
   methods: {
+
+    /**
+     * Change the page.
+     * @param page The page to change to
+     */
     changePage(page) {
       this.activeButton = page
       this.$emit('update:page', page)
     },
-    // Returns if there is any buttons to the left outside of the visible ones
+
+    /**
+     * Returns if there is any buttons to the left outside of the visible ones
+     */
     hasButtonsLeft() {
       return this.minButtonNr() >= 1
     },
-    // Checks if there is any buttons to the right outside of the visible ones
+
+    /**
+     * Checks if there is any buttons to the right outside of the visible ones
+     */
     hasButtonsRight() {
       return this.maxButtonNr() < this.lastButton
     },
-    // Returns the index of the lowest visible number
+
+    /**
+     * Returns the index of the lowest visible number
+     */
     minButtonNr() {
       return Math.floor(this.activeButton - (this.maxVisibleButtons / 2))
     },
-    // Returns the highest number that should be visible.
+
+    /**
+     * Returns the highest number that should be visible.
+     */
     maxButtonNr() {
       return Math.floor(this.activeButton + (this.maxVisibleButtons / 2))
     },
-    /*
-     Jumps to the first button outside of the visible left range, if button 1 is visible that wil be jumped to.
+
+    /**
+     *Jumps to the first button outside of the visible left range, if button 1 is visible that wil be jumped to.
      */
     jumpLeft() {
       if (this.minButtonNr() <= 0) {
@@ -88,9 +106,10 @@ export default {
         this.changePage(this.minButtonNr())
       }
     },
-    /*
-    Jumps to the first button outside of the visible right range,
-    if button last button is visible that wil be jumped to.
+
+    /**
+     * Jumps to the first button outside of the visible right range,
+     * if button last button is visible that wil be jumped to.
      */
     jumpRight() {
       if (this.maxButtonNr() >= this.lastButton) {
@@ -99,14 +118,29 @@ export default {
         this.changePage(this.maxButtonNr() + 1)
       }
     },
+
+    /**
+     * Hides or displays the << button.
+     * @param show Boolean value to deside if [<<] should be shown
+     */
     alterShowJumpLeft(show) {
       this.showJumpLeft = show
     },
+
+    /**
+     * Hides or displays the >> button.
+     * @param show Boolean value to deside if [>>] should be shown
+     */
     alterShowJumpRight(show) {
       this.showJumpRight = show
     }
   },
   computed: {
+
+    /**
+     * Returns an array consisting of the number of the buttons that should be visible.
+     * @returns {[]|*[]} Array consisting of the number of the buttons that should be visible.
+     */
     visibleButtons () {
       let button = 1
       let buttonsArr = []
@@ -120,16 +154,19 @@ export default {
           this.alterShowJumpLeft(false)
           this.alterShowJumpRight(false)
           return buttonsArr
+
         // If there are no buttons to the left of the visible range
         case !this.hasButtonsLeft():
           this.alterShowJumpLeft(false)
           this.alterShowJumpRight(true)
           return buttonsArr.slice(0, this.maxVisibleButtons)
+
         // No buttons to the right of the visible range
         case !this.hasButtonsRight():
           this.alterShowJumpLeft(true)
           this.alterShowJumpRight(false)
           return buttonsArr.slice(this.lastButton - this.maxVisibleButtons, this.lastButton)
+
         default:
           this.alterShowJumpLeft(true)
           this.alterShowJumpRight(true)
@@ -137,12 +174,22 @@ export default {
           return buttonsArr.slice(this.minButtonNr(), this.maxButtonNr())
       }
     },
+
+    /**
+     * Returns the last button
+     * @returns {number} The last button
+     */
     lastButton () {
       let lastButton = Math.ceil(this.numberOfItems / this.prPage)
       return lastButton > 0 ? lastButton : 1
     }
   },
   watch: {
+
+    /**
+     * Go the the next button every 30 sek. When the last button is reached, start from the beginning.
+     * @param autoScroll Boolean value to tell if it should auto scroll or not.
+     */
     autoScroll: function(autoScroll) {
       const VM = this
       if (autoScroll) {

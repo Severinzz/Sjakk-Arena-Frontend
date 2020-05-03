@@ -5,13 +5,29 @@ const LOADING_MESSAGE = 'loading....'
 
 export const state = setDefaultState()
 export const mutations = {
+  /**
+   * Set the tournament
+   * @param state
+   * @param tournament Tournament that should be set.
+   */
   addTournament: (state, tournament) => {
     state.tournament = tournament
     state.activeTournament = tournament.active
   },
+
+  /**
+   * Sets the tournament active state.
+   * @param state
+   * @param active Active value that should be set.
+   */
   setTournamentActive: (state, active) => {
     state.activeTournament = active
   },
+
+  /**
+   * Reset the state
+   * @param state
+   */
   resetTournamentState: (state) => {
     // https://github.com/vuejs/vuex/issues/1118
     Object.assign(state, setDefaultState())
@@ -22,8 +38,11 @@ export const actions = {
     commit('resetTournamentState')
   },
 
-  /*
-    Send a tournament to the server.
+  /**
+   * Send a tournament to the server.
+   * @param commit
+   * @param tournament Tournament that should be sent
+   * @returns {Promise<AxiosResponse<T>>}
    */
   sendTournament: ({ commit }, tournament) => {
     return API_SERVICE.post('new-tournament', tournament).then(res => {
@@ -37,8 +56,9 @@ export const actions = {
     })
   },
 
-  /*
-  Send tournament pause request to server.
+  /**
+   * Send tournament pause request to server.
+   * @returns {Promise<AxiosResponse<T>>}
    */
   sendTournamentPauseRequest: () => {
     return TOURNAMENT_SERVICE.patch('pause').catch(res => {
@@ -46,24 +66,33 @@ export const actions = {
     })
   },
 
-  /*
-  Send tournament unpause request to server.
- */
+  /**
+   * Send tournament unpause request to server.
+   * @returns {Promise<AxiosResponse<T>>}
+   */
   sendTournamentUnpauseRequest: () => {
     return TOURNAMENT_SERVICE.patch('unpause').catch(res => {
       throw res.response
     })
   },
 
-  /*
-  Fetch a tournament from the server.
- */
+  /**
+   * Fetch a tournament from the server.
+   * @param commit
+   * @returns {Promise<AxiosResponse<T>>}
+   */
   fetchTournament: ({ commit }) => {
     return TOURNAMENT_SERVICE.get().then(res => {
       commit('addTournament', res.data)
     })
   },
 
+  /**
+   * Signs-in with adminID.
+   * @param NULL
+   * @param uuid the AdminID.
+   * @returns {Promise<AxiosResponse<T>>}
+   */
   signInUUID: ({ NULL }, uuid) => {
     return API_SERVICE.get(`sign-in/${uuid}`).then(res => {
       addToken(res.data.jwt)
@@ -72,27 +101,42 @@ export const actions = {
     })
   },
 
-  /*
-  Fetch the tournament a player is enrolled in.
- */
+  /**
+   * Fetch the tournament a player is enrolled in.
+   * @param commit
+   * @returns {Promise<AxiosResponse<T>>}
+   */
   fetchPlayersTournament: ({ commit }) => {
     return PLAYER_SERVICE.get('tournament').then(res => {
       commit('addTournament', res.data)
     })
   },
 
+  /**
+   * Send request to start the tournament
+   * @returns {Promise<AxiosResponse<T>>}
+   */
   sendStartRequest: () => {
     return TOURNAMENT_SERVICE.patch('start').catch(err => {
       throw err
     })
   },
 
+  /**
+   * Send request to end the tournament
+   * @returns {Promise<AxiosResponse<T>>}
+   */
   sendEndRequest: () => {
     return TOURNAMENT_SERVICE.patch('end').catch(err => {
       throw err
     })
   },
 
+  /**
+   * Subscribes to the tournament active endpoint. Receives updates when tournament starts or ends
+   * @param commit
+   * @param userRole
+   */
   subscribeToTournamentActive: ({ commit }, { userRole }) => {
     let activeCallback = function (res) {
       let active = JSON.parse(res.body).active
@@ -104,11 +148,20 @@ export const actions = {
   }
 }
 export const getters = {
+  /**
+   * Gets the tournament active state
+   * @param state
+   * @returns {boolean} Active state.
+   */
   isTournamentActive: (state) => {
     return state.activeTournament
   }
 }
 
+/**
+ * Sets the default state
+ * @returns {{playingPlayers: [], players: [], paired: boolean, player: {name: string, points: string}, points: number}}
+ */
 function setDefaultState() {
   return {
     tournament: {

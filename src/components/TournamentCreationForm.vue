@@ -217,10 +217,18 @@ export default {
     ...mapMutations([
       'clearPlayers'
     ]),
-    // Clears all input fields and errors from the form.
+
+    /**
+     * Clears all input fields and errors from the form.
+     */
     clear() {
       this.$refs.form.reset()
     },
+
+    /**
+     * Submit the form to the backend.
+     * @returns {Promise<void>} Void, returns nothing to stop execution if the start time is missing.
+     */
     async submit () {
       if (this.validateTime()) {
         this.missingStartTime = true
@@ -250,15 +258,27 @@ export default {
         this.isLoading = false
       })
     },
+
+    /**
+     * Validate the form.
+     */
     validate() {
       if (this.$refs.form.validate()) {
         this.submit()
       }
     },
+    /**
+     * Checks if start time is missing
+     * @returns {boolean} true if start time is missing, false if not.
+     */
     validateTime() {
       return this.startTime === ''
     },
-    // Checks if end time is after start time and not before or equal
+
+    /**
+     * Checks if end time is after start time and not before or equal
+     * @returns {boolean} True if start time is equal or smaller than end time.
+     */
     checkTime() {
       if (this.endTime === undefined || this.endDate !== this.currentDate) { return true }
       let startTimeH = this.startTime.toString().split(':')[0]
@@ -273,15 +293,28 @@ export default {
         return parseInt(startTimeM) < parseInt(endTimeM)
       }
     },
-    // Grabs the minutes from the time string.
+
+    /**
+     * Grabs the minutes from the time string.
+     * @param timeString Time string on the format HH:MM / HH:MM:SS etc...
+     * @returns {number} The minutes of the time string.
+     */
     lastNumberInTime(timeString) {
       return parseInt(timeString.toString().split(':')[1])
     },
-    // Clears the form and all its errors and sends user back to homepage.
+
+    /**
+     * Clears the form and all its errors and sends user back to homepage.
+     */
     cancel() {
       this.clear()
       this.$router.push('/')
     },
+
+    /**
+     * Handles the end date and end time changed event.
+     * @param value The new end date and end time values.
+     */
     onEndDateTime(value) {
       let dateTimeArray = value.split('t')
       if (dateTimeArray.length === 2) {
@@ -297,6 +330,11 @@ export default {
     ...mapState({
       tournament: state => state.tournament.tournament
     }),
+
+    /**
+     * Calculates the max value of the start time based on the end time.
+     * @returns {string|null} String if end time is given, null if not.
+     */
     calcStartTime() {
       if (this.currentDate === this.endDate) {
         return this.endTime
