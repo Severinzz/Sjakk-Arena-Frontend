@@ -39,5 +39,6 @@ export default {
 
   .player-wrapper:hover {
     text-decoration: line-through;
+    cursor: pointer;
   }
 </style>

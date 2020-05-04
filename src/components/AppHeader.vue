@@ -6,6 +6,7 @@
   >
     <img
       id="logo"
+      alt="Sjakk arena Logo"
       :src="require('@/assets/Logo-v11.png')"
     >
   </v-toolbar>

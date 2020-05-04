@@ -430,10 +430,6 @@ export default {
     margin-bottom: 1em;
   }
 
-  .btn {
-    margin-top: 0.5em;
-  }
-
   .card {
     display: inline;
     width: auto;
