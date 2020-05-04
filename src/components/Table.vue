@@ -12,6 +12,7 @@
       class="switch"
       v-if="autoScrollOption"
       v-model="autoScroll"
+      :disabled="(objectList.length / prPage) <= 1"
       :label="switchLabel"
     />
     </div>
