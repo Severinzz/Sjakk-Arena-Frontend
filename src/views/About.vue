@@ -51,6 +51,14 @@
             spillerne tid, så dette bør ungås om turneringen har høy spilltempo.
             <strong> Husk at verten kan velge å kaste ut spillere!</strong>
           </p>
+          <p>
+            For mere informasjon om hvordan du bruker applikasjonen,
+            <strong>
+              <router-link to="/help">
+            se her
+              </router-link>
+            </strong>
+          </p>
         </v-col>
       </v-row>
     </v-container>

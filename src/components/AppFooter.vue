@@ -2,7 +2,9 @@
   <v-footer color="#f5f5f5">
     <div class="footerTxt">
       Trenger du
+      <Strong>
       <router-link to="/help" target="_blank"> hjelp  </router-link>
+      </Strong>
       eller ønsker å vite mer om applikasjonen
       <strong>
         <router-link to="/about" target="_blank"> trykk her.

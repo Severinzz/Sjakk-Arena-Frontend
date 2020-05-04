@@ -2,8 +2,8 @@ const playerHelpPageData = [{
   title: 'Bli med i turnering',
   texts: [
     'For å bli med i en turnering velger du "spill turnering" på hjemmesiden. Der etter fyller du ut skjemaet.',
-    ' Game pin får du av turnerings verten. Spillernavn kan vær hvilket som helst navn du ønske å bruke under ' +
-      'turneringen, så lenge den ikke allerede er i bruk av andre.'
+    ' Game pin får du av turnerings verten. Spillernavn kan vær hvilket som helst navn du ønsker å bruke under ' +
+      'turneringen, så lenge det ikke allerede er i bruk av andre.'
   ],
   images: [
     require('@/assets/help-page/player/play_home.jpg'),

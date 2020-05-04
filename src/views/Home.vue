@@ -32,6 +32,12 @@
                     icon="fa-id-card"
                     link="/enter-AID"
                   />
+                <menu-tile
+                    tileText="Hvordan bruke applikasjonen"
+                    color="#dbf436"
+                    icon="fa-info-circle"
+                    link="/help"
+                  />
               </v-row>
             </v-col>
           </v-row>
