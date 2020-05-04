@@ -32,6 +32,12 @@
                     icon="fa-id-card"
                     link="/enter-AID"
                   />
+                <menu-tile
+                    tileText="Hjelp"
+                    color="#36f44f"
+                    icon="fa-info-circle"
+                    link="/help"
+                  />
               </v-row>
             </v-col>
           </v-row>
