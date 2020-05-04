@@ -132,7 +132,7 @@ export const actions = {
    */
   sendGameImage: (payload) => {
     let slug = '/upload'
-    return FILE_SERVICE.post(slug, '/' + payload).catch(err => {
+    return FILE_SERVICE.post(slug, payload).catch(err => {
       throw err
     })
   },
