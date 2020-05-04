@@ -37,8 +37,8 @@ const hostHelpPageData = [{
   title: 'Oversikt over pågående partier',
   texts: [
     'For å få en oversikt over pågående partier bruker du knappen som heter "Vis parti oversikt".' +
-    ' Denne ligger under turneringsinformasjonen. (tittlel, pin, antall spillere etc..). Når den er trykkt vil tabellen' +
-      ' som ligger midt på siden bli byttet ut med en tabell som inneholder de på gående partiene.',
+    ' Denne ligger under turneringsinformasjonen. (tittel, pin, antall spillere etc..). Når den er trykt vil tabellen' +
+      ' som ligger midt på siden bli byttet ut med en tabell som inneholder de pågående partiene.',
     'Du kan enkelt bytte tilbake til å vise rangeringstabellen ved å benytte den samme knappen. '
   ],
   images: [
@@ -53,7 +53,7 @@ const hostHelpPageData = [{
 {
   title: 'Ugyldige resultat/Uenige spillere',
   texts: [
-    'Når to spillere er ikke er enig om resultatet, vil spillet bli lagt i en tabell på vertsiden. Der kan verten sette' +
+    'Når to spillere ikke blir enig om resultatet, vil spillet bli lagt i en tabell på vertsiden. Der kan verten sette' +
       ' resultatet til det som verten mener er riktig. Om en av spillerne har lastet opp bildet av sluttstillingen' +
     ' kan dette hentes ut og brukes til vurdering av hva som er riktig resultat',
     ' Når "endre resultat" knappen blir benyttet, kommer det en dialog boks der verten kan sette det resultatet som er' +
@@ -73,7 +73,7 @@ const hostHelpPageData = [{
   texts: [
     'I sidebaren der turneringsinformasjonen ligger, er det også en knapp for å sette turneringen på pause. Dette gjør at' +
       ' ingen nye partier vil bli tildelt før turneringen starter igjen. Alle pågående parti vil kunne fortsette som normalt.',
-    'For å starte turneringen igjen er det bare å benytte den samme knappen.'
+    'For å starte turneringen igjen er det bare å benytte den tilsvarende knappen.'
   ],
   images: [
     require('@/assets/help-page/host/pause_tournament.jpg'),

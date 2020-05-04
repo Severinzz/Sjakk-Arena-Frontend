@@ -10,11 +10,11 @@ const notificationHelpPageData = [{
   icon: 'fab fa-firefox-browser',
   description: DESKTOPDESCRIPTION,
   texts: [
-    'For å se hvilke tillatelser du har gitt dette nettstede så går du til adressefeltet og ser etter en hengelås. ' +
-      'Når du har funnet hengelåsen trykker du på den, og en informasjons boks vil vises. ' +
-      'Ved å trykke på "X" vedsiden av "Sende varsler" vil du ikke bli sendt varsler lenger, men du vil bli spørt på nytt ' +
-      'når du går inn i en ny turnering. For å da ikke mota varsler er det bare å velge "tillat aldri". Om du angrer ' +
-      'og alikevel vil mota varsler, så endres dette på samme måte.'
+    'For å se hvilke tillatelser du har gitt dette nettstedet så går du til adressefeltet og ser etter en hengelås. ' +
+      'Når du har funnet hengelåsen trykker du på den, og en informasjonsboks vil vises. ' +
+      'Ved å trykke på "X" vedsiden av "Sende varsler" vil du ikke bli sendt varsler lenger, men du vil bli spurt på nytt ' +
+      'når du går inn i en ny turnering. For å da ikke motta varsler er det bare å velge "tillat aldri". Om du angrer ' +
+      'og alikevel vil motta varsler, så endres dette på samme måte.'
   ],
   images: [
     require('@/assets/help-page/firefox/firefox2.png')
@@ -78,7 +78,7 @@ const notificationHelpPageData = [{
     '2. Finn tannhjulet/instillinger i menyen som dukker opp.',
     '3. Let etter "nettsteder og nedlastinger" som ligger under "Avansert".',
     '4. Deretter finner du varsler.',
-    '5. I hjørnet oppe til høgre finner du en meny bestående av tre dotter. Åpn denne menyen og velg tillat eller blokker.',
+    '5. I hjørnet oppe til høyre finner du en meny bestående av tre prikker. Trykk på denne og velg tillat eller blokker.',
     '5. Så i den siste menyen kan den øverste knappen slå av varslinger for alle nettsteder, eller du kan bla gjennom &' +
     ' finne sjakk-arena for å slå av for dette nettstedet.'
   ],

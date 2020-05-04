@@ -3,7 +3,7 @@ const playerHelpPageData = [{
   texts: [
     'For å bli med i en turnering velger du "spill turnering" på hjemmesiden. Der etter fyller du ut skjemaet.',
     ' Game pin får du av turnerings verten. Spillernavn kan vær hvilket som helst navn du ønske å bruke under ' +
-      'turneringen.'
+      'turneringen, så lenge den ikke allerede er i bruk av andre.'
   ],
   images: [
     require('@/assets/help-page/player/play_home.jpg'),
@@ -17,10 +17,10 @@ const playerHelpPageData = [{
 {
   title: 'Forlat turnering',
   texts: [
-    'Det er to måter du kan forlate turneringen på. Det første er å bneytte "Forlat turnering" knappen. Den andre måten' +
+    'Det er to måter du kan forlate turneringen på. Det første er å benytte "Forlat turnering" knappen. Den andre måten' +
       ' er å navigere bort fra siden.',
-    'Når du prøver å forlate turneringen vil du få en dialog for å være sikker på at det er dette du ønsker. Huska' +
-      ' at å forlate turneringen er en ikke reversibel handling!'
+    'Når du prøver å forlate turneringen vil du få en dialog for å være sikker på at det er dette du ønsker. Husk' +
+      ' at å forlate turneringen er en ikke-reversibel handling! Trykker du forlat kan du ikke angre.'
   ],
   images: [
     require('@/assets/help-page/player/leave_tournament.jpg'),
@@ -35,7 +35,7 @@ const playerHelpPageData = [{
   title: 'Se tidligere spillte partier',
   texts: [
     'For å se en oversikt over dine tidligere spillte parti i turneringen benytter du deg av "Tidligere parti" knappen.' +
-      ' Denne vil åpne en tabell under som inneholder alle partiene. Benytt samme knappen for å fjerne listen.',
+      ' Denne vil åpne en tabell under som inneholder alle partiene. Benytt tilsvarende knapp for å fjerne listen.',
     'Om du ikke har spilt noen partier enda, så vil en tabell med teksten "Du har jo ikke spilt enda!" vises.'
   ],
   images: [
@@ -71,10 +71,10 @@ const playerHelpPageData = [{
 {
   title: 'Pause',
   texts: [
-    'Spillere kan selv velge å ta pause fra turneringen, dette gjøres enkelt ved å benytte "pause" kanppen. Dette kan' +
+    'Spillere kan selv velge å ta pause fra turneringen, dette gjøres enkelt ved å benytte "pause" knappen. Dette kan' +
       ' kun gjøres mens spilleren venter på at applikasjonen skal tildele ett nytt parti.',
     ' Når spilleren har tatt pause blir de ikke tildelt nytt parti før de velger å fortsette turneringen igjen.' +
-      ' For å fortsette turneringen benytter spilleren knappen som ligger i den samme posisjonen. "forstsett spill".'
+      ' For å fortsette turneringen benytter spilleren knappen som ligger i den samme posisjonen. "fortsett spill".'
   ],
   images: [
     require('@/assets/help-page/player/take_break.jpg'),
@@ -88,8 +88,8 @@ const playerHelpPageData = [{
 {
   title: 'Registrering av resultat',
   texts: [
-    'Når ett spill er ferdig skal resultatet registreres. Benytt "registrer resultat knappen" Det er ikke nødvendig' +
-      ' att begge spillerne legger inn resultat.',
+    'Når ett spill er ferdig skal resultatet registreres. Benytt "registrer resultat" knappen. Det er ikke nødvendig' +
+      ' at begge spillerne legger inn resultat.',
     'Resultat valgene er "Hvit seier", "remi (uavgjort)" eller "sort seier".',
     'Når ene spilleren har lagt inn resultat, så vil motstanderen få en dialog boks der man skal godkjenne eller ikke' +
       ' godkjenne resultatet. Velger man å ikke godkjenne, kan de prøve på nytt eller kontakte turneringsverten for' +
