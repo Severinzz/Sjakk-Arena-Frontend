@@ -33,7 +33,7 @@
                     link="/enter-AID"
                   />
                 <menu-tile
-                    tileText="Hvordan bruke applikasjonen"
+                    tileText="Hjelp"
                     color="#36f44f"
                     icon="fa-info-circle"
                     link="/help"
