@@ -105,6 +105,14 @@ const routes = [
       title: 'sjakkur'
     },
     component: () => import('../views/ChessClock')
+  },
+  {
+    path: '/help',
+    name: 'help',
+    meta: {
+      title: 'Hjelp'
+    },
+    component: () => import('../views/Help')
   }
 ]
 
