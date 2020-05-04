@@ -134,7 +134,7 @@ export default {
   methods: {
 
     /**
-     * Open the time menu
+     * Open the time menu and close date menu
      */
     openTimeMenu() {
       this.dateMenu = false
@@ -142,7 +142,7 @@ export default {
     },
 
     /**
-     * Open the date menu.
+     * Open the date menu and close time menu
      */
     openDateMenu() {
       this.dateMenu = true
@@ -160,7 +160,7 @@ export default {
     },
 
     /**
-     * Tells parent component that the date or time has changed..
+     * Tells parent component that the date or time has changed.
      */
     onChange() {
       this.dateTime = this.date + 't' + this.time

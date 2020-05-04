@@ -392,7 +392,7 @@ export default {
     },
 
     /**
-     *
+     * Changes the visibility state of the leave dialog.
      */
     alterLeavePageDialogState() {
       this.leaveDialog = !this.leaveDialog

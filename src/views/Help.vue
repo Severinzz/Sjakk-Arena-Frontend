@@ -1,10 +1,12 @@
 <template>
   <div id="helpRoot">
+    <!-- Navigation bar -->
   <v-tabs
     v-model="tab"
     color="#910002"
     grow
       >
+    <!-- Items in navigation bar -->
         <v-tab
           v-for="item in items"
           :key="item"
@@ -13,6 +15,7 @@
         </v-tab>
       </v-tabs>
 
+    <!-- Content for each of the navigation items -->
       <v-tabs-items v-model="tab">
         <v-tab-item>
           <HelpPanels

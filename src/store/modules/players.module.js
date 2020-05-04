@@ -3,7 +3,7 @@ import { addToken, deleteToken } from '../../common/jwt.storage'
 import WEBSOCKET_SERVICE from '../../common/websocketApi'
 const LOADING_MESSAGE = 'loading....'
 
-export const state = setDefaultState()
+export const state = getDefaultState()
 
 export const mutations = {
   /**
@@ -78,7 +78,7 @@ export const mutations = {
    */
   resetPlayerState: (state) => {
     // https://github.com/vuejs/vuex/issues/1118
-    Object.assign(state, setDefaultState())
+    Object.assign(state, getDefaultState())
   }
 }
 export const actions = {
@@ -245,7 +245,7 @@ export const actions = {
 }
 export const getters = {
   /**
-   * Get the amount of players in the tournament
+   * Return the amount of players in the tournament
    * @param state
    * @returns {number}
    */
@@ -254,7 +254,7 @@ export const getters = {
   },
 
   /**
-   * Gets all the players in the tournament
+   * Returns all players in the tournament
    * @param state
    * @returns {[]|{name: string, points: string}|{name: string, points: string}|null|
    * {type: StringConstructor, required: boolean}|{type: StringConstructor | String, required: boolean}}
@@ -265,10 +265,10 @@ export const getters = {
 }
 
 /**
- * Sets the default state
+ * Returns the default state
  * @returns {{playingPlayers: [], players: [], paired: boolean, player: {name: string, points: string}, points: number}}
  */
-function setDefaultState() {
+function getDefaultState() {
   return {
     player: {
       name: LOADING_MESSAGE,

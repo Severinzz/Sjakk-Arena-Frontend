@@ -3,7 +3,7 @@ import { addToken } from '../../common/jwt.storage'
 import WEBSOCKET_SERVICE from '../../common/websocketApi'
 const LOADING_MESSAGE = 'loading....'
 
-export const state = setDefaultState()
+export const state = getDefaultState()
 export const mutations = {
   /**
    * Set the tournament
@@ -30,7 +30,7 @@ export const mutations = {
    */
   resetTournamentState: (state) => {
     // https://github.com/vuejs/vuex/issues/1118
-    Object.assign(state, setDefaultState())
+    Object.assign(state, getDefaultState())
   }
 }
 export const actions = {
@@ -57,7 +57,7 @@ export const actions = {
   },
 
   /**
-   * Send tournament pause request to server.
+   * Send tournament pause request.
    * @returns {Promise<AxiosResponse<T>>}
    */
   sendTournamentPauseRequest: () => {
@@ -67,7 +67,7 @@ export const actions = {
   },
 
   /**
-   * Send tournament unpause request to server.
+   * Send tournament unpause request.
    * @returns {Promise<AxiosResponse<T>>}
    */
   sendTournamentUnpauseRequest: () => {
@@ -149,7 +149,7 @@ export const actions = {
 }
 export const getters = {
   /**
-   * Gets the tournament active state
+   * Returns the tournament's active state
    * @param state
    * @returns {boolean} Active state.
    */
@@ -159,10 +159,10 @@ export const getters = {
 }
 
 /**
- * Sets the default state
+ * Returns the default state
  * @returns {{playingPlayers: [], players: [], paired: boolean, player: {name: string, points: string}, points: number}}
  */
-function setDefaultState() {
+function getDefaultState() {
   return {
     tournament: {
       user_id: LOADING_MESSAGE,

@@ -86,7 +86,7 @@ export default {
     },
 
     /**
-     * calculates the time
+     * Calculates the remaining time
      * @returns {string} Returns the remaining time.
      */
     time () {

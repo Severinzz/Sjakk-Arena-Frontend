@@ -138,7 +138,7 @@ export default {
     },
 
     /**
-     * Gets the public key from backend.
+     * Returns the public key from backend.
      * @returns {Promise<AxiosResponse<T>>} Axios promis. Contains public key.
      */
     fetchPublicKey() {
@@ -146,7 +146,7 @@ export default {
     },
 
     /**
-     * Gets the service worker registration from the current site.
+     * Returns the service worker registration from the current page.
      * @returns {Promise<ReadonlyArray<ServiceWorkerRegistration>>}. Service worker registration from the current page.
      */
     getRegistration() {
@@ -154,7 +154,7 @@ export default {
     },
 
     /**
-     * Gets subscription from browser's push manager
+     * Returns subscription from browser's push manager
      * @param registration Service worker registration
      * @param applicationServerKey Publickey from the backend.
      * @returns {Promise<PushSubscription>} Push subscription from the browsers push manager.

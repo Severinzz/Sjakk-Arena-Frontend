@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- [<<] button -->
     <v-btn
       class="left"
       @click="jumpLeft"
@@ -7,6 +8,7 @@
     >
       &laquo;
     </v-btn>
+    <!-- The list of number buttons -->
     <v-btn
       v-for="page in visibleButtons"
       :key="page"
@@ -17,6 +19,7 @@
     >
       {{ page }}
     </v-btn>
+    <!-- [>>] button -->
     <v-btn
       class="right"
       @click="jumpRight"
@@ -24,6 +27,7 @@
     >
       &raquo;
     </v-btn>
+    <!-- Current page -->
       <p>Side {{ activeButton }} av {{ lastButton }}</p>
   </div>
 </template>
@@ -60,7 +64,7 @@ export default {
   methods: {
 
     /**
-     * Change the page.
+     * Change active button and emit update:page event.
      * @param page The page to change to
      */
     changePage(page) {
@@ -97,7 +101,7 @@ export default {
     },
 
     /**
-     *Jumps to the first button outside of the visible left range, if button 1 is visible that wil be jumped to.
+     * Jumps to the first button outside of the visible left range, if button 1 is visible that wil be jumped to.
      */
     jumpLeft() {
       if (this.minButtonNr() <= 0) {
@@ -120,7 +124,7 @@ export default {
     },
 
     /**
-     * Hides or displays the << button.
+     * Hides or displays the [<<] button.
      * @param show Boolean value to deside if [<<] should be shown
      */
     alterShowJumpLeft(show) {
@@ -128,7 +132,7 @@ export default {
     },
 
     /**
-     * Hides or displays the >> button.
+     * Hides or displays the [>>] button.
      * @param show Boolean value to deside if [>>] should be shown
      */
     alterShowJumpRight(show) {
@@ -187,7 +191,7 @@ export default {
   watch: {
 
     /**
-     * Go the the next button every 30 sek. When the last button is reached, start from the beginning.
+     * Go the the next button every 30 sec. When the last button is reached, start from the beginning.
      * @param autoScroll Boolean value to tell if it should auto scroll or not.
      */
     autoScroll: function(autoScroll) {

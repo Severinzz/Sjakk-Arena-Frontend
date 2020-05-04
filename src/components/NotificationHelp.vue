@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Notification navigation tabs -->
     <v-tabs
       v-model="tab"
       color="#910002"
@@ -19,13 +20,14 @@
         </v-label>
       </v-tab>
     </v-tabs>
-
+    <!-- Checkbox to tell if notifications is available or not -->
     <v-tabs-items class="content" v-model="tab">
       <v-checkbox class="checkbox"
                   :label="checkBoxLabel"
                   disabled
                   v-model="notificationsEnabled"
       />
+      <!-- Notification content -->
       <v-tab-item v-for="(item, index) in data"
                   :key="index">
       <h1>
@@ -34,6 +36,7 @@
         <h3 v-if="item.description">
           {{ item.description }}
         </h3>
+        <!-- Image and text container -->
         <div class="content-container" v-for="(image, index) in item.images"
              :key="index+10">
         <img :src="image"
@@ -61,6 +64,10 @@ export default {
     }
   },
   computed: {
+    /**
+     * Changes text-box label.
+     * @returns {string} String that tells user if they have activated notifications or not
+     */
     checkBoxLabel() {
       return this.notificationsEnabled ? 'Du har aktivert notfikasjoner' : 'Du har ikke aktivert notifikasjoner'
     }

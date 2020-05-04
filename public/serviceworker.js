@@ -1,7 +1,7 @@
 const url = new URL('http://localhost:8081/#/player-lobby', self.location.origin).href
 
 /**
- * Listen for push event. Show notification if the site is not in focus
+ * Listen for push event. Show notification if the page is not in focus
  */
 self.addEventListener('push', event => {
   let job = event.data.json()
