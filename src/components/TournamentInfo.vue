@@ -1,22 +1,31 @@
 <template>
 <div>
+  <!-- Game pin -->
   <p class="pinTitle">PIN:</p>
   <p class="pin">
     {{ tournament.user_id }}
   </p>
+
+  <!-- Tournament name -->
   <h5 class="name">{{ this.tournament.tournament_name }} </h5>
+
+  <!-- Tournament start time -->
   <p
     class="time"
     v-if="!started"
   >
     Starter: {{ formatTime(this.tournament.start) }}
   </p>
+
+  <!-- Tournament end time -->
   <p
     class="time"
     v-if="tournament.end"
   >
     Slutter: {{ formatTime(this.tournament.end) }}
   </p>
+
+  <!-- Tournament end date -->
   <p
     class="date"
     v-if="endDate"
@@ -56,7 +65,12 @@ export default {
     }
   },
   methods: {
-    // Returns the start time in the correct format.
+
+    /**
+     * Returns the date and time in the correct format.
+     * @param dateTime Date and time string or Time string.
+     * @returns {string|*} Retruns the formatted date and time string.
+     */
     formatTime(dateTime) {
       if (dateTime.includes('loading')) {
         return dateTime
@@ -73,6 +87,11 @@ export default {
         return timeArr[0]
       }
     },
+
+    /**
+     * Formats the end date
+     * @returns {parser.Node[] | * | string} Formatted end date.
+     */
     formatEndDate() {
       if (this.tournament.end.includes('T')) {
         return this.tournament.end.split('T')[0]

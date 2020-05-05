@@ -3,6 +3,7 @@
   <v-container class="content-wrapper" fluid>
     <v-row>
       <v-col cols="2">
+        <!-- Information side bar -->
         <div class="info-wrapper">
           <tournament-info
             :tournament="this.tournament"
@@ -36,6 +37,8 @@
           </div>
         </div>
       </v-col>
+
+      <!-- Main content -->
       <v-col class="playerTable"
              xl="8"
              lg="7"
@@ -43,6 +46,7 @@
              sm="7"
              xs="7"
       >
+        <!-- Leader board -->
         <Table
           class="leaderBoard"
           v-if="showLeaderBoard"
@@ -51,6 +55,8 @@
           :autoScrollOption="true"
           @entryClicked="handlePlayerClicked"
         />
+
+        <!-- Active games -->
         <!-- TODO: Add functionality when clicked (set result or something) -->
         <Table
           class="leaderBoard"
@@ -155,7 +161,11 @@ export default {
       'getPlayerCount',
       'getAllPlayers'
     ]),
-    // Add placement to the players.
+
+    /**
+     * Add placement to the players.
+     * @returns {string} List of the current standing with placement number added.
+     */
     playerList () {
       let list = this.getAllPlayers
       let i = 1
@@ -167,6 +177,11 @@ export default {
       }
       return list
     },
+
+    /**
+     * List of the currently active games.
+     * @returns {any} List containing the currently active games with the right time format.
+     */
     gamesList () {
       let list = this.activeGames
       list.forEach(function (game) {
@@ -187,11 +202,20 @@ export default {
       'subscribeToTournamentActive',
       'subscribeToActiveGames'
     ]),
+
+    /**
+     * Open the player details page in a new tab.
+     * @param player The player to checkout.
+     */
     handlePlayerClicked(player) {
       // https://stackoverflow.com/a/47874850
       let route = this.$router.resolve('/tournament/player/' + player.user_id)
       window.open(route.href, '_blank')
     },
+
+    /**
+     * Alters the pause state. Pause or not paused.
+     */
     alterPauseState() {
       this.pause = !this.pause
       if (this.pause) {
@@ -202,30 +226,46 @@ export default {
         this.pauseButtonText = 'Pause'
       }
     },
+
+    /**
+     * Changes between leader board and active games table.
+     */
     alterShowLeaderBoard() {
       this.showLeaderBoard = !this.showLeaderBoard
       this.showLeaderBoard === true ? this.alterLeaderBoardText = 'Vis partioversikt' : this.alterLeaderBoardText = 'Vis rangeringstabell'
     },
+
+    /**
+     * Send end request and navigate home if ended.
+     */
     endTournament() {
       this.sendEndRequest().then(res => {
         this.$router.push('/')
       })
     },
+
+    /**
+     * Show the end tournament confirmation dialog.
+     */
     alterLeavePageDialogState() {
       this.endDialog = !this.endDialog
       this.endDialogTitle = 'Avslutt turnering'
     }
   },
-  async created () {
-    this.subscribeToActiveGames()
-  },
   watch: {
+    /**
+     * Watches for if the tournament is stil active. Displays message when end time is passed.
+     * @param active Boolean value to tell if tournament is active.
+     */
     isTournamentActive: function(active) {
       if (!active) {
         this.endDialog = true
         this.endDialogTitle = 'Tidspunktet for turneringsslutt er passert'
       }
     }
+  },
+  async created () {
+    this.subscribeToActiveGames()
   }
 }
 </script>

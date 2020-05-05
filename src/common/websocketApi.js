@@ -18,20 +18,24 @@ let subQueue = []
 let connected = CONNECTION.CLOSED
 
 const WEBSOCKET = {
-  /*
-  Subscribes to the correct endpoint on the backend.
+  /**
+   * Connect to the endpoint. Subscribes if it is already connected.
+   * @param newSubscription A subscription object containing callback and path that should be subscribed to.
    */
   connect(newSubscription) {
     if (initialised === false) {
       init()
     }
     switch (connected) {
+      // Socket is still connecting. Add subscription object to queue.
       case CONNECTION.CONNECTING:
         subQueue.push(newSubscription)
         break
+      // Socket is open. Subscribe to the subscription.
       case CONNECTION.OPEN:
         this.subscribe(newSubscription)
         break
+      // Socket is closed, open connection and connect to endpoint.
       default:
         connected = CONNECTION.CONNECTING
         client.connect(this.setupHeader(), function () {
@@ -43,14 +47,19 @@ const WEBSOCKET = {
         })
     }
   },
+
+  /**
+   * Subscribe to websocket endpoint.
+   * @param newSubscription Subscription object containing path and callback.
+   */
   subscribe(newSubscription) {
     subscriptions[newSubscription.path] = client.subscribe('/user/queue/' + newSubscription.path, newSubscription.callback)
     client.send('/app/' + newSubscription.path, function (msg) {
     })
   },
-  /*
-  Unsubscribe from the backend
-  @param subscription An subscription object containing subscription id and a unsubscribe function.
+
+  /**
+   * Unsubscribe from all websocket endpoints.
    */
   unsubscribeAll() {
     for (let tag in subscriptions) {
@@ -58,9 +67,10 @@ const WEBSOCKET = {
       delete subscriptions[tag]
     }
   },
-  /*
-  Unsubscribe from the backend
-  @param subscription An subscription object containing subscription id and a unsubscribe function.
+
+  /**
+   * Unsubscribe from specific endpoint.
+   * @param subscription Subscription object that you want to unsubscribe from.
    */
   unsubscribe(subscription) {
     if (subscriptions[subscription] !== undefined) {
@@ -68,8 +78,9 @@ const WEBSOCKET = {
       delete subscriptions[subscription]
     }
   },
-  /*
-  Checks if a websocket is open, does nothing if not. Closes the socket if there is one open
+
+  /**
+   * Close websocket connection.
    */
   close() {
     if (typeof socket.close === 'function') {
@@ -78,6 +89,11 @@ const WEBSOCKET = {
       connected = CONNECTION.CLOSED
     }
   },
+
+  /**
+   * Set authorisation header for the websocket.
+   * @returns {{jwt: string}} A object containing the jwt.
+   */
   setupHeader() {
     return {
       'jwt': jwt.getToken()
@@ -85,6 +101,9 @@ const WEBSOCKET = {
   }
 }
 
+/**
+ * Subscribes all subscriptions in the subscription queue.
+ */
 function subToQueue() {
   if (subQueue.length < 1) { return }
   for (let i in subQueue) {
@@ -93,8 +112,8 @@ function subToQueue() {
   subQueue = []
 }
 
-/*
-Initialises the socket. Connect to backend
+/**
+ * Initialise socket.
  */
 function init() {
   socket = SockJS(config.API_URL + '/ws')
