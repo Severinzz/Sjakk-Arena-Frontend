@@ -92,7 +92,7 @@ const routes = [
   {
     path: '/tournament/player/:index',
     name: 'playerdetails',
-    // Finne en måte å bruke spiller sitt navn?
+    // TODO: Finne en måte å bruke spiller sitt navn som dynamisk route?
     meta: {
       title: 'Spiller - '
     },
@@ -120,7 +120,11 @@ const router = new VueRouter({
   routes
 })
 
-// Adapted from https://stackoverflow.com/a/45462996
+/**
+ * Adapted from https://stackoverflow.com/a/45462996
+ *
+ * Add title to all pages with meta: { title: } defined.
+ */
 router.beforeEach((to, from, next) => {
   if (to.meta.title !== undefined) {
     let dynamicTitle = to.params.id !== undefined ? to.params.id : ''

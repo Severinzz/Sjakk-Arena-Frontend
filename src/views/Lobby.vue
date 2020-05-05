@@ -11,6 +11,8 @@
     </v-alert>
     <v-row>
       <v-col cols="2">
+
+        <!-- Information side bar -->
         <div class="info-wrapper">
           <tournament-info
             :tournament="this.tournament"
@@ -37,6 +39,7 @@
           </div>
         </div>
       </v-col>
+
       <!-- The player list. Offset to better fit smaller screens -->
       <v-col
         offset="5"
@@ -127,17 +130,32 @@ export default {
       'subscribeToPlayers',
       'subscribeToTournamentActive'
     ]),
+
+    /**
+     * Removes the given player from the tournament
+     * @param player Player to remove
+     * @param id Id of the player to remove.
+     */
     handleRemovePlayer (player, id) {
       let payload = {
         player: player,
         id: id,
-        msg: '' // Custom message player should receive when they are kicked. Is optional/future feature.
+        msg: '' // Custom message player could receive when they are kicked. Message not implemented for lobby.
       }
       this.removePlayer(payload)
     },
+
+    /**
+     * Cancel the tournament. Navigates back.
+     * TODO: Send cancel request to backend.
+     */
     cancel() {
       this.$router.go(-1)
     },
+
+    /**
+     * Starts the tournament
+     */
     startTournament() {
       this.sendStartRequest()
         .then(res => {
@@ -147,25 +165,44 @@ export default {
           this.errorMessage = err + '. Prøv igjen senere!'
         })
     },
+
+    /**
+     * Ends the tournament
+     */
     endTournament() {
       this.$router.push('/')
     },
+
+    /**
+     * Alter the leave warning dialog viability state.
+     */
     alterLeavePageDialogState() {
       this.leaveWarn = !this.leaveWarn
     }
   },
   watch: {
+    /**
+     * Watches the player count, starts the tournament when the count is greater than or equal to 2.
+     * Only happens if the tournament got the early_start value set to true.
+     * @param playerCount
+     */
     playerCount: function(playerCount) {
       if (this.tournament.early_start && !this.tournament.finished && playerCount >= 2) {
         this.startTournament()
       }
     },
+
+    /**
+     * Watches the active part of the tournament. Starts when set to true.
+     * @param active
+     */
     isTournamentActive: function (active) {
       if (active) {
         this.startTournament()
       }
     }
   },
+
   beforeRouteLeave(to, from, next) {
     if (to.name === 'tournament') {
       WEBSOCKET.unsubscribe('tournament/players')

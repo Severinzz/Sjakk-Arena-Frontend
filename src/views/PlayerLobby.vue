@@ -107,6 +107,10 @@ export default {
       'subscribeToSuggestedResult',
       'subscribeToPlayerKicked'
     ]),
+
+    /**
+     * Counts down, navigate home when finished.
+     */
     countDown() {
       this.countDownNr--
       if (this.countDownNr === 0) {
@@ -115,24 +119,46 @@ export default {
         this.navigateHome()
       }
     },
+
+    /**
+     * Navigate home.
+     */
     navigateHome() {
       this.kickedDialog = false
       storage.deleteToken()
       clearInterval(this.intervalId)
       this.$router.replace('/')
     },
+
+    /**
+     * Start the kicked dialog countdown.
+     */
     startCountDown() {
       this.intervalId = setInterval(this.countDown, 1000)
     },
-    // Gets the public key from backend.
+
+    /**
+     * Returns the public key from backend.
+     * @returns {Promise<AxiosResponse<T>>} Axios promis. Contains public key.
+     */
     fetchPublicKey() {
       return API_SERVICE.get('', 'pushnotification')
     },
-    // Gets the service worker registration from the current site.
+
+    /**
+     * Returns the service worker registration from the current page.
+     * @returns {Promise<ReadonlyArray<ServiceWorkerRegistration>>}. Service worker registration from the current page.
+     */
     getRegistration() {
       return navigator.serviceWorker.getRegistrations('http://localhost:8081/')
     },
-    // Gets subscription from browser's push manager
+
+    /**
+     * Returns subscription from browser's push manager
+     * @param registration Service worker registration
+     * @param applicationServerKey Publickey from the backend.
+     * @returns {Promise<PushSubscription>} Push subscription from the browsers push manager.
+     */
     getSubscription(registration, applicationServerKey) {
       const subOptions = {
         userVisibleOnly: true,
@@ -140,11 +166,18 @@ export default {
       }
       return registration.pushManager.subscribe(subOptions)
     },
-    // Send subscription object to backend.
+
+    /**
+     * Send subscription object to backend.
+     * @param subscription Subscription object from the browser.
+     */
     sendSubscription(subscription) {
       API_SERVICE.post('pushnotification', subscription)
     },
-    // Subscribes to push notifications
+
+    /**
+     * Subscribes to push notifications
+     */
     subscribeToPushNotifications() {
       this.fetchPublicKey().then(publicKey => {
         this.getRegistration().then(registration => {
@@ -154,8 +187,12 @@ export default {
         })
       })
     },
-    // Adapted from https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/message_event
-    // Unsubscribe from push notifications.
+
+    /**
+     * Adapted from https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/message_event
+     * Unsubscribe from push notifications.
+     * @returns {Promise<void>}
+     */
     async unsubscribePushNotification() {
       await navigator.serviceWorker.ready.then(async reg => {
         await reg.pushManager.getSubscription().then(async subscription => {
@@ -171,6 +208,13 @@ export default {
       })
     },
 
+    /**
+     * Checks notification permission.
+     * Granted: Start subscription chain.
+     * Denied: Display warning in console
+     * Ask(default): Ask for permission, start subscription chain if granted.
+     * @returns {Promise<void>}
+     */
     async setupPushNotifications() {
       const VM = this
       if ('PushManager' in window && 'Notification' in window) {
@@ -199,6 +243,7 @@ export default {
       }
     }
   },
+
   created() {
     this.fetchPlayersTournament()
     this.fetchPlayer()
@@ -216,12 +261,14 @@ export default {
 
     this.setupPushNotifications()
   },
+
   async beforeRouteLeave(to, from, next) {
     if ('serviceWorker' in navigator && 'PushManager' in window) {
       await this.unsubscribePushNotification()
     }
     next()
   },
+
   destroyed () {
     WEBSOCKET.unsubscribeAll()
     WEBSOCKET.close()

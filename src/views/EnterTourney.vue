@@ -100,6 +100,11 @@ export default {
     ...mapActions([
       'sendPlayer'
     ]),
+
+    /**
+     * Sends the game-pin and wanted nickname to the backend.
+     * @returns {Promise<void>}
+     */
     async submit() {
       this.isLoading = true
       let payload = {
@@ -121,6 +126,11 @@ export default {
         }
       })
     },
+
+    /**
+     * Sets the error message
+     * @param response Axios error.response object
+     */
     handleErrorResponse (response) {
       if (response.status === 409) {
         this.errorMessage = 'Navnet er tatt, prøv et nytt ett!'
@@ -128,6 +138,10 @@ export default {
         this.errorMessage = 'Game pin finnes ikke!'
       }
     },
+
+    /**
+     * Validates the form
+     */
     validate() {
       if (this.$refs.form.validate()) {
         this.submit()

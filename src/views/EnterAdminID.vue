@@ -96,6 +96,11 @@ export default {
       'signInUUID',
       'deleteTokenAndSetStateToDefault'
     ]),
+
+    /**
+     * Sends the AdminID.
+     * @returns {Promise<void>}
+     */
     async submit() {
       if (this.$refs.form.validate()) {
         this.error = false
@@ -122,6 +127,11 @@ export default {
         })
       }
     },
+
+    /**
+     * Sets the error message
+     * @param response Axios error.response object
+     */
     handleErrorResponse(response) {
       this.isLoading = false
       if (response.status === 404) {

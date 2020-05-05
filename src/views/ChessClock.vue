@@ -126,6 +126,10 @@ export default {
     }
   },
   methods: {
+
+    /**
+     * Updates the chess clock
+     */
     updateClock: function () {
       if (this.$refs.form.validate()) {
         this.initialTimePrPlayer = parseInt(this.configMinutes) * 60 + parseInt(this.configSeconds)
@@ -134,12 +138,21 @@ export default {
         this.resetClock()
       }
     },
+
+    /**
+     * Reset the chess clock
+     */
     resetClock: function () {
       this.whiteCountDown = true
       this.blackCountDown = false
       this.whiteReset = true
       this.blackReset = true
     },
+
+    /**
+     * Displays a dialog box telling the players who won.
+     * @param player The player who won.
+     */
     handleTimesUpEvent: function (player) {
       if (player === 'white') {
         this.playerWhoRunOutOfTime = 'Hvit'
@@ -148,6 +161,10 @@ export default {
       }
       this.showTimesUpDialog = true
     },
+
+    /**
+     * Close the times up dialog box.
+     */
     closeTimesUpDialog: function () {
       this.resetClock()
       this.showTimesUpDialog = false
