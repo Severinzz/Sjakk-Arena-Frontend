@@ -1,5 +1,8 @@
 const url = new URL('http://localhost:8081/#/player-lobby', self.location.origin).href
 
+/**
+ * Listen for push event. Show notification if the page is not in focus
+ */
 self.addEventListener('push', event => {
   let job = event.data.json()
   let promiseChain = getMatchingWindowClient().then(windowClient => {
@@ -15,7 +18,11 @@ self.addEventListener('push', event => {
   event.waitUntil(promiseChain)
 })
 
-// adapted from https://developers.google.com/web/fundamentals/push-notifications/common-notification-patterns
+/**
+ * adapted from https://developers.google.com/web/fundamentals/push-notifications/common-notification-patterns
+ *
+ * Listen for notification click event. Focus the website if it is open, else open it.
+ */
 self.addEventListener('notificationclick', event => {
   event.waitUntil(getMatchingWindowClient().then(matchingClient => {
     if (matchingClient) {
@@ -26,7 +33,12 @@ self.addEventListener('notificationclick', event => {
   }))
 })
 
-// adapted from https://developers.google.com/web/fundamentals/push-notifications/common-notification-patterns
+/**
+ * adapted from https://developers.google.com/web/fundamentals/push-notifications/common-notification-patterns
+ *
+ * Finds and returns the window client that matches the website.
+ * @returns {Promise<ReadonlyArray<Client>>}.
+ */
 async function getMatchingWindowClient() {
   let matchingClient = null
   return self.clients.matchAll({

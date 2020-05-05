@@ -1,6 +1,7 @@
 <template>
   <div class="about">
     <div class="heading">
+      <!-- Alert box used for network errors -->
       <v-alert
         class="sucsess"
         v-if="removed"
@@ -42,7 +43,7 @@
       class="justify-center"
       align="center"
     >
-      <!-- A dialog box the tournament host can use t0 remove a player from the tournament -->
+      <!-- A dialog box the tournament host can use to remove a player from the tournament -->
       <v-dialog
         v-model="kickDialog"
         max-width="650px"
@@ -59,7 +60,7 @@
             </v-text-field>
           </v-card-text>
           <v-card-actions class="actions">
-            <!-- User has the option to either leave or go back -->
+            <!-- Kick player dialog buttons. -->
             <v-btn
               text
               class="error"
@@ -127,8 +128,9 @@ export default {
       'hostFetchPlayer',
       'fetchPlayersInactiveGames'
     ]),
-    /*
-    Removes the player from the tournament
+
+    /**
+     * Removes the player from the tournament
      */
     removePlayerFromTournament() {
       this.kickDialog = false
@@ -146,6 +148,11 @@ export default {
       })
       this.removed = true
     },
+
+    /**
+     * Sets the error message
+     * @param response Axios error.response object
+     */
     handleErrorResponse (response) {
       if (response.status === 400 || response.status === 403) {
         this.removedMessage = 'Feilmelding: ' + response.status + '. ' + 'Du har ikke tilgang til denne spilleren!'
@@ -155,6 +162,11 @@ export default {
       this.icon = 'plug'
       this.color = 'error'
     },
+
+    /**
+     * Sets custom error message.
+     * @param err Axios error.
+     */
     handleError(err) {
       if (err.response !== undefined) {
         this.handleErrorResponse(err.response)
@@ -165,16 +177,19 @@ export default {
       }
     }
   },
+
   async created() {
     let payload = {
       id: this.$route.params.index
     }
+    // Fetch player from backend
     await this.hostFetchPlayer(payload).then(res => {
       this.player = res.data
     }).catch(err => {
       this.handleError(err)
       this.removed = true
     })
+    // Fetch the previous played games of the player.
     await this.fetchPlayersInactiveGames(payload).then(res => {
       this.games = res.data
     }).catch(err => {

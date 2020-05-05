@@ -76,10 +76,19 @@ export default {
     ...mapMutations([
       'removeInvalidGame'
     ]),
+
+    /**
+     * Set the gameID in the data values
+     * @param gameID Id of the clicked game.
+     */
     editGame (gameID) {
       this.gameID = gameID
       this.alterResultDialogState()
     },
+
+    /**
+     * Alter viability state of the dialog.
+     */
     alterResultDialogState () {
       this.dialogBox = !this.dialogBox
     }

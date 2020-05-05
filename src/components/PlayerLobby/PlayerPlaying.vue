@@ -285,6 +285,10 @@ export default {
       validResult: state => state.games.resultDialog.valid,
       active: state => state.tournament.activeTournament
     }),
+
+    /**
+     * Return the result text depending on the suggested result.
+     */
     getResultText: function () {
       if (this.suggestedResult === 1.0) {
         return 'hvit vant'
@@ -294,6 +298,7 @@ export default {
         return 'sort vant'
       }
     },
+
     showSuggestedResultDialog: function() {
       return this.suggestedResult !== undefined
     }
@@ -312,9 +317,10 @@ export default {
       'setSuggestedResult',
       'setOpponentsDisagree'
     ]),
-    /*
-        Register the result of the currently active game
-      */
+
+    /**
+     * Register the result of the currently active game
+     */
     registerResult() {
       let payload = {
         opponent: this.opponentId,
@@ -325,31 +331,38 @@ export default {
         this.suggestionIsSent = true
       })
     },
-    /*
-        Approve the result of the currently active game
-      */
+
+    /**
+     * Approve the result of the currently active game
+     */
     approveResult() {
       this.sendValidationOfResult(this.gameId).then(res => {
         this.setSuggestedResult(undefined)
         this.setPaired(false)
       })
     },
+
+    /**
+     * Disapprove the result of the currently active game.
+     */
     disapproveResult() {
       this.sendInvalidationOfResult(this.gameId).then(res => {
         this.setSuggestedResult(undefined)
       })
     },
-    /*
-        The player leaves the tournament
-      */
+
+    /**
+     * The player leaves the tournament
+     */
     async leaveTournament() {
       this.sendLeaveRequest(this.active).then(res => {
         this.$router.push('/')
       })
     },
-    /*
-        Alter the break state. The player is either taking a break or not.
-      */
+
+    /**
+     * Alter the break state. The player is either taking a break or not.
+     */
     alterBreakState() {
       this.pause = !this.pause
       if (this.pause) {
@@ -360,9 +373,10 @@ export default {
         this.pauseButtonText = 'Ta pause'
       }
     },
-    /*
-        Alter the past result state. The past results is either shown or not.
-       */
+
+    /**
+     * Alter the past result state. The past results is either shown or not.
+     */
     alterPastResultsState() {
       this.pastResults = !this.pastResults
       if (this.pastResults) {
@@ -371,9 +385,17 @@ export default {
         this.pastResultsText = 'Tidligere parti'
       }
     },
+
+    /**
+     * Changes the visibility state of the leave dialog.
+     */
     alterLeavePageDialogState() {
       this.leaveDialog = !this.leaveDialog
     },
+
+    /**
+     * Open the chess clock in a new tab
+     */
     showChessClock() {
       let route = this.$router.resolve('/chess-clock')
       window.open(route.href, '_blank')
