@@ -57,6 +57,14 @@
             @buttonClicked="resultDialog = true"
             />
 
+            <input type="file" style="display: none" @change="onFileSelected" ref="fileInput"
+                   capture="camera" method="post" enctype="multipart/form-data">
+            <oval-button
+              v-if="paired"
+              text="Last opp bilde"
+              @buttonClicked="$refs.fileInput.click()"
+            />
+
             <!-- Leave tournament -->
             <oval-button
               text="Forlat turnering"
@@ -252,6 +260,7 @@ import { leavePageWarningMixin } from '../../mixins/leavePageWarning.mixin'
 import { playerMixin } from '../../mixins/player.mixin'
 import InformationDialog from '../InformationDialog'
 import OvalButton from '../OvalButton'
+import { Coverage as uploadEvent } from 'istanbul-lib-coverage'
 
 export default {
   name: 'PlayerPlaying',
@@ -277,7 +286,12 @@ export default {
       pastResultsText: 'Tidligere parti',
       result: '',
       suggestionIsSent: false,
-      pathVar: 'player-lobby'
+      pathVar: 'player-lobby',
+      selectedFile: null,
+      data: null,
+      rules: [
+        value => !value || value.size < 10000000 || 'Bildet må være mindre enn 10 MB!'
+      ]
     }
   },
   computed: {
@@ -310,7 +324,8 @@ export default {
       'sendPauseRequest',
       'sendUnpauseRequest',
       'sendValidationOfResult',
-      'sendInvalidationOfResult'
+      'sendInvalidationOfResult',
+      'sendGameImage'
     ]),
     ...mapMutations([
       'setPaired',
@@ -382,6 +397,25 @@ export default {
     showChessClock() {
       let route = this.$router.resolve('/chess-clock')
       window.open(route.href, '_blank')
+    },
+    onFileSelected (event) {
+      this.selectedFile = event.target.files[0]
+      if (!this.selectedFile) { return console.log('Ikke valgt fil.') }
+      this.uploadFile()
+    },
+    uploadFile () {
+      if (!this.selectedFile) {
+        return console.log('Vennligst velg et bilde')
+      }
+      const FD = new FormData()
+      FD.append('image', this.selectedFile, this.selectedFile.name)
+      this.sendGameImage(FD, {
+        onUploadProgess: upLoadEvent => {
+          console.log('Upload Progress: ' + Math.round(uploadEvent.loaded / uploadEvent.total * 100) + '%')
+        }
+      }).then(res => {
+        console.log(res)
+      })
     }
   },
   watch: {

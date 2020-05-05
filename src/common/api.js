@@ -71,8 +71,19 @@ export const PLAYER_SERVICE = {
 
 export const FILE_SERVICE = {
   path: 'playerFile',
-  post(slug) {
-    return API_SERVICE.post(this.path, slug)
+  post(slug, form) {
+    // let fullpath = this.path + '/' + slug
+    // return API_SERVICE.post(fullpath, formData)
+    return axios({
+      method: 'post',
+      url: 'http://localhost:8080/playerFile/Upload',
+      data: form,
+      headers: {
+        'Authorization': `Bearer ${jwtService.getToken()}`,
+        'content-type': `multipart/form-data; boundary=${form._boundary}`
+      } }).catch(error => {
+      console.log(error.message)
+    })
   },
   get(slug) {
     return API_SERVICE.get(this.path, slug)

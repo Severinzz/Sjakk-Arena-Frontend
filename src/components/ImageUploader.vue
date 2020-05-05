@@ -1,21 +1,10 @@
 <template>
   <div>
     <p>Test side for bilde opplasting, skal ikke være med i pull request!</p>
-    <v-file-input
-      :rules="rules"
-      accept="image/png, image/jpeg, image/jpg"
-      placeholder="Maks 10MB .PNG, .jpg eller .jpeg"
-      prepend-icon="mdi-camera"
-      label="Last opp sluttstilling"
-      counter
-      :show-size="1000"
-      id="game_image"
-      @change="onFileSelected"
-      />
 
     <input type="file" style="display: none" @change="onFileSelected" ref="fileInput" capture="camera">
     <v-btn @click="$refs.fileInput.click()">Velg bilde</v-btn>
-    <v-btn @click="uploadFile">Last opp bilde</v-btn>
+
   </div>
 </template>
 

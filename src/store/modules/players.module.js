@@ -130,9 +130,9 @@ export const actions = {
   /*
     Send image from user to backend.
    */
-  sendGameImage: (payload) => {
-    let slug = '/upload'
-    return FILE_SERVICE.post(slug, payload).catch(err => {
+  sendGameImage: (formData) => {
+    let slug = 'Upload'
+    return FILE_SERVICE.post(slug, formData).catch(err => {
       throw err
     })
   },
