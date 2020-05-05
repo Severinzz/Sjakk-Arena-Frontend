@@ -19,7 +19,7 @@ export const mutations = {
   },
 
   addPlayers: (state, payload) => {
-    state.player = payload
+    state.players = payload
   },
 
   clearPlayers: (state) => {
@@ -159,10 +159,19 @@ export const actions = {
 }
 export const getters = {
   getPlayerCount: (state) => {
-    return state.player.length
+    return state.players.length
   },
   getAllPlayers: (state) => {
-    return state.player
+    return state.players
+  },
+
+  /**
+   * Returns the reversed players array
+   * @param state
+   * @returns {T[]}
+   */
+  getAllPlayersReversed: (state) => {
+    return state.players.reverse()
   }
 }
 

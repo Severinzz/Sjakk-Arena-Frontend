@@ -244,7 +244,7 @@ export default {
     padding: 0 0 2% 0;
   }
   .numberOfPlayers {
-    font-size: 1.5em;
+    font-size: 1.8em;
   }
   .playerTable{
     margin: auto !important;
@@ -256,7 +256,6 @@ export default {
     text-align: center;
     display: inline-block;
     height: 100%;
-    padding-top: 20%;
     margin: auto auto auto 10%;
   }
 
