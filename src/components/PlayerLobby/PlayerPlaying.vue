@@ -88,11 +88,6 @@
 
           <div v-if="pastResults">
             <earlier-results/>
-            <oval-button
-              :primary="pastResults"
-              :text="pastResultsText"
-              @buttonClicked="alterPastResultsState"
-            />
           </div>
 
           <!-- Dialog for user to input result; https://vuetifyjs.com/en/components/dialogs -->
