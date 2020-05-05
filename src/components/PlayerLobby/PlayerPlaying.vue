@@ -57,8 +57,7 @@
             @buttonClicked="resultDialog = true"
             />
 
-            <input type="file" style="display: none" @change="onFileSelected" ref="fileInput"
-                   capture="camera" method="post" enctype="multipart/form-data">
+            <input type="file" style="display: none" @change="onFileSelected" ref="fileInput" capture="camera">
             <oval-button
               v-if="paired"
               text="Last opp bilde"
@@ -407,9 +406,9 @@ export default {
       if (!this.selectedFile) {
         return console.log('Vennligst velg et bilde')
       }
-      const FD = new FormData()
-      FD.append('image', this.selectedFile, this.selectedFile.name)
-      this.sendGameImage(FD, {
+      const formData = new FormData()
+      formData.append('Image', this.selectedFile, this.selectedFile.name)
+      this.sendGameImage(formData, {
         onUploadProgess: upLoadEvent => {
           console.log('Upload Progress: ' + Math.round(uploadEvent.loaded / uploadEvent.total * 100) + '%')
         }

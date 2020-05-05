@@ -27,16 +27,20 @@ export default {
     ]),
     onFileSelected (event) {
       this.selectedFile = event.target.files[0]
-      // this.selectedFile = document.getElementById('game_image').files[0]
       if (!this.selectedFile) { return console.log('Ikke valgt fil.') }
-      console.log(this.selectedFile)
+      this.uploadFile()
     },
     uploadFile () {
-      if (!this.selectedFile) { return console.log('Vennligst velg et bilde') }
-      const FD = new FormData()
-      FD.append('image', this.selectedFile, this.selectedFile.name)
-      this.sendGameImage(FD, {
-        onUploadProgess: upLoadEvent => { console.log('Upload Progress: ' + Math.round(uploadEvent.loaded / uploadEvent.total * 100) + '%') } }).then(res => {
+      if (!this.selectedFile) {
+        return console.log('Vennligst velg et bilde')
+      }
+      const formData = new FormData()
+      formData.append('Image', this.selectedFile, this.selectedFile.name)
+      this.sendGameImage(formData, {
+        onUploadProgess: upLoadEvent => {
+          console.log('Upload Progress: ' + Math.round(uploadEvent.loaded / uploadEvent.total * 100) + '%')
+        }
+      }).then(res => {
         console.log(res)
       })
     }
