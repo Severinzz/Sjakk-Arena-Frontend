@@ -52,12 +52,12 @@
           align="start"
           justify="start"
           class="text-center"
-          v-if="this.getAllPlayers.length !== undefined"
+          v-if="this.getAllPlayersReversed.length !== undefined"
         >
           <!-- The individual players -->
             <player
               class="player"
-              v-for="(player, index) in this.getAllPlayers"
+              v-for="(player, index) in this.getAllPlayersReversed"
               @click.native="handleRemovePlayer(player, player.user_id)"
               :player-name="player.name"
               :player-piece="player.icon"
@@ -110,7 +110,7 @@ export default {
   computed: {
     ...mapGetters([
       'getPlayerCount',
-      'getAllPlayers'
+      'getAllPlayersReversed'
     ]),
     ...mapState({
       tournament: state => state.tournament.tournament,
@@ -220,14 +220,13 @@ export default {
   }
 
    .numberOfPlayers {
-    font-size: 1.5em;
+    font-size: 1.8em;
   }
 
   .info-wrapper {
     text-align: center;
     display: inline-block;
     height: 100%;
-    padding-top: 20%;
     margin: auto auto auto 10%;
   }
 

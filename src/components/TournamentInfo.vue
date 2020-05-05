@@ -116,7 +116,7 @@ export default {
     font-weight: bold;
   }
   .time{
-    margin: 20% 0 10% 0;
+    margin: 10% 0 5% 0;
     font-size: 3em;
   }
   .date{

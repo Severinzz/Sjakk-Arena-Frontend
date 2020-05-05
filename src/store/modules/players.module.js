@@ -41,7 +41,7 @@ export const mutations = {
    * @param payload The player to add.
    */
   addPlayers: (state, payload) => {
-    state.player = payload
+    state.players = payload
   },
 
   /**
@@ -250,7 +250,7 @@ export const getters = {
    * @returns {number}
    */
   getPlayerCount: (state) => {
-    return state.player.length
+    return state.players.length
   },
 
   /**
@@ -260,7 +260,16 @@ export const getters = {
    * {type: StringConstructor, required: boolean}|{type: StringConstructor | String, required: boolean}}
    */
   getAllPlayers: (state) => {
-    return state.player
+    return state.players
+  },
+
+  /**
+   * Returns the reversed players array
+   * @param state
+   * @returns {T[]}
+   */
+  getAllPlayersReversed: (state) => {
+    return state.players.reverse()
   }
 }
 
