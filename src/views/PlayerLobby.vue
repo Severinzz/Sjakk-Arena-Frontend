@@ -145,7 +145,7 @@ export default {
      * @returns {Promise<ReadonlyArray<ServiceWorkerRegistration>>}. Service worker registration from the current page.
      */
     getRegistration() {
-      return navigator.serviceWorker.getRegistrations('http://localhost:8081/')
+      return navigator.serviceWorker.getRegistrations(process.env.VUE_APP_SJAKK_ARENA_ROOT_PAGE)
     },
     /**
      * Returns subscription from browser's push manager
