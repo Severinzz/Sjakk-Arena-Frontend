@@ -57,13 +57,6 @@
             @buttonClicked="resultDialog = true"
             />
 
-            <input type="file" style="display: none" @change="onFileSelected" ref="fileInput" capture="camera">
-            <oval-button
-              v-if="paired"
-              text="Last opp bilde"
-              @buttonClicked="$refs.fileInput.click()"
-            />
-
             <!-- Leave tournament -->
             <oval-button
               text="Forlat turnering"
@@ -154,6 +147,13 @@
                   </v-row>
                 </v-card-text>
                 <v-card-actions>
+                  <input type="file" style="display: none" @change="onFileSelected" ref="fileInput" capture="camera">
+                  <v-btn
+                    text
+                    @click="$refs.fileInput.click()"
+                  >
+                    Ta bilde
+                  </v-btn>
                   <v-spacer/>
                   <v-btn
                     text
@@ -259,7 +259,6 @@ import { leavePageWarningMixin } from '../../mixins/leavePageWarning.mixin'
 import { playerMixin } from '../../mixins/player.mixin'
 import InformationDialog from '../InformationDialog'
 import OvalButton from '../OvalButton'
-import { Coverage as uploadEvent } from 'istanbul-lib-coverage'
 
 export default {
   name: 'PlayerPlaying',
@@ -323,8 +322,7 @@ export default {
       'sendPauseRequest',
       'sendUnpauseRequest',
       'sendValidationOfResult',
-      'sendInvalidationOfResult',
-      'sendGameImage'
+      'sendInvalidationOfResult'
     ]),
     ...mapMutations([
       'setPaired',
@@ -399,21 +397,22 @@ export default {
     },
     onFileSelected (event) {
       this.selectedFile = event.target.files[0]
-      if (!this.selectedFile) { return console.log('Ikke valgt fil.') }
+      if (!this.selectedFile) { return console.log('User did not choose a file.') }
       this.uploadFile()
     },
-    uploadFile () {
+    async uploadFile () {
       if (!this.selectedFile) {
-        return console.log('Vennligst velg et bilde')
+        return console.log('Please choose a image to upload.')
       }
       const formData = new FormData()
-      formData.append('Image', this.selectedFile, this.selectedFile.name)
-      this.sendGameImage(formData, {
-        onUploadProgess: upLoadEvent => {
-          console.log('Upload Progress: ' + Math.round(uploadEvent.loaded / uploadEvent.total * 100) + '%')
-        }
-      }).then(res => {
-        console.log(res)
+      formData.append('Image', this.selectedFile)
+      // kjøre axios i vue filene slik som nå er imot våre kodeformer. Det er problemer med axios som tvinger dette; diskutert i lenken under. (vær så god å prøv selv)
+      // code adapted from: https://github.com/axios/axios/issues/1006
+      const axios = require('axios')
+      await axios.post('/playerFile/Upload', formData).then(result => {
+        console.log('Image uploaded sucessfully')
+      }).catch(error => {
+        console.log(error.message)
       })
     }
   },

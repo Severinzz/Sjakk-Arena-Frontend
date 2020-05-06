@@ -127,6 +127,26 @@ export default {
       let status = response.status
       status === 400 ? this.errorMessage = 'http ' + status + ': Spill ikke funnet'
         : this.errorMessage = 'http ' + status + ': Tekniske problem!'
+    },
+    onFileSelected (event) {
+      this.selectedFile = event.target.files[0]
+      if (!this.selectedFile) { return console.log('User did not choose a file.') }
+      this.uploadFile()
+    },
+    async uploadFile () {
+      if (!this.selectedFile) {
+        return console.log('Please choose a image to upload.')
+      }
+      const formData = new FormData()
+      formData.append('Image', this.selectedFile)
+      // kjøre axios i vue filene slik som nå er imot våre kodeformer. Det er problemer med axios som tvinger dette; diskutert i lenken under. (vær så god å prøv selv)
+      // code adapted from: https://github.com/axios/axios/issues/1006
+      const axios = require('axios')
+      await axios.post('/playerFile/Upload', formData).then(result => {
+        console.log('Image uploaded sucessfully')
+      }).catch(error => {
+        console.log(error.message)
+      })
     }
   }
 }

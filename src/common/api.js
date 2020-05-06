@@ -72,17 +72,16 @@ export const PLAYER_SERVICE = {
 export const FILE_SERVICE = {
   path: 'playerFile',
   post(slug, formData) {
-    // let fullpath = this.path + '/' + slug
+    return console.log('This function is not in use.')
+    // let fullpath = '/' + this.path + '/' + slug
     // return API_SERVICE.post(fullpath, formData)
-    return axios({
-      method: 'post',
-      url: 'http://localhost:8080/playerFile/Upload',
-      data: formData,
-      headers: {
-        'content-type': `multipart/form-data; boundary=${formData._boundary}`
-      } }).catch(error => {
-      console.log(error.message)
-    })
+    // code adapted from: https://github.com/axios/axios/issues/1006 under linjen funker.
+    // const axios = require('axios')
+    // return axios.post(fullpath, formData).then(result => {
+    //  console.log('Image uploaded sucessfully')
+    // }).catch(error => {
+    //  console.log(error.message)
+    // })
   },
   get(slug) {
     return API_SERVICE.get(this.path, slug)
