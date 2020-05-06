@@ -1,5 +1,5 @@
 <template>
-  <div class="EnterTID">
+  <div class="EnterAdminID">
     <!-- // Kilde: https://github.com/vuetifyjs/vuetify/blob/master/packages/docs/src/layouts/layouts/demos/centered.vue -->
     <v-container
       class="fill-height"
@@ -14,11 +14,12 @@
           sm="8"
           md="4"
         >
-          <alert-box
-            v-if="error"
-            :errorMessage="errorMessage"
-            :errorIcon="'fas fa-plug'"
-          />
+          <v-alert
+            type="error"
+            v-if="alertError"
+          >
+            {{ alertErrorMessage }}
+          </v-alert>
           <v-card class="elevation-12">
             <v-toolbar
               color="primary"
@@ -28,7 +29,10 @@
               <v-toolbar-title>Fyll inn adminID</v-toolbar-title>
             </v-toolbar>
             <v-card-text>
-              <v-form>
+              <v-form
+                ref="form"
+                lazy-validation
+              >
                 <v-progress-circular
                   class="loadingCircle"
                   :size="50"
@@ -39,11 +43,14 @@
                 />
                 <!-- No limits for the input field, might be needed to changed -->
                 <v-text-field
-                  v-model="tournamentId"
-                  label="TurneringsID"
+                  v-model="adminID"
+                  label="adminID"
                   placeholder="1337"
                   type="text"
+                  :rules="adminIdRules"
+                  required
                 />
+                <div id="error">{{ errorMessage }}</div>
               </v-form>
               <v-card-actions>
                 <v-spacer />
@@ -65,23 +72,22 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import AlertBox from '../components/AlertBox'
 import { clearTokenAndStateMixin } from '../mixins/clearTokenAndState.mixin'
 
 export default {
-  name: 'enterTID',
-  components: {
-    AlertBox
-  },
+  name: 'EnterAdminID',
   mixins: [
     clearTokenAndStateMixin
   ],
-  data () {
+  data() {
     return {
-      tournamentId: '',
+      adminID: '',
       errorMessage: '',
-      error: false,
-      isLoading: false
+      isLoading: false,
+      alertError: false,
+      adminIdRules: [
+        v => !!v || 'Du må skrive inn adminID'
+      ]
     }
   },
   methods: {
@@ -90,28 +96,52 @@ export default {
       'signInUUID',
       'deleteTokenAndSetStateToDefault'
     ]),
+
+    /**
+     * Sends the AdminID.
+     * @returns {Promise<void>}
+     */
     async submit() {
-      this.error = false
-      this.isLoading = true
-      let vm = this
-      this.signInUUID(this.tournamentId).then(res => {
-        vm.fetchTournament().then(res => {
-          vm.isLoading = false
-          if (vm.tournament.active) {
-            this.$router.push('/tournament/' + `${vm.tournament.user_id}`)
+      if (this.$refs.form.validate()) {
+        this.error = false
+        this.isLoading = true
+        let vm = this
+        this.signInUUID(this.adminID).then(res => {
+          vm.fetchTournament().then(res => {
+            vm.isLoading = false
+            if (vm.tournament.active) {
+              this.$router.push('/tournament/' + `${vm.tournament.user_id}`)
+            } else {
+              this.$router.push('/lobby/' + `${vm.tournament.user_id}`)
+            }
+          })
+        }).catch(err => {
+          this.isLoading = false
+          if (err.response !== undefined) {
+            this.handleErrorResponse(err.response)
           } else {
-            this.$router.push('/lobby/' + `${vm.tournament.user_id}`)
+            this.errorMessage = ''
+            this.alertError = true
+            this.alertErrorMessage = err + '. Prøv igjen senere!'
           }
         })
-      }).catch(err => {
-        this.isLoading = false
-        this.error = true
-        if (err.response.status === 404) {
-          this.errorMessage = 'Denne IDen: "' + this.tournamentId + '", finnes ikke!'
-        } else {
-          this.errorMessage = 'Error code: ' + err.response.status + ', ' + err.response.data.message
-        }
-      })
+      }
+    },
+
+    /**
+     * Sets the error message
+     * @param response Axios error.response object
+     */
+    handleErrorResponse(response) {
+      this.isLoading = false
+      if (response.status === 404) {
+        this.alertError = false
+        this.errorMessage = 'Denne IDen: "' + this.adminID + '", finnes ikke!'
+      } else {
+        this.errorMessage = ''
+        this.alertErrorMessage = 'Error code: ' + response.status + ', ' + response.data.message
+        this.alertError = true
+      }
     }
   },
   computed: {
@@ -123,7 +153,10 @@ export default {
 </script>
 
 <style scoped>
-  .loadingCircle{
+  .loadingCircle {
     margin-left: 45%;
+  }
+  #error{
+    color: #FF5252;
   }
 </style>

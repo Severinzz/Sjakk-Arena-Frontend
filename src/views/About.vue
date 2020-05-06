@@ -2,8 +2,15 @@
   <div class="about">
     <h1 align="center">Om Sjakk Arena</h1>
     <v-container>
-      <v-row class="justify-xl-start" align="stretch" justify="end">
-        <v-col cols="12" sm="6" md="6">
+      <v-row
+        class="justify-xl-start"
+        align="stretch"
+        justify="end"
+      >
+        <v-col
+          cols="12"
+          sm="6"
+          md="6">
           <p>Denne webapplikasjonen ble laget av studenter fra NTNU Ålesund i bacheloroppgave fra Aalesunds Schaklag.</p>
           <v-card
             locale="no-NO"
@@ -50,6 +57,14 @@
             vil begge spillerne bli bedt om å gå til turneringsvert som da vil bestemme resultatet. Dette vil koste begge
             spillerne tid, så dette bør ungås om turneringen har høy spilltempo.
             <strong> Husk at verten kan velge å kaste ut spillere!</strong>
+          </p>
+          <p>
+            For mere informasjon om hvordan du bruker applikasjonen,
+            <strong>
+              <router-link to="/help">
+            se her
+              </router-link>
+            </strong>
           </p>
         </v-col>
       </v-row>

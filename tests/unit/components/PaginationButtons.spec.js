@@ -26,12 +26,14 @@ describe('PaginationButtons', () => {
     await wrapper.vm.$nextTick()
     expect(wrapper.emitted('update:page')[0]).toEqual([5])
   })
+
   it('should match snapshot', () => {
     const wrapper = factory({
       numberOfItems: 20,
       prPage: 3 })
     expect(wrapper.html()).toMatchSnapshot()
   })
+
   it('Jump left button should be visible after page change to right', async() => {
     const wrapper = factory({
       numberOfItems: 20,
@@ -40,6 +42,7 @@ describe('PaginationButtons', () => {
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.left').isVisible()).toBe(true)
   })
+
   it('should render the correct active button', () => {
     const wrapper = factory({
       numberOfItems: 20,
@@ -47,6 +50,7 @@ describe('PaginationButtons', () => {
     wrapper.setData({ activeButton: 6 })
     expect(wrapper.find('.active-button').text()).toBe('6')
   })
+
   it('should render the correct amount of buttons', () => {
     // NOTE: maxVisibleButtons does NOT count "<<" and ">>" buttons!
     const visibleButtons = 3

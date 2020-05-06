@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import EnterTourney from '../views/EnterTourney'
-import EnterTID from '../views/EnterTID'
+import EnterAdminID from '../views/EnterAdminID'
 import TournamentCreation from '../views/TournamentCreation.vue'
 import PlayerLobby from '../views/PlayerLobby'
 
@@ -55,12 +55,12 @@ const routes = [
   },
   {
     // Add host enter tournament ID from views for the router to use
-    path: '/enter-TID',
-    name: 'Enter TID',
+    path: '/enter-AID',
+    name: 'Enter AdminID',
     meta: {
-      title: 'Skriv inn admin kode'
+      title: 'Skriv inn adminID'
     },
-    component: EnterTID
+    component: EnterAdminID
   },
   {
     path: '/tournament-creation',
@@ -92,7 +92,7 @@ const routes = [
   {
     path: '/tournament/player/:index',
     name: 'playerdetails',
-    // Finne en måte å bruke spiller sitt navn?
+    // TODO: Finne en måte å bruke spiller sitt navn som dynamisk route?
     meta: {
       title: 'Spiller - '
     },
@@ -105,6 +105,14 @@ const routes = [
       title: 'sjakkur'
     },
     component: () => import('../views/ChessClock')
+  },
+  {
+    path: '/help',
+    name: 'help',
+    meta: {
+      title: 'Hjelp'
+    },
+    component: () => import('../views/Help')
   }
 ]
 
@@ -112,7 +120,11 @@ const router = new VueRouter({
   routes
 })
 
-// Adapted from https://stackoverflow.com/a/45462996
+/**
+ * Adapted from https://stackoverflow.com/a/45462996
+ *
+ * Add title to all pages with meta: { title: } defined.
+ */
 router.beforeEach((to, from, next) => {
   if (to.meta.title !== undefined) {
     let dynamicTitle = to.params.id !== undefined ? to.params.id : ''

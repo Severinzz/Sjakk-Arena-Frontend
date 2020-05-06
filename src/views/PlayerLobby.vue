@@ -77,7 +77,7 @@ export default {
     PlayerWaiting,
     PlayerPlaying
   },
-  data () {
+  data() {
     return {
       waiting: false,
       kickedMessage: '',
@@ -107,6 +107,9 @@ export default {
       'subscribeToSuggestedResult',
       'subscribeToPlayerKicked'
     ]),
+    /**
+     * Counts down, navigate home when finished.
+     */
     countDown() {
       this.countDownNr--
       if (this.countDownNr === 0) {
@@ -115,24 +118,41 @@ export default {
         this.navigateHome()
       }
     },
+    /**
+     * Navigate home.
+     */
     navigateHome() {
       this.kickedDialog = false
       storage.deleteToken()
       clearInterval(this.intervalId)
       this.$router.replace('/')
     },
+    /**
+     * Start the kicked dialog countdown.
+     */
     startCountDown() {
       this.intervalId = setInterval(this.countDown, 1000)
     },
-    // Gets the public key from backend.
+    /**
+     * Returns the public key from backend.
+     * @returns {Promise<AxiosResponse<T>>} Axios promis. Contains public key.
+     */
     fetchPublicKey() {
       return API_SERVICE.get('', 'pushnotification')
     },
-    // Gets the service worker registration from the current site.
+    /**
+     * Returns the service worker registration from the current page.
+     * @returns {Promise<ReadonlyArray<ServiceWorkerRegistration>>}. Service worker registration from the current page.
+     */
     getRegistration() {
-      return navigator.serviceWorker.getRegistrations(process.env.VUE_APP_SJAKK_ARENA_ROOT_PAGE)
+      return navigator.serviceWorker.getRegistrations('http://localhost:8081/')
     },
-    // Gets subscription from browser's push manager
+    /**
+     * Returns subscription from browser's push manager
+     * @param registration Service worker registration
+     * @param applicationServerKey Publickey from the backend.
+     * @returns {Promise<PushSubscription>} Push subscription from the browsers push manager.
+     */
     getSubscription(registration, applicationServerKey) {
       const subOptions = {
         userVisibleOnly: true,
@@ -140,10 +160,16 @@ export default {
       }
       return registration.pushManager.subscribe(subOptions)
     },
-    // Send subscription object to backend.
+    /**
+     * Send subscription object to backend.
+     * @param subscription Subscription object from the browser.
+     */
     sendSubscription(subscription) {
       API_SERVICE.post('pushnotification', subscription)
     },
+    /**
+     * Subscribes to push notifications
+     */
     subscribeToPushNotifications() {
       this.fetchPublicKey().then(publicKey => {
         this.getRegistration().then(registration => {
@@ -153,28 +179,65 @@ export default {
         })
       })
     },
-    // Adapted from https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/message_event
-    // Unsubscribe from push notifications.
+    /**
+     * Adapted from https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/message_event
+     * Unsubscribe from push notifications.
+     * @returns {Promise<void>}
+     */
     async unsubscribePushNotification() {
       await navigator.serviceWorker.ready.then(async reg => {
         await reg.pushManager.getSubscription().then(async subscription => {
-          // Unsubscribe from browser's push manager.
-          await subscription.unsubscribe().then(async res => {
-            // Delete subscription from backend.
-            await API_SERVICE.delete('pushnotification', 'unsubscribe').then(res => {
+          if (subscription !== null) {
+            await subscription.unsubscribe().then(async res => {
+              await API_SERVICE.delete('pushnotification', 'unsubscribe').then(res => {
+              })
+            }).catch(error => {
+              console.log(error)
             })
-          }).catch(error => {
-            console.log(error)
-          })
+          }
         })
       })
+    },
+    /**
+     * Checks notification permission.
+     * Granted: Start subscription chain.
+     * Denied: Display warning in console
+     * Ask(default): Ask for permission, start subscription chain if granted.
+     * @returns {Promise<void>}
+     */
+    async setupPushNotifications() {
+      const VM = this
+      if ('PushManager' in window && 'Notification' in window) {
+        await navigator.serviceWorker.ready.then(async function () {
+          // Request notifiaction permission.
+          switch (Notification.permission) {
+            case 'granted':
+              VM.subscribeToPushNotifications()
+              break
+            case 'denied':
+              console.warn('Treng tilgang til notifikasjoner for å gi besked om nytt spill er funnet.')
+              break
+            default:
+              // Make site "transparent" while user decides. To make "decision box" be more in focus.
+              document.getElementById('root').style.opacity = '0.5'
+              Notification.requestPermission().then(permission => {
+                document.getElementById('root').style.opacity = '1'
+                if (permission === 'granted') {
+                  VM.subscribeToPushNotifications()
+                } else {
+                  console.warn('Treng tilgang til notifikasjoner for å gi besked om nytt spill er funnet.')
+                }
+              })
+          }
+        })
+      }
     }
   },
-  async created() {
+  created() {
     this.fetchPlayersTournament()
     this.fetchPlayer()
     let vm = this
-    let callback = function(res) {
+    let callback = function (res) {
       vm.kickedMessage = res.body
       vm.kickedDialog = true
       vm.startCountDown()
@@ -184,42 +247,15 @@ export default {
     this.subscribeToPoints()
     this.subscribeToSuggestedResult()
     this.subscribeToPlayerKicked(callback)
-    console.log('PushManager' in window && 'Notification' in window)
-    if ('PushManager' in window && 'Notification' in window && 'serviceWorker' in navigator) {
-      await navigator.serviceWorker.ready.then(async function () {
-        // Request notifiaction permission.
-        switch (Notification.permission) {
-          case 'granted':
-            // Begin subscription chain.
-            vm.subscribeToPushNotifications(vm)
-            break
-          case 'denied':
-            console.warn('Treng tilgang til notifikasjoner for å gi besked om nytt spill er funnet.')
-            break
-          default:
-            // Make site "transparent" while user decides. To make "decision box" be more in focus.
-            document.getElementById('root').style.opacity = '0.5'
-            Notification.requestPermission().then(permission => {
-              console.log(permission)
-              document.getElementById('root').style.opacity = '1'
-              if (permission === 'granted') {
-                // Begin subscription chain.
-                vm.subscribeToPushNotifications()
-              } else {
-                console.warn('Treng tilgang til notifikasjoner for å gi besked om nytt spill er funnet.')
-              }
-            })
-        }
-      })
-    }
+    this.setupPushNotifications()
   },
   async beforeRouteLeave(to, from, next) {
-    if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
       await this.unsubscribePushNotification()
     }
     next()
   },
-  destroyed () {
+  destroyed() {
     WEBSOCKET.unsubscribeAll()
     WEBSOCKET.close()
   }
@@ -227,20 +263,24 @@ export default {
 </script>
 
 <style scoped>
-  button{
+  button {
     margin: auto
   }
-  .card-text{
+
+  .card-text {
     justify-content: center;
     text-align: center;
   }
-  h1{
+
+  h1 {
     margin-top: 1em;
   }
-  h3{
+
+  h3 {
     margin-top: 1em;
   }
-  .title{
+
+  .title {
     word-break: keep-all;
   }
 </style>

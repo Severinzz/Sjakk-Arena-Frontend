@@ -1,6 +1,6 @@
 <template>
   <div class="tournament-creation">
-    <TournamentCreationForm></TournamentCreationForm>
+    <tournament-creation-form/>
   </div>
 </template>
 

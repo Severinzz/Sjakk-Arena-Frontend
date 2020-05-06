@@ -7,16 +7,17 @@
       align-center
     >
       <v-col>
+        <v-alert
+        type="error"
+        v-if="alertError"
+        >
+          {{ errorMessage }}
+        </v-alert>
     <v-card>
     <v-form
       ref="form"
       lazy-validation
     >
-     <alert-box
-     v-if="error"
-     :errorMessage="errorMessage"
-     :errorIcon="'fas fa-plug'"
-     />
       <v-toolbar
         dark
         color="primary"
@@ -163,31 +164,30 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
-import AlertBox from './AlertBox'
 import DateTime from './DateTime'
 
 export default {
   name: 'TournamentCreationForm',
-  components: { AlertBox, DateTime },
+  components: { DateTime },
   data () {
     return {
-      startTime: '', // start time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
-      endTime: '', // end time of tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT) // TODO: burde kunne endre senere
+      startTime: '', // start time of tournament
+      endTime: '', // end time of tournament
       currentDate: new Date().toISOString().slice(0, 10),
       endDate: '',
       startTimeMenu: false,
       minStartTime: new Date().getHours().toString() + ':' + new Date().getMinutes().toString(),
       email: '', // email address of tournament host
       tournamentName: '', // name of tournament
-      tables: '', // number of tables used in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
-      rounds: '', // maximum number of rounds in the tournament // TODO CHECK DATABASE FOR MAX VALUE (MIGHT ALSO WANT TO CHANGE IT)
+      tables: '', // number of tables used in the tournament
+      rounds: '', // maximum number of rounds in the tournament
       earlyStart: false, // true if the tournament will start when two players are registered
       formColor: 'blue', // color to be used in form elements
       isLoading: false,
-      errorMessage: '',
-      error: false,
       useEndTime: false,
       missingStartTime: false,
+      alertError: false,
+      errorMessage: '',
       // rules
       emailRules: [
         v => /^[A-ZÆØÅa-zæøå0-9._%+-]+@[A-ZÆØÅa-zæøå0-9.-]+\.[A-ZÆØÅa-zæøå]{2,6}$/.test(v) || 'Du må skrive inn en gyldig e-postadresse'
@@ -198,15 +198,14 @@ export default {
       ],
       numberFieldRules: [
         v => /^\d+$/.test(v) || 'Bare tall i dette feltet!', // If not included the number field can contain + and -
-        v => v < 256 || 'Må vær mindre enn 256!' // TODO MIGHT NOT WANT IT TO BE THE SAME FOR EACH NUMBER FIELD
+        v => v < 256 || 'Må vær mindre enn 256!'
       ],
       endTimeRules: [
         v => !v || this.checkTime() ||
           'Sluttid kan ikke vær lik eller mindre start tiden!'
       ],
       startTimeRules: [
-        v => !!v || 'Starttid er påkrevd',
-        v => (v.length = 0) || 'fisk'
+        v => !!v || 'Starttid er påkrevd'
       ]
     }
   },
@@ -217,16 +216,24 @@ export default {
     ...mapMutations([
       'clearPlayers'
     ]),
-    // Clears all input fields and errors from the form.
+
+    /**
+     * Clears all input fields and errors from the form.
+     */
     clear() {
       this.$refs.form.reset()
     },
+
+    /**
+     * Submit the form to the backend.
+     * @returns {Promise<void>} Void, returns nothing to stop execution if the start time is missing.
+     */
     async submit () {
       if (this.validateTime()) {
         this.missingStartTime = true
         return
       }
-      this.error = false
+      this.alertError = false
       this.isLoading = true
       // Setup the JSON object to be sent to the server
       let payload = {
@@ -245,20 +252,32 @@ export default {
         this.isLoading = false
       }).catch(err => {
         // Hides the loading circle and display error message
+        this.alertError = true
+        this.errorMessage = err + '. Prøv igjen senere'
         this.isLoading = false
-        this.error = true
-        this.errorMessage = err + '. Prøv igjen senere!'
       })
     },
+
+    /**
+     * Validate the form.
+     */
     validate() {
       if (this.$refs.form.validate()) {
         this.submit()
       }
     },
+    /**
+     * Checks if start time is missing
+     * @returns {boolean} true if start time is missing, false if not.
+     */
     validateTime() {
       return this.startTime === ''
     },
-    // Checks if end time is after start time and not before or equal
+
+    /**
+     * Checks if end time is after start time and not before or equal
+     * @returns {boolean} True if start time is equal or smaller than end time.
+     */
     checkTime() {
       if (this.endTime === undefined || this.endDate !== this.currentDate) { return true }
       let startTimeH = this.startTime.toString().split(':')[0]
@@ -273,15 +292,28 @@ export default {
         return parseInt(startTimeM) < parseInt(endTimeM)
       }
     },
-    // Grabs the minutes from the time string.
+
+    /**
+     * Grabs the minutes from the time string.
+     * @param timeString Time string on the format HH:MM / HH:MM:SS etc...
+     * @returns {number} The minutes of the time string.
+     */
     lastNumberInTime(timeString) {
       return parseInt(timeString.toString().split(':')[1])
     },
-    // Clears the form and all its errors and sends user back to homepage.
+
+    /**
+     * Clears the form and all its errors and sends user back to homepage.
+     */
     cancel() {
       this.clear()
       this.$router.push('/')
     },
+
+    /**
+     * Handles the end date and end time changed event.
+     * @param value The new end date and end time values.
+     */
     onEndDateTime(value) {
       let dateTimeArray = value.split('t')
       if (dateTimeArray.length === 2) {
@@ -297,6 +329,11 @@ export default {
     ...mapState({
       tournament: state => state.tournament.tournament
     }),
+
+    /**
+     * Calculates the max value of the start time based on the end time.
+     * @returns {string|null} String if end time is given, null if not.
+     */
     calcStartTime() {
       if (this.currentDate === this.endDate) {
         return this.endTime

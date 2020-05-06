@@ -41,21 +41,31 @@ export default {
   },
   data() {
     return {
-      secondToMillisecondRatio: 1000,
-      minuteToSecondRatio: 60,
+      millisecondToSecondRatio: 1000,
+      secondToMinuteRatio: 60,
       intervalStart: 0,
       remainingTime: this.initialTimePrPlayer * 1000, // in ms
       countDownInterval: undefined
     }
   },
   methods: {
+
+    /**
+     * Adds additional time to the clock
+     * Stops countdown
+     * Emits the 'update:count-down' event to parent.
+     */
     clicked: function () {
       if (this.countDown) {
-        this.remainingTime += this.additionalTimePrMove * this.secondToMillisecondRatio
+        this.remainingTime += this.additionalTimePrMove * this.millisecondToSecondRatio
         clearInterval(this.countDownInterval)
         this.$emit('update:count-down', false)
       }
     },
+
+    /**
+     * Reduces the remaining time and stops the clock when the time is up.
+     */
     reduceRemainingTime: function() {
       if (this.remainingTime > 0) {
         let now = new Date().getTime()
@@ -74,27 +84,47 @@ export default {
       }
       return ''
     },
+
+    /**
+     * Calculates the remaining time
+     * @returns {string} Returns the remaining time.
+     */
     time () {
-      let minutes = Math.floor(this.remainingTime / (this.minuteToSecondRatio * this.secondToMillisecondRatio))
-      let seconds = Math.floor((this.remainingTime % (this.minuteToSecondRatio * this.secondToMillisecondRatio)) / this.secondToMillisecondRatio)
+      let minutes = Math.floor(this.remainingTime / (this.secondToMinuteRatio * this.millisecondToSecondRatio))
+      let seconds = Math.floor((this.remainingTime % (this.secondToMinuteRatio * this.millisecondToSecondRatio)) / this.millisecondToSecondRatio)
       let secondsString = seconds < 10 ? '0' + `${seconds}` : `${seconds}`
       return minutes >= 0 ? minutes + ':' + secondsString : '0:00'
     },
+
+    /**
+     * Sets the color for the buttons.
+     * @returns {string} Button color.
+     */
     cardColor () {
       return this.player === 'white' ? 'blue-grey lighten-3' : 'blue darken-4'
     }
   },
   watch: {
+
+    /**
+     * Counts down the time
+     * @param countDown Boolean value to tell if it should count down.
+     */
     countDown: function (countDown) {
       if (countDown && !this.reset) {
         this.intervalStart = new Date().getTime()
         this.countDownInterval = setInterval(this.reduceRemainingTime, 100)
       }
     },
+
+    /**
+     * Resets the time
+     * @param reset Boolean value to tell if it should reset.
+     */
     reset: function (reset) {
       if (reset) {
         clearInterval(this.countDownInterval)
-        this.remainingTime = this.initialTimePrPlayer * this.secondToMillisecondRatio
+        this.remainingTime = this.initialTimePrPlayer * this.millisecondToSecondRatio
         this.$emit('update:reset', false)
       }
     }

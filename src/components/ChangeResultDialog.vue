@@ -2,11 +2,6 @@
   <v-row class="justify-center" align="center">
     <v-dialog v-model="dialogBox" persistent max-width="650px">
       <v-card>
-        <AlertBox
-          v-if="error"
-          :error-icon="'fas fa-plug'"
-          :error-message="errorMessage"
-        />
         <v-card-title class="justify-center">
           Bestemmer resultat for parti ID:  {{ gameId }}
         </v-card-title>
@@ -48,6 +43,14 @@
             </v-radio-group>
           </v-row>
         </v-card-text>
+        <v-row class="justify-center">
+          <v-alert
+            v-if="error"
+            type="error"
+          >
+            {{ errorMessage }}
+          </v-alert>
+        </v-row>
         <v-card-actions>
           <v-spacer />
           <v-btn
@@ -72,11 +75,9 @@
 
 <script>
 import { mapActions } from 'vuex'
-import AlertBox from './AlertBox'
 
 export default {
   name: 'ChangeResultDialog',
-  components: { AlertBox },
   props: {
     gameId: {
       type: Number,
@@ -90,14 +91,18 @@ export default {
   data () {
     return {
       result: '',
-      errorMessage: '',
-      error: false
+      error: false,
+      errorMessage: ''
     }
   },
   methods: {
     ...mapActions([
       'hostSendGameResult'
     ]),
+
+    /**
+     * Send the given result to the server.
+     */
     registerResult () {
       let param = this.gameId + '/' + this.result
       this.hostSendGameResult(param).then(res => {
@@ -105,20 +110,35 @@ export default {
         this.$emit('resultAdded')
       }).catch(err => {
         this.error = true
-        let status = err.response.status
-        status === 400 ? this.errorMessage = 'http ' + status + ': Spill ikke funnet'
-          : this.errorMessage = 'http ' + status + ': Tekniske problem!'
+        if (err.response !== undefined) {
+          this.handleErrorResponse(err.response)
+        } else {
+          this.errorMessage = err.message + 'Prøv igjen senere!'
+        }
       })
     },
+
+    /**
+     * Alter the state of the visibility state of the result dialog.
+     */
     alterResultDialogState() {
       this.error = false
       this.errorMessage = ''
       this.$emit('closeResultDialog')
+    },
+
+    /**
+     * Display network error to the user.
+     * @param response
+     */
+    handleErrorResponse(response) {
+      let status = response.status
+      status === 400 ? this.errorMessage = 'http ' + status + ': Spill ikke funnet'
+        : this.errorMessage = 'http ' + status + ': Tekniske problem!'
     }
   }
 }
 </script>
 
 <style scoped>
-
 </style>
