@@ -163,6 +163,7 @@ export default {
         .then(res => {
           this.$router.replace('/tournament/' + this.tournament.user_id)
         }).catch(err => {
+          this.starting = false
           this.alertError = true
           this.errorMessage = err + '. Prøv igjen senere!'
         })
