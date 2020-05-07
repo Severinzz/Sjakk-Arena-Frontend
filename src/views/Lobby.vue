@@ -104,7 +104,8 @@ export default {
       active: false,
       leaveWarn: false,
       pathVar: 'lobby/',
-      alertError: false
+      alertError: false,
+      starting: false
     }
   },
   computed: {
@@ -157,10 +158,12 @@ export default {
      * Starts the tournament
      */
     startTournament() {
+      this.starting = true
       this.sendStartRequest()
         .then(res => {
           this.$router.replace('/tournament/' + this.tournament.user_id)
         }).catch(err => {
+          this.starting = false
           this.alertError = true
           this.errorMessage = err + '. Prøv igjen senere!'
         })
@@ -197,7 +200,7 @@ export default {
      * @param active
      */
     isTournamentActive: function (active) {
-      if (active) {
+      if (active && !this.starting) {
         this.startTournament()
       }
     }
