@@ -1,6 +1,7 @@
 <template>
   <span>
   <v-container class="content-wrapper" fluid>
+    <h1 v-if="this.pause">Turneringen er satt på pause</h1>
     <v-row>
       <v-col cols="2">
         <!-- Information side bar -->
@@ -275,13 +276,20 @@ export default {
     font-size: 2em;
     font-weight: bold;
   }
-  /deep/ .leaderBoard th {
-   }
   /deep/ .leaderBoard {
     margin: 2em auto;
   }
   .content-wrapper {
+    text-align: center;
     padding: 0 0 2% 0;
+  }
+  h1{
+    display: inline-block;
+    padding: 15px;
+    font-size: 3.5em;
+    background-color: #1976d2;
+    border-radius: 10px;
+    color: white;
   }
   .numberOfPlayers {
     font-size: 1.8em;

@@ -104,7 +104,8 @@ export default {
       active: false,
       leaveWarn: false,
       pathVar: 'lobby/',
-      alertError: false
+      alertError: false,
+      starting: false
     }
   },
   computed: {
@@ -157,6 +158,7 @@ export default {
      * Starts the tournament
      */
     startTournament() {
+      this.starting = true
       this.sendStartRequest()
         .then(res => {
           this.$router.replace('/tournament/' + this.tournament.user_id)
@@ -197,7 +199,7 @@ export default {
      * @param active
      */
     isTournamentActive: function (active) {
-      if (active) {
+      if (active && !this.starting) {
         this.startTournament()
       }
     }

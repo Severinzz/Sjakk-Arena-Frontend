@@ -3,7 +3,7 @@
     <v-container>
       <!-- Let the system decide what to load when we are waiting -->
       <!-- https://vuejs.org/v2/guide/conditional.html -->
-      <div v-if="!isTournamentActive">
+      <div v-if="!isTournamentActive && typeof activeGame.table === 'string'">
         <player-waiting
           :tournament-name="tournamentName"
           :tournament-start="tournamentStart"
@@ -14,7 +14,7 @@
       </div>
 
       <!-- Let the system decide what to load when we are not waiting -->
-      <div v-else-if="isTournamentActive">
+      <div v-else-if="isTournamentActive || typeof activeGame.table !== 'string'">
         <player-playing
           :tournament-name="tournamentName"
           :tournament-start="tournamentStart"
@@ -26,7 +26,7 @@
 
       <!-- Something goes wrong -->
       <div v-else>
-        <h1>Something wrong in PlayerLobby.vue. isTournamentActive = {{ activeTournament }}</h1>
+        <h1>Something wrong in PlayerLobby.vue. isTournamentActive = {{ isTournamentActive }}</h1>
       </div>
 
       <v-row
@@ -93,6 +93,7 @@ export default {
       tournamentStart: state => state.tournament.tournament.start,
       tournamentEnd: state => state.tournament.tournament.end,
       isTournamentActive: state => state.tournament.activeTournament,
+      activeGame: state => state.games.activeGame,
       playerName: state => state.players.player.name,
       points: state => state.players.points
     })

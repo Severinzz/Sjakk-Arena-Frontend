@@ -65,6 +65,18 @@ export const mutations = {
    */
   setOpponentsDisagree: (state, disagree) => {
     state.resultDialog.opponents_disagree = disagree
+  },
+
+  /**
+   * Resets the active game state.
+   * @param state
+   */
+  resetActiveGame: (state) => {
+    state.activeGame = {
+      table: LOADING_MESSAGE,
+      opponent: LOADING_MESSAGE,
+      colour: LOADING_MESSAGE
+    }
   }
 }
 export const actions = {
@@ -185,9 +197,13 @@ export const actions = {
    * or the tournament host
    * @param commit
    */
-  subscribeToSuggestedResult: ({ commit }) => {
+  subscribeToSuggestedResult: ({ commit, dispatch }) => {
     let resultCallback = function (res) {
       let resultDialog = JSON.parse(res.body)
+      if (resultDialog.valid === true && resultDialog.opponents_disagree === false) {
+        commit('resetActiveGame')
+        dispatch('setPlayerPaired', false)
+      }
       commit('setResultDialog', resultDialog)
     }
     let sub = { path: 'player/result', callback: resultCallback }
