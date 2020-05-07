@@ -37,6 +37,10 @@ export default {
     reset: {
       type: Boolean,
       required: true
+    },
+    firstClick: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -57,9 +61,12 @@ export default {
      */
     clicked: function () {
       if (this.countDown) {
-        this.remainingTime += this.additionalTimePrMove * this.millisecondToSecondRatio
+        if (!this.firstClick) {
+          this.remainingTime += this.additionalTimePrMove * this.millisecondToSecondRatio
+        }
         clearInterval(this.countDownInterval)
         this.$emit('update:count-down', false)
+        this.$emit('update:firstClick', false)
       }
     },
 
