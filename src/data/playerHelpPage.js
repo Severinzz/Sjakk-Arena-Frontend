@@ -52,7 +52,7 @@ const playerHelpPageData = [{
   texts: [
     'Om det er ønskelig finnes det også ett sjakkur i applikasjonen. Denne finner man tilgjengelig i hjemmesiden & i' +
       ' turneringssiden til spillerne etter at parti er tildelt.',
-    'For å bruke sjakkuret så skal hvit gjøre sitt trekk, så starte tiden ved å trykke på sin knapp. Når tiden' +
+    'Sjakkuret startes ved å trykke på sorts knapp. Når tiden' +
       ' går ut er det spillerne selv som har ansvaret for å registrere resultatet.',
     'Spillerne har selv ansvar for å konfigurere klokken ved å sette antall minutter, sekunder pr spiller og hvor' +
       ' mye ekstra tid hver spiller får pr trekk.'
