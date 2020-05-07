@@ -83,9 +83,9 @@ import TournamentInfo from '@/components/TournamentInfo'
 import Player from '@/components/Player'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import WarningDialog from '@/components/WarningDialog'
-import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
+// import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
 import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
-import WEBSOCKET from '../common/websocketApi'
+// import WEBSOCKET from '../common/websocketApi'
 
 export default {
   name: 'Lobby',
@@ -95,7 +95,7 @@ export default {
     WarningDialog
   },
   mixins: [
-    leavePageWarningMixin,
+    // leavePageWarningMixin,
     tournamentAndLobbyMixin
   ],
   data () {
@@ -105,7 +105,8 @@ export default {
       leaveWarn: false,
       pathVar: 'lobby/',
       alertError: false,
-      starting: false
+      starting: false,
+      wantToLeave: null
     }
   },
   computed: {
@@ -159,6 +160,7 @@ export default {
      */
     startTournament() {
       this.starting = true
+      this.wantToLeave = true
       this.sendStartRequest()
         .then(res => {
           this.$router.replace('/tournament/' + this.tournament.user_id)
@@ -173,14 +175,25 @@ export default {
      * Ends the tournament
      */
     endTournament() {
-      this.$router.push('/')
+      this.wantToLeave = true
+      console.log('END TOURNAMENT')
+      this.$router.replace('/tournament-creation')
     },
 
     /**
      * Alter the leave warning dialog viability state.
      */
     alterLeavePageDialogState() {
+      this.wantToLeave = false
       this.leaveWarn = !this.leaveWarn
+      console.log('ALTER LEAVE PAGE DIALOG')
+      this.$router.push(this.pathVar).catch(res => { })
+    },
+
+    async testFunc() {
+      return new Promise((resolve, reject) => {
+        this.wantToLeave = resolve
+      })
     }
   },
   watch: {
@@ -206,13 +219,20 @@ export default {
     }
   },
 
-  beforeRouteLeave(to, from, next) {
-    if (to.name === 'tournament') {
-      WEBSOCKET.unsubscribe('tournament/players')
+  async beforeRouteLeave(to, from, next) {
+    if (this.wantToLeave === null) {
+      console.log('wantToLeave === null')
+      this.leaveWarn = true
+      next(false)
+    } else if (this.wantToLeave) {
+      console.log('wantToLeave')
+      console.log(to)
+      next(true)
     } else {
-      WEBSOCKET.unsubscribeAll()
+      console.log('!wantToLeave')
+      this.wantToLeave = null
+      next(from.fullPath)
     }
-    next()
   }
 }
 </script>
