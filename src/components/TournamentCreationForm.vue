@@ -210,7 +210,7 @@ export default {
           'Sluttid kan ikke vær lik eller mindre start tiden!'
       ],
       startTimeRules: [
-        v => v !== undefined || 'Starttid er påkrevd'
+        v => !!v || 'Starttid er påkrevd'
       ]
     }
   },
@@ -228,7 +228,6 @@ export default {
      */
     clear() {
       this.$refs.form.reset()
-      this.startTime = undefined
     },
     /**
      * Creates and starts the tournament described by the form data
