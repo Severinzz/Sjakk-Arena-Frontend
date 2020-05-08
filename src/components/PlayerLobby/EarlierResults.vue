@@ -13,7 +13,14 @@
         flat
         class="primary"
       >
-        <v-toolbar-title>Dine resultater</v-toolbar-title>
+        <v-toolbar-title class="white--text">Dine resultater</v-toolbar-title>
+        <v-spacer/>
+        <v-btn
+          icon
+        @click="loadResults"
+        >
+          <i class="fas fa-sync"/>
+        </v-btn>
       </v-toolbar>
       <v-container
         fluid
@@ -117,17 +124,9 @@ export default {
      * Set polling interval for fetching earlier results.
      */
     loadResults () {
-      this.intervalID = setInterval(this.requestEarlierResults, this.timeInterval)
-    },
-
-    /**
-     * Fetch the earlier results.
-     */
-    requestEarlierResults() {
       this.fetchResults().then(res => {
         this.spillArray = res.data
       }).catch(err => {
-        console.log(err)
         this.handleErr(err)
       })
     },
@@ -160,7 +159,8 @@ export default {
   },
   computed: {
     ...mapState({
-      playerName: state => state.players.player.name
+      playerName: state => state.players.player.name,
+      validResult: state => state.games.resultDialog.valid
     }),
 
     /**
@@ -171,8 +171,15 @@ export default {
       return this.limit ? this.spillArray.slice(0, this.limit) : this.result
     }
   },
+  watch: {
+    validResult (validResult) {
+      // Refreshes the earlier result list when a result as been added and validated
+      if (validResult) {
+        this.loadResults()
+      }
+    }
+  },
   created () {
-    this.requestEarlierResults()
     this.loadResults()
   },
   destroyed() {
@@ -189,5 +196,9 @@ export default {
   .resultDetails {
     display: inline-flex;
     margin-right: 1.5em;
+  }
+
+  .fa-sync {
+    color: white;
   }
 </style>
