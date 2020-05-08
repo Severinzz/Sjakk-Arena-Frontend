@@ -172,11 +172,15 @@ export const actions = {
    * @returns {Promise<AxiosResponse<T>>}
    */
   sendLeaveRequest: ({ commit }, started) => {
-    let slug
-    started ? slug = 'inactivate' : slug = 'delete'
-    return PLAYER_SERVICE.patch(slug).then(res => {
-      deleteToken()
-    })
+    if (started) {
+      return PLAYER_SERVICE.patch('inactivate').then(res => {
+        deleteToken()
+      })
+    } else {
+      return PLAYER_SERVICE.delete('delete').then(res => {
+        deleteToken()
+      })
+    }
   },
 
   /**

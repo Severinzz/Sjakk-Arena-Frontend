@@ -70,7 +70,7 @@
     <warning-dialog
       title="Avslutt turneringen"
       action="avslutte tuneringen"
-      :show-dialog="leaveWarn"
+      :show-dialog="leaveDialog"
       carry-on-button-text="Avslutt turnering"
       @carryOn="endTournament()"
       @closeDialog="alterLeavePageDialogState"
@@ -83,9 +83,8 @@ import TournamentInfo from '@/components/TournamentInfo'
 import Player from '@/components/Player'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import WarningDialog from '@/components/WarningDialog'
-// import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
+import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
 import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
-// import WEBSOCKET from '../common/websocketApi'
 
 export default {
   name: 'Lobby',
@@ -95,18 +94,16 @@ export default {
     WarningDialog
   },
   mixins: [
-    // leavePageWarningMixin,
+    leavePageWarningMixin,
     tournamentAndLobbyMixin
   ],
   data () {
     return {
       intervalId: '',
       active: false,
-      leaveWarn: false,
       pathVar: 'lobby/',
       alertError: false,
-      starting: false,
-      wantToLeave: null
+      starting: false
     }
   },
   computed: {
@@ -176,24 +173,7 @@ export default {
      */
     endTournament() {
       this.wantToLeave = true
-      console.log('END TOURNAMENT')
-      this.$router.replace('/tournament-creation')
-    },
-
-    /**
-     * Alter the leave warning dialog viability state.
-     */
-    alterLeavePageDialogState() {
-      this.wantToLeave = false
-      this.leaveWarn = !this.leaveWarn
-      console.log('ALTER LEAVE PAGE DIALOG')
-      this.$router.push(this.pathVar).catch(res => { })
-    },
-
-    async testFunc() {
-      return new Promise((resolve, reject) => {
-        this.wantToLeave = resolve
-      })
+      this.$router.go(-1)
     }
   },
   watch: {
@@ -216,22 +196,6 @@ export default {
       if (active && !this.starting) {
         this.startTournament()
       }
-    }
-  },
-
-  async beforeRouteLeave(to, from, next) {
-    if (this.wantToLeave === null) {
-      console.log('wantToLeave === null')
-      this.leaveWarn = true
-      next(false)
-    } else if (this.wantToLeave) {
-      console.log('wantToLeave')
-      console.log(to)
-      next(true)
-    } else {
-      console.log('!wantToLeave')
-      this.wantToLeave = null
-      next(from.fullPath)
     }
   }
 }

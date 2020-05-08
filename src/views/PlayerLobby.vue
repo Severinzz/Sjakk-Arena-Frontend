@@ -21,6 +21,7 @@
           :tournament-end="tournamentEnd"
           :player-name="playerName"
           :points="points"
+          @leaveTournament="leaveDialog = true"
         />
       </div>
 
@@ -58,6 +59,16 @@
           </v-card>
         </v-dialog>
       </v-row>
+
+      <!-- Dialog shown when player tries to leave the tournament -->
+      <warning-dialog
+        title="Forlat turneringen"
+        action="forlate tuneringen"
+        :show-dialog="leaveDialog"
+        carry-on-button-text="Forlat turnering"
+        @carryOn="leaveTournament()"
+        @closeDialog="alterLeavePageDialogState"
+      />
     </v-container>
     <v-spacer/>
   </div>
@@ -67,15 +78,17 @@
 import PlayerWaiting from '../components/PlayerLobby/PlayerWaiting'
 import PlayerPlaying from '../components/PlayerLobby/PlayerPlaying'
 import storage from '../common/jwt.storage'
-import WEBSOCKET from '../common/websocketApi'
 import { mapActions, mapState } from 'vuex'
 import { API_SERVICE } from '../common/api'
+import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
+import WarningDialog from '../components/WarningDialog'
 
 export default {
   name: 'PlayerLobby',
   components: {
     PlayerWaiting,
-    PlayerPlaying
+    PlayerPlaying,
+    WarningDialog
   },
   data () {
     return {
@@ -83,9 +96,13 @@ export default {
       kickedMessage: '',
       countDownNr: 15,
       intervalId: '',
-      kickedDialog: false
+      kickedDialog: false,
+      pathVar: '/player-lobby'
     }
   },
+  mixins: [
+    leavePageWarningMixin
+  ],
   computed: {
     ...mapState({
       tournament: state => state.tournament,
@@ -106,7 +123,8 @@ export default {
       'subscribeToActiveGame',
       'subscribeToPoints',
       'subscribeToSuggestedResult',
-      'subscribeToPlayerKicked'
+      'subscribeToPlayerKicked',
+      'sendLeaveRequest'
     ]),
 
     /**
@@ -136,6 +154,16 @@ export default {
      */
     startCountDown() {
       this.intervalId = setInterval(this.countDown, 1000)
+    },
+
+    /**
+     * The player leaves the tournament
+     */
+    async leaveTournament() {
+      this.sendLeaveRequest(this.isTournamentActive).then(res => {
+        this.wantToLeave = true
+        this.$router.push('/')
+      })
     },
 
     /**
@@ -268,11 +296,6 @@ export default {
       await this.unsubscribePushNotification()
     }
     next()
-  },
-
-  destroyed () {
-    WEBSOCKET.unsubscribeAll()
-    WEBSOCKET.close()
   }
 }
 </script>

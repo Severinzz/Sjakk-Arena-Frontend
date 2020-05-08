@@ -119,7 +119,6 @@ function init() {
   socket = SockJS(config.API_URL + '/ws')
   client = Stomp.over(socket)
   initialised = true
-  client.debug = null
 }
 
 export default WEBSOCKET
