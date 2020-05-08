@@ -177,7 +177,7 @@ export default {
   components: { DateTime },
   data () {
     return {
-      startTime: undefined, // start time of tournament
+      startTime: '', // start time of tournament
       endTime: '', // end time of tournament
       currentDate: new Date().toISOString().slice(0, 10),
       endDate: '',
