@@ -159,7 +159,8 @@ export default {
   },
   computed: {
     ...mapState({
-      playerName: state => state.players.player.name
+      playerName: state => state.players.player.name,
+      validResult: state => state.games.resultDialog.valid
     }),
 
     /**
@@ -168,6 +169,14 @@ export default {
      */
     gameList() {
       return this.limit ? this.spillArray.slice(0, this.limit) : this.result
+    }
+  },
+  watch: {
+    validResult (validResult) {
+      // Refreshes the earlier result list when a result as been added and validated
+      if (validResult) {
+        this.loadResults()
+      }
     }
   },
   created () {
