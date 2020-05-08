@@ -128,11 +128,21 @@ export const actions = {
   },
 
   /*
-    Send image from user to backend.
+    Send image from user to backend
    */
   sendGameImage: (formData) => {
     let slug = 'Upload'
     return FILE_SERVICE.post(slug, formData).catch(err => {
+      throw err
+    })
+  },
+
+  /*
+    Sends request to download images associated with gameId
+   */
+  getGameImages: (gameId) => {
+    let slug = 'Download/' + gameId
+    return FILE_SERVICE.get(slug).catch(err => {
       throw err
     })
   },

@@ -38,6 +38,14 @@
             >
               Endre resultat
             </v-btn>
+          <v-btn
+            small
+            color="primary"
+            rounded
+            @click="getImages(Game.game_id)"
+          >
+            Last ned bilde(r)
+          </v-btn>
           </tbody>
         </table>
       </v-layout>
@@ -73,7 +81,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'subscribeToInvalidGames'
+      'subscribeToInvalidGames',
+      'getGameImages'
     ]),
     ...mapMutations([
       'removeInvalidGame'
@@ -88,6 +97,16 @@ export default {
     },
     resultAdded () {
       this.removeInvalidGame(this.index)
+    },
+    getImages (gameID) {
+      this.gameID = gameID
+      console.log('GameID = ' + gameID)
+      const axios = require('axios')
+      axios.get('/playerFile/Download/' + gameID).then(result => {
+        console.log('Getting image for game: ' + gameID)
+      }).catch(error => {
+        console.log(error.message)
+      })
     }
   },
   computed: {

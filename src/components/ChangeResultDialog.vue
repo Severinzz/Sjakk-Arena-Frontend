@@ -143,7 +143,6 @@ export default {
       // code adapted from: https://github.com/axios/axios/issues/1006
       const axios = require('axios')
       await axios.post('/playerFile/Upload', formData).then(result => {
-        console.log('Image uploaded sucessfully')
       }).catch(error => {
         console.log(error.message)
       })
