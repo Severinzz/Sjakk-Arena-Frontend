@@ -150,6 +150,7 @@
               </v-btn>
               <v-btn
                 class="btn"
+                id="clear-btn"
                 @click="clear"
               >
                 Tøm
