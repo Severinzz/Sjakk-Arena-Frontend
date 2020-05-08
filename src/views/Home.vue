@@ -15,28 +15,16 @@
                     link="/enter-tourney"
                   />
                   <menu-tile
-                    tileText="Bruk Sjakkur"
-                    color="orange"
-                    icon="fa-stopwatch"
-                    link="/chess-clock"
-                    />
-                  <menu-tile
                     tileText="Opprett turnering"
                     color="blue"
                     icon="fa-chess-board"
                     link="/tournament-creation"
                   />
                   <menu-tile
-                    tileText="Skriv inn adminID"
+                    tileText="Logg på med adminID"
                     color="#dbf436"
                     icon="fa-id-card"
                     link="/enter-AID"
-                  />
-                <menu-tile
-                    tileText="Hjelp"
-                    color="#36f44f"
-                    icon="fa-info-circle"
-                    link="/help"
                   />
               </v-row>
             </v-col>
@@ -65,3 +53,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  ul {
+    list-style: none;
+  }
+</style>

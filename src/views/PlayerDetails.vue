@@ -11,6 +11,15 @@
       >
         {{ removedMessage }}
       </v-alert>
+
+      <!-- If player is no longer in the tournament -->
+      <v-alert
+        class="info-box"
+        v-if="player !== null && !player.in_tournament" type="info"
+      >
+        Spilleren er ikke i turneringen lenger
+      </v-alert>
+
       <!-- player's name -->
       <h1
         class="name"
@@ -34,6 +43,7 @@
       />
       <v-btn
         class="error"
+        :disabled="(player === null ? false : !player.in_tournament) || removed || player === null"
         @click="kickDialog = true"
       >
         Fjern spiller
@@ -225,5 +235,15 @@ export default {
 
   .actions {
     justify-content: center;
+  }
+  .info-box{
+    display: inline-block;
+    margin: auto;
+    min-width: 410px;
+  }
+  @media(max-width: 410px){
+    .info-box{
+      min-width: 100%;
+    }
   }
 </style>
