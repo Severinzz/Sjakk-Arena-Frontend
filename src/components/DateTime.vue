@@ -173,8 +173,13 @@ export default {
      * Formats the date and time
      * @returns {string} Formatted date and time
      */
-    formattedDateTime() {
-      return this.date + '  ' + this.time
+    formattedDateTime: {
+      get() {
+        return this.date + '  ' + this.time
+      },
+      set(newDateTime) {
+        return newDateTime
+      }
     },
 
     /**
