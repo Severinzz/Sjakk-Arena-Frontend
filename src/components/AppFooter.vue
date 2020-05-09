@@ -6,16 +6,19 @@
       <router-list-element
         link="/help"
         text="Hjelp"
+        data-cy="help"
       />
       <!-- about page -->
       <router-list-element
         link="/about"
         text="Om Sjakkarena"
+        data-cy="about"
       />
       <!-- chess clock -->
       <router-list-element
         link="/chess-clock"
         text="Sjakkur"
+        data-cy="chess-clock"
       />
       </ul>
     </div>

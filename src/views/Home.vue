@@ -13,18 +13,21 @@
                     color="red"
                     icon="fa-chess-knight"
                     link="/enter-tourney"
+                    data-cy="play"
                   />
                   <menu-tile
                     tileText="Opprett turnering"
                     color="blue"
                     icon="fa-chess-board"
                     link="/tournament-creation"
+                    data-cy="create-torunament"
                   />
                   <menu-tile
                     tileText="Logg på med adminID"
                     color="#dbf436"
                     icon="fa-id-card"
                     link="/enter-AID"
+                    data-cy="login-adminID"
                   />
               </v-row>
             </v-col>
