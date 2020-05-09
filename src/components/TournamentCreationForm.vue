@@ -218,7 +218,8 @@ export default {
   methods: {
     ...mapActions([
       'sendTournament',
-      'sendStartRequest'
+      'sendStartRequest',
+      'fetchTournament'
     ]),
     ...mapMutations([
       'clearPlayers'
@@ -233,35 +234,31 @@ export default {
     /**
      * Creates and starts the tournament described by the form data
      */
-    createAndStartTournament() {
-      this.submit()
-        // Grabs the tournament from store so the correct tournament_id is used in the dynamic link.
-        .then(res => {
-          this.startTournament().catch(err => {
-            this.hideLoadingCircleAndDisplayErrorMessage(err)
-          })
-        })
-        .catch(err => {
-          if (err.message !== 'invalidFormData') {
-            this.hideLoadingCircleAndDisplayErrorMessage(err)
-          }
-        })
+    async createAndStartTournament() {
+      try {
+        await this.submit()
+        await this.sendStartRequest()
+        await this.fetchTournament()
+        await this.$router.replace('/tournament/' + this.tournament.user_id)
+      } catch (err) {
+        if (err.message !== 'invalidFormData') {
+          this.hideLoadingCircleAndDisplayErrorMessage(err)
+        }
+      }
     },
     /**
      * Creates the tournament described by the form data
      * Routes to the tournament lobby if the tournament is successfully created
      */
-    createTournament () {
-      this.submit()
-        .then(res => {
-          // Grabs the tournament from store so the correct tournament_id is used in the dynamic link.
-          this.$router.push('/lobby/' + this.tournament.user_id)
-        })
-        .catch(err => {
-          if (err.message !== 'invalidFormData') {
-            this.hideLoadingCircleAndDisplayErrorMessage(err)
-          }
-        })
+    async createTournament () {
+      try {
+        await this.submit()
+        await this.$router.push('/lobby/' + this.tournament.user_id)
+      } catch (err) {
+        if (err.message !== 'invalidFormData') {
+          this.hideLoadingCircleAndDisplayErrorMessage(err)
+        }
+      }
     },
     /**
      * Submit the form to the backend.
@@ -276,16 +273,6 @@ export default {
       } else {
         throw new Error('invalidFormData')
       }
-    },
-    /**
-     * Starts the tournament described by the form data
-     * Routes to the tournament site if the tournament is successfully started
-     * @returns A promise when after a startRequest is sent and handled by the server
-     */
-    startTournament() {
-      return this.sendStartRequest().then(res => {
-        this.$router.replace('/tournament/' + this.tournament.user_id)
-      })
     },
     /**
      * Hides the loading circle and displays a error message
@@ -320,7 +307,7 @@ export default {
     async setupPayloadAndSend() {
       let payload = this.setupPayload()
       // Sends the given information in the form to the server.
-      return this.sendTournament(payload)
+      await this.sendTournament(payload)
     },
     /**
      * Sets up the information to be sent to the server
