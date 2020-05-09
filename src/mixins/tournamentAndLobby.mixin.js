@@ -7,6 +7,5 @@ export const tournamentAndLobbyMixin = {
     this.pathVar = this.pathVar + this.tournament.user_id
     this.subscribeToTournamentActive({ userRole: 'tournament' })
     this.subscribeToPlayers(this.isTournamentActive)
-    this.setupBrowserWarning()
   }
 }

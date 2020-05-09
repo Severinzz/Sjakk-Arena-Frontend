@@ -66,5 +66,8 @@ export const PLAYER_SERVICE = {
   },
   put(slug, payload) {
     return API_SERVICE.put(this.path, slug, payload)
+  },
+  delete(slug) {
+    return API_SERVICE.delete(this.path, slug)
   }
 }
