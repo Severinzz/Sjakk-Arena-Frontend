@@ -371,6 +371,7 @@ export default {
       this.clear()
       this.$router.push('/')
     },
+
     /**
      * Handles the end date and end time changed event.
      * @param value The new end date and end time values.
