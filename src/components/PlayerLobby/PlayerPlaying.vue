@@ -60,7 +60,7 @@
             <!-- Leave tournament -->
             <oval-button
               text="Forlat turnering"
-              @buttonClicked="leaveDialog = true"
+              @buttonClicked="leaveTournament"
             />
 
             <!-- break -->
@@ -215,15 +215,6 @@
             @closeDialog="suggestionIsSent = false"
           />
 
-          <!-- Dialog shown when player tries to leave the tournament -->
-          <warning-dialog
-          title="Forlat turneringen"
-          action="forlate tuneringen"
-          :show-dialog="leaveDialog"
-          carry-on-button-text="Forlat turnering"
-          @carryOn="leaveTournament()"
-          @closeDialog="leaveDialog = false"
-          />
           <!-- playtime -->
           <p
             v-if="tournamentEnd"
@@ -242,8 +233,6 @@ import PlayerPaired from './PlayerPaired'
 import PlayerNotPaired from './PlayerNotPaired'
 import EarlierResults from './EarlierResults'
 import { mapActions, mapState, mapMutations } from 'vuex'
-import WarningDialog from '../WarningDialog'
-import { leavePageWarningMixin } from '../../mixins/leavePageWarning.mixin'
 import { playerMixin } from '../../mixins/player.mixin'
 import InformationDialog from '../InformationDialog'
 import OvalButton from '../OvalButton'
@@ -252,27 +241,23 @@ export default {
   name: 'PlayerPlaying',
   components: {
     InformationDialog,
-    WarningDialog,
     PlayerPaired,
     PlayerNotPaired,
     EarlierResults,
     OvalButton
   },
   mixins: [
-    leavePageWarningMixin,
     playerMixin
   ],
   data() {
     return {
       resultDialog: false,
-      leaveDialog: false,
       pastResults: false,
       pause: false,
       pauseButtonText: 'Ta pause',
       pastResultsText: 'Tidligere parti',
       result: '',
-      suggestionIsSent: false,
-      pathVar: 'player-lobby'
+      suggestionIsSent: false
     }
   },
   computed: {
@@ -282,8 +267,7 @@ export default {
       opponentsDisagree: state => state.games.resultDialog.opponents_disagree,
       suggestedResult: state => state.games.resultDialog.suggested_result,
       gameId: state => state.games.resultDialog.game_id,
-      validResult: state => state.games.resultDialog.valid,
-      active: state => state.tournament.activeTournament
+      validResult: state => state.games.resultDialog.valid
     }),
 
     /**
@@ -305,7 +289,6 @@ export default {
   },
   methods: {
     ...mapActions([
-      'sendLeaveRequest',
       'sendGameResult',
       'sendPauseRequest',
       'sendUnpauseRequest',
@@ -317,6 +300,10 @@ export default {
       'setSuggestedResult',
       'setOpponentsDisagree'
     ]),
+
+    leaveTournament() {
+      this.$emit('leaveTournament')
+    },
 
     /**
      * Register the result of the currently active game
@@ -352,15 +339,6 @@ export default {
     },
 
     /**
-     * The player leaves the tournament
-     */
-    async leaveTournament() {
-      this.sendLeaveRequest(this.active).then(res => {
-        this.$router.push('/')
-      })
-    },
-
-    /**
      * Alter the break state. The player is either taking a break or not.
      */
     alterBreakState() {
@@ -387,13 +365,6 @@ export default {
     },
 
     /**
-     * Changes the visibility state of the leave dialog.
-     */
-    alterLeavePageDialogState() {
-      this.leaveDialog = !this.leaveDialog
-    },
-
-    /**
      * Open the chess clock in a new tab
      */
     showChessClock() {
@@ -407,9 +378,6 @@ export default {
         this.setPaired(false)
       }
     }
-  },
-  mounted() {
-    this.setupBrowserWarning()
   }
 }
 </script>

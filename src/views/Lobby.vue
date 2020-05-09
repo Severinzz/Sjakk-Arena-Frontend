@@ -70,7 +70,7 @@
     <warning-dialog
       title="Avslutt turneringen"
       action="avslutte tuneringen"
-      :show-dialog="leaveWarn"
+      :show-dialog="leaveDialog"
       carry-on-button-text="Avslutt turnering"
       @carryOn="endTournament()"
       @closeDialog="alterLeavePageDialogState"
@@ -85,7 +85,6 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import WarningDialog from '@/components/WarningDialog'
 import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
 import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
-import WEBSOCKET from '../common/websocketApi'
 
 export default {
   name: 'Lobby',
@@ -102,7 +101,6 @@ export default {
     return {
       intervalId: '',
       active: false,
-      leaveWarn: false,
       pathVar: 'lobby/',
       alertError: false,
       starting: false
@@ -159,6 +157,7 @@ export default {
      */
     startTournament() {
       this.starting = true
+      this.wantToLeave = true
       this.sendStartRequest()
         .then(res => {
           this.$router.replace('/tournament/' + this.tournament.user_id)
@@ -173,14 +172,8 @@ export default {
      * Ends the tournament
      */
     endTournament() {
-      this.$router.push('/')
-    },
-
-    /**
-     * Alter the leave warning dialog viability state.
-     */
-    alterLeavePageDialogState() {
-      this.leaveWarn = !this.leaveWarn
+      this.wantToLeave = true
+      this.$router.go(-1)
     }
   },
   watch: {
@@ -204,15 +197,6 @@ export default {
         this.startTournament()
       }
     }
-  },
-
-  beforeRouteLeave(to, from, next) {
-    if (to.name === 'tournament') {
-      WEBSOCKET.unsubscribe('tournament/players')
-    } else {
-      WEBSOCKET.unsubscribeAll()
-    }
-    next()
   }
 }
 </script>

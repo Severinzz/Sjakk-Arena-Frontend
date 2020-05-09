@@ -31,7 +31,7 @@
             <v-btn id="Stop"
                    color="error"
                    class="mr-4"
-                   @click="endDialog = true"
+                   @click="leaveDialog = true"
             >
               Avslutt
             </v-btn>
@@ -75,10 +75,10 @@
     </v-row>
   </v-container>
   <warning-dialog
-  :title="endDialogTitle"
+  :title="leaveDialogTitle"
   action="avslutte turneringen"
   carry-on-button-text="Avslutt turnering"
-  :show-dialog="endDialog"
+  :show-dialog="leaveDialog"
   @carryOn="endTournament"
   @closeDialog="alterLeavePageDialogState"
   />
@@ -147,8 +147,7 @@ export default {
           align: 'end',
           value: 'start'
         }],
-      endDialog: false,
-      endDialogTitle: 'Avslutt turnering',
+      leaveDialogTitle: 'Avslutt turnering',
       pathVar: 'tournament/'
     }
   },
@@ -241,16 +240,9 @@ export default {
      */
     endTournament() {
       this.sendEndRequest().then(res => {
+        this.wantToLeave = true
         this.$router.push('/')
       })
-    },
-
-    /**
-     * Show the end tournament confirmation dialog.
-     */
-    alterLeavePageDialogState() {
-      this.endDialog = !this.endDialog
-      this.endDialogTitle = 'Avslutt turnering'
     }
   },
   watch: {
@@ -260,8 +252,8 @@ export default {
      */
     isTournamentActive: function(active) {
       if (!active) {
-        this.endDialog = true
-        this.endDialogTitle = 'Tidspunktet for turneringsslutt er passert'
+        this.leaveDialogTitle = 'Tidspunktet for turneringsslutt er passert'
+        this.leaveDialog = true
       }
     }
   },
