@@ -126,7 +126,7 @@
                   <!-- End time and date-->
                   <date-time
                     v-if="useEndTime"
-                    :min-time="startTime"
+                    :min-time="startTime === '' ? undefined : startTime"
                     :rules="endTimeRules"
                     :event-name="'endDateTime'"
                     @endDateTime="onEndDateTime"
@@ -230,7 +230,10 @@ export default {
      */
     clear() {
       this.$refs.form.reset()
+      this.endTime = ''
+      this.endDate = ''
     },
+
     /**
      * Creates and starts the tournament described by the form data
      */
@@ -246,6 +249,7 @@ export default {
         }
       }
     },
+
     /**
      * Creates the tournament described by the form data
      * Routes to the tournament lobby if the tournament is successfully created
@@ -260,6 +264,7 @@ export default {
         }
       }
     },
+
     /**
      * Submit the form to the backend.
      * @returns A promise when the tournament information is sent and handled by the server
@@ -274,6 +279,7 @@ export default {
         throw new Error('invalidFormData')
       }
     },
+
     /**
      * Hides the loading circle and displays a error message
      */
@@ -281,12 +287,14 @@ export default {
       this.hideLoadingCircle()
       this.displayErrorMessage(err)
     },
+
     /**
      * Hides the loading circle
      */
     hideLoadingCircle() {
       this.isLoading = false
     },
+
     /**
      * Displays the specified error's message
      * @param error
@@ -295,12 +303,14 @@ export default {
       this.alertError = true
       this.errorMessage = err + '. Prøv igjen senere'
     },
+
     /**
      * Validates the form.
      */
     validate() {
       return this.$refs.form.validate()
     },
+
     /**
      * Sets up the information to be sent to the server and sends it
      */
@@ -309,6 +319,7 @@ export default {
       // Sends the given information in the form to the server.
       await this.sendTournament(payload)
     },
+
     /**
      * Sets up the information to be sent to the server
      */
@@ -324,12 +335,13 @@ export default {
         'early_start': this.earlyStart
       }
     },
+
     /**
      * Checks if end time is after start time and not before or equal
      * @returns {boolean} True if start time is equal or smaller than end time.
      */
     checkTime() {
-      if (this.endTime === undefined || this.endDate !== this.currentDate) { return true }
+      if (this.endTime === undefined || this.endDate !== this.currentDate || this.startTime === undefined) { return true }
       let startTimeH = this.startTime.toString().split(':')[0]
       let endTimeH = this.endTime.toString().split(':')[0]
       if (parseInt(startTimeH) < parseInt(endTimeH)) {
@@ -359,6 +371,7 @@ export default {
       this.clear()
       this.$router.push('/')
     },
+
     /**
      * Handles the end date and end time changed event.
      * @param value The new end date and end time values.
