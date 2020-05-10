@@ -1,6 +1,6 @@
 // https://docs.cypress.io/api/introduction/api.html
 
-describe('', () => {
+describe('Home page', () => {
   beforeEach(function visitRootPage() {
     cy.visit('/')
   })
@@ -9,27 +9,27 @@ describe('', () => {
     cy.get('[data-cy=play]').contains('Spill turnering').should('be.visible')
     cy.get('[data-cy=create-torunament]').contains('Opprett turnering').should('be.visible')
     cy.get('[data-cy=login-adminID]').contains('Logg på med adminID').should('be.visible')
-    cy.get('[data-cy=help] > .router-link').contains('Hjelp').should('be.visible')
-    cy.get('[data-cy=about] > .router-link').contains('Om Sjakkarena').should('be.visible')
-    cy.get('[data-cy=chess-clock] > .router-link').contains('Sjakkur').should('be.visible')
+    cy.get('[data-cy=help]').contains('Hjelp').should('be.visible')
+    cy.get('[data-cy=about]').contains('Om Sjakkarena').should('be.visible')
+    cy.get('[data-cy=chess-clock]').contains('Sjakkur').should('be.visible')
   })
 
   it('Play navigates to enter-tourney', () => {
     cy.get('[data-cy=play]').click()
     cy.location('pathname').should('eq', '/enter-tourney')
-    cy.wait(1000)
+    cy.wait(500)
   })
 
   it('Create-tournament navigates to tournament-creation', () => {
     cy.get('[data-cy=create-torunament]').click()
     cy.location('pathname').should('eq', '/tournament-creation')
-    cy.wait(1000)
+    cy.wait(500)
   })
 
   it('Login-adminID navigates to enter-AID', () => {
     cy.get('[data-cy=login-adminID]').click()
     cy.location('pathname').should('eq', '/enter-AID')
-    cy.wait(1000)
+    cy.wait(500)
   })
 
   it('Help in footer opens new tab', () => {

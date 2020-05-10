@@ -49,6 +49,7 @@
                   type="text"
                   :rules="adminIdRules"
                   required
+                  data-cy="adminId"
                 />
                 <div id="error">{{ errorMessage }}</div>
               </v-form>
@@ -60,7 +61,12 @@
                 >
                   Send inn
                 </v-btn>
-                <v-btn to="/">Avbryt</v-btn>
+                <v-btn
+                  to="/"
+                  data-cy="cancel"
+                >
+                  Avbryt
+                </v-btn>
               </v-card-actions>
             </v-card-text>
           </v-card>
