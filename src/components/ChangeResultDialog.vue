@@ -139,7 +139,7 @@ export default {
       }
       const formData = new FormData()
       formData.append('Image', this.selectedFile)
-      // kjøre axios i vue filene slik som nå er imot våre kodeformer. Det er problemer med axios som tvinger dette; diskutert i lenken under. (vær så god å prøv selv)
+      // kjøre axios i vue filene slik som nå er imot våre kodeformer.
       // code adapted from: https://github.com/axios/axios/issues/1006
       const axios = require('axios')
       await axios.post('/playerFile/Upload', formData).then(result => {

@@ -101,7 +101,9 @@ export default {
       this.gameID = gameID
       console.log('GameID = ' + gameID)
       const axios = require('axios')
+      // kjøre axios i vue filene slik som nå er imot våre kodeformer.
       axios.get('/playerFile/Download/' + gameID, { responseType: 'arraybuffer' }).then(({ data }) => {
+        // adapted from: https://jetrockets.pro/blog/l8dadq8oac-how-to-download-files-with-axios
         const downloadUrl = window.URL.createObjectURL(new Blob([data]))
         const link = document.createElement('a')
         link.href = downloadUrl
