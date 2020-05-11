@@ -1,4 +1,4 @@
-import { PLAYER_SERVICE, TOURNAMENT_SERVICE } from '../../common/api'
+import { API_SERVICE, PLAYER_SERVICE, TOURNAMENT_SERVICE } from '../../common/api'
 import WEBSOCKET_SERVICE from '../../common/websocketApi'
 const LOADING_MESSAGE = 'loading....'
 
@@ -222,6 +222,25 @@ export const actions = {
     }
     let sub = { path: 'tournament/games/invalid', callback: invalidGameCallback }
     WEBSOCKET_SERVICE.connect(sub)
+  },
+  /**
+   * Upload a file to the server
+   *
+   * @param commit
+   * @param file The file to upload
+   */
+  uploadFile ({ commit }, file) {
+    if (!file) {
+      return console.log('Please choose a image to upload.')
+    }
+    let formData = new FormData()
+    formData.append('Image', file)
+    console.log(file)
+    API_SERVICE.post('/playerFile/Upload', formData).then(result => {
+      console.log('Image uploaded sucessfully')
+    }).catch(error => {
+      console.log(error.message)
+    })
   }
 }
 export const getters = {
