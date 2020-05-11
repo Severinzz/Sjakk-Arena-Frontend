@@ -10,8 +10,8 @@
             min-width="230px"
             class="ma-2"
     >
-      <v-card-title class="justify-center">
-        <span>{{ tileText }}</span>
+      <v-card-title class="justify-center text-center text-no-wrap">
+        {{ tileText }}
       </v-card-title>
       <div id="tile-icon">
         <i :class="[commonClass, icon]"></i>

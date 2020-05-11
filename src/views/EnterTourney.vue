@@ -42,6 +42,14 @@
                                   type="number"
                     />
                     <v-spacer></v-spacer>
+                    <v-progress-circular
+                      class="loadingCircle"
+                      :size="50"
+                      :width="7"
+                      color="purple"
+                      indeterminate
+                      v-if="isLoading === true"
+                    />
                     <v-text-field v-model="playerName"
                                   label="Spillernavn"
                                   placeholder="Ola Nordmann"
@@ -84,22 +92,31 @@ export default {
       playerName: '',
       errorAlertMessage: '',
       errorMessage: '',
-      alertError: false
+      alertError: false,
+      isLoading: false
     }
   },
   methods: {
     ...mapActions([
       'sendPlayer'
     ]),
+
+    /**
+     * Sends the game-pin and wanted nickname to the backend.
+     * @returns {Promise<void>}
+     */
     async submit() {
+      this.isLoading = true
       let payload = {
         'name': this.playerName,
         'tournament': parseInt(this.gamePin)
       }
       await this.sendPlayer(payload).then(res => {
+        this.isLoading = false
         // TODO: Dynamic routing
         this.$router.push('/player-lobby')
       }).catch(err => {
+        this.isLoading = false
         if (err.response !== undefined) {
           this.alertError = false
           this.handleErrorResponse(err.response)
@@ -109,6 +126,11 @@ export default {
         }
       })
     },
+
+    /**
+     * Sets the error message
+     * @param response Axios error.response object
+     */
     handleErrorResponse (response) {
       if (response.status === 409) {
         this.errorMessage = 'Navnet er tatt, prøv et nytt ett!'
@@ -116,6 +138,10 @@ export default {
         this.errorMessage = 'Game pin finnes ikke!'
       }
     },
+
+    /**
+     * Validates the form
+     */
     validate() {
       if (this.$refs.form.validate()) {
         this.submit()
@@ -145,5 +171,9 @@ export default {
 <style scoped>
   #error{
     color: #FF5252;
+  }
+  .loadingCircle{
+    position: absolute;
+    margin: -3% 0 0% 40%;
   }
 </style>

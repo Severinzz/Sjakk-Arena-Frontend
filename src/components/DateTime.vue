@@ -2,7 +2,7 @@
   <div class="dateTimeContainer">
   <v-row>
     <v-col>
-      <!-- Start time -->
+      <!-- Menu containing the date and time pickers -->
       <v-menu
         ref="menu"
         v-model="menuOpen"
@@ -27,6 +27,8 @@
           >
           </v-text-field>
         </template>
+
+        <!-- Date picker -->
         <v-date-picker
           full-width
           v-if="dateMenu"
@@ -54,6 +56,8 @@
             Clear
           </v-btn>
         </v-date-picker>
+
+        <!-- Time picker -->
         <v-time-picker
           v-if="timeMenu"
           v-model="time"
@@ -128,29 +132,60 @@ export default {
     }
   },
   methods: {
+
+    /**
+     * Open the time menu and close date menu
+     */
     openTimeMenu() {
       this.dateMenu = false
       this.timeMenu = true
     },
+
+    /**
+     * Open the date menu and close time menu
+     */
     openDateMenu() {
       this.dateMenu = true
       this.timeMenu = false
     },
+
+    /**
+     * Clears the date and time.
+     */
     clearMenu() {
       this.date = ''
       this.time = ''
       this.dateTime = ''
       this.$emit(this.eventName, this.dateTime)
     },
+
+    /**
+     * Tells parent component that the date or time has changed.
+     */
     onChange() {
       this.dateTime = this.date + 't' + this.time
       this.$emit(this.eventName, this.dateTime)
     }
   },
   computed: {
-    formattedDateTime() {
-      return this.date + '  ' + this.time
+
+    /**
+     * Formats the date and time
+     * @returns {string} Formatted date and time
+     */
+    formattedDateTime: {
+      get() {
+        return this.date + '  ' + this.time
+      },
+      set(newDateTime) {
+        return newDateTime
+      }
     },
+
+    /**
+     * Returns the minimum value the time can be.
+     * @returns {string|null} Minimum value the time can be. Null if it can be whatever.
+     */
     calcMinTime() {
       let currentDate = new Date().toISOString().slice(0, 10)
       if (this.date === currentDate) {

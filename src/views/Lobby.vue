@@ -11,6 +11,8 @@
     </v-alert>
     <v-row>
       <v-col cols="2">
+
+        <!-- Information side bar -->
         <div class="info-wrapper">
           <tournament-info
             :tournament="this.tournament"
@@ -37,6 +39,7 @@
           </div>
         </div>
       </v-col>
+
       <!-- The player list. Offset to better fit smaller screens -->
       <v-col
         offset="5"
@@ -49,12 +52,12 @@
           align="start"
           justify="start"
           class="text-center"
-          v-if="this.getAllPlayers.length !== undefined"
+          v-if="this.getAllPlayersReversed.length !== undefined"
         >
           <!-- The individual players -->
             <player
               class="player"
-              v-for="(player, index) in this.getAllPlayers"
+              v-for="(player, index) in this.getAllPlayersReversed"
               @click.native="handleRemovePlayer(player, player.user_id)"
               :player-name="player.name"
               :player-piece="player.icon"
@@ -67,7 +70,7 @@
     <warning-dialog
       title="Avslutt turneringen"
       action="avslutte tuneringen"
-      :show-dialog="leaveWarn"
+      :show-dialog="leaveDialog"
       carry-on-button-text="Avslutt turnering"
       @carryOn="endTournament()"
       @closeDialog="alterLeavePageDialogState"
@@ -82,7 +85,6 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import WarningDialog from '@/components/WarningDialog'
 import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
 import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
-import WEBSOCKET from '../common/websocketApi'
 
 export default {
   name: 'Lobby',
@@ -99,15 +101,15 @@ export default {
     return {
       intervalId: '',
       active: false,
-      leaveWarn: false,
       pathVar: 'lobby/',
-      alertError: false
+      alertError: false,
+      starting: false
     }
   },
   computed: {
     ...mapGetters([
       'getPlayerCount',
-      'getAllPlayers'
+      'getAllPlayersReversed'
     ]),
     ...mapState({
       tournament: state => state.tournament.tournament,
@@ -127,52 +129,74 @@ export default {
       'subscribeToPlayers',
       'subscribeToTournamentActive'
     ]),
+
+    /**
+     * Removes the given player from the tournament
+     * @param player Player to remove
+     * @param id Id of the player to remove.
+     */
     handleRemovePlayer (player, id) {
       let payload = {
         player: player,
         id: id,
-        msg: '' // Custom message player should receive when they are kicked. Is optional/future feature.
+        msg: '' // Custom message player could receive when they are kicked. Message not implemented for lobby.
       }
       this.removePlayer(payload)
     },
+
+    /**
+     * Cancel the tournament. Navigates back.
+     * TODO: Send cancel request to backend.
+     */
     cancel() {
       this.$router.go(-1)
     },
+
+    /**
+     * Starts the tournament
+     */
     startTournament() {
+      this.starting = true
+      this.wantToLeave = true
       this.sendStartRequest()
         .then(res => {
           this.$router.replace('/tournament/' + this.tournament.user_id)
         }).catch(err => {
+          this.starting = false
           this.alertError = true
           this.errorMessage = err + '. Prøv igjen senere!'
         })
     },
+
+    /**
+     * Ends the tournament
+     */
     endTournament() {
-      this.$router.push('/')
-    },
-    alterLeavePageDialogState() {
-      this.leaveWarn = !this.leaveWarn
+      this.wantToLeave = true
+      this.$router.go(-1)
     }
   },
   watch: {
+    /**
+     * Watches the player count, starts the tournament when the count is greater than or equal to 2.
+     * Only happens if the tournament got the early_start value set to true.
+     * @param playerCount
+     */
     playerCount: function(playerCount) {
       if (this.tournament.early_start && !this.tournament.finished && playerCount >= 2) {
         this.startTournament()
       }
     },
+
+    /**
+     * Watches the active part of the tournament. Starts when set to true.
+     * @param active
+     */
     isTournamentActive: function (active) {
-      if (active) {
+      if (active && !this.starting) {
         this.startTournament()
       }
     }
-  },
-  beforeRouteLeave(to, from, next) {
-    if (to.name === 'tournament') {
-      WEBSOCKET.unsubscribe('tournament/players')
-    } else {
-      WEBSOCKET.unsubscribeAll()
-    }
-    next()
   }
 }
 </script>
@@ -183,14 +207,13 @@ export default {
   }
 
    .numberOfPlayers {
-    font-size: 1.5em;
+    font-size: 1.8em;
   }
 
   .info-wrapper {
     text-align: center;
     display: inline-block;
     height: 100%;
-    padding-top: 20%;
     margin: auto auto auto 10%;
   }
 

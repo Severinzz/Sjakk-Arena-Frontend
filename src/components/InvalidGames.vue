@@ -34,7 +34,7 @@
               small
               color="primary"
               rounded
-              @click="editGame(Game.game_id, index)"
+              @click="editGame(Game.game_id)"
             >
               Endre resultat
             </v-btn>
@@ -56,7 +56,6 @@
       :gameId="gameID"
       :dialogBox="dialogBox"
       @closeResultDialog="alterResultDialogState"
-      @resultAdded="resultAdded"
     />
   </span>
 </template>
@@ -75,8 +74,7 @@ export default {
       timeInterval: 5000,
       dialogBox: false,
       result: '',
-      gameID: 0,
-      index: ''
+      gameID: 0
     }
   },
   methods: {
@@ -86,11 +84,19 @@ export default {
     ...mapMutations([
       'removeInvalidGame'
     ]),
-    editGame (gameID, index) {
+
+    /**
+     * Set the gameID in the data values
+     * @param gameID Id of the clicked game.
+     */
+    editGame (gameID) {
       this.gameID = gameID
-      this.index = index
       this.alterResultDialogState()
     },
+
+    /**
+     * Alter viability state of the dialog.
+     */
     alterResultDialogState () {
       this.dialogBox = !this.dialogBox
     },

@@ -5,10 +5,35 @@ import EnterTourney from '../views/EnterTourney'
 import EnterAdminID from '../views/EnterAdminID'
 import TournamentCreation from '../views/TournamentCreation.vue'
 import PlayerLobby from '../views/PlayerLobby'
+import jwtService from '../common/jwt.storage'
 
 Vue.use(VueRouter)
 
 const DEFAULT_TITLE = 'Sjakk Arena'
+
+function routeGuard(from, to, next) {
+  let auth = jwtService.getToken()
+  if (auth === null) {
+    switch (from.name) {
+      case 'lobby':
+        next({ name: 'tournamentCreation' })
+        break
+      case 'playerLobby':
+        next({ name: 'Enter Tournament' })
+        break
+      case 'tournament':
+        next({ name: 'Enter AdminID' })
+        break
+      case 'playerDetails':
+        next({ name: 'Enter AdminID' })
+        break
+      default:
+        next()
+    }
+  } else {
+    next()
+  }
+}
 
 const routes = [
   {
@@ -37,12 +62,13 @@ const routes = [
   },
   {
     path: '/lobby/:id',
-    name: 'Lobby',
+    name: 'lobby',
     // Lazy-load for better performance.
     meta: {
       title: 'Lobby - '
     },
-    component: () => import('../views/Lobby')
+    component: () => import('../views/Lobby'),
+    beforeEnter: routeGuard
   },
   {
     // Add enter player-details for tournament from views for the router to use.
@@ -79,7 +105,8 @@ const routes = [
     meta: {
       title: 'Spiller turnering'
     },
-    component: PlayerLobby
+    component: PlayerLobby,
+    beforeEnter: routeGuard
   },
   {
     path: '/tournament/:id',
@@ -87,16 +114,18 @@ const routes = [
     meta: {
       title: 'Turnering - '
     },
-    component: () => import('../views/Tournament')
+    component: () => import('../views/Tournament'),
+    beforeEnter: routeGuard
   },
   {
     path: '/tournament/player/:index',
-    name: 'playerdetails',
-    // Finne en måte å bruke spiller sitt navn?
+    name: 'playerDetails',
+    // TODO: Finne en måte å bruke spiller sitt navn som dynamisk route?
     meta: {
       title: 'Spiller - '
     },
-    component: () => import('../views/PlayerDetails')
+    component: () => import('../views/PlayerDetails'),
+    beforeEnter: routeGuard
   },
   {
     path: '/chess-clock',
@@ -105,14 +134,27 @@ const routes = [
       title: 'sjakkur'
     },
     component: () => import('../views/ChessClock')
+  },
+  {
+    path: '/help',
+    name: 'help',
+    meta: {
+      title: 'Hjelp'
+    },
+    component: () => import('../views/Help')
   }
 ]
 
 const router = new VueRouter({
+  mode: 'history',
   routes
 })
 
-// Adapted from https://stackoverflow.com/a/45462996
+/**
+ * Adapted from https://stackoverflow.com/a/45462996
+ *
+ * Add title to all pages with meta: { title: } defined.
+ */
 router.beforeEach((to, from, next) => {
   if (to.meta.title !== undefined) {
     let dynamicTitle = to.params.id !== undefined ? to.params.id : ''

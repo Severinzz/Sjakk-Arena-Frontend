@@ -7,8 +7,6 @@ import vuetify from './plugins/vuetify'
 
 Vue.config.productionTip = false
 
-// TODO CHECK IF POSSIBLE TO ADD VUEAXIOS AND AXIOS HERE, REDUCE NEEDS OF IMPORTS ELSE WHERE
-
 new Vue({
   router,
   store,

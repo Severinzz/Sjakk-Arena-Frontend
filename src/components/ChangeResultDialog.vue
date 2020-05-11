@@ -104,6 +104,10 @@ export default {
     ...mapActions([
       'hostSendGameResult'
     ]),
+
+    /**
+     * Send the given result to the server.
+     */
     registerResult () {
       let param = this.gameId + '/' + this.result
       this.hostSendGameResult(param).then(res => {
@@ -118,11 +122,20 @@ export default {
         }
       })
     },
+
+    /**
+     * Alter the state of the visibility state of the result dialog.
+     */
     alterResultDialogState() {
       this.error = false
       this.errorMessage = ''
       this.$emit('closeResultDialog')
     },
+
+    /**
+     * Display network error to the user.
+     * @param response
+     */
     handleErrorResponse(response) {
       let status = response.status
       status === 400 ? this.errorMessage = 'http ' + status + ': Spill ikke funnet'
@@ -152,7 +165,4 @@ export default {
 </script>
 
 <style scoped>
-  #error{
-    color: #FF5252;
-  }
 </style>

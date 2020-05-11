@@ -1,6 +1,7 @@
 <template>
   <div class="about">
     <div class="heading">
+      <!-- Alert box used for network errors -->
       <v-alert
         class="sucsess"
         v-if="removed"
@@ -10,12 +11,23 @@
       >
         {{ removedMessage }}
       </v-alert>
+
+      <!-- If player is no longer in the tournament -->
+      <v-alert
+        class="info-box"
+        v-if="player !== null && !player.in_tournament" type="info"
+      >
+        Spilleren er ikke i turneringen lenger
+      </v-alert>
+
+      <!-- player's name -->
       <h1
         class="name"
         v-if="player !== null"
       >
         {{ player.name }}
       </h1>
+      <!-- player's points -->
       <h2
         class="points"
         v-if="player !== null"
@@ -23,14 +35,15 @@
         Poeng: {{ player.points }}
       </h2>
     </div>
+    <!-- Table containing the games of the player -->
     <div>
       <Table
-        :objectList="playerList"
+        :objectList="games"
         :headingList="headingList"
-        @entryClicked="handleEntryClicked"
       />
       <v-btn
         class="error"
+        :disabled="(player === null ? false : !player.in_tournament) || removed || player === null"
         @click="kickDialog = true"
       >
         Fjern spiller
@@ -40,6 +53,7 @@
       class="justify-center"
       align="center"
     >
+      <!-- A dialog box the tournament host can use to remove a player from the tournament -->
       <v-dialog
         v-model="kickDialog"
         max-width="650px"
@@ -56,7 +70,7 @@
             </v-text-field>
           </v-card-text>
           <v-card-actions class="actions">
-            <!-- User has the option to either leave or go back -->
+            <!-- Kick player dialog buttons. -->
             <v-btn
               text
               class="error"
@@ -87,74 +101,30 @@ export default {
   data() {
     return {
       player: null,
-      removed: false,
-      removedMessage: '',
-      msg: '',
-      kickDialog: false,
-      color: '',
-      icon: '',
-      // TODO: FETCH FROM SERVER
-      playerList: [{
-        id: 1,
-        table: 1,
-        name: 'Magnus',
-        opponent: 'Anand',
-        score: '1-0',
-        start: '20:30'
-      }, {
-        id: 2,
-        table: 1,
-        name: 'Magnus',
-        opponent: 'Ding Liren',
-        score: '0-1',
-        start: '20:30'
-      }, {
-        id: 3,
-        table: 1,
-        name: 'Magnus',
-        opponent: 'Maxim VL',
-        score: '0-1',
-        start: '20:30'
-      }, {
-        id: 4,
-        table: 1,
-        name: 'Magnus',
-        opponent: 'Wang Hao',
-        score: '1-0',
-        start: '20:30'
-      }, {
-        id: 5,
-        table: 1,
-        name: 'Magnus',
-        opponent: '(ノಠ益ಠ)ノ彡┻━┻',
-        score: '0.5-0.5',
-        start: '20:30'
-      }, {
-        id: 6,
-        table: 1,
-        name: 'Magnus',
-        opponent: '(ノಠ益ಠ)ノ彡┻━┻',
-        score: '1-0',
-        start: '20:30'
-      }],
-      attributeList: ['table', 'name', 'opponent', 'score', 'start'],
-      headingList: [
+      removed: false, // whether the player is removed
+      removedMessage: '', // A message shown when the player is removed
+      msg: '', // a message sent to the removed player
+      kickDialog: false, // whether to show the kick dialog
+      color: '', // the color of the alert box
+      icon: '', // the icon of the alert boc
+      games: [], // the player's games
+      headingList: [ // headings used in the game table
         {
           text: 'Bord',
           align: 'start',
           value: 'table'
         },
         {
-          text: 'Hvit',
-          value: 'name'
+          text: 'Farge',
+          value: 'colour'
         },
         {
-          text: 'Sort',
+          text: 'Motstander',
           value: 'opponent'
         },
         {
-          text: 'Poeng',
-          value: 'score'
+          text: 'Resultat',
+          value: 'result'
         },
         {
           text: 'Startet',
@@ -165,11 +135,13 @@ export default {
   methods: {
     ...mapActions([
       'removePlayer',
-      'hostFetchPlayer'
+      'hostFetchPlayer',
+      'fetchPlayersInactiveGames'
     ]),
-    handleEntryClicked(game) {
-      alert(game)
-    },
+
+    /**
+     * Removes the player from the tournament
+     */
     removePlayerFromTournament() {
       this.kickDialog = false
       let payload = {
@@ -182,14 +154,15 @@ export default {
         this.removedMessage = 'Spiller fjernet! Du kan nå lukke denne fanen'
         this.icon = 'check'
       }).catch(err => {
-        if (err.response !== undefined) {
-          this.handleErrorResponse(err.response)
-        } else {
-          this.handleError(err)
-        }
+        this.handleError(err)
       })
       this.removed = true
     },
+
+    /**
+     * Sets the error message
+     * @param response Axios error.response object
+     */
     handleErrorResponse (response) {
       if (response.status === 400 || response.status === 403) {
         this.removedMessage = 'Feilmelding: ' + response.status + '. ' + 'Du har ikke tilgang til denne spilleren!'
@@ -199,25 +172,38 @@ export default {
       this.icon = 'plug'
       this.color = 'error'
     },
+
+    /**
+     * Sets custom error message.
+     * @param err Axios error.
+     */
     handleError(err) {
-      this.removedMessage = err + '. Prøv igjen senere!'
-      this.icon = 'plug'
-      this.color = 'error'
+      if (err.response !== undefined) {
+        this.handleErrorResponse(err.response)
+      } else {
+        this.removedMessage = err + '. Prøv igjen senere!'
+        this.icon = 'plug'
+        this.color = 'error'
+      }
     }
   },
+
   async created() {
     let payload = {
       id: this.$route.params.index
     }
+    // Fetch player from backend
     await this.hostFetchPlayer(payload).then(res => {
       this.player = res.data
     }).catch(err => {
-      if (err.response !== undefined) {
-        this.handleErrorResponse(err.response)
-      } else {
-        this.handleError(err)
-      }
+      this.handleError(err)
       this.removed = true
+    })
+    // Fetch the previous played games of the player.
+    await this.fetchPlayersInactiveGames(payload).then(res => {
+      this.games = res.data
+    }).catch(err => {
+      this.handleError(err)
     })
   }
 }
@@ -249,5 +235,15 @@ export default {
 
   .actions {
     justify-content: center;
+  }
+  .info-box{
+    display: inline-block;
+    margin: auto;
+    min-width: 410px;
+  }
+  @media(max-width: 410px){
+    .info-box{
+      min-width: 100%;
+    }
   }
 </style>

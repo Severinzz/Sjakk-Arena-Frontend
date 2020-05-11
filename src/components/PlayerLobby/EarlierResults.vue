@@ -13,20 +13,27 @@
         flat
         class="primary"
       >
-        <v-toolbar-title>Dine resultater</v-toolbar-title>
+        <v-toolbar-title class="white--text">Dine resultater</v-toolbar-title>
+        <v-spacer/>
+        <v-btn
+          icon
+        @click="loadResults"
+        >
+          <i class="fas fa-sync"/>
+        </v-btn>
       </v-toolbar>
       <v-container
         fluid
         fill-height
       >
         <v-layout>
-          <!-- https://stackoverflow.com/a/54836170/12885810 -->
           <v-alert
             type="error"
             v-if="error"
             >
             {{ errMsg }}
           </v-alert>
+          <!-- https://stackoverflow.com/a/54836170/12885810 -->
           <ul v-if="!error">
             <h6
               v-if="gameList.length == 0"
@@ -101,8 +108,8 @@ export default {
   name: 'EarlierResults',
   data() {
     return {
-      limit: 10,
-      timeInterval: 5000,
+      limit: 10, // Int value
+      timeInterval: 5000, // In MS.
       spillArray: [],
       error: false,
       errMsg: ''
@@ -112,16 +119,22 @@ export default {
     ...mapActions([
       'fetchResults'
     ]),
+
+    /**
+     * Set polling interval for fetching earlier results.
+     */
     loadResults () {
-      this.intervalID = setInterval(this.requestEarlierResults, this.timeInterval)
-    },
-    requestEarlierResults() {
       this.fetchResults().then(res => {
         this.spillArray = res.data
       }).catch(err => {
         this.handleErr(err)
       })
     },
+
+    /**
+     * Display the error if the error.response is undefined.
+     * @param err Axios error
+     */
     handleErr(err) {
       this.error = true
       clearInterval(this.intervalID)
@@ -131,6 +144,11 @@ export default {
         this.errMsg = err + '. Prøv igjen senere!'
       }
     },
+
+    /**
+     * Display the error response from server.
+     * @param response Error response message from server.
+     */
     handleErrorResponse(response) {
       if (response.status === 404) {
         this.errMsg = '404, finner ikke resultatlisten. Kontakt vert/systemansvarlig'
@@ -140,15 +158,28 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      playerName: state => state.players.player.name,
+      validResult: state => state.games.resultDialog.valid
+    }),
+
+    /**
+     * Returns a smaller copy of the games array.
+     * @returns {any} Sliced games array.
+     */
     gameList() {
       return this.limit ? this.spillArray.slice(0, this.limit) : this.result
-    },
-    ...mapState({
-      playerName: state => state.players.player.name
-    })
+    }
+  },
+  watch: {
+    validResult (validResult) {
+      // Refreshes the earlier result list when a result as been added and validated
+      if (validResult) {
+        this.loadResults()
+      }
+    }
   },
   created () {
-    this.requestEarlierResults()
     this.loadResults()
   },
   destroyed() {
@@ -165,5 +196,9 @@ export default {
   .resultDetails {
     display: inline-flex;
     margin-right: 1.5em;
+  }
+
+  .fa-sync {
+    color: white;
   }
 </style>

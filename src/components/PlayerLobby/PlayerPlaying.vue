@@ -60,7 +60,7 @@
             <!-- Leave tournament -->
             <oval-button
               text="Forlat turnering"
-              @buttonClicked="leaveDialog = true"
+              @buttonClicked="leaveTournament"
             />
 
             <!-- break -->
@@ -88,11 +88,6 @@
 
           <div v-if="pastResults">
             <earlier-results/>
-            <oval-button
-              :primary="pastResults"
-              :text="pastResultsText"
-              @buttonClicked="alterPastResultsState"
-            />
           </div>
 
           <!-- Dialog for user to input result; https://vuetifyjs.com/en/components/dialogs -->
@@ -227,15 +222,6 @@
             @closeDialog="suggestionIsSent = false"
           />
 
-          <!-- Dialog shown when player tries to leave the tournament -->
-          <warning-dialog
-          title="Forlat turneringen"
-          action="forlate tuneringen"
-          :show-dialog="leaveDialog"
-          carry-on-button-text="Forlat turnering"
-          @carryOn="leaveTournament()"
-          @closeDialog="leaveDialog = false"
-          />
           <!-- playtime -->
           <p
             v-if="tournamentEnd"
@@ -254,8 +240,6 @@ import PlayerPaired from './PlayerPaired'
 import PlayerNotPaired from './PlayerNotPaired'
 import EarlierResults from './EarlierResults'
 import { mapActions, mapState, mapMutations } from 'vuex'
-import WarningDialog from '../WarningDialog'
-import { leavePageWarningMixin } from '../../mixins/leavePageWarning.mixin'
 import { playerMixin } from '../../mixins/player.mixin'
 import InformationDialog from '../InformationDialog'
 import OvalButton from '../OvalButton'
@@ -264,20 +248,17 @@ export default {
   name: 'PlayerPlaying',
   components: {
     InformationDialog,
-    WarningDialog,
     PlayerPaired,
     PlayerNotPaired,
     EarlierResults,
     OvalButton
   },
   mixins: [
-    leavePageWarningMixin,
     playerMixin
   ],
   data() {
     return {
       resultDialog: false,
-      leaveDialog: false,
       pastResults: false,
       pause: false,
       pauseButtonText: 'Ta pause',
@@ -299,9 +280,12 @@ export default {
       opponentsDisagree: state => state.games.resultDialog.opponents_disagree,
       suggestedResult: state => state.games.resultDialog.suggested_result,
       gameId: state => state.games.resultDialog.game_id,
-      validResult: state => state.games.resultDialog.valid,
-      active: state => state.tournament.activeTournament
+      validResult: state => state.games.resultDialog.valid
     }),
+
+    /**
+     * Return the result text depending on the suggested result.
+     */
     getResultText: function () {
       if (this.suggestedResult === 1.0) {
         return 'hvit vant'
@@ -311,13 +295,13 @@ export default {
         return 'sort vant'
       }
     },
+
     showSuggestedResultDialog: function() {
       return this.suggestedResult !== undefined
     }
   },
   methods: {
     ...mapActions([
-      'sendLeaveRequest',
       'sendGameResult',
       'sendPauseRequest',
       'sendUnpauseRequest',
@@ -329,9 +313,14 @@ export default {
       'setSuggestedResult',
       'setOpponentsDisagree'
     ]),
-    /*
-        Register the result of the currently active game
-      */
+
+    leaveTournament() {
+      this.$emit('leaveTournament')
+    },
+
+    /**
+     * Register the result of the currently active game
+     */
     registerResult() {
       let payload = {
         opponent: this.opponentId,
@@ -342,31 +331,29 @@ export default {
         this.suggestionIsSent = true
       })
     },
-    /*
-        Approve the result of the currently active game
-      */
+
+    /**
+     * Approve the result of the currently active game
+     */
     approveResult() {
       this.sendValidationOfResult(this.gameId).then(res => {
         this.setSuggestedResult(undefined)
         this.setPaired(false)
       })
     },
+
+    /**
+     * Disapprove the result of the currently active game.
+     */
     disapproveResult() {
       this.sendInvalidationOfResult(this.gameId).then(res => {
         this.setSuggestedResult(undefined)
       })
     },
-    /*
-        The player leaves the tournament
-      */
-    async leaveTournament() {
-      this.sendLeaveRequest(this.active).then(res => {
-        this.$router.push('/')
-      })
-    },
-    /*
-        Alter the break state. The player is either taking a break or not.
-      */
+
+    /**
+     * Alter the break state. The player is either taking a break or not.
+     */
     alterBreakState() {
       this.pause = !this.pause
       if (this.pause) {
@@ -377,9 +364,10 @@ export default {
         this.pauseButtonText = 'Ta pause'
       }
     },
-    /*
-        Alter the past result state. The past results is either shown or not.
-       */
+
+    /**
+     * Alter the past result state. The past results is either shown or not.
+     */
     alterPastResultsState() {
       this.pastResults = !this.pastResults
       if (this.pastResults) {
@@ -388,9 +376,10 @@ export default {
         this.pastResultsText = 'Tidligere parti'
       }
     },
-    alterLeavePageDialogState() {
-      this.leaveDialog = !this.leaveDialog
-    },
+
+    /**
+     * Open the chess clock in a new tab
+     */
     showChessClock() {
       let route = this.$router.resolve('/chess-clock')
       window.open(route.href, '_blank')
@@ -422,9 +411,6 @@ export default {
         this.setPaired(false)
       }
     }
-  },
-  mounted() {
-    this.setupBrowserWarning()
   }
 }
 </script>
@@ -438,10 +424,6 @@ export default {
 
   .radio {
     margin-bottom: 1em;
-  }
-
-  .btn {
-    margin-top: 0.5em;
   }
 
   .card {
