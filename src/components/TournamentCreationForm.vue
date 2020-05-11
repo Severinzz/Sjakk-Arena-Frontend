@@ -180,7 +180,8 @@ export default {
     return {
       startTime: '', // start time of tournament
       endTime: '', // end time of tournament
-      currentDate: new Date().toISOString().slice(0, 10),
+      // https://stackoverflow.com/questions/23593052/format-javascript-date-as-yyyy-mm-dd#comment84587622_29774197
+      currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60 * 1000)).toISOString().slice(0, 10),
       endDate: '',
       startTimeMenu: false,
       minStartTime: new Date().getHours().toString() + ':' + new Date().getMinutes().toString(),
