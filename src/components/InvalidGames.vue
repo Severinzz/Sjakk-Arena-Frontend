@@ -114,7 +114,11 @@ export default {
         link.click()
         link.remove()
       }).catch(error => {
-        console.log(error.message)
+        if (error.response.status === 404) {
+          console.log('This game does not have any images') // TODO: let user know there is nothing to download.
+        } else {
+          console.log(error)
+        }
       })
     }
   },
