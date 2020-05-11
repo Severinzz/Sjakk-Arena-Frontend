@@ -81,8 +81,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'subscribeToInvalidGames',
-      'getGameImages'
+      'subscribeToInvalidGames'
     ]),
     ...mapMutations([
       'removeInvalidGame'
@@ -102,9 +101,6 @@ export default {
       this.gameID = gameID
       console.log('GameID = ' + gameID)
       const axios = require('axios')
-      //      axios.get('/playerFile/Download/' + gameID).then(result => {
-      //        console.log('Getting image for game: ' + gameID)
-      //      })
       axios.get('/playerFile/Download/' + gameID, { responseType: 'arraybuffer' }).then(({ data }) => {
         const downloadUrl = window.URL.createObjectURL(new Blob([data]))
         const link = document.createElement('a')

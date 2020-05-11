@@ -68,22 +68,3 @@ export const PLAYER_SERVICE = {
     return API_SERVICE.put(this.path, slug, payload)
   }
 }
-
-export const FILE_SERVICE = {
-  path: 'playerFile',
-  post(slug, formData) {
-    return console.log('This function is not in use.')
-    // let fullpath = '/' + this.path + '/' + slug
-    // return API_SERVICE.post(fullpath, formData)
-    // code adapted from: https://github.com/axios/axios/issues/1006 under linjen funker.
-    // const axios = require('axios')
-    // return axios.post(fullpath, formData).then(result => {
-    //  console.log('Image uploaded sucessfully')
-    // }).catch(error => {
-    //  console.log(error.message)
-    // })
-  },
-  get(slug) {
-    return API_SERVICE.get(this.path, slug)
-  }
-}
