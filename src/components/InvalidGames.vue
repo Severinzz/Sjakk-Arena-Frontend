@@ -102,8 +102,17 @@ export default {
       this.gameID = gameID
       console.log('GameID = ' + gameID)
       const axios = require('axios')
-      axios.get('/playerFile/Download/' + gameID).then(result => {
-        console.log('Getting image for game: ' + gameID)
+      //      axios.get('/playerFile/Download/' + gameID).then(result => {
+      //        console.log('Getting image for game: ' + gameID)
+      //      })
+      axios.get('/playerFile/Download/' + gameID, { responseType: 'arraybuffer' }).then(({ data }) => {
+        const downloadUrl = window.URL.createObjectURL(new Blob([data]))
+        const link = document.createElement('a')
+        link.href = downloadUrl
+        link.setAttribute('download', 'Parti#_' + gameID + '.zip') // Name of the file which will be downloaded.
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
       }).catch(error => {
         console.log(error.message)
       })
