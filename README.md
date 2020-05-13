@@ -16,14 +16,21 @@ npm run serve
 npm run build
 ```
 
-### Run your unit tests
+
+### Testing
+#### Unit tests
 ```
 npm run test:unit
 ```
-
-### Run your end-to-end tests
+#### Cypres
+To run all cypress tests that does not contain .skip use. 
+Some of the tests require the backend to be up and running and some are "mocking/stubbing" the requests.
 ```
-npm run test:e2e
+cypress run
+```
+Cypress also have a GUI you can use to run specific test files and see the test live.
+```
+cypress open
 ```
 
 ### Lints and fixes files
