@@ -152,7 +152,7 @@
                     filled
                     prepend-icon="mdi-camera"
                     accept="image/*"
-                    messages="Her kan du laste opp et bilde som kan være til hjelp når turneringsvert skal avgjøre spillets resultat"
+                    messages="Her kan du laste opp et bilde som kan være til hjelp dersom turneringsvert må avgjøre spillets resultat"
                   />
                 </v-card-text>
                 <v-card-actions>
@@ -367,6 +367,7 @@ export default {
       this.alertErrorMessage = ''
       this.alertError = false
       this.resultDialog = false
+      this.file = undefined
     },
     /**
      * Approve the result of the currently active game
