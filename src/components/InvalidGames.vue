@@ -42,7 +42,7 @@
             small
             color="primary"
             rounded
-            @click="getImages(Game.game_id)"
+            @click="downloadImages(Game.game_id)"
           >
             Last ned bilde(r)
           </v-btn>
@@ -79,7 +79,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'subscribeToInvalidGames'
+      'subscribeToInvalidGames',
+      'getImages'
     ]),
     ...mapMutations([
       'removeInvalidGame'
@@ -103,27 +104,30 @@ export default {
     resultAdded () {
       this.removeInvalidGame(this.index)
     },
-    getImages (gameID) {
-      this.gameID = gameID
-      console.log('GameID = ' + gameID)
-      const axios = require('axios')
-      // kjøre axios i vue filene slik som nå er imot våre kodeformer.
-      axios.get('/playerFile/Download/' + gameID, { responseType: 'arraybuffer' }).then(({ data }) => {
+    /**
+     * Downloads images that belong to the specified game
+     *
+     * @param gameId
+     * @returns {Promise<void>}
+     */
+    async downloadImages(gameId) {
+      try {
+        let data = await this.getImages(gameId)
         // adapted from: https://jetrockets.pro/blog/l8dadq8oac-how-to-download-files-with-axios
         const downloadUrl = window.URL.createObjectURL(new Blob([data]))
         const link = document.createElement('a')
         link.href = downloadUrl
-        link.setAttribute('download', 'Parti#_' + gameID + '.zip') // Name of the file which will be downloaded.
+        link.setAttribute('download', 'Parti#_' + gameId + '.zip') // Name of the file which will be downloaded.
         document.body.appendChild(link)
         link.click()
         link.remove()
-      }).catch(error => {
+      } catch (error) {
         if (error.response.status === 404) {
           console.log('This game does not have any images') // TODO: let user know there is nothing to download.
         } else {
           console.log(error)
         }
-      })
+      }
     }
   },
   computed: {

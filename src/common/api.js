@@ -23,8 +23,8 @@ export const API_SERVICE = {
   delete(path, slug = '') {
     return axios.delete(`${path}/${slug}`)
   },
-  get(path, slug = '') {
-    return axios.get(`${path}/${slug}`)
+  get(path, param, slug = '') {
+    return axios.get(`${path}/${slug}`, param)
   },
   post(path, params) {
     return axios.post(`${path}`, params)
