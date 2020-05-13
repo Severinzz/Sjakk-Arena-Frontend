@@ -39,6 +39,7 @@
                   :width="7"
                   color="purple"
                   indeterminate
+                  data-cy="loadingCircle"
                   v-if="isLoading === true"
                 />
                 <!-- No limits for the input field, might be needed to changed -->
@@ -58,6 +59,7 @@
                 <v-btn
                   color="primary"
                   @click="submit"
+                  data-cy="submit"
                 >
                   Send inn
                 </v-btn>

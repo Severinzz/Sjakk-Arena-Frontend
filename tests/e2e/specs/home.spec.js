@@ -7,7 +7,7 @@ describe('Home page', () => {
 
   it('All navigation should be visible', () => {
     cy.get('[data-cy=play]').contains('Spill turnering').should('be.visible')
-    cy.get('[data-cy=create-torunament]').contains('Opprett turnering').should('be.visible')
+    cy.get('[data-cy=create-tournament]').contains('Opprett turnering').should('be.visible')
     cy.get('[data-cy=login-adminID]').contains('Logg på med adminID').should('be.visible')
     cy.get('[data-cy=help]').contains('Hjelp').should('be.visible')
     cy.get('[data-cy=about]').contains('Om Sjakkarena').should('be.visible')
@@ -21,7 +21,7 @@ describe('Home page', () => {
   })
 
   it('Create-tournament navigates to tournament-creation', () => {
-    cy.get('[data-cy=create-torunament]').click()
+    cy.get('[data-cy=create-tournament]').click()
     cy.location('pathname').should('eq', '/tournament-creation')
     cy.wait(500)
   })

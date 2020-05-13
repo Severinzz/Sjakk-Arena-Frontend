@@ -90,6 +90,7 @@
                     :width="7"
                     color="purple"
                     indeterminate
+                    data-cy="loadingCircle"
                     v-if="isLoading === true"
                   >
                   </v-progress-circular>

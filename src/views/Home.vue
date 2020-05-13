@@ -20,7 +20,7 @@
                     color="blue"
                     icon="fa-chess-board"
                     link="/tournament-creation"
-                    data-cy="create-torunament"
+                    data-cy="create-tournament"
                   />
                   <menu-tile
                     tileText="Logg på med adminID"

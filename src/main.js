@@ -13,3 +13,7 @@ new Vue({
   vuetify,
   render: h => h(App)
 }).$mount('#app')
+
+if (window.Cypress) {
+  window.__store = store
+}

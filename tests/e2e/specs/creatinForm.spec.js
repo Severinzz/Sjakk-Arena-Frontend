@@ -14,7 +14,7 @@ function fillOutTime() {
   selectTime()
 }
 
-function selectTime(){
+function selectTime() {
   cy.wait(1000)
   cy.get('[style="left: 23.1532%; top: 65.5%;"]').should('be.visible').click()
   cy.wait(1000)

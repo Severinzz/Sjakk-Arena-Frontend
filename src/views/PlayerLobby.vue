@@ -144,6 +144,7 @@ export default {
      */
     navigateHome() {
       this.kickedDialog = false
+      this.wantToLeave = true
       storage.deleteToken()
       clearInterval(this.intervalId)
       this.$router.replace('/')
