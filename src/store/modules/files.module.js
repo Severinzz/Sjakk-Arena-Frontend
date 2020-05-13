@@ -7,18 +7,12 @@ export const actions = {
    * @param commit
    * @param file The file to upload
    */
-  uploadFile ({ commit }, file) {
-    if (!file) {
-      return console.log('Please choose a image to upload.')
+  async uploadFile ({ commit }, file) {
+    if (file !== undefined) {
+      let formData = new FormData()
+      formData.append('Image', file)
+      await API_SERVICE.post('/player/file/upload', formData)
     }
-    let formData = new FormData()
-    formData.append('Image', file)
-    console.log(file)
-    API_SERVICE.post('/player/file/upload', formData).then(result => {
-      console.log('Image uploaded sucessfully')
-    }).catch(error => {
-      console.log(error.message)
-    })
   },
   /**
    * Fetches a files belonging to the specified gameID from the server
@@ -27,7 +21,7 @@ export const actions = {
    */
   async getImages ({ commit }, gameID) {
     try {
-      let response = await API_SERVICE.get('/tournament/file/download/' + gameID, { responseType: 'arraybuffer' })
+      let response = await API_SERVICE.getWithParam('/tournament/file/download/' + gameID, { responseType: 'arraybuffer' })
       return response.data
     } catch (error) {
       throw error

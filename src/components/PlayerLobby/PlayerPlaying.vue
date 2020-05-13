@@ -102,6 +102,12 @@
               max-width="650px"
             >
               <v-card>
+                <v-alert
+                  type="error"
+                  v-if="alertError"
+                >
+                  {{ alertErrorMessage }}
+                </v-alert>
                 <v-card-title class="justify-center">Resultatet ble:</v-card-title>
                 <v-card-text>
                   <v-row class="justify-center">
@@ -140,19 +146,20 @@
                       </v-col>
                     </v-radio-group>
                   </v-row>
+                  <v-file-input
+                    v-model="file"
+                    label="Last opp bilde"
+                    filled
+                    prepend-icon="mdi-camera"
+                    accept="image/*"
+                    messages="Her kan du laste opp et bilde som kan være til hjelp når turneringsvert skal avgjøre spillets resultat"
+                  />
                 </v-card-text>
                 <v-card-actions>
-                  <input type="file" style="display: none" @change="onFileSelected" ref="fileInput" capture="camera">
-                  <v-btn
-                    text
-                    @click="$refs.fileInput.click()"
-                  >
-                    Ta bilde
-                  </v-btn>
                   <v-spacer/>
                   <v-btn
                     text
-                    @click="resultDialog=false"
+                    @click="closeResultDialog"
                   >
                     Avbryt
                   </v-btn>
@@ -270,7 +277,10 @@ export default {
       data: null,
       rules: [
         value => !value || value.size < 10000000 || 'Bildet må være mindre enn 10 MB!'
-      ]
+      ],
+      file: undefined,
+      alertError: false,
+      alertErrorMessage: ''
     }
   },
   computed: {
@@ -322,17 +332,42 @@ export default {
     /**
      * Register the result of the currently active game
      */
-    registerResult() {
-      let payload = {
+    async registerResult() {
+      try {
+        await this.uploadFile(this.file)
+        let payload = this.getResultPayload()
+        await this.sendGameResult(payload)
+        this.showSuggestionIsSentDialog()
+        this.closeResultDialog()
+      } catch (err) {
+        this.alertErrorMessage = err.message
+        this.alertError = true
+      }
+    },
+    /**
+     * Show suggestion is sent dialog
+     */
+    showSuggestionIsSentDialog() {
+      this.suggestionIsSent = true
+    },
+    /**
+     * Returns the information needed when a result is sent to the server
+     * @returns the information needed when a result is sent to the server
+     */
+    getResultPayload() {
+      return {
         opponent: this.opponentId,
         result: this.result
       }
-      this.sendGameResult(payload).then(res => {
-        this.resultDialog = false
-        this.suggestionIsSent = true
-      })
     },
-
+    /**
+     * Closes the result dialog
+     */
+    closeResultDialog() {
+      this.alertErrorMessage = ''
+      this.alertError = false
+      this.resultDialog = false
+    },
     /**
      * Approve the result of the currently active game
      */
@@ -384,11 +419,6 @@ export default {
     showChessClock() {
       let route = this.$router.resolve('/chess-clock')
       window.open(route.href, '_blank')
-    },
-    onFileSelected (event) {
-      this.selectedFile = event.target.files[0]
-      if (!this.selectedFile) { return console.log('User did not choose a file.') }
-      this.uploadFile(this.selectedFile)
     }
   },
   watch: {
