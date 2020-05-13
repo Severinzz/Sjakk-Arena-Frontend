@@ -66,6 +66,7 @@ const WEBSOCKET = {
       subscriptions[tag].unsubscribe()
       delete subscriptions[tag]
     }
+    this.close()
   },
 
   /**
