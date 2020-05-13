@@ -21,7 +21,9 @@ export const mutations = {
    * @param player Player to remove
    */
   removePlayer: (state, player) => {
-    delete state.players[player]
+    // https://stackoverflow.com/a/55004167
+    const i = state.players.map(player => player.name).indexOf(player.name)
+    state.players.splice(i, 1)
   },
 
   /**
