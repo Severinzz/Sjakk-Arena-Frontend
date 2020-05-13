@@ -1,11 +1,11 @@
 // https://docs.cypress.io/api/introduction/api.html
 
 function fillOutForm() {
-  cy.get('[data-cy=name]').type('Cypress tournament', { delay: 35 })
-  cy.get('[data-cy=email]').type('Sjakkarena_testemail@test.com', { delay: 35 })
+  cy.get('[data-cy=name]').type('Cypress tournament')
+  cy.get('[data-cy=email]').type('Sjakkarena_testemail@test.com')
   fillOutTime()
-  cy.get('[data-cy=tables]').type('10', { delay: 35 })
-  cy.get('[data-cy=rounds]').type('12', { delay: 35 })
+  cy.get('[data-cy=tables]').type('10')
+  cy.get('[data-cy=rounds]').type('12')
 }
 
 function fillOutTime() {
@@ -15,9 +15,9 @@ function fillOutTime() {
 }
 
 function selectTime() {
-  cy.wait(1000)
+  cy.wait(500)
   cy.get('[style="left: 23.1532%; top: 65.5%;"]').should('be.visible').click()
-  cy.wait(1000)
+  cy.wait(500)
   cy.get('[style="left: 50%; top: 100%;"]').should('be.visible').click()
 }
 
@@ -31,12 +31,9 @@ describe('Tournament creation form', () => {
     cy.get('[data-cy=time-input]').should('have.value', '20:30')
   })
 
-  it('Play navigates to enter-tourney', () => {
+  it('Should fill the form and clear the form with clear button', () => {
     cy.get('[data-cy=clear]').click()
     fillOutForm()
-  })
-
-  it('Should clear the form', () => {
     cy.get('[data-cy=clear]').click()
     cy.get('[data-cy=name]').should('have.value', '')
     cy.get('[data-cy=email]').should('have.value', '')
@@ -71,8 +68,5 @@ describe('Tournament creation form', () => {
     cy.wait(500)
     selectTime()
     cy.get('[data-cy="dateTimeInput"]').should('have.value', '2024-05-15  20:30')
-  })
-
-  it('Chess-clock in footer opens new tab', () => {
   })
 })

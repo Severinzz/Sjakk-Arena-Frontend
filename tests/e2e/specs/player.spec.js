@@ -3,20 +3,18 @@
 * Mostly used as a preview wil be skipped if .skip is present.
 */
 
-// https://docs.cypress.io/api/introduction/api.html
-
 describe('Home page', () => {
-  it('Should load home page', () => {
+  it.skip('Should load home page', () => {
     cy.visit('/')
     cy.get('[data-cy=play]').click()
   })
 
-  it('enters a tournament', () => {
+  it.skip('enters a tournament', () => {
     cy.stubSocketPlayerLobby()
     cy.server()
     cy.route({
-      method: 'POST', // Route all GET requests
-      url: 'new-player', // that have a URL that matches '/users/*'
+      method: 'POST',
+      url: 'new-player',
       status: 200,
       delay: 2000,
       response: {
@@ -25,9 +23,8 @@ describe('Home page', () => {
     }).as('newPlayer')
 
     cy.route({
-      method: 'GET', // Route all GET requests
-      url: 'player', // that have a URL that matches '/users/*'
-      status: 200,
+      method: 'GET',
+      url: 'player',
       response: {
         name: 'Cypress test player',
         points: 0
@@ -35,9 +32,8 @@ describe('Home page', () => {
     }).as('newPlayer')
 
     cy.route({
-      method: 'GET', // Route all GET requests
-      url: 'tournament', // that have a URL that matches '/users/*'
-      status: 200,
+      method: 'GET',
+      url: 'tournament',
       response: {
         name: 'Cypress Tournament',
         start: '2020-05-13 01:29:12',
@@ -54,13 +50,12 @@ describe('Home page', () => {
     cy.wait(5000)
   })
 
-  it('Gets opponent and registers result', () => {
+  it.skip('Gets opponent and registers result', () => {
     cy.stubSocketPlayerLobby()
     cy.server()
     cy.route({
       method: 'PUT',
       url: 'add-result*',
-      status: 200,
       response: {}
     }).as('addResult')
 
@@ -94,13 +89,12 @@ describe('Home page', () => {
     cy.wait(5000)
   })
 
-  it('Gets opponent, opponents suggests result and player accepts', () => {
+  it.skip('Gets opponent, opponents suggests result and player accepts', () => {
     cy.stubSocketPlayerLobby()
     cy.server()
     cy.route({
       method: 'PATCH',
       url: 'validate',
-      status: 200,
       response: {}
     }).as('addResult')
 
@@ -135,12 +129,11 @@ describe('Home page', () => {
     })
   })
 
-  it('checks past results and leaves tournament', () => {
+  it.skip('checks past results and leaves tournament', () => {
     cy.server()
     cy.route({
       method: 'GET',
       url: 'inactive',
-      status: 200,
       response: [
         {
           white_player_name: 'Cypress test player',

@@ -1,4 +1,3 @@
-// https://docs.cypress.io/api/introduction/api.html
 
 /*
 * This is the full flow of a tournament from creating it to finishing it from the host point of view.
@@ -46,16 +45,14 @@ describe('Complete flow of host', () => {
     cy.server()
   })
 
-  it('Home page should load with create-tournament tile', () => {
+  it.skip('Home page should load with create-tournament tile', () => {
     cy.get('[data-cy=create-tournament]').should('be.visible').click()
   })
 
-  it('Should fill out all input fields and be navigated to lobby page', () => {
+  it.skip('Should fill out all input fields and be navigated to lobby page', () => {
     cy.route({
-      method: 'POST', // Route all GET requests
-      url: '/new-tournament', // that have a URL that matches '/users/*'
-      delay: 0,
-      status: 200,
+      method: 'POST',
+      url: '/new-tournament',
       response: {
         tournament_id: 275621,
         jwt: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUT1VSTkFNRU5UIiwianRpIjoiNTMwNTA4In0.yxofGyRlQl0BTOmwXdkLbcC8cr4mG-afyBfoto5nuo8'
@@ -63,10 +60,8 @@ describe('Complete flow of host', () => {
     }).as('tournamentRes')
 
     cy.route({
-      method: 'GET', // Route all GET requests
-      url: '/tournament', // that have a URL that matches '/users/*'
-      delay: 0,
-      status: 200,
+      method: 'GET',
+      url: '/tournament',
       response: 'fixture:tournament'
     }).as('getTournament')
 
@@ -103,20 +98,16 @@ describe('Complete flow of host', () => {
     cy.location('pathname').should('eq', '/lobby/275621')
   })
 
-  it('Should add players and kick a player', () => {
+  it.skip('Should add players, kick a player and start tournament', () => {
     cy.route({
       method: 'DELETE', // Route all GET requests
-      url: '/tournament/player/delete/*', // that have a URL that matches '/users/*'
-      delay: 0,
-      status: 200,
+      url: '/tournament/player/delete/*',
       response: {}
     }).as('deletePlayer')
 
     cy.route({
-      method: 'PATCH', // Route all GET requests
-      url: '/tournament/start', // that have a URL that matches '/users/*'
-      delay: 0,
-      status: 200,
+      method: 'PATCH',
+      url: '/tournament/start',
       response: 'fix:tournament'
     }).as('startTournament')
 
@@ -143,7 +134,7 @@ describe('Complete flow of host', () => {
     })
   })
 
-  it('', () => {
+  it.skip('should select 2.page in rating table, checkout game table, set a result and end the tournament', () => {
     cy.window().then(win => {
       cy.stub(win.__store._actions.subscribeToPlayers, '0', (player) => {
         win.__store.commit('addPlayers', player)
@@ -205,8 +196,8 @@ describe('Complete flow of host', () => {
     cy.get('[data-cy="stalemate"]').check({ force: true })
 
     cy.route({
-      method: 'PATCH', // Route all GET requests
-      url: 'tournament/games/result/16/*', // that have a URL that matches '/users/*'
+      method: 'PATCH',
+      url: 'tournament/games/result/16/*',
       delay: 2000,
       status: 200,
       response: {}
@@ -221,8 +212,8 @@ describe('Complete flow of host', () => {
     }).as('pause')
 
     cy.route({
-      method: 'PATCH', // Route all GET requests
-      url: 'tournament/unpause', // that have a URL that matches '/users/*'
+      method: 'PATCH',
+      url: 'tournament/unpause',
       delay: 2000,
       status: 200,
       response: {}
@@ -250,10 +241,8 @@ describe('Complete flow of host', () => {
     cy.wait(3000)
 
     cy.route({
-      method: 'patch', // Route all GET requests
-      url: 'end', // that have a URL that matches '/users/*'
-      delay: 0,
-      status: 200,
+      method: 'patch',
+      url: 'end',
       response: {}
     }).as('endTournament')
 

@@ -1,6 +1,5 @@
-// https://docs.cypress.io/api/introduction/api.html
 
-let visitTournament = false // SET TO FALSE WHEN RUNNING THE WHOLE FILE. WHEN SKIPPING 1.st TEST SET TO FALSE
+let visitTournament = false // SET TO FALSE WHEN RUNNING THE WHOLE FILE. WHEN SKIPPING 1.st TEST SET TO TRUE
 
 describe('Lobby page', () => {
   before(function setupMocks() {
@@ -50,8 +49,8 @@ describe('Lobby page', () => {
   it('Should display error messages if server error', () => {
     cy.server()
     cy.route({
-      method: 'PATCH', // Route all GET requests
-      url: '/tournament/start', // that have a URL that matches '/users/*'
+      method: 'PATCH',
+      url: '/tournament/start',
       delay: 5000,
       status: 500,
       response: 'fix:tournament'
@@ -65,8 +64,8 @@ describe('Lobby page', () => {
   it('Should display error messages if timeout', () => {
     cy.server()
     cy.route({
-      method: 'PATCH', // Route all GET requests
-      url: '/tournament/start', // that have a URL that matches '/users/*'
+      method: 'PATCH',
+      url: '/tournament/start',
       delay: 20000,
       status: 400,
       response: 'fix:tournament'

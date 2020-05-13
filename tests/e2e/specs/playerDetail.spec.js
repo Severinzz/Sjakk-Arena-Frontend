@@ -21,7 +21,7 @@ describe('Player detail page', () => {
   it('Should show info box and disable remove button when player is no longer in the tournament', () => {
     cy.server()
     cy.route({
-      method: 'GET', // Route all GET requests
+      method: 'GET',
       url: 'http://localhost:8080/tournament/player/133',
       delay: 2000,
       status: 200,
@@ -37,7 +37,7 @@ describe('Player detail page', () => {
   it('Should display error when player fetch fails', () => {
     cy.server()
     cy.route({
-      method: 'GET', // Route all GET requests
+      method: 'GET',
       url: 'http://localhost:8080/tournament/player/133',
       delay: 2000,
       status: 400,
@@ -50,7 +50,7 @@ describe('Player detail page', () => {
       .should('be.visible')
 
     cy.route({
-      method: 'GET', // Route all GET requests
+      method: 'GET',
       url: 'http://localhost:8080/tournament/player/*',
       delay: 2000,
       status: 404,
@@ -65,10 +65,8 @@ describe('Player detail page', () => {
   it('Should remove player, display error when failed and success on success', () => {
     cy.server()
     cy.route({
-      method: 'PATCH', // Route all GET requests
+      method: 'PATCH',
       url: 'http://localhost:8080/tournament/player/inactivate/*',
-      delay: 0,
-      status: 200,
       response: {}
     }).as('removePlayer')
     cy.playerDetailsKick()
