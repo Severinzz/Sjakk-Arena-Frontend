@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import TournamentInfo from '@/components/TournamentInfo'
+import TournamentInfo from '@/components/Props/TournamentInfo'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import InvalidGames from '@/components/InvalidGames'
 import Table from '../components/Utilities/Table'

@@ -79,10 +79,10 @@
 </template>
 
 <script>
-import TournamentInfo from '@/components/TournamentInfo'
-import Player from '@/components/Player'
+import TournamentInfo from '@/components/Props/TournamentInfo'
+import Player from '@/components/Props/Player'
 import { mapActions, mapGetters, mapState } from 'vuex'
-import WarningDialog from '@/components/WarningDialog'
+import WarningDialog from '@/components/Dialogs/WarningDialog'
 import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
 import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
 

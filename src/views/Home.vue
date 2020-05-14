@@ -34,8 +34,8 @@
 </template>
 <script>
 // @ is an alias to /src
-import MenuTile from '@/components/MenuTile.vue'
-import TileHeaderSpace from '@/components/TileHeaderSpace'
+import MenuTile from '@/components/Props/MenuTile.vue'
+import TileHeaderSpace from '@/components/Props/TileHeaderSpace'
 import { clearTokenAndStateMixin } from '../mixins/clearTokenAndState.mixin'
 import WEBSOCKET from '../common/websocketApi'
 

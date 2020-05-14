@@ -48,7 +48,7 @@
 
 <script>
 import NotificationHelp from '../components/Utilities/NotificationHelp'
-import HelpPanels from '@/components/HelpPanels'
+import HelpPanels from '@/components/Props/HelpPanels'
 import hostHelpPageData from '@/data/hostHelpPage'
 import playerHelpPageData from '@/data/playerHelpPage'
 
