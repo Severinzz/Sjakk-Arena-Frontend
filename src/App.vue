@@ -13,9 +13,9 @@
 
 <script>
 import { API_SERVICE } from './common/api'
-import AppFooter from './components/AppFooter'
-import AppHeader from './components/AppHeader'
-import TileHeaderSpace from './components/props/TileHeaderSpace'
+import AppFooter from './components/Layout/AppFooter'
+import AppHeader from './components/Layout/AppHeader'
+import TileHeaderSpace from './components/TileHeaderSpace'
 import jwtService from './common/jwt.storage'
 
 export default {
