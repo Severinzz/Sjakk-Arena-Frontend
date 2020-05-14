@@ -13,8 +13,8 @@
 
 <script>
 import { API_SERVICE } from './common/api'
-import AppFooter from './components/Layout/AppFooter'
-import AppHeader from './components/Layout/AppHeader'
+import AppFooter from './components/layout/AppFooter'
+import AppHeader from './components/layout/AppHeader'
 import TileHeaderSpace from './components/TileHeaderSpace'
 import jwtService from './common/jwt.storage'
 
