@@ -36,7 +36,8 @@ Cypress also have a GUI you can use to run specific tests files and see the test
 cypress open
 ```
 Some of the tests require the [backend](https://github.com/Severinzz/Sjakk-Arena-backend) to be up and running 
-and some tests have the network requests "mocked/stubbed"
+and some tests have the network requests "mocked/stubbed". Some of the tests also requires the dummy data defined in the 
+backend to be in that exact state.
 
 ### Lints and fixes files
 ```
