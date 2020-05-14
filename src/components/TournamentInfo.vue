@@ -2,7 +2,10 @@
 <div>
   <!-- Game pin -->
   <p class="pinTitle">PIN:</p>
-  <p class="pin">
+  <p
+    class="pin"
+    data-cy="game-pin"
+  >
     {{ tournament.user_id }}
   </p>
 

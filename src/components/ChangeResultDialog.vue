@@ -97,7 +97,12 @@ export default {
     return {
       result: '',
       error: false,
-      errorMessage: ''
+      errorMessage: '',
+      selectedFile: null,
+      data: null,
+      rules: [
+        value => !value || value.size < 10000000 || 'Bildet må være mindre enn 10 MB!'
+      ]
     }
   },
   methods: {

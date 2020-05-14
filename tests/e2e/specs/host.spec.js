@@ -190,7 +190,7 @@ describe('Complete flow of host', () => {
     })
 
     cy.wait(500)
-    cy.get('tbody > .v-btn').click()
+    cy.get('.ma-1').click()
 
     cy.wait(500)
     cy.get('[data-cy="stalemate"]').check({ force: true })

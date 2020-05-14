@@ -4,6 +4,7 @@
 */
 
 describe('Home page', () => {
+
   it.skip('Should load home page', () => {
     cy.visit('/')
     cy.get('[data-cy=play]').click()
@@ -149,6 +150,9 @@ describe('Home page', () => {
         }
       ]
     }).as('addResult')
+
+    cy.route('PATCH', 'inactivate', '')
+
     cy.get('[data-cy=past-results]').click()
     cy.wait(5000)
     cy.get('[data-cy=leave-tournament]').click()
