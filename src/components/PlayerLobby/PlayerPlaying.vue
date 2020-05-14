@@ -146,14 +146,20 @@
                       </v-col>
                     </v-radio-group>
                   </v-row>
+                  <div class="imgInput">
+                  <img
+                    :src="img"
+                    v-if="showImg"
+                  >
                   <v-file-input
                     v-model="file"
                     label="Last opp bilde"
                     filled
-                    prepend-icon="mdi-camera"
+                    :prepend-icon="showImg ? '' : 'mdi-camera'"
                     accept="image/*"
                     messages="Her kan du laste opp et bilde som kan være til hjelp dersom turneringsvert må avgjøre spillets resultat"
                   />
+                  </div>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer/>
@@ -280,7 +286,9 @@ export default {
       ],
       file: undefined,
       alertError: false,
-      alertErrorMessage: ''
+      alertErrorMessage: '',
+      img: '',
+      showImg: false
     }
   },
   computed: {
@@ -427,6 +435,19 @@ export default {
       if (this.validResult) {
         this.setPaired(false)
       }
+    },
+    file () {
+      let fileReader = new FileReader()
+      if (this.file !== undefined) {
+        fileReader.onload = fileData => {
+          this.img = fileData.target.result
+          this.showImg = true
+        }
+        fileReader.readAsDataURL(this.file)
+      } else {
+        this.img = ''
+        this.showImg = false
+      }
     }
   }
 }
@@ -464,5 +485,23 @@ export default {
 
   .minorInfo {
     margin-top: 0.8em;
+  }
+  .imgInput{
+    display: flex;
+    height: 100px;
+  }
+  img{
+    height: 150px;
+    width: 150px;
+    margin-right: 10px;
+  }
+  @media (max-width: 440px) {
+    .imgInput{
+      flex-direction: column;
+      height: auto
+    }
+    img{
+      margin: auto auto 10px auto
+    }
   }
 </style>
