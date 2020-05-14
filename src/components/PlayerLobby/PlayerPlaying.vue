@@ -234,8 +234,8 @@ import PlayerNotPaired from './PlayerNotPaired'
 import EarlierResults from './EarlierResults'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import { playerMixin } from '../../mixins/player.mixin'
-import InformationDialog from '../InformationDialog'
-import OvalButton from '../OvalButton'
+import InformationDialog from '../Dialogs/InformationDialog'
+import OvalButton from '../Buttons/OvalButton'
 
 export default {
   name: 'PlayerPlaying',

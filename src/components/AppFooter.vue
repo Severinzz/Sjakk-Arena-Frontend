@@ -25,7 +25,7 @@
 </template>
 <script>
 
-import RouterListElement from './RouterListElement'
+import RouterListElement from './Utilities/RouterListElement'
 
 export default {
   name: 'AppFooter',

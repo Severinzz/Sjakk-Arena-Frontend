@@ -14,7 +14,7 @@
 <script>
 import AppFooter from './components/AppFooter'
 import AppHeader from './components/AppHeader'
-import TileHeaderSpace from './components/TileHeaderSpace'
+import TileHeaderSpace from './components/Props/TileHeaderSpace'
 import { API_SERVICE } from './common/api'
 import jwtService from './common/jwt.storage'
 

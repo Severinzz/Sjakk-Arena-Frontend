@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import NotificationHelp from '../components/NotificationHelp'
+import NotificationHelp from '../components/Utilities/NotificationHelp'
 import HelpPanels from '@/components/HelpPanels'
 import hostHelpPageData from '@/data/hostHelpPage'
 import playerHelpPageData from '@/data/playerHelpPage'

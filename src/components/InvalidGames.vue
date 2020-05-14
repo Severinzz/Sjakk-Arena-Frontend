@@ -54,7 +54,7 @@
 
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
-import ChangeResultDialog from './ChangeResultDialog'
+import ChangeResultDialog from './Dialogs/ChangeResultDialog'
 
 export default {
   name: 'InvalidGames',

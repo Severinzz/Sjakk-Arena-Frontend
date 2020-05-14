@@ -81,7 +81,7 @@ import storage from '../common/jwt.storage'
 import { mapActions, mapState } from 'vuex'
 import { API_SERVICE } from '../common/api'
 import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
-import WarningDialog from '../components/WarningDialog'
+import WarningDialog from '../components/Dialogs/WarningDialog'
 
 export default {
   name: 'PlayerLobby',

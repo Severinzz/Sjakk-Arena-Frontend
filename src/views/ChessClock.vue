@@ -97,8 +97,8 @@
 </template>
 
 <script>
-import ChessClockButton from '../components/ChessClockButton'
-import InformationDialog from '../components/InformationDialog'
+import ChessClockButton from '../components/Buttons/ChessClockButton'
+import InformationDialog from '../components/Dialogs/InformationDialog'
 
 export default {
   name: 'ChessClock',

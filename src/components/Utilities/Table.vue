@@ -37,7 +37,7 @@
 
 <script>
 
-import PaginationButtons from './PaginationButtons'
+import PaginationButtons from '../Buttons/PaginationButtons'
 
 export default {
   name: 'Table',
