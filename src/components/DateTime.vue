@@ -21,6 +21,7 @@
             readonly
             required
             v-on="on"
+            data-cy="dateTimeInput"
             :rules="rules !== undefined ? rules : []"
             @click="openDateMenu()"
             @change="onChange"
@@ -109,7 +110,8 @@ export default {
     },
     minDate: { // The minimum date that can be picked
       type: String,
-      default: new Date().toISOString().slice(0, 10),
+      // https://stackoverflow.com/questions/23593052/format-javascript-date-as-yyyy-mm-dd#comment84587622_29774197
+      default: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60 * 1000)).toISOString().slice(0, 10),
       validator: value => {
         // regex from https://stackoverflow.com/a/22061879
         return /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/.test(value)
@@ -187,7 +189,7 @@ export default {
      * @returns {string|null} Minimum value the time can be. Null if it can be whatever.
      */
     calcMinTime() {
-      let currentDate = new Date().toISOString().slice(0, 10)
+      let currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60 * 1000)).toISOString().slice(0, 10)
       if (this.date === currentDate) {
         return this.minTime
       }

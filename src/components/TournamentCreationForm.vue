@@ -31,6 +31,7 @@
                 :rules="tournamentNameRules"
                 label="Navn på turnering"
                 required
+                data-cy="name"
               >
               </v-text-field>
               <!-- email address of tournament host -->
@@ -38,7 +39,9 @@
                 v-model="email"
                 :rules="emailRules"
                 label="E-post"
-                required>
+                required
+                data-cy="email"
+              >
               </v-text-field>
               <!-- code from https://vuetifyjs.com/en/components/time-pickers-->
               <v-row>
@@ -63,6 +66,7 @@
                         :rules="startTimeRules"
                         required
                         v-on="on"
+                        data-cy="time-input"
                       >
                       </v-text-field>
                     </template>
@@ -75,6 +79,7 @@
                       :color="formColor"
                       :max="calcStartTime"
                       :min="minStartTime"
+                      data-cy="time-picker"
                     >
                     </v-time-picker>
                   </v-menu>
@@ -85,6 +90,7 @@
                     :width="7"
                     color="purple"
                     indeterminate
+                    data-cy="loadingCircle"
                     v-if="isLoading === true"
                   >
                   </v-progress-circular>
@@ -98,6 +104,7 @@
                 type="number"
                 :min="0"
                 :rules="numberFieldRules"
+                data-cy="tables"
               >
               </v-text-field>
               <!-- Maximum number of rounds -->
@@ -106,15 +113,19 @@
                 label="Max antall runder"
                 type="number"
                 :rules="numberFieldRules"
+                data-cy="rounds"
               >
               </v-text-field>
               <v-switch
                 label="Start når to spillere er påmeldt"
-                v-model="earlyStart">
+                v-model="earlyStart"
+                data-cy="early-start"
+              >
               </v-switch>
               <v-switch
                 label="Bruk sluttid"
                 v-model="useEndTime"
+                data-cy="endtime-switch"
               >
               </v-switch>
               <!-- code from https://vuetifyjs.com/en/components/time-pickers-->
@@ -130,6 +141,7 @@
                     :rules="endTimeRules"
                     :event-name="'endDateTime'"
                     @endDateTime="onEndDateTime"
+                    data-cy="endtime"
                   />
                 </v-col>
               </v-row>
@@ -138,6 +150,7 @@
                 class="btn"
                 color="primary"
                 @click="createTournament"
+                data-cy="create"
               >
                 Opprett
               </v-btn>
@@ -145,6 +158,7 @@
                 class="btn"
                 color="primary"
                 @click="createAndStartTournament"
+                data-cy="create-start"
               >
                 Opprett og start
               </v-btn>
@@ -152,12 +166,14 @@
                 class="btn"
                 id="clear-btn"
                 @click="clear"
+                data-cy="clear"
               >
                 Tøm
               </v-btn>
               <v-btn
                 class="btn"
                 @click="cancel"
+                data-cy="cancel"
               >
                 Avbryt
               </v-btn>
@@ -180,7 +196,8 @@ export default {
     return {
       startTime: '', // start time of tournament
       endTime: '', // end time of tournament
-      currentDate: new Date().toISOString().slice(0, 10),
+      // https://stackoverflow.com/questions/23593052/format-javascript-date-as-yyyy-mm-dd#comment84587622_29774197
+      currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60 * 1000)).toISOString().slice(0, 10),
       endDate: '',
       startTimeMenu: false,
       minStartTime: new Date().getHours().toString() + ':' + new Date().getMinutes().toString(),

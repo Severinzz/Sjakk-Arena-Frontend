@@ -55,12 +55,14 @@
             v-if="paired"
             text="Registrer resultat"
             @buttonClicked="resultDialog = true"
+            data-cy="register-result"
             />
 
             <!-- Leave tournament -->
             <oval-button
               text="Forlat turnering"
               @buttonClicked="leaveTournament"
+              data-cy="leave-tournament"
             />
 
             <!-- break -->
@@ -82,6 +84,7 @@
               :primary="pastResults"
               :text="pastResultsText"
               @buttonClicked="alterPastResultsState"
+              data-cy="past-results"
             />
 
           </v-container>
@@ -122,6 +125,7 @@
                           class="radio"
                           label="Hvit seier"
                           value="1"
+                          data-cy="white-win"
                         >
                           <v-spacer/>
                         </v-radio>
@@ -131,6 +135,7 @@
                           class="radio"
                           label="Remis"
                           value="0.5"
+                          data-cy="stalemate"
                         >
                           <v-spacer/>
                         </v-radio>
@@ -140,6 +145,7 @@
                           class="radio"
                           label="Sort seier"
                           value="0"
+                          data-cy="black-win"
                         >
                           <v-spacer/>
                         </v-radio>
@@ -166,6 +172,7 @@
                   <v-btn
                     text
                     @click="closeResultDialog"
+                    data-cy="cancel-result"
                   >
                     Avbryt
                   </v-btn>
@@ -174,6 +181,7 @@
                     color="primary"
                     outlined
                     @click="registerResult"
+                    data-cy="send-result"
                   >
                     Send inn
                   </v-btn>

@@ -121,7 +121,6 @@ export const actions = {
    */
   removePlayer: ({ commit }, { started, player, id, msg }) => {
     if (started === true) {
-      commit('removePlayer', player)
       return TOURNAMENT_SERVICE.patch(`player/inactivate/${id}`, msg)
     } else {
       TOURNAMENT_SERVICE.delete(`player/delete/${id}?msg=${msg}`)
