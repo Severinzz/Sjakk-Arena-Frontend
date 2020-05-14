@@ -88,7 +88,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { clearTokenAndStateMixin } from '../mixins/clearTokenAndState.mixin'
+import { clearTokenAndStateMixin } from '@/mixins/clearTokenAndState.mixin'
 
 export default {
   name: 'EnterTourney',

@@ -86,13 +86,13 @@
 </template>
 
 <script>
-import TournamentInfo from '@/components/Props/TournamentInfo'
 import { mapActions, mapGetters, mapState } from 'vuex'
-import InvalidGames from '@/components/InvalidGames'
-import Table from '../components/Utilities/Table'
-import WarningDialog from '../components/Dialogs/WarningDialog'
 import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
 import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
+import TournamentInfo from '@/components/props/TournamentInfo'
+import InvalidGames from '@/components/InvalidGames'
+import Table from '@/components/utilities/Table'
+import WarningDialog from '@/components/dialogs/WarningDialog'
 
 export default {
   name: 'Tournament',

@@ -257,13 +257,13 @@
 </template>
 
 <script>
+import { mapActions, mapState, mapMutations } from 'vuex'
+import { playerMixin } from '@/mixins/player.mixin'
 import PlayerPaired from './PlayerPaired'
 import PlayerNotPaired from './PlayerNotPaired'
 import EarlierResults from './EarlierResults'
-import { mapActions, mapState, mapMutations } from 'vuex'
-import { playerMixin } from '../../mixins/player.mixin'
-import InformationDialog from '../Dialogs/InformationDialog'
-import OvalButton from '../Buttons/OvalButton'
+import InformationDialog from '../dialogs/InformationDialog'
+import OvalButton from '../buttons/OvalButton'
 
 export default {
   name: 'PlayerPlaying',

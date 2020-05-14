@@ -75,13 +75,13 @@
 </template>
 
 <script>
-import PlayerWaiting from '../components/PlayerLobby/PlayerWaiting'
-import PlayerPlaying from '../components/PlayerLobby/PlayerPlaying'
-import storage from '../common/jwt.storage'
 import { mapActions, mapState } from 'vuex'
-import { API_SERVICE } from '../common/api'
-import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
-import WarningDialog from '../components/Dialogs/WarningDialog'
+import { API_SERVICE } from '@/common/api'
+import { leavePageWarningMixin } from '@/mixins/leavePageWarning.mixin'
+import PlayerWaiting from '@/components/playerlobby/PlayerWaiting'
+import PlayerPlaying from '@/components/playerlobby/PlayerPlaying'
+import storage from '@/common/jwt.storage'
+import WarningDialog from '@/components/dialogs/WarningDialog'
 
 export default {
   name: 'PlayerLobby',

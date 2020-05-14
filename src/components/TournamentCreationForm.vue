@@ -187,7 +187,7 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
-import DateTime from './Utilities/DateTime'
+import DateTime from './utilities/DateTime'
 
 export default {
   name: 'TournamentCreationForm',

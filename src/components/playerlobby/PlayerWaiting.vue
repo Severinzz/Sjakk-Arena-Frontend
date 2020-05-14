@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { playerMixin } from '../../mixins/player.mixin'
+import { playerMixin } from '@/mixins/player.mixin'
 
 export default {
   name: 'PlayerWaiting',

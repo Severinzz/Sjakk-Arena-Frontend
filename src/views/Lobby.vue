@@ -79,12 +79,12 @@
 </template>
 
 <script>
-import TournamentInfo from '@/components/Props/TournamentInfo'
-import Player from '@/components/Props/Player'
 import { mapActions, mapGetters, mapState } from 'vuex'
-import WarningDialog from '@/components/Dialogs/WarningDialog'
-import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
-import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
+import { leavePageWarningMixin } from '@/mixins/leavePageWarning.mixin'
+import { tournamentAndLobbyMixin } from '@/mixins/tournamentAndLobby.mixin'
+import TournamentInfo from '@/components/props/TournamentInfo'
+import Player from '@/components/props/Player'
+import WarningDialog from '@/components/dialogs/WarningDialog'
 
 export default {
   name: 'Lobby',

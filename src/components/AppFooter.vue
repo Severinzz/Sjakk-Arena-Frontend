@@ -26,9 +26,9 @@
     <div>&copy; {{ new Date().getFullYear() }}</div>
   </v-footer>
 </template>
-<script>
 
-import RouterListElement from './Utilities/RouterListElement'
+<script>
+import RouterListElement from './utilities/RouterListElement'
 
 export default {
   name: 'AppFooter',
