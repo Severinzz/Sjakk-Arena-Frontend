@@ -40,6 +40,7 @@
                                   label="Game Pin"
                                   placeholder="1234"
                                   type="number"
+                                  data-cy="game-pin"
                     />
                     <v-spacer></v-spacer>
                     <v-progress-circular
@@ -48,11 +49,13 @@
                       :width="7"
                       color="purple"
                       indeterminate
+                      data-cy="loadingCircle"
                       v-if="isLoading === true"
                     />
                     <v-text-field v-model="playerName"
                                   label="Spillernavn"
                                   placeholder="Ola Nordmann"
+                                  data-cy="player-name"
                                   :rules="[ v => !!v || 'Navn er påkrevd']"
                                   type="text"
                                   @keydown="limit"
@@ -64,10 +67,16 @@
                     <v-btn
                       color="primary"
                       @click="validate"
+                      data-cy="submit"
                     >
                       Delta
                     </v-btn>
-                    <v-btn to="/">Avbryt</v-btn>
+                    <v-btn
+                      to="/"
+                      data-cy="cancel"
+                    >
+                      Avbryt
+                    </v-btn>
                   </v-card-actions>
                 </v-card-text>
               </v-card>

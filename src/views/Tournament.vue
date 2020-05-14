@@ -49,7 +49,7 @@
       >
         <!-- Leader board -->
         <Table
-          class="leaderBoard"
+          class="tournament-table"
           v-if="showLeaderBoard"
           :object-list="Array.from(playerList)"
           :heading-list="leaderBoardHeadingList"
@@ -60,7 +60,7 @@
         <!-- Active games -->
         <!-- TODO: Add functionality when clicked (set result or something) -->
         <Table
-          class="leaderBoard"
+          class="tournament-table"
           v-if="!showLeaderBoard"
           :object-list="Array.from(gamesList)"
           :heading-list="activeGamesHeadingList"
@@ -264,11 +264,11 @@ export default {
 </script>
 
 <style scoped>
-  /deep/ .leaderBoard td {
+  /deep/ .tournament-table td {
     font-size: 2em;
     font-weight: bold;
   }
-  /deep/ .leaderBoard {
+  /deep/ .tournament-table {
     margin: 2em auto;
   }
   .content-wrapper {
@@ -321,7 +321,7 @@ export default {
     padding: 0;
   }
   @media (max-width: 1480px) {
-    /deep/ .leaderBoard td, th{
+    /deep/ .tournament-table td, th{
       font-size: 1.5em;
     }
   }
@@ -329,18 +329,18 @@ export default {
     /deep/.row{
       display: block !important;
     }
-    /deep/ .leaderBoard{
+    /deep/ .tournament-table{
       width: 150% !important;
       margin-left: 5% !important;
     }
   }
   @media (max-width: 780px) {
-    /deep/ .leaderBoard td, th{
+    /deep/ .tournament-table td, th{
       font-size: 1em;
     }
   }
   @media (max-width: 600px) {
-    /deep/ .leaderBoard{
+    /deep/ .tournament-table{
       width: 90% !important;
       margin-left: 5% !important;
     }

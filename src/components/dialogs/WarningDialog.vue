@@ -22,6 +22,7 @@
           <v-btn
             text
             @click="carryOn"
+            data-cy="leave"
           >
             {{ carryOnButtonText }}
           </v-btn>
@@ -30,6 +31,7 @@
             color="primary"
             outlined
             @click="closeDialog"
+            data-cy="cancel-leave"
           >
             Avbryt
           </v-btn>

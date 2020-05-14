@@ -17,6 +17,7 @@
             <v-btn
               textv
               @click="closeDialog"
+              data-cy="info-dia-btn"
             >
               Lukk
             </v-btn>

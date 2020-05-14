@@ -18,6 +18,7 @@
                   class="radio"
                   label="Hvit seier"
                   value="1"
+                  data-cy="white-win"
                 >
                   <v-spacer />
                 </v-radio>
@@ -27,6 +28,7 @@
                   class="radio"
                   label="Remis"
                   value="0.5"
+                  data-cy="stalemate"
                 >
                   <v-spacer />
                 </v-radio>
@@ -36,6 +38,7 @@
                   class="radio"
                   label="Sort seier"
                   value="0"
+                  data-cy="black-win"
                 >
                   <v-spacer />
                 </v-radio>
@@ -56,6 +59,7 @@
           <v-btn
             text
             @click="alterResultDialogState"
+            data-cy="cancel"
           >
             Avbryt
           </v-btn>
@@ -64,6 +68,7 @@
             color="primary"
             outlined
             @click="registerResult"
+            data-cy="submit"
           >
             Send inn
           </v-btn>
@@ -92,7 +97,12 @@ export default {
     return {
       result: '',
       error: false,
-      errorMessage: ''
+      errorMessage: '',
+      selectedFile: null,
+      data: null,
+      rules: [
+        value => !value || value.size < 10000000 || 'Bildet må være mindre enn 10 MB!'
+      ]
     }
   },
   methods: {

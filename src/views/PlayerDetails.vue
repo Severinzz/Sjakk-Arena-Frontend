@@ -8,6 +8,7 @@
         :color="color"
         :icon="`fas fa-${icon}`"
         transition="scale-transition"
+        data-cy="alert-box"
       >
         {{ removedMessage }}
       </v-alert>
@@ -16,6 +17,7 @@
       <v-alert
         class="info-box"
         v-if="player !== null && !player.in_tournament" type="info"
+        data-cy="info-box"
       >
         Spilleren er ikke i turneringen lenger
       </v-alert>
@@ -24,6 +26,7 @@
       <h1
         class="name"
         v-if="player !== null"
+        data-cy="name"
       >
         {{ player.name }}
       </h1>
@@ -31,6 +34,7 @@
       <h2
         class="points"
         v-if="player !== null"
+        data-cy="points"
       >
         Poeng: {{ player.points }}
       </h2>
@@ -40,10 +44,12 @@
       <Table
         :objectList="games"
         :headingList="headingList"
+        data-cy="table"
       />
       <v-btn
         class="error"
         :disabled="(player === null ? false : !player.in_tournament) || removed || player === null"
+        data-cy="remove"
         @click="kickDialog = true"
       >
         Fjern spiller
@@ -66,6 +72,7 @@
               v-model="msg"
               label="Begrunnelse"
               required
+              data-cy="reasoning"
             >
             </v-text-field>
           </v-card-text>
@@ -75,6 +82,7 @@
               text
               class="error"
               @click="removePlayerFromTournament"
+              data-cy="remove-confirm"
             >
               OK
             </v-btn>
@@ -82,6 +90,7 @@
               text
               outlined
               @click="kickDialog = false"
+              data-cy="remove-cancel"
             >
               Avbryt
             </v-btn>

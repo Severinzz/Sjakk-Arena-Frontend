@@ -10,6 +10,7 @@
         <v-tab
           v-for="item in items"
           :key="item"
+          :data-cy="item"
         >
           {{ item }}
         </v-tab>
