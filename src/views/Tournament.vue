@@ -89,9 +89,9 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
 import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
-import TournamentInfo from '@/components/props/TournamentInfo'
-import InvalidGames from '@/components/InvalidGames'
-import Table from '@/components/utilities/Table'
+import TournamentInfo from '@/components/HostComponents/TournamentInfo'
+import InvalidGames from '@/components/HostComponents/InvalidGames'
+import Table from '@/components/HostComponents/Table'
 import WarningDialog from '@/components/dialogs/WarningDialog'
 
 export default {

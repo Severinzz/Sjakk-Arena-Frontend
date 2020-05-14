@@ -38,8 +38,8 @@
 <script>
 // @ is an alias to /src
 import { clearTokenAndStateMixin } from '@/mixins/clearTokenAndState.mixin'
-import MenuTile from '@/components/props/MenuTile.vue'
-import TileHeaderSpace from '@/components/props/TileHeaderSpace'
+import MenuTile from '@/components/MenuTile.vue'
+import TileHeaderSpace from '@/components/TileHeaderSpace'
 import WEBSOCKET from '@/common/websocketApi'
 
 export default {

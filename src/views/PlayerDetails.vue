@@ -102,7 +102,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import Table from '@/components/utilities/Table'
+import Table from '@/components/HostComponents/Table'
 
 export default {
   components: { Table },

@@ -48,8 +48,8 @@
 </template>
 
 <script>
-import NotificationHelp from '@/components/utilities/NotificationHelp'
-import HelpPanels from '@/components/props/HelpPanels'
+import NotificationHelp from '@/components/HelpPage/NotificationHelp'
+import HelpPanels from '@/components/HelpPage/HelpPanels'
 import hostHelpPageData from '@/data/hostHelpPage'
 import playerHelpPageData from '@/data/playerHelpPage'
 
