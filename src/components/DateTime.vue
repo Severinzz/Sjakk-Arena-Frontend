@@ -21,6 +21,7 @@
             readonly
             required
             v-on="on"
+            data-cy="dateTimeInput"
             :rules="rules !== undefined ? rules : []"
             @click="openDateMenu()"
             @change="onChange"

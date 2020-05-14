@@ -13,3 +13,8 @@ new Vue({
   vuetify,
   render: h => h(App)
 }).$mount('#app')
+
+// Give cypress access to store. Useful for stubbing store actions.
+if (window.Cypress) {
+  window.__store = store
+}

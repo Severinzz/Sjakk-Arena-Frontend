@@ -8,7 +8,9 @@
     >
       <v-tab
         v-for="item in data"
-        :key="item.title">
+        :key="item.title"
+        :data-cy="item.title"
+      >
         <v-icon>
           {{ item.icon }}
         </v-icon>

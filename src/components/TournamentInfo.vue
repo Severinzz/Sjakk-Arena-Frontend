@@ -13,6 +13,7 @@
   <p
     class="time"
     v-if="!started"
+    data-cy="start-time"
   >
     Starter: {{ formatTime(this.tournament.start) }}
   </p>
@@ -21,6 +22,7 @@
   <p
     class="time"
     v-if="tournament.end"
+    data-cy="end-time"
   >
     Slutter: {{ formatTime(this.tournament.end) }}
   </p>
