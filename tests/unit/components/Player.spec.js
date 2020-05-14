@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils'
 
-import Player from '@/components/props/Player'
+import Player from '@/components/hostcomponents/Player'
 
 const factory = (propsData) => {
   return shallowMount(Player, {

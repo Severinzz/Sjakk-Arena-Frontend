@@ -2,7 +2,7 @@ import { createLocalVue, shallowMount } from '@vue/test-utils'
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 
-import DateTime from '@/components/utilities/DateTime'
+import DateTime from '@/components/DateTime'
 
 Vue.use(Vuetify)
 
