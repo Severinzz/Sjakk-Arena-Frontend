@@ -1,4 +1,4 @@
-const url = new URL('http://localhost:8081/#/player-lobby', self.location.origin).href
+const url = new URL('http://localhost:8081/player-lobby', self.location.origin).href
 
 /**
  * Listen for push event. Show notification if the page is not in focus
