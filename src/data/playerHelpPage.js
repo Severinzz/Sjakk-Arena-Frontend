@@ -90,7 +90,9 @@ const playerHelpPageData = [{
   texts: [
     'Når ett spill er ferdig skal resultatet registreres. Benytt "registrer resultat" knappen. Det er ikke nødvendig' +
       ' at begge spillerne legger inn resultat.',
-    'Resultat valgene er "Hvit seier", "remi (uavgjort)" eller "sort seier".',
+    'Resultat valgene er "Hvit seier", "remi (uavgjort)" eller "sort seier". Når du registrere resultatet kan ett' +
+    ' bilde bli lastet opp, dette vil bli brukt til hjelp for turneringsvert dersom dere skulle være uenige om resultatet.' +
+      ' Når bildet blir lagt inn så vil du få se en liten versjon av bildet slik du kan være sikker på at det er riktig.',
     'Når ene spilleren har lagt inn resultat, så vil motstanderen få en dialog boks der man skal godkjenne eller ikke' +
       ' godkjenne resultatet. Velger man å ikke godkjenne, kan de prøve på nytt eller kontakte turneringsverten for' +
       ' å få oppklaring i uneighetene. Turneringsverten kan også selv velge å overstyre og sette resultatet.'

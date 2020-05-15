@@ -55,7 +55,7 @@ const hostHelpPageData = [{
   texts: [
     'Når to spillere ikke blir enig om resultatet, vil spillet bli lagt i en tabell på vertsiden. Der kan verten sette' +
       ' resultatet til det som verten mener er riktig. Om en av spillerne har lastet opp bildet av sluttstillingen' +
-    ' kan dette hentes ut og brukes til vurdering av hva som er riktig resultat',
+    ' kan dette hentes ut og brukes til vurdering av hva som er riktig resultat. Bildene blir lastet ned med en zip fil.',
     ' Når "endre resultat" knappen blir benyttet, kommer det en dialog boks der verten kan sette det resultatet som er' +
       ' rettferdig'
   ],
