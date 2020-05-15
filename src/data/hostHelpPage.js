@@ -4,7 +4,8 @@ const hostHelpPageData = [{
     'For å opprette en turnering, velger du "opprett turnering" på hjemme siden, så fyller du ut skjemaet. ' +
     'Alle intastings felter er obligatoriske. Nederst i skjemaet er to brytere som er valgfrie.' +
     ' Den ene angir om turneringen skal starte når to spillere er påmeldt, den' +
-    ' andre gir tilgang til ett inntastingsfelt der du kan anngi når turneringen automatisk skal avslutte'
+    ' andre gir tilgang til ett inntastingsfelt der du kan anngi når turneringen automatisk skal avslutte.' +
+      ' NB! Husk å skjekk spam/søppelpost for administrator id.'
   ],
   images: [
     require('@/assets/help-page/host/create_tournament.jpg')
