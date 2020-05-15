@@ -1,4 +1,4 @@
-const url = new URL(process.env.VUE_APP_SJAKK_ARENA_ROOT_PAGE + '/#/player-lobby', self.location.origin).href
+const url = new URL(process.env.VUE_APP_SJAKK_ARENA_ROOT_PAGE + '/player-lobby', self.location.origin).href
 
 /**
  * Listen for push event. Show notification if the page is not in focus
