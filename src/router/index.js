@@ -1,10 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import EnterTourney from '../views/EnterTourney'
-import EnterAdminID from '../views/EnterAdminID'
-import TournamentCreation from '../views/TournamentCreation.vue'
-import PlayerLobby from '../views/PlayerLobby'
 import jwtService from '../common/jwt.storage'
 
 Vue.use(VueRouter)
@@ -39,7 +34,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: () => import('../views/Home')
   },
   {
     path: '*',
@@ -55,10 +50,7 @@ const routes = [
     meta: {
       title: 'Om Sjakk Arena'
     },
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import('../views/About.vue')
   },
   {
     path: '/lobby/:id',
@@ -77,7 +69,7 @@ const routes = [
     meta: {
       title: 'Bli med i turnering'
     },
-    component: EnterTourney
+    component: () => import('../views/EnterTourney')
   },
   {
     // Add host enter tournament ID from views for the router to use
@@ -86,7 +78,7 @@ const routes = [
     meta: {
       title: 'Skriv inn adminID'
     },
-    component: EnterAdminID
+    component: () => import('../views/EnterAdminID')
   },
   {
     path: '/tournament-creation',
@@ -94,7 +86,7 @@ const routes = [
     meta: {
       title: 'Opprett turnering'
     },
-    component: TournamentCreation
+    component: () => import('../views/TournamentCreation')
 
   },
   {
@@ -105,7 +97,7 @@ const routes = [
     meta: {
       title: 'Spiller turnering'
     },
-    component: PlayerLobby,
+    component: () => import('../views/PlayerLobby'),
     beforeEnter: routeGuard
   },
   {

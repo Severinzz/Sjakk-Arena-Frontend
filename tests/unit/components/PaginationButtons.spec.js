@@ -2,7 +2,7 @@ import { createLocalVue, mount } from '@vue/test-utils'
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 
-import PaginationButtons from '../../../src/components/PaginationButtons'
+import PaginationButtons from '@/components/buttons/PaginationButtons'
 
 Vue.use(Vuetify)
 
