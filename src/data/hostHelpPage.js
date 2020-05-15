@@ -4,7 +4,8 @@ const hostHelpPageData = [{
     'For å opprette en turnering, velger du "opprett turnering" på hjemme siden, så fyller du ut skjemaet. ' +
     'Alle intastings felter er obligatoriske. Nederst i skjemaet er to brytere som er valgfrie.' +
     ' Den ene angir om turneringen skal starte når to spillere er påmeldt, den' +
-    ' andre gir tilgang til ett inntastingsfelt der du kan anngi når turneringen automatisk skal avslutte'
+    ' andre gir tilgang til ett inntastingsfelt der du kan anngi når turneringen automatisk skal avslutte.' +
+      ' NB! Husk å skjekk spam/søppelpost for administrator id.'
   ],
   images: [
     require('@/assets/help-page/host/create_tournament.jpg')
@@ -55,7 +56,7 @@ const hostHelpPageData = [{
   texts: [
     'Når to spillere ikke blir enig om resultatet, vil spillet bli lagt i en tabell på vertsiden. Der kan verten sette' +
       ' resultatet til det som verten mener er riktig. Om en av spillerne har lastet opp bildet av sluttstillingen' +
-    ' kan dette hentes ut og brukes til vurdering av hva som er riktig resultat',
+    ' kan dette hentes ut og brukes til vurdering av hva som er riktig resultat. Bildene blir lastet ned med en zip fil.',
     ' Når "endre resultat" knappen blir benyttet, kommer det en dialog boks der verten kan sette det resultatet som er' +
       ' rettferdig'
   ],

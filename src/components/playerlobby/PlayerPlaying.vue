@@ -202,7 +202,7 @@
               max-width="650px"
             >
               <v-card>
-                <v-card-title class="justify-center"> Din motstander hevder at {{ getResultText }}</v-card-title>
+                <v-card-title class="justify-center no-word-break"> Din motstander hevder at {{ getResultText }}</v-card-title>
                 <v-card-text class="text-center">Vil du godkjenne dette resultatforslaget?</v-card-text>
                 <v-layout justify-center>
                   <v-card-actions>
@@ -497,6 +497,9 @@ export default {
   .imgInput{
     display: flex;
     height: 100px;
+  }
+  .no-word-break {
+    word-break: keep-all; /* maybe !important  */
   }
   img{
     height: 150px;
