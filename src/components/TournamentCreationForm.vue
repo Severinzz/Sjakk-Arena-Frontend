@@ -8,155 +8,178 @@
     >
       <v-col>
         <v-alert
-        type="error"
-        v-if="alertError"
+          type="error"
+          v-if="alertError"
         >
           {{ errorMessage }}
         </v-alert>
-    <v-card>
-    <v-form
-      ref="form"
-      lazy-validation
-    >
-      <v-toolbar
-        dark
-        color="primary"
-      >
-        <v-toolbar-title>Turneringsinformasjon</v-toolbar-title>
-      </v-toolbar>
-      <!-- Name of tournament -->
-      <div class="formstyle">
-      <v-text-field
-        v-model="tournamentName"
-        :rules="tournamentNameRules"
-        label="Navn på turnering"
-        required
-      >
-      </v-text-field>
-      <!-- email address of tournament host -->
-      <v-text-field
-        v-model="email"
-        :rules="emailRules"
-        label="E-post"
-        required>
-      </v-text-field>
-      <!-- code from https://vuetifyjs.com/en/components/time-pickers-->
-      <v-row>
-        <v-col cols="11" sm="5">
-          <!-- Start time -->
-          <v-menu
-            ref="firstmenu"
-            v-model="startTimeMenu"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            :return-value.sync="startTime"
-            transition="scale-transition"
-            offset-y
-            max-width="290px"
-            min-width="290px"
+        <v-card>
+          <v-form
+            ref="form"
+            lazy-validation
           >
-            <template v-slot:activator="{ on }">
+            <v-toolbar
+              dark
+              color="primary"
+            >
+              <v-toolbar-title>Turneringsinformasjon</v-toolbar-title>
+            </v-toolbar>
+            <!-- Name of tournament -->
+            <div class="formstyle">
               <v-text-field
-                v-model="startTime"
-                label="Starttid"
-                readonly
+                v-model="tournamentName"
+                :rules="tournamentNameRules"
+                label="Navn på turnering"
                 required
-                v-on="on"
-                :error="missingStartTime"
+                data-cy="name"
               >
               </v-text-field>
-            </template>
-            <v-time-picker
-              v-if="startTimeMenu"
-              v-model="startTime"
-              full-width
-              format="24hr"
-              @click:minute="$refs.firstmenu.save(startTime)"
-              :color="formColor"
-              :max="calcStartTime"
-              :min="minStartTime"
-            >
-            </v-time-picker>
-          </v-menu>
-        </v-col>
-        <v-spacer>
-          <v-progress-circular
-            :size="70"
-            :width="7"
-            color="purple"
-            indeterminate
-            v-if="isLoading === true"
-          >
-          </v-progress-circular>
-        </v-spacer>
-      </v-row>
-      <!-- end of code from vuetifyjs.com -->
-      <!-- Number of tables -->
-      <v-text-field
-        v-model="tables"
-        label="Antall bord"
-        type="number"
-        :min="0"
-        :rules="numberFieldRules"
-      >
-      </v-text-field>
-      <!-- Maximum number of rounds -->
-      <v-text-field
-        v-model="rounds"
-        label="Max antall runder"
-        type="number"
-        :rules="numberFieldRules"
-      >
-      </v-text-field>
-      <v-switch
-        label="Start når to spillere er påmeldt"
-        v-model="earlyStart">
-      </v-switch>
-      <v-switch
-        label="Bruk sluttid"
-        v-model="useEndTime"
-      >
-      </v-switch>
-      <!-- code from https://vuetifyjs.com/en/components/time-pickers-->
-      <v-row>
-      <v-col
-        cols="12"
-        sm="5"
-      >
-      <!-- End time and date-->
-        <date-time
-          v-if="useEndTime"
-          :min-time="startTime"
-          :rules="endTimeRules"
-          :event-name="'endDateTime'"
-          @endDateTime="onEndDateTime"
-        />
-      </v-col>
-      </v-row>
-      <!-- end of code from vuetifyjs.com -->
-      <v-btn
-        id="submit-btn"
-        class=""
-        color="primary"
-        @click="validate"
-      >
-        Send
-      </v-btn>
-      <v-btn
-        id="clear-btn"
-        @click="clear"
-      >
-        Tøm
-      </v-btn>
-      <v-btn
-        id="cancel-btn"
-        @click="cancel"
-      >
-        Avbryt
-      </v-btn>
-      </div>
-    </v-form>
-    </v-card>
+              <!-- email address of tournament host -->
+              <v-text-field
+                v-model="email"
+                :rules="emailRules"
+                label="E-post"
+                required
+                data-cy="email"
+              >
+              </v-text-field>
+              <!-- code from https://vuetifyjs.com/en/components/time-pickers-->
+              <v-row>
+                <v-col cols="11" sm="5">
+                  <!-- Start time -->
+                  <v-menu
+                    ref="firstmenu"
+                    v-model="startTimeMenu"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    :return-value.sync="startTime"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="startTime"
+                        label="Starttid"
+                        readonly
+                        :rules="startTimeRules"
+                        required
+                        v-on="on"
+                        data-cy="time-input"
+                      >
+                      </v-text-field>
+                    </template>
+                    <v-time-picker
+                      v-if="startTimeMenu"
+                      v-model="startTime"
+                      full-width
+                      format="24hr"
+                      @click:minute="$refs.firstmenu.save(startTime)"
+                      :color="formColor"
+                      :max="calcStartTime"
+                      :min="minStartTime"
+                      data-cy="time-picker"
+                    >
+                    </v-time-picker>
+                  </v-menu>
+                </v-col>
+                <v-spacer>
+                  <v-progress-circular
+                    :size="70"
+                    :width="7"
+                    color="purple"
+                    indeterminate
+                    data-cy="loadingCircle"
+                    v-if="isLoading === true"
+                  >
+                  </v-progress-circular>
+                </v-spacer>
+              </v-row>
+              <!-- end of code from vuetifyjs.com -->
+              <!-- Number of tables -->
+              <v-text-field
+                v-model="tables"
+                label="Antall bord"
+                type="number"
+                :min="0"
+                :rules="numberFieldRules"
+                data-cy="tables"
+              >
+              </v-text-field>
+              <!-- Maximum number of rounds -->
+              <v-text-field
+                v-model="rounds"
+                label="Max antall runder"
+                type="number"
+                :rules="numberFieldRules"
+                data-cy="rounds"
+              >
+              </v-text-field>
+              <v-switch
+                label="Start når to spillere er påmeldt"
+                v-model="earlyStart"
+                data-cy="early-start"
+              >
+              </v-switch>
+              <v-switch
+                label="Bruk sluttid"
+                v-model="useEndTime"
+                data-cy="endtime-switch"
+              >
+              </v-switch>
+              <!-- code from https://vuetifyjs.com/en/components/time-pickers-->
+              <v-row>
+                <v-col
+                  cols="12"
+                  sm="5"
+                >
+                  <!-- End time and date-->
+                  <date-time
+                    v-if="useEndTime"
+                    :min-time="startTime === '' ? undefined : startTime"
+                    :rules="endTimeRules"
+                    :event-name="'endDateTime'"
+                    @endDateTime="onEndDateTime"
+                    data-cy="endtime"
+                  />
+                </v-col>
+              </v-row>
+              <!-- end of code from vuetifyjs.com -->
+              <v-btn
+                class="btn"
+                color="primary"
+                @click="createTournament"
+                data-cy="create"
+              >
+                Opprett
+              </v-btn>
+              <v-btn
+                class="btn"
+                color="primary"
+                @click="createAndStartTournament"
+                data-cy="create-start"
+              >
+                Opprett og start
+              </v-btn>
+              <v-btn
+                class="btn"
+                id="clear-btn"
+                @click="clear"
+                data-cy="clear"
+              >
+                Tøm
+              </v-btn>
+              <v-btn
+                class="btn"
+                @click="cancel"
+                data-cy="cancel"
+              >
+                Avbryt
+              </v-btn>
+            </div>
+          </v-form>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -173,7 +196,8 @@ export default {
     return {
       startTime: '', // start time of tournament
       endTime: '', // end time of tournament
-      currentDate: new Date().toISOString().slice(0, 10),
+      // https://stackoverflow.com/questions/23593052/format-javascript-date-as-yyyy-mm-dd#comment84587622_29774197
+      currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60 * 1000)).toISOString().slice(0, 10),
       endDate: '',
       startTimeMenu: false,
       minStartTime: new Date().getHours().toString() + ':' + new Date().getMinutes().toString(),
@@ -185,7 +209,6 @@ export default {
       formColor: 'blue', // color to be used in form elements
       isLoading: false,
       useEndTime: false,
-      missingStartTime: false,
       alertError: false,
       errorMessage: '',
       // rules
@@ -211,7 +234,9 @@ export default {
   },
   methods: {
     ...mapActions([
-      'sendTournament'
+      'sendTournament',
+      'sendStartRequest',
+      'fetchTournament'
     ]),
     ...mapMutations([
       'clearPlayers'
@@ -222,21 +247,102 @@ export default {
      */
     clear() {
       this.$refs.form.reset()
+      this.endTime = ''
+      this.endDate = ''
+    },
+
+    /**
+     * Creates and starts the tournament described by the form data
+     */
+    async createAndStartTournament() {
+      try {
+        await this.submit()
+        await this.sendStartRequest()
+        await this.fetchTournament()
+        await this.$router.replace('/tournament/' + this.tournament.user_id)
+      } catch (err) {
+        if (err.message !== 'invalidFormData') {
+          this.hideLoadingCircleAndDisplayErrorMessage(err)
+        }
+      }
+    },
+
+    /**
+     * Creates the tournament described by the form data
+     * Routes to the tournament lobby if the tournament is successfully created
+     */
+    async createTournament () {
+      try {
+        await this.submit()
+        await this.$router.push('/lobby/' + this.tournament.user_id)
+      } catch (err) {
+        if (err.message !== 'invalidFormData') {
+          this.hideLoadingCircleAndDisplayErrorMessage(err)
+        }
+      }
     },
 
     /**
      * Submit the form to the backend.
-     * @returns {Promise<void>} Void, returns nothing to stop execution if the start time is missing.
+     * @returns A promise when the tournament information is sent and handled by the server
+     * @throws Error if form data is invalid
      */
-    async submit () {
-      if (this.validateTime()) {
-        this.missingStartTime = true
-        return
+    async submit() {
+      if (this.validate()) {
+        this.alertError = false
+        this.isLoading = true
+        return this.setupPayloadAndSend()
+      } else {
+        throw new Error('invalidFormData')
       }
-      this.alertError = false
-      this.isLoading = true
-      // Setup the JSON object to be sent to the server
-      let payload = {
+    },
+
+    /**
+     * Hides the loading circle and displays a error message
+     */
+    hideLoadingCircleAndDisplayErrorMessage(err) {
+      this.hideLoadingCircle()
+      this.displayErrorMessage(err)
+    },
+
+    /**
+     * Hides the loading circle
+     */
+    hideLoadingCircle() {
+      this.isLoading = false
+    },
+
+    /**
+     * Displays the specified error's message
+     * @param error
+     */
+    displayErrorMessage(err) {
+      this.alertError = true
+      this.errorMessage = err + '. Prøv igjen senere'
+    },
+
+    /**
+     * Validates the form.
+     */
+    validate() {
+      return this.$refs.form.validate()
+    },
+
+    /**
+     * Sets up the information to be sent to the server and sends it
+     */
+    async setupPayloadAndSend() {
+      let payload = this.setupPayload()
+      // Sends the given information in the form to the server.
+      await this.sendTournament(payload)
+    },
+
+    /**
+     * Sets up the information to be sent to the server
+     */
+    setupPayload() {
+      return {
+        // Setup the JSON object to be sent to the server
         'tournament_name': this.tournamentName,
         'admin_email': this.email,
         'start': this.startTime !== '' ? this.currentDate + 'T' + this.startTime : null,
@@ -245,33 +351,6 @@ export default {
         'max_rounds': parseInt(this.rounds),
         'early_start': this.earlyStart
       }
-      // Sends the given information in the form to the server.
-      await this.sendTournament(payload).then(res => {
-        // Grabs the tournament from store so the correct tournament_id is used in the dynamic link.
-        this.$router.push('/lobby/' + this.tournament.user_id)
-        this.isLoading = false
-      }).catch(err => {
-        // Hides the loading circle and display error message
-        this.alertError = true
-        this.errorMessage = err + '. Prøv igjen senere'
-        this.isLoading = false
-      })
-    },
-
-    /**
-     * Validate the form.
-     */
-    validate() {
-      if (this.$refs.form.validate()) {
-        this.submit()
-      }
-    },
-    /**
-     * Checks if start time is missing
-     * @returns {boolean} true if start time is missing, false if not.
-     */
-    validateTime() {
-      return this.startTime === ''
     },
 
     /**
@@ -279,7 +358,7 @@ export default {
      * @returns {boolean} True if start time is equal or smaller than end time.
      */
     checkTime() {
-      if (this.endTime === undefined || this.endDate !== this.currentDate) { return true }
+      if (this.endTime === undefined || this.endDate !== this.currentDate || this.startTime === undefined) { return true }
       let startTimeH = this.startTime.toString().split(':')[0]
       let endTimeH = this.endTime.toString().split(':')[0]
       if (parseInt(startTimeH) < parseInt(endTimeH)) {
@@ -356,10 +435,8 @@ export default {
     margin-left: 0.5em;
     margin-right: 0.5em;
   }
-  #cancel-btn, #clear-btn{
+  .btn{
     margin-left: 1%;
-  }
-  #cancel-btn, #submit-btn, #clear-btn{
     margin-bottom: 10px;
   }
 </style>

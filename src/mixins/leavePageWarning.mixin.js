@@ -1,17 +1,34 @@
+import WEBSOCKET from '../common/websocketApi'
+
 export const leavePageWarningMixin = {
+  data() {
+    return {
+      leaveDialog: false,
+      wantToLeave: null
+    }
+  },
   methods: {
-    setupBrowserWarning() {
-      /*
-          Send warning to user when back button is pressed.
-          adapted from from: https://stackoverflow.com/questions/12381563/how-to-stop-browser-back-button-using-javascript
-        */
-      let VM = this
-      window.location.hash = this.pathVar
-      window.location.hash = this.pathVar // Varsel vil nå dukke opp to ganger
-      console.log(window.location.hash)
-      window.onhashchange = function() {
-        window.onpopstate = function() { VM.alterLeavePageDialogState() }
-      }
+
+    /**
+     * Alter the leave warning dialog viability state.
+     */
+    alterLeavePageDialogState() {
+      this.wantToLeave = false
+      this.leaveDialog = !this.leaveDialog
+      this.$router.push(this.pathVar).catch(res => { this.wantToLeave = null })
+    }
+  },
+
+  beforeRouteLeave(to, from, next) {
+    if (this.wantToLeave === null) {
+      this.leaveDialog = true
+      next(false)
+    } else if (this.wantToLeave) {
+      WEBSOCKET.unsubscribeAll()
+      next()
+    } else {
+      this.wantToLeave = null
+      next(from.fullPath)
     }
   }
 }

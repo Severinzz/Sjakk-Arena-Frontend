@@ -1,0 +1,65 @@
+[
+  {
+    "name": "Grete",
+    "paused": false,
+    "points": 1.0,
+    "icon": "fas fa-chess-knight fa-3x",
+    "tournament_id": 275621,
+    "in_tournament": true,
+    "user_id": 6
+  },
+  {
+    "name": "Ole",
+    "paused": false,
+    "points": 1.0,
+    "icon": "fas fa-chess-bishop fa-3x",
+    "tournament_id": 275621,
+    "in_tournament": true,
+    "user_id": 133
+  },
+  {
+    "name": "Pål",
+    "paused": false,
+    "points": 1.0,
+    "icon": "fas fa-chess-knight fa-3x",
+    "tournament_id": 275621,
+    "in_tournament": true,
+    "user_id": 2
+  },
+  {
+    "name": "Per",
+    "paused": false,
+    "points": 0.5,
+    "icon": "fas fa-chess-king fa-3x",
+    "tournament_id": 275621,
+    "in_tournament": true,
+    "user_id": 3
+  },
+  {
+    "name": "Hans",
+    "paused": false,
+    "points": 0.5,
+    "icon": "fas fa-chess-knight fa-3x",
+    "tournament_id": 275621,
+    "in_tournament": true,
+    "user_id": 5
+  },
+  {
+    "name": "Bjarne",
+    "paused": false,
+    "points": 0.0,
+    "icon": "fas fa-chess-pawn fa-3x",
+    "tournament_id": 275621,
+    "in_tournament": true,
+    "user_id": 1
+  },
+  {
+    "name": "Espen",
+    "paused": false,
+    "points": 0.0,
+    "icon": "fas fa-chess-bishop fa-3x",
+    "tournament_id": 275621,
+    "in_tournament": true,
+    "user_id": 4
+  }
+]

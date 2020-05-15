@@ -10,6 +10,7 @@
         <v-tab
           v-for="item in items"
           :key="item"
+          :data-cy="item"
         >
           {{ item }}
         </v-tab>
@@ -47,8 +48,8 @@
 </template>
 
 <script>
-import NotificationHelp from '../components/NotificationHelp'
-import HelpPanels from '@/components/HelpPanels'
+import NotificationHelp from '@/components/helppage/NotificationHelp'
+import HelpPanels from '@/components/helppage/HelpPanels'
 import hostHelpPageData from '@/data/hostHelpPage'
 import playerHelpPageData from '@/data/playerHelpPage'
 

@@ -3,7 +3,7 @@
     <v-container>
       <!-- Let the system decide what to load when we are waiting -->
       <!-- https://vuejs.org/v2/guide/conditional.html -->
-      <div v-if="!isTournamentActive">
+      <div v-if="!isTournamentActive && typeof activeGame.table === 'string'">
         <player-waiting
           :tournament-name="tournamentName"
           :tournament-start="tournamentStart"
@@ -14,19 +14,20 @@
       </div>
 
       <!-- Let the system decide what to load when we are not waiting -->
-      <div v-else-if="isTournamentActive">
+      <div v-else-if="isTournamentActive || typeof activeGame.table !== 'string'">
         <player-playing
           :tournament-name="tournamentName"
           :tournament-start="tournamentStart"
           :tournament-end="tournamentEnd"
           :player-name="playerName"
           :points="points"
+          @leaveTournament="leaveDialog = true"
         />
       </div>
 
       <!-- Something goes wrong -->
       <div v-else>
-        <h1>Something wrong in PlayerLobby.vue. isTournamentActive = {{ activeTournament }}</h1>
+        <h1>Something wrong in PlayerLobby.vue. isTournamentActive = {{ isTournamentActive }}</h1>
       </div>
 
       <v-row
@@ -58,24 +59,36 @@
           </v-card>
         </v-dialog>
       </v-row>
+
+      <!-- Dialog shown when player tries to leave the tournament -->
+      <warning-dialog
+        title="Forlat turneringen"
+        action="forlate tuneringen"
+        :show-dialog="leaveDialog"
+        carry-on-button-text="Forlat turnering"
+        @carryOn="leaveTournament()"
+        @closeDialog="alterLeavePageDialogState"
+      />
     </v-container>
     <v-spacer/>
   </div>
 </template>
 
 <script>
-import PlayerWaiting from '../components/PlayerLobby/PlayerWaiting'
-import PlayerPlaying from '../components/PlayerLobby/PlayerPlaying'
-import storage from '../common/jwt.storage'
-import WEBSOCKET from '../common/websocketApi'
 import { mapActions, mapState } from 'vuex'
-import { API_SERVICE } from '../common/api'
+import { API_SERVICE } from '@/common/api'
+import { leavePageWarningMixin } from '@/mixins/leavePageWarning.mixin'
+import PlayerWaiting from '@/components/playerlobby/PlayerWaiting'
+import PlayerPlaying from '@/components/playerlobby/PlayerPlaying'
+import storage from '@/common/jwt.storage'
+import WarningDialog from '@/components/dialogs/WarningDialog'
 
 export default {
   name: 'PlayerLobby',
   components: {
     PlayerWaiting,
-    PlayerPlaying
+    PlayerPlaying,
+    WarningDialog
   },
   data() {
     return {
@@ -83,9 +96,13 @@ export default {
       kickedMessage: '',
       countDownNr: 15,
       intervalId: '',
-      kickedDialog: false
+      kickedDialog: false,
+      pathVar: '/player-lobby'
     }
   },
+  mixins: [
+    leavePageWarningMixin
+  ],
   computed: {
     ...mapState({
       tournament: state => state.tournament,
@@ -93,6 +110,7 @@ export default {
       tournamentStart: state => state.tournament.tournament.start,
       tournamentEnd: state => state.tournament.tournament.end,
       isTournamentActive: state => state.tournament.activeTournament,
+      activeGame: state => state.games.activeGame,
       playerName: state => state.players.player.name,
       points: state => state.players.points
     })
@@ -105,7 +123,8 @@ export default {
       'subscribeToActiveGame',
       'subscribeToPoints',
       'subscribeToSuggestedResult',
-      'subscribeToPlayerKicked'
+      'subscribeToPlayerKicked',
+      'sendLeaveRequest'
     ]),
     /**
      * Counts down, navigate home when finished.
@@ -123,6 +142,7 @@ export default {
      */
     navigateHome() {
       this.kickedDialog = false
+      this.wantToLeave = true
       storage.deleteToken()
       clearInterval(this.intervalId)
       this.$router.replace('/')
@@ -133,6 +153,16 @@ export default {
     startCountDown() {
       this.intervalId = setInterval(this.countDown, 1000)
     },
+    /**
+     * The player leaves the tournament
+     */
+    async leaveTournament() {
+      this.sendLeaveRequest(this.isTournamentActive).then(res => {
+        this.wantToLeave = true
+        this.$router.push('/')
+      })
+    },
+
     /**
      * Returns the public key from backend.
      * @returns {Promise<AxiosResponse<T>>} Axios promis. Contains public key.
@@ -254,10 +284,6 @@ export default {
       await this.unsubscribePushNotification()
     }
     next()
-  },
-  destroyed() {
-    WEBSOCKET.unsubscribeAll()
-    WEBSOCKET.close()
   }
 }
 </script>

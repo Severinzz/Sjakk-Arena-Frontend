@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import AppFooter from './components/AppFooter'
-import AppHeader from './components/AppHeader'
-import TileHeaderSpace from './components/TileHeaderSpace'
 import { API_SERVICE } from './common/api'
+import AppFooter from './components/layout/AppFooter'
+import AppHeader from './components/layout/AppHeader'
+import TileHeaderSpace from './components/TileHeaderSpace'
 import jwtService from './common/jwt.storage'
 
 export default {

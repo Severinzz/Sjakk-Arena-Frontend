@@ -9,6 +9,7 @@
       :additional-time-pr-move="additionalTimePrMove"
       :count-down.sync="blackCountDown"
       :reset.sync="blackReset"
+      :first-click.sync="firstClick"
       @times-up="handleTimesUpEvent('black')"
     />
 
@@ -96,8 +97,8 @@
 </template>
 
 <script>
-import ChessClockButton from '../components/ChessClockButton'
-import InformationDialog from '../components/InformationDialog'
+import ChessClockButton from '@/components/buttons/ChessClockButton'
+import InformationDialog from '@/components/dialogs/InformationDialog'
 
 export default {
   name: 'ChessClock',
@@ -111,8 +112,9 @@ export default {
     return {
       initialTimePrPlayer: 900, // in seconds
       additionalTimePrMove: 10, // in seconds
-      blackCountDown: false,
-      whiteCountDown: true,
+      firstClick: true,
+      blackCountDown: true,
+      whiteCountDown: false,
       configurationDialog: false,
       configMinutes: undefined,
       configSeconds: undefined,
@@ -143,8 +145,9 @@ export default {
      * Reset the chess clock
      */
     resetClock: function () {
-      this.whiteCountDown = true
-      this.blackCountDown = false
+      this.whiteCountDown = false
+      this.blackCountDown = true
+      this.firstClick = true
       this.whiteReset = true
       this.blackReset = true
     },

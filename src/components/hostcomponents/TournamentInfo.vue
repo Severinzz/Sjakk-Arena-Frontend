@@ -2,7 +2,10 @@
 <div>
   <!-- Game pin -->
   <p class="pinTitle">PIN:</p>
-  <p class="pin">
+  <p
+    class="pin"
+    data-cy="game-pin"
+  >
     {{ tournament.user_id }}
   </p>
 
@@ -13,6 +16,7 @@
   <p
     class="time"
     v-if="!started"
+    data-cy="start-time"
   >
     Starter: {{ formatTime(this.tournament.start) }}
   </p>
@@ -21,6 +25,7 @@
   <p
     class="time"
     v-if="tournament.end"
+    data-cy="end-time"
   >
     Slutter: {{ formatTime(this.tournament.end) }}
   </p>

@@ -1,0 +1,15 @@
+[
+  {
+    "table": 6,
+    "start": "2020-05-12 17:51:31",
+    "end": "2020-05-12 17:51:37",
+    "active": true,
+    "validResult": false,
+    "game_id": 16,
+    "white_player_id": 1,
+    "black_player_id": 6,
+    "white_player_points": 0.5,
+    "white_player_name": "Bjarne",
+    "black_player_name": "Grete"
+  }
+]

@@ -1,6 +1,7 @@
 <template>
   <span>
   <v-container class="content-wrapper" fluid>
+    <h1 v-if="this.pause">Turneringen er satt på pause</h1>
     <v-row>
       <v-col cols="2">
         <!-- Information side bar -->
@@ -30,7 +31,7 @@
             <v-btn id="Stop"
                    color="error"
                    class="mr-4"
-                   @click="endDialog = true"
+                   @click="leaveDialog = true"
             >
               Avslutt
             </v-btn>
@@ -48,7 +49,7 @@
       >
         <!-- Leader board -->
         <Table
-          class="leaderBoard"
+          class="tournament-table"
           v-if="showLeaderBoard"
           :object-list="Array.from(playerList)"
           :heading-list="leaderBoardHeadingList"
@@ -59,7 +60,7 @@
         <!-- Active games -->
         <!-- TODO: Add functionality when clicked (set result or something) -->
         <Table
-          class="leaderBoard"
+          class="tournament-table"
           v-if="!showLeaderBoard"
           :object-list="Array.from(gamesList)"
           :heading-list="activeGamesHeadingList"
@@ -74,10 +75,10 @@
     </v-row>
   </v-container>
   <warning-dialog
-  :title="endDialogTitle"
+  :title="leaveDialogTitle"
   action="avslutte turneringen"
   carry-on-button-text="Avslutt turnering"
-  :show-dialog="endDialog"
+  :show-dialog="leaveDialog"
   @carryOn="endTournament"
   @closeDialog="alterLeavePageDialogState"
   />
@@ -85,13 +86,13 @@
 </template>
 
 <script>
-import TournamentInfo from '@/components/TournamentInfo'
 import { mapActions, mapGetters, mapState } from 'vuex'
-import InvalidGames from '@/components/InvalidGames'
-import Table from '../components/Table'
-import WarningDialog from '../components/WarningDialog'
 import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
 import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
+import TournamentInfo from '@/components/hostcomponents/TournamentInfo'
+import InvalidGames from '@/components/hostcomponents/InvalidGames'
+import Table from '@/components/hostcomponents/Table'
+import WarningDialog from '@/components/dialogs/WarningDialog'
 
 export default {
   name: 'Tournament',
@@ -146,8 +147,7 @@ export default {
           align: 'end',
           value: 'start'
         }],
-      endDialog: false,
-      endDialogTitle: 'Avslutt turnering',
+      leaveDialogTitle: 'Avslutt turnering',
       pathVar: 'tournament/'
     }
   },
@@ -240,16 +240,9 @@ export default {
      */
     endTournament() {
       this.sendEndRequest().then(res => {
+        this.wantToLeave = true
         this.$router.push('/')
       })
-    },
-
-    /**
-     * Show the end tournament confirmation dialog.
-     */
-    alterLeavePageDialogState() {
-      this.endDialog = !this.endDialog
-      this.endDialogTitle = 'Avslutt turnering'
     }
   },
   watch: {
@@ -259,8 +252,8 @@ export default {
      */
     isTournamentActive: function(active) {
       if (!active) {
-        this.endDialog = true
-        this.endDialogTitle = 'Tidspunktet for turneringsslutt er passert'
+        this.leaveDialogTitle = 'Tidspunktet for turneringsslutt er passert'
+        this.leaveDialog = true
       }
     }
   },
@@ -271,17 +264,24 @@ export default {
 </script>
 
 <style scoped>
-  /deep/ .leaderBoard td {
+  /deep/ .tournament-table td {
     font-size: 2em;
     font-weight: bold;
   }
-  /deep/ .leaderBoard th {
-   }
-  /deep/ .leaderBoard {
+  /deep/ .tournament-table {
     margin: 2em auto;
   }
   .content-wrapper {
+    text-align: center;
     padding: 0 0 2% 0;
+  }
+  h1{
+    display: inline-block;
+    padding: 15px;
+    font-size: 3.5em;
+    background-color: #1976d2;
+    border-radius: 10px;
+    color: white;
   }
   .numberOfPlayers {
     font-size: 1.8em;
@@ -321,7 +321,7 @@ export default {
     padding: 0;
   }
   @media (max-width: 1480px) {
-    /deep/ .leaderBoard td, th{
+    /deep/ .tournament-table td, th{
       font-size: 1.5em;
     }
   }
@@ -329,18 +329,18 @@ export default {
     /deep/.row{
       display: block !important;
     }
-    /deep/ .leaderBoard{
+    /deep/ .tournament-table{
       width: 150% !important;
       margin-left: 5% !important;
     }
   }
   @media (max-width: 780px) {
-    /deep/ .leaderBoard td, th{
+    /deep/ .tournament-table td, th{
       font-size: 1em;
     }
   }
   @media (max-width: 600px) {
-    /deep/ .leaderBoard{
+    /deep/ .tournament-table{
       width: 90% !important;
       margin-left: 5% !important;
     }

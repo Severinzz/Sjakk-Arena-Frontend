@@ -26,6 +26,9 @@ export const API_SERVICE = {
   get(path, slug = '') {
     return axios.get(`${path}/${slug}`)
   },
+  getWithParam(path, params) {
+    return axios.get(`${path}`, params)
+  },
   post(path, params) {
     return axios.post(`${path}`, params)
   },
@@ -45,12 +48,6 @@ export const TOURNAMENT_SERVICE = {
   get(slug) {
     return API_SERVICE.get(this.path, slug)
   },
-  post(params) {
-    return API_SERVICE.post(this.path, params)
-  },
-  put(params) {
-    return API_SERVICE.put(this.path, params)
-  },
   patch(slug, params) {
     return API_SERVICE.patch(this.path, slug, params)
   }
@@ -66,5 +63,8 @@ export const PLAYER_SERVICE = {
   },
   put(slug, payload) {
     return API_SERVICE.put(this.path, slug, payload)
+  },
+  delete(slug) {
+    return API_SERVICE.delete(this.path, slug)
   }
 }

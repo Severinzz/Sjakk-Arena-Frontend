@@ -59,10 +59,10 @@
             <strong> Husk at verten kan velge å kaste ut spillere!</strong>
           </p>
           <p>
-            For mere informasjon om hvordan du bruker applikasjonen,
+            For mer informasjon om hvordan du bruker applikasjonen,
             <strong>
               <router-link to="/help">
-            se her
+            se her.
               </router-link>
             </strong>
           </p>

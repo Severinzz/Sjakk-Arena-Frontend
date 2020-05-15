@@ -1,0 +1,41 @@
+[
+  {
+    "active": true,
+    "black_player_id": 1,
+    "black_player_name": "Bjarne",
+    "end": null,
+    "game_id": 10,
+    "start": "2020-05-11 15:27:36",
+    "table": 3,
+    "validResult": true,
+    "white_player_id": 6,
+    "white_player_name": "Grete",
+    "white_player_points": 0
+  },
+  {
+    "active": true,
+    "black_player_id": 5,
+    "black_player_name": "Hans",
+    "end": null,
+    "game_id": 9,
+    "start": "2020-05-11 15:27:36",
+    "table": 1,
+    "validResult": true,
+    "white_player_id": 3,
+    "white_player_name": "Per",
+    "white_player_points": 0
+  },
+  {
+    "active": true,
+    "black_player_id": 4,
+    "black_player_name": "Espen",
+    "end": null,
+    "game_id": 8,
+    "start": "2020-05-11 15:27:36",
+    "table": 4,
+    "validResult": true,
+    "white_player_id": 133,
+    "white_player_name": "Ole",
+    "white_player_points": 0.5
+  }
+]

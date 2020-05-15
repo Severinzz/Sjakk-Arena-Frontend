@@ -1,20 +1,40 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import EnterTourney from '../views/EnterTourney'
-import EnterAdminID from '../views/EnterAdminID'
-import TournamentCreation from '../views/TournamentCreation.vue'
-import PlayerLobby from '../views/PlayerLobby'
+import jwtService from '../common/jwt.storage'
 
 Vue.use(VueRouter)
 
 const DEFAULT_TITLE = 'Sjakk Arena'
 
+function routeGuard(from, to, next) {
+  let auth = jwtService.getToken()
+  if (auth === null) {
+    switch (from.name) {
+      case 'lobby':
+        next({ name: 'tournamentCreation' })
+        break
+      case 'playerLobby':
+        next({ name: 'Enter Tournament' })
+        break
+      case 'tournament':
+        next({ name: 'Enter AdminID' })
+        break
+      case 'playerDetails':
+        next({ name: 'Enter AdminID' })
+        break
+      default:
+        next()
+    }
+  } else {
+    next()
+  }
+}
+
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: () => import('../views/Home')
   },
   {
     path: '*',
@@ -30,19 +50,17 @@ const routes = [
     meta: {
       title: 'Om Sjakk Arena'
     },
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import('../views/About.vue')
   },
   {
     path: '/lobby/:id',
-    name: 'Lobby',
+    name: 'lobby',
     // Lazy-load for better performance.
     meta: {
       title: 'Lobby - '
     },
-    component: () => import('../views/Lobby')
+    component: () => import('../views/Lobby'),
+    beforeEnter: routeGuard
   },
   {
     // Add enter player-details for tournament from views for the router to use.
@@ -51,7 +69,7 @@ const routes = [
     meta: {
       title: 'Bli med i turnering'
     },
-    component: EnterTourney
+    component: () => import('../views/EnterTourney')
   },
   {
     // Add host enter tournament ID from views for the router to use
@@ -60,7 +78,7 @@ const routes = [
     meta: {
       title: 'Skriv inn adminID'
     },
-    component: EnterAdminID
+    component: () => import('../views/EnterAdminID')
   },
   {
     path: '/tournament-creation',
@@ -68,7 +86,7 @@ const routes = [
     meta: {
       title: 'Opprett turnering'
     },
-    component: TournamentCreation
+    component: () => import('../views/TournamentCreation')
 
   },
   {
@@ -79,7 +97,8 @@ const routes = [
     meta: {
       title: 'Spiller turnering'
     },
-    component: PlayerLobby
+    component: () => import('../views/PlayerLobby'),
+    beforeEnter: routeGuard
   },
   {
     path: '/tournament/:id',
@@ -87,16 +106,18 @@ const routes = [
     meta: {
       title: 'Turnering - '
     },
-    component: () => import('../views/Tournament')
+    component: () => import('../views/Tournament'),
+    beforeEnter: routeGuard
   },
   {
     path: '/tournament/player/:index',
-    name: 'playerdetails',
+    name: 'playerDetails',
     // TODO: Finne en måte å bruke spiller sitt navn som dynamisk route?
     meta: {
       title: 'Spiller - '
     },
-    component: () => import('../views/PlayerDetails')
+    component: () => import('../views/PlayerDetails'),
+    beforeEnter: routeGuard
   },
   {
     path: '/chess-clock',
@@ -117,6 +138,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
+  mode: 'history',
   routes
 })
 

@@ -21,7 +21,9 @@ export const mutations = {
    * @param player Player to remove
    */
   removePlayer: (state, player) => {
-    delete state.players[player]
+    // https://stackoverflow.com/a/55004167
+    const i = state.players.map(player => player.name).indexOf(player.name)
+    state.players.splice(i, 1)
   },
 
   /**
@@ -119,7 +121,6 @@ export const actions = {
    */
   removePlayer: ({ commit }, { started, player, id, msg }) => {
     if (started === true) {
-      commit('removePlayer', player)
       return TOURNAMENT_SERVICE.patch(`player/inactivate/${id}`, msg)
     } else {
       TOURNAMENT_SERVICE.delete(`player/delete/${id}?msg=${msg}`)
@@ -172,11 +173,15 @@ export const actions = {
    * @returns {Promise<AxiosResponse<T>>}
    */
   sendLeaveRequest: ({ commit }, started) => {
-    let slug
-    started ? slug = 'inactivate' : slug = 'delete'
-    return PLAYER_SERVICE.patch(slug).then(res => {
-      deleteToken()
-    })
+    if (started) {
+      return PLAYER_SERVICE.patch('inactivate').then(res => {
+        deleteToken()
+      })
+    } else {
+      return PLAYER_SERVICE.delete('delete').then(res => {
+        deleteToken()
+      })
+    }
   },
 
   /**

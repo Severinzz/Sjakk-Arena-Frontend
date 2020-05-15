@@ -8,13 +8,25 @@
         :color="color"
         :icon="`fas fa-${icon}`"
         transition="scale-transition"
+        data-cy="alert-box"
       >
         {{ removedMessage }}
       </v-alert>
+
+      <!-- If player is no longer in the tournament -->
+      <v-alert
+        class="info-box"
+        v-if="player !== null && !player.in_tournament" type="info"
+        data-cy="info-box"
+      >
+        Spilleren er ikke i turneringen lenger
+      </v-alert>
+
       <!-- player's name -->
       <h1
         class="name"
         v-if="player !== null"
+        data-cy="name"
       >
         {{ player.name }}
       </h1>
@@ -22,6 +34,7 @@
       <h2
         class="points"
         v-if="player !== null"
+        data-cy="points"
       >
         Poeng: {{ player.points }}
       </h2>
@@ -31,9 +44,12 @@
       <Table
         :objectList="games"
         :headingList="headingList"
+        data-cy="table"
       />
       <v-btn
         class="error"
+        :disabled="(player === null ? false : !player.in_tournament) || removed || player === null"
+        data-cy="remove"
         @click="kickDialog = true"
       >
         Fjern spiller
@@ -56,6 +72,7 @@
               v-model="msg"
               label="Begrunnelse"
               required
+              data-cy="reasoning"
             >
             </v-text-field>
           </v-card-text>
@@ -65,6 +82,7 @@
               text
               class="error"
               @click="removePlayerFromTournament"
+              data-cy="remove-confirm"
             >
               OK
             </v-btn>
@@ -72,6 +90,7 @@
               text
               outlined
               @click="kickDialog = false"
+              data-cy="remove-cancel"
             >
               Avbryt
             </v-btn>
@@ -82,8 +101,8 @@
   </div>
 </template>
 <script>
-import Table from '@/components/Table'
 import { mapActions } from 'vuex'
+import Table from '@/components/hostcomponents/Table'
 
 export default {
   components: { Table },
@@ -225,5 +244,15 @@ export default {
 
   .actions {
     justify-content: center;
+  }
+  .info-box{
+    display: inline-block;
+    margin: auto;
+    min-width: 410px;
+  }
+  @media(max-width: 410px){
+    .info-box{
+      min-width: 100%;
+    }
   }
 </style>

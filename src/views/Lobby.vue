@@ -70,7 +70,7 @@
     <warning-dialog
       title="Avslutt turneringen"
       action="avslutte tuneringen"
-      :show-dialog="leaveWarn"
+      :show-dialog="leaveDialog"
       carry-on-button-text="Avslutt turnering"
       @carryOn="endTournament()"
       @closeDialog="alterLeavePageDialogState"
@@ -79,13 +79,12 @@
 </template>
 
 <script>
-import TournamentInfo from '@/components/TournamentInfo'
-import Player from '@/components/Player'
 import { mapActions, mapGetters, mapState } from 'vuex'
-import WarningDialog from '@/components/WarningDialog'
-import { leavePageWarningMixin } from '../mixins/leavePageWarning.mixin'
-import { tournamentAndLobbyMixin } from '../mixins/tournamentAndLobby.mixin'
-import WEBSOCKET from '../common/websocketApi'
+import { leavePageWarningMixin } from '@/mixins/leavePageWarning.mixin'
+import { tournamentAndLobbyMixin } from '@/mixins/tournamentAndLobby.mixin'
+import TournamentInfo from '@/components/hostcomponents/TournamentInfo'
+import Player from '@/components/hostcomponents/Player'
+import WarningDialog from '@/components/dialogs/WarningDialog'
 
 export default {
   name: 'Lobby',
@@ -102,9 +101,9 @@ export default {
     return {
       intervalId: '',
       active: false,
-      leaveWarn: false,
       pathVar: 'lobby/',
-      alertError: false
+      alertError: false,
+      starting: false
     }
   },
   computed: {
@@ -157,10 +156,13 @@ export default {
      * Starts the tournament
      */
     startTournament() {
+      this.starting = true
+      this.wantToLeave = true
       this.sendStartRequest()
         .then(res => {
           this.$router.replace('/tournament/' + this.tournament.user_id)
         }).catch(err => {
+          this.starting = false
           this.alertError = true
           this.errorMessage = err + '. Prøv igjen senere!'
         })
@@ -170,14 +172,8 @@ export default {
      * Ends the tournament
      */
     endTournament() {
-      this.$router.push('/')
-    },
-
-    /**
-     * Alter the leave warning dialog viability state.
-     */
-    alterLeavePageDialogState() {
-      this.leaveWarn = !this.leaveWarn
+      this.wantToLeave = true
+      this.$router.go(-1)
     }
   },
   watch: {
@@ -197,19 +193,10 @@ export default {
      * @param active
      */
     isTournamentActive: function (active) {
-      if (active) {
+      if (active && !this.starting) {
         this.startTournament()
       }
     }
-  },
-
-  beforeRouteLeave(to, from, next) {
-    if (to.name === 'tournament') {
-      WEBSOCKET.unsubscribe('tournament/players')
-    } else {
-      WEBSOCKET.unsubscribeAll()
-    }
-    next()
   }
 }
 </script>

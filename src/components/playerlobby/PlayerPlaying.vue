@@ -55,12 +55,14 @@
             v-if="paired"
             text="Registrer resultat"
             @buttonClicked="resultDialog = true"
+            data-cy="register-result"
             />
 
             <!-- Leave tournament -->
             <oval-button
               text="Forlat turnering"
-              @buttonClicked="leaveDialog = true"
+              @buttonClicked="leaveTournament"
+              data-cy="leave-tournament"
             />
 
             <!-- break -->
@@ -82,6 +84,7 @@
               :primary="pastResults"
               :text="pastResultsText"
               @buttonClicked="alterPastResultsState"
+              data-cy="past-results"
             />
 
           </v-container>
@@ -102,6 +105,12 @@
               max-width="650px"
             >
               <v-card>
+                <v-alert
+                  type="error"
+                  v-if="alertError"
+                >
+                  {{ alertErrorMessage }}
+                </v-alert>
                 <v-card-title class="justify-center">Resultatet ble:</v-card-title>
                 <v-card-text>
                   <v-row class="justify-center">
@@ -116,6 +125,7 @@
                           class="radio"
                           label="Hvit seier"
                           value="1"
+                          data-cy="white-win"
                         >
                           <v-spacer/>
                         </v-radio>
@@ -125,6 +135,7 @@
                           class="radio"
                           label="Remis"
                           value="0.5"
+                          data-cy="stalemate"
                         >
                           <v-spacer/>
                         </v-radio>
@@ -134,18 +145,34 @@
                           class="radio"
                           label="Sort seier"
                           value="0"
+                          data-cy="black-win"
                         >
                           <v-spacer/>
                         </v-radio>
                       </v-col>
                     </v-radio-group>
                   </v-row>
+                  <div class="imgInput">
+                  <img
+                    :src="img"
+                    v-if="showImg"
+                  >
+                  <v-file-input
+                    v-model="file"
+                    label="Last opp bilde"
+                    filled
+                    :prepend-icon="showImg ? '' : 'mdi-camera'"
+                    accept="image/*"
+                    messages="Her kan du laste opp et bilde som kan være til hjelp dersom turneringsvert må avgjøre spillets resultat"
+                  />
+                  </div>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer/>
                   <v-btn
                     text
-                    @click="resultDialog=false"
+                    @click="closeResultDialog"
+                    data-cy="cancel-result"
                   >
                     Avbryt
                   </v-btn>
@@ -154,6 +181,7 @@
                     color="primary"
                     outlined
                     @click="registerResult"
+                    data-cy="send-result"
                   >
                     Send inn
                   </v-btn>
@@ -215,15 +243,6 @@
             @closeDialog="suggestionIsSent = false"
           />
 
-          <!-- Dialog shown when player tries to leave the tournament -->
-          <warning-dialog
-          title="Forlat turneringen"
-          action="forlate tuneringen"
-          :show-dialog="leaveDialog"
-          carry-on-button-text="Forlat turnering"
-          @carryOn="leaveTournament()"
-          @closeDialog="leaveDialog = false"
-          />
           <!-- playtime -->
           <p
             v-if="tournamentEnd"
@@ -238,41 +257,46 @@
 </template>
 
 <script>
+import { mapActions, mapState, mapMutations } from 'vuex'
+import { playerMixin } from '@/mixins/player.mixin'
 import PlayerPaired from './PlayerPaired'
 import PlayerNotPaired from './PlayerNotPaired'
 import EarlierResults from './EarlierResults'
-import { mapActions, mapState, mapMutations } from 'vuex'
-import WarningDialog from '../WarningDialog'
-import { leavePageWarningMixin } from '../../mixins/leavePageWarning.mixin'
-import { playerMixin } from '../../mixins/player.mixin'
-import InformationDialog from '../InformationDialog'
-import OvalButton from '../OvalButton'
+import InformationDialog from '../dialogs/InformationDialog'
+import OvalButton from '../buttons/OvalButton'
 
 export default {
   name: 'PlayerPlaying',
   components: {
     InformationDialog,
-    WarningDialog,
     PlayerPaired,
     PlayerNotPaired,
     EarlierResults,
     OvalButton
   },
   mixins: [
-    leavePageWarningMixin,
     playerMixin
   ],
   data() {
     return {
       resultDialog: false,
-      leaveDialog: false,
       pastResults: false,
       pause: false,
       pauseButtonText: 'Ta pause',
       pastResultsText: 'Tidligere parti',
       result: '',
       suggestionIsSent: false,
-      pathVar: 'player-lobby'
+      pathVar: 'player-lobby',
+      selectedFile: null,
+      data: null,
+      rules: [
+        value => !value || value.size < 10000000 || 'Bildet må være mindre enn 10 MB!'
+      ],
+      file: undefined,
+      alertError: false,
+      alertErrorMessage: '',
+      img: '',
+      showImg: false
     }
   },
   computed: {
@@ -282,8 +306,7 @@ export default {
       opponentsDisagree: state => state.games.resultDialog.opponents_disagree,
       suggestedResult: state => state.games.resultDialog.suggested_result,
       gameId: state => state.games.resultDialog.game_id,
-      validResult: state => state.games.resultDialog.valid,
-      active: state => state.tournament.activeTournament
+      validResult: state => state.games.resultDialog.valid
     }),
 
     /**
@@ -305,12 +328,12 @@ export default {
   },
   methods: {
     ...mapActions([
-      'sendLeaveRequest',
       'sendGameResult',
       'sendPauseRequest',
       'sendUnpauseRequest',
       'sendValidationOfResult',
-      'sendInvalidationOfResult'
+      'sendInvalidationOfResult',
+      'uploadFile'
     ]),
     ...mapMutations([
       'setPaired',
@@ -318,20 +341,50 @@ export default {
       'setOpponentsDisagree'
     ]),
 
+    leaveTournament() {
+      this.$emit('leaveTournament')
+    },
+
     /**
      * Register the result of the currently active game
      */
-    registerResult() {
-      let payload = {
+    async registerResult() {
+      try {
+        await this.uploadFile(this.file)
+        let payload = this.getResultPayload()
+        await this.sendGameResult(payload)
+        this.showSuggestionIsSentDialog()
+        this.closeResultDialog()
+      } catch (err) {
+        this.alertErrorMessage = err.message
+        this.alertError = true
+      }
+    },
+    /**
+     * Show suggestion is sent dialog
+     */
+    showSuggestionIsSentDialog() {
+      this.suggestionIsSent = true
+    },
+    /**
+     * Returns the information needed when a result is sent to the server
+     * @returns the information needed when a result is sent to the server
+     */
+    getResultPayload() {
+      return {
         opponent: this.opponentId,
         result: this.result
       }
-      this.sendGameResult(payload).then(res => {
-        this.resultDialog = false
-        this.suggestionIsSent = true
-      })
     },
-
+    /**
+     * Closes the result dialog
+     */
+    closeResultDialog() {
+      this.alertErrorMessage = ''
+      this.alertError = false
+      this.resultDialog = false
+      this.file = undefined
+    },
     /**
      * Approve the result of the currently active game
      */
@@ -348,15 +401,6 @@ export default {
     disapproveResult() {
       this.sendInvalidationOfResult(this.gameId).then(res => {
         this.setSuggestedResult(undefined)
-      })
-    },
-
-    /**
-     * The player leaves the tournament
-     */
-    async leaveTournament() {
-      this.sendLeaveRequest(this.active).then(res => {
-        this.$router.push('/')
       })
     },
 
@@ -387,13 +431,6 @@ export default {
     },
 
     /**
-     * Changes the visibility state of the leave dialog.
-     */
-    alterLeavePageDialogState() {
-      this.leaveDialog = !this.leaveDialog
-    },
-
-    /**
      * Open the chess clock in a new tab
      */
     showChessClock() {
@@ -406,10 +443,20 @@ export default {
       if (this.validResult) {
         this.setPaired(false)
       }
+    },
+    file () {
+      let fileReader = new FileReader()
+      if (this.file !== undefined) {
+        fileReader.onload = fileData => {
+          this.img = fileData.target.result
+          this.showImg = true
+        }
+        fileReader.readAsDataURL(this.file)
+      } else {
+        this.img = ''
+        this.showImg = false
+      }
     }
-  },
-  mounted() {
-    this.setupBrowserWarning()
   }
 }
 </script>
@@ -446,5 +493,23 @@ export default {
 
   .minorInfo {
     margin-top: 0.8em;
+  }
+  .imgInput{
+    display: flex;
+    height: 100px;
+  }
+  img{
+    height: 150px;
+    width: 150px;
+    margin-right: 10px;
+  }
+  @media (max-width: 440px) {
+    .imgInput{
+      flex-direction: column;
+      height: auto
+    }
+    img{
+      margin: auto auto 10px auto
+    }
   }
 </style>
