@@ -9,8 +9,8 @@
       max-width="650px"
     >
       <v-card>
-        <v-card-title class="justify-center">{{ title }}</v-card-title>
-        <v-card-text class="text-center"> {{ text }}
+        <v-card-title class="justify-center no-word-break">{{ title }}</v-card-title>
+        <v-card-text class="text-center no-word-break"> {{ text }}
         </v-card-text>
         <v-layout justify-center>
           <v-card-actions>
@@ -54,5 +54,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .no-word-break {
+    word-break: keep-all; /* maybe !important  */
+  }
 </style>
