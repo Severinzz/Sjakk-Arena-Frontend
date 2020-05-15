@@ -5,8 +5,8 @@
 </template>
 
 <script>
+import { clearTokenAndStateMixin } from '@/mixins/clearTokenAndState.mixin'
 import TournamentCreationForm from '@/components/TournamentCreationForm.vue'
-import { clearTokenAndStateMixin } from '../mixins/clearTokenAndState.mixin'
 
 export default {
   name: 'TournamentCreation',

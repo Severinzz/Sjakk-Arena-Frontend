@@ -101,8 +101,8 @@
   </div>
 </template>
 <script>
-import Table from '@/components/Table'
 import { mapActions } from 'vuex'
+import Table from '@/components/hostcomponents/Table'
 
 export default {
   components: { Table },

@@ -37,10 +37,10 @@
 </template>
 <script>
 // @ is an alias to /src
+import { clearTokenAndStateMixin } from '@/mixins/clearTokenAndState.mixin'
 import MenuTile from '@/components/MenuTile.vue'
 import TileHeaderSpace from '@/components/TileHeaderSpace'
-import { clearTokenAndStateMixin } from '../mixins/clearTokenAndState.mixin'
-import WEBSOCKET from '../common/websocketApi'
+import WEBSOCKET from '@/common/websocketApi'
 
 export default {
   name: 'home',
