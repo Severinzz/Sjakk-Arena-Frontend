@@ -362,10 +362,10 @@ export default {
       let startTimeH = this.startTime.toString().split(':')[0]
       let endTimeH = this.endTime.toString().split(':')[0]
       if (parseInt(startTimeH) < parseInt(endTimeH)) {
-        // Error displayed since the start time is smaller than the end time
+        // Error not displayed since the start time is smaller than the end time
         return true
       } else {
-        // Displays error only if start time is exaclty equal to end time.
+        // Display error if endtime is less than or equal to start time.
         let startTimeM = this.lastNumberInTime(this.startTime)
         let endTimeM = this.lastNumberInTime(this.endTime)
         return parseInt(startTimeM) < parseInt(endTimeM)
