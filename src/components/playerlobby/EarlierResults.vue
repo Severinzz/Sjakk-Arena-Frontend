@@ -69,19 +69,19 @@
               </p>
               <!-- 1 = hvit seier, 0 = sort seier -->
               <p
-                v-if="games.white_player_points == 1"
+                v-if="games.white_player_points === 1"
                 class="body-2 resultDetails"
               >
                 Resultat: Hvit Seier
               </p>
               <p
-                v-if="games.white_player_point == 0.5"
+                v-if="games.white_player_points === 0.5"
                 class="body-2 resultDetails"
               >
                 Resultat: Remis
               </p>
               <p
-                v-if="games.white_player_point == 0"
+                v-if="games.white_player_points === 0"
                 class="body-2 resultDetails"
               >
                 Resultat: Sort Seier
